@@ -2,8 +2,9 @@
 import StudentSidebar from '@/components/layout/StudentSidebar';
 import MobileBottomNav from '@/components/layout/MobileBottomNav';
 import Link from 'next/link';
-import { useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { isLoggedIn, getUserName, getUserInitials, clearSession, ensureDefaults } from '@/lib/store';
 
 const mobileMenuLinks = [
   { href: '/messages', label: 'Messages', icon: 'chat' },
@@ -13,18 +14,57 @@ const mobileMenuLinks = [
 
 export default function StudentLayout({ children }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [userName, setUserName] = useState('Alex');
+  const [userInitials, setUserInitials] = useState('AJ');
+  const [authChecked, setAuthChecked] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoggedIn()) {
+      router.replace('/login');
+      return;
+    }
+    ensureDefaults();
+    setUserName(getUserName());
+    setUserInitials(getUserInitials());
+    setAuthChecked(true);
+
+    // Listen for store updates
+    const handler = () => {
+      setUserName(getUserName());
+      setUserInitials(getUserInitials());
+    };
+    window.addEventListener('sq_update', handler);
+    return () => window.removeEventListener('sq_update', handler);
+  }, [router]);
+
+  const handleLogout = () => {
+    clearSession();
+    router.push('/login');
+  };
+
+  if (!authChecked) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="flex flex-col items-center gap-4">
+          <span className="material-symbols-outlined text-primary animate-spin" style={{ fontSize: '40px' }}>progress_activity</span>
+          <p className="text-on-surface-variant font-label-md">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen bg-background">
-      <StudentSidebar />
+      <StudentSidebar onLogout={handleLogout} userName={userName} userInitials={userInitials} />
 
       <main className="flex-1 min-w-0 overflow-y-auto relative">
         {/* Top Header */}
         <header className="sticky top-0 z-30 flex justify-between items-center w-full px-gutter bg-white/80 backdrop-blur-md border-b border-outline-variant/20 h-16 shadow-sm">
           {/* Mobile Menu Toggle & Logo */}
           <div className="lg:hidden flex items-center gap-3">
-            <button 
+            <button
               className="p-2 -ml-2 text-on-surface-variant hover:bg-surface-container rounded-6 transition-colors"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
@@ -53,11 +93,11 @@ export default function StudentLayout({ children }) {
             </button>
             <div className="flex items-center gap-3 pl-4 border-l border-outline-variant/30">
               <div className="text-right hidden sm:block">
-                <p className="font-label-md text-on-surface leading-tight">Welcome, Alex</p>
+                <p className="font-label-md text-on-surface leading-tight">Welcome, {userName.split(' ')[0]}</p>
                 <p className="font-label-sm text-on-surface-variant">Senior Scholar</p>
               </div>
               <div className="w-10 h-10 rounded-full border-2 border-primary/20 bg-primary/10 flex items-center justify-center text-primary font-bold cursor-pointer hover:bg-primary/20 transition-colors">
-                AJ
+                {userInitials}
               </div>
             </div>
           </div>
@@ -84,16 +124,16 @@ export default function StudentLayout({ children }) {
                   </Link>
                 );
               })}
-              
+
               <div className="h-px bg-outline-variant/20 my-4" />
-              
-              <Link
-                href="/login"
-                className="flex items-center gap-3 px-4 py-3 text-error hover:bg-error-container/30 rounded-10 transition-all"
+
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-3 px-4 py-3 text-error hover:bg-error-container/30 rounded-10 transition-all w-full"
               >
                 <span className="material-symbols-outlined">logout</span>
                 <span className="font-label-md">Logout</span>
-              </Link>
+              </button>
             </div>
           </div>
         )}

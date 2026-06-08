@@ -1,79 +1,71 @@
 'use client';
-import { useState } from 'react';
-
-const conversations = [
-  {
-    id: 1,
-    name: 'Gates Foundation',
-    avatar: 'GF',
-    avatarBg: 'bg-primary/10 text-primary',
-    lastMessage: 'Thank you for your application. We are pleased to inform you...',
-    time: '2h ago',
-    unread: 2,
-    online: true,
-  },
-  {
-    id: 2,
-    name: 'World Future Foundation',
-    avatar: 'WF',
-    avatarBg: 'bg-secondary/10 text-secondary',
-    lastMessage: 'Your application documents have been received.',
-    time: 'Yesterday',
-    unread: 0,
-    online: false,
-  },
-  {
-    id: 3,
-    name: 'ScholarQuest Support',
-    avatar: 'SQ',
-    avatarBg: 'bg-green-100 text-green-700',
-    lastMessage: 'Hi Alex! How can I help you today?',
-    time: 'Mon',
-    unread: 0,
-    online: true,
-  },
-  {
-    id: 4,
-    name: 'Rhodes Trust',
-    avatar: 'RT',
-    avatarBg: 'bg-tertiary-container/10 text-tertiary',
-    lastMessage: 'The interview schedule has been updated for your review.',
-    time: 'Sep 28',
-    unread: 1,
-    online: false,
-  },
-];
-
-const messages = [
-  { id: 1, sender: 'Gates Foundation', content: 'Hello Alex! We have reviewed your initial application for the Gates Scholarship.', time: '10:02 AM', isMe: false },
-  { id: 2, sender: 'me', content: 'Thank you for reaching out! I am very excited about this opportunity.', time: '10:15 AM', isMe: true },
-  { id: 3, sender: 'Gates Foundation', content: 'Your profile shows impressive academic achievements. We would like to invite you to the second round of evaluation.', time: '10:30 AM', isMe: false },
-  { id: 4, sender: 'me', content: 'That is wonderful news! What documents will be required for the next stage?', time: '10:45 AM', isMe: true },
-  { id: 5, sender: 'Gates Foundation', content: 'Thank you for your application. We are pleased to inform you that you have been selected for the final interview round. Congratulations!', time: '11:20 AM', isMe: false },
-];
+import { useState, useEffect, useRef } from 'react';
+import { getMessages, sendMessage, markAsRead } from '@/lib/store';
 
 export default function MessagesPage() {
+  const [convs, setConvs] = useState([]);
   const [activeConv, setActiveConv] = useState(1);
   const [newMessage, setNewMessage] = useState('');
   const [showMobileList, setShowMobileList] = useState(true);
+  const [search, setSearch] = useState('');
+  const messagesEndRef = useRef(null);
+
+  const load = () => setConvs(getMessages());
+
+  useEffect(() => {
+    load();
+    window.addEventListener('sq_update', load);
+    return () => window.removeEventListener('sq_update', load);
+  }, []);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [convs, activeConv]);
 
   const handleSelectConv = (id) => {
     setActiveConv(id);
     setShowMobileList(false);
+    markAsRead(id);
   };
 
-  const activeConvData = conversations.find(c => c.id === activeConv);
+  const handleSend = () => {
+    const text = newMessage.trim();
+    if (!text) return;
+    sendMessage(activeConv, text);
+    setNewMessage('');
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
+  };
+
+  const filteredConvs = convs.filter(c =>
+    c.name.toLowerCase().includes(search.toLowerCase()) ||
+    c.lastMessage.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const activeConvData = convs.find(c => c.id === activeConv);
+  const totalUnread = convs.reduce((sum, c) => sum + (c.unread || 0), 0);
 
   return (
     <div className="flex h-[calc(100vh-64px)] bg-surface-container-lowest overflow-hidden relative">
       {/* Conversations Sidebar */}
       <div className={`${showMobileList ? 'flex' : 'hidden'} md:flex w-full md:w-80 flex-shrink-0 border-r border-outline-variant/20 flex-col bg-white z-10`}>
         <div className="p-6 border-b border-outline-variant/10">
-          <h2 className="font-headline-md text-headline-md mb-3">Messages</h2>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="font-headline-md text-headline-md">Messages</h2>
+            {totalUnread > 0 && (
+              <span className="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-[11px] text-white font-bold">
+                {totalUnread}
+              </span>
+            )}
+          </div>
           <div className="relative">
             <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline-variant" style={{ fontSize: '18px' }}>search</span>
             <input
               type="text"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
               placeholder="Search messages..."
               className="w-full bg-surface-container-low border border-outline-variant/30 rounded-10 py-2 pl-9 pr-4 text-body-sm outline-none focus:ring-2 focus:ring-primary/20"
             />
@@ -81,7 +73,12 @@ export default function MessagesPage() {
         </div>
 
         <div className="flex-1 overflow-y-auto">
-          {conversations.map((conv) => (
+          {filteredConvs.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-40 text-on-surface-variant">
+              <span className="material-symbols-outlined" style={{ fontSize: '36px' }}>search_off</span>
+              <p className="font-label-sm mt-2">No conversations found</p>
+            </div>
+          ) : filteredConvs.map((conv) => (
             <button
               key={conv.id}
               onClick={() => handleSelectConv(conv.id)}
@@ -114,13 +111,13 @@ export default function MessagesPage() {
       <div className={`${!showMobileList ? 'flex' : 'hidden'} md:flex flex-1 flex-col min-w-0 bg-surface-container-lowest`}>
         {/* Chat Header */}
         <div className="flex items-center gap-4 p-4 border-b border-outline-variant/20 bg-white shadow-sm shrink-0">
-          <button 
+          <button
             className="md:hidden p-2 -ml-2 text-on-surface-variant hover:bg-surface-container rounded-6"
             onClick={() => setShowMobileList(true)}
           >
             <span className="material-symbols-outlined">arrow_back</span>
           </button>
-          
+
           {activeConvData && (
             <>
               <div className="relative">
@@ -150,9 +147,9 @@ export default function MessagesPage() {
         {/* Messages */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-lg space-y-4">
           <div className="text-center">
-            <span className="font-label-sm text-label-sm text-on-surface-variant bg-surface-container-low px-4 py-1 rounded-full">Today, 10:00 AM</span>
+            <span className="font-label-sm text-label-sm text-on-surface-variant bg-surface-container-low px-4 py-1 rounded-full">Today</span>
           </div>
-          {messages.map((msg) => (
+          {activeConvData?.thread?.map((msg) => (
             <div key={msg.id} className={`flex gap-2 sm:gap-3 ${msg.isMe ? 'justify-end' : 'justify-start'}`}>
               {!msg.isMe && activeConvData && (
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 self-end ${activeConvData.avatarBg}`}>
@@ -165,8 +162,14 @@ export default function MessagesPage() {
                 </div>
                 <span className="font-label-sm text-label-sm text-outline px-2">{msg.time}</span>
               </div>
+              {msg.isMe && (
+                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs shrink-0 self-end">
+                  Me
+                </div>
+              )}
             </div>
           ))}
+          <div ref={messagesEndRef} />
         </div>
 
         {/* Message Input */}
@@ -179,13 +182,19 @@ export default function MessagesPage() {
               type="text"
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
+              onKeyDown={handleKeyDown}
               placeholder="Type a message..."
               className="flex-1 bg-transparent outline-none font-body-md text-on-surface placeholder:text-outline-variant py-2 min-w-0"
             />
-            <button className="w-10 h-10 bg-primary text-white rounded-10 flex items-center justify-center hover:opacity-90 transition-all active:scale-95 shrink-0">
+            <button
+              onClick={handleSend}
+              disabled={!newMessage.trim()}
+              className="w-10 h-10 bg-primary text-white rounded-10 flex items-center justify-center hover:opacity-90 transition-all active:scale-95 shrink-0 disabled:opacity-40"
+            >
               <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>send</span>
             </button>
           </div>
+          <p className="text-[10px] text-outline mt-1 text-center">Press Enter to send</p>
         </div>
       </div>
     </div>

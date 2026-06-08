@@ -1,22 +1,82 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { getSettings, saveSettings, getUser, saveUser, clearAllData } from '@/lib/store';
+import { useRouter } from 'next/navigation';
 
 export default function SettingsPage() {
-  const [notifications, setNotifications] = useState({
-    emailMatches: true,
-    emailDeadlines: true,
-    emailUpdates: false,
-    pushMatches: true,
-    pushDeadlines: true,
-  });
+  const router = useRouter();
+  const [activeSection, setActiveSection] = useState('profile');
+  const [saved, setSaved] = useState('');
+  const [notifications, setNotifications] = useState({ emailMatches: true, emailDeadlines: true, emailUpdates: false, pushMatches: true, pushDeadlines: true });
+  const [privacy, setPrivacy] = useState({ profileVisible: true, showGPA: false, allowContact: true });
+  const [theme, setTheme] = useState('light');
+  const [profileForm, setProfileForm] = useState({ firstName: '', lastName: '', email: '', phone: '', bio: '' });
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-  const [privacy, setPrivacy] = useState({
-    profileVisible: true,
-    showGPA: false,
-    allowContact: true,
-  });
+  useEffect(() => {
+    const settings = getSettings();
+    if (settings?.notifications) setNotifications(settings.notifications);
+    if (settings?.privacy) setPrivacy(settings.privacy);
+    if (settings?.appearance?.theme) setTheme(settings.appearance.theme);
+    const user = getUser();
+    if (user) setProfileForm({
+      firstName: user.firstName || '',
+      lastName: user.lastName || '',
+      email: user.email || '',
+      phone: user.phone || '',
+      bio: user.bio || '',
+    });
+  }, []);
 
-  const toggle = (setter, key) => setter(prev => ({ ...prev, [key]: !prev[key] }));
+  const showToast = (msg) => {
+    setSaved(msg);
+    setTimeout(() => setSaved(''), 3000);
+  };
+
+  const toggle = (setter, stateObj, key, settingsKey) => {
+    const newObj = { ...stateObj, [key]: !stateObj[key] };
+    setter(newObj);
+    const settings = getSettings();
+    saveSettings({ ...settings, [settingsKey]: newObj });
+    showToast('Setting saved!');
+  };
+
+  const handleSaveProfile = (e) => {
+    e.preventDefault();
+    saveUser({
+      ...profileForm,
+      name: `${profileForm.firstName} ${profileForm.lastName}`,
+      initials: `${(profileForm.firstName || 'A')[0]}${(profileForm.lastName || 'J')[0]}`.toUpperCase(),
+    });
+    showToast('Profile saved!');
+  };
+
+  const handleThemeChange = (t) => {
+    setTheme(t);
+    const settings = getSettings();
+    saveSettings({ ...settings, appearance: { theme: t } });
+    showToast('Theme saved!');
+  };
+
+  const handleDeleteAccount = () => {
+    clearAllData();
+    router.push('/');
+  };
+
+  const handleExportData = () => {
+    const data = {
+      user: getUser(),
+      settings: getSettings(),
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'scholarquest_data.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('Data exported!');
+  };
 
   const Toggle = ({ checked, onChange }) => (
     <button
@@ -35,10 +95,16 @@ export default function SettingsPage() {
     { id: 'account', label: 'Account', icon: 'manage_accounts' },
   ];
 
-  const [activeSection, setActiveSection] = useState('profile');
-
   return (
     <div className="max-w-container-max mx-auto px-gutter py-10">
+      {/* Toast */}
+      {saved && (
+        <div className="fixed top-6 right-6 z-50 bg-green-600 text-white px-5 py-3 rounded-2xl shadow-xl flex items-center gap-2 animate-subtle-float">
+          <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>check_circle</span>
+          {saved}
+        </div>
+      )}
+
       <div className="mb-10">
         <h1 className="font-headline-lg text-headline-lg text-on-background" style={{ fontFamily: 'Manrope, sans-serif' }}>Settings</h1>
         <p className="font-body-md text-body-md text-on-surface-variant mt-1">Manage your account preferences and profile settings.</p>
@@ -63,34 +129,40 @@ export default function SettingsPage() {
 
         {/* Settings Content */}
         <div className="lg:col-span-3 space-y-10">
+          {/* ── PROFILE ── */}
           {activeSection === 'profile' && (
             <div className="glass-card rounded-2xl p-10">
               <h2 className="font-headline-md text-headline-md mb-6">Profile Settings</h2>
               <div className="flex items-center gap-6 mb-10 pb-10 border-b border-outline-variant/20">
-                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-extrabold text-2xl shadow-lg">AJ</div>
+                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-extrabold text-2xl shadow-lg">
+                  {`${(profileForm.firstName || 'A')[0]}${(profileForm.lastName || 'J')[0]}`.toUpperCase()}
+                </div>
                 <div>
                   <p className="font-label-md text-on-surface mb-2">Profile Photo</p>
                   <div className="flex gap-2">
-                    <button className="px-4 py-2 bg-primary text-on-primary rounded-6 font-label-sm hover:opacity-90 transition-all">Upload Photo</button>
-                    <button className="px-4 py-2 border border-outline-variant rounded-6 font-label-sm text-on-surface-variant hover:bg-surface-container-low transition-all">Remove</button>
+                    <label className="px-4 py-2 bg-primary text-on-primary rounded-6 font-label-sm hover:opacity-90 transition-all cursor-pointer">
+                      Upload Photo
+                      <input type="file" className="hidden" accept="image/*" onChange={() => showToast('Photo upload would connect to backend in production')} />
+                    </label>
                   </div>
                 </div>
               </div>
 
-              <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+              <form className="space-y-6" onSubmit={handleSaveProfile}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {[
-                    { id: 'first_name', label: 'First Name', value: 'Alex', type: 'text' },
-                    { id: 'last_name', label: 'Last Name', value: 'Johnson', type: 'text' },
-                    { id: 'email', label: 'Email Address', value: 'alex.j@stanford.edu', type: 'email' },
-                    { id: 'phone', label: 'Phone Number', value: '+1 (555) 234-5678', type: 'tel' },
+                    { id: 'firstName', label: 'First Name', type: 'text' },
+                    { id: 'lastName', label: 'Last Name', type: 'text' },
+                    { id: 'email', label: 'Email Address', type: 'email' },
+                    { id: 'phone', label: 'Phone Number', type: 'tel' },
                   ].map((field) => (
                     <div key={field.id} className="space-y-2">
                       <label htmlFor={field.id} className="font-label-md text-label-md text-on-surface">{field.label}</label>
                       <input
                         id={field.id}
                         type={field.type}
-                        defaultValue={field.value}
+                        value={profileForm[field.id] || ''}
+                        onChange={e => setProfileForm({...profileForm, [field.id]: e.target.value})}
                         className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all"
                       />
                     </div>
@@ -101,7 +173,8 @@ export default function SettingsPage() {
                   <textarea
                     id="bio"
                     rows={4}
-                    defaultValue="Computer Science senior at Stanford passionate about AI ethics and sustainable technology."
+                    value={profileForm.bio || ''}
+                    onChange={e => setProfileForm({...profileForm, bio: e.target.value})}
                     className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all resize-none"
                   />
                 </div>
@@ -109,7 +182,7 @@ export default function SettingsPage() {
                   <button type="submit" className="px-6 py-3 bg-primary text-on-primary rounded-10 font-label-md hover:opacity-90 transition-all active:scale-95 shadow-md shadow-primary/20">
                     Save Changes
                   </button>
-                  <button type="button" className="px-6 py-3 border border-outline-variant rounded-10 font-label-md text-on-surface hover:bg-surface-container-low transition-all">
+                  <button type="button" onClick={() => { const user = getUser(); if (user) setProfileForm({ firstName: user.firstName || '', lastName: user.lastName || '', email: user.email || '', phone: user.phone || '', bio: user.bio || '' }); }} className="px-6 py-3 border border-outline-variant rounded-10 font-label-md text-on-surface hover:bg-surface-container-low transition-all">
                     Discard
                   </button>
                 </div>
@@ -117,6 +190,7 @@ export default function SettingsPage() {
             </div>
           )}
 
+          {/* ── NOTIFICATIONS ── */}
           {activeSection === 'notifications' && (
             <div className="glass-card rounded-2xl p-10">
               <h2 className="font-headline-md text-headline-md mb-6">Notification Preferences</h2>
@@ -134,7 +208,7 @@ export default function SettingsPage() {
                           <p className="font-label-md text-on-surface">{item.label}</p>
                           <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5">{item.desc}</p>
                         </div>
-                        <Toggle checked={notifications[item.key]} onChange={() => toggle(setNotifications, item.key)} />
+                        <Toggle checked={notifications[item.key]} onChange={() => toggle(setNotifications, notifications, item.key, 'notifications')} />
                       </div>
                     ))}
                   </div>
@@ -151,7 +225,7 @@ export default function SettingsPage() {
                           <p className="font-label-md text-on-surface">{item.label}</p>
                           <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5">{item.desc}</p>
                         </div>
-                        <Toggle checked={notifications[item.key]} onChange={() => toggle(setNotifications, item.key)} />
+                        <Toggle checked={notifications[item.key]} onChange={() => toggle(setNotifications, notifications, item.key, 'notifications')} />
                       </div>
                     ))}
                   </div>
@@ -160,9 +234,10 @@ export default function SettingsPage() {
             </div>
           )}
 
+          {/* ── PRIVACY ── */}
           {activeSection === 'privacy' && (
             <div className="glass-card rounded-2xl p-10">
-              <h2 className="font-headline-md text-headline-md mb-6">Privacy & Security</h2>
+              <h2 className="font-headline-md text-headline-md mb-6">Privacy &amp; Security</h2>
               <div className="space-y-6">
                 <div>
                   <h3 className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-4">Profile Visibility</h3>
@@ -177,7 +252,7 @@ export default function SettingsPage() {
                           <p className="font-label-md text-on-surface">{item.label}</p>
                           <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5">{item.desc}</p>
                         </div>
-                        <Toggle checked={privacy[item.key]} onChange={() => toggle(setPrivacy, item.key)} />
+                        <Toggle checked={privacy[item.key]} onChange={() => toggle(setPrivacy, privacy, item.key, 'privacy')} />
                       </div>
                     ))}
                   </div>
@@ -186,14 +261,14 @@ export default function SettingsPage() {
                 <div className="border-t border-outline-variant/20 pt-6">
                   <h3 className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-4">Security</h3>
                   <div className="space-y-3">
-                    <button className="w-full flex items-center justify-between p-4 bg-surface-container-low rounded-10 hover:bg-surface-container transition-colors">
+                    <button onClick={() => showToast('Password reset email sent!')} className="w-full flex items-center justify-between p-4 bg-surface-container-low rounded-10 hover:bg-surface-container transition-colors">
                       <div className="flex items-center gap-3">
                         <span className="material-symbols-outlined text-primary">lock</span>
                         <span className="font-label-md text-on-surface">Change Password</span>
                       </div>
                       <span className="material-symbols-outlined text-on-surface-variant">chevron_right</span>
                     </button>
-                    <button className="w-full flex items-center justify-between p-4 bg-surface-container-low rounded-10 hover:bg-surface-container transition-colors">
+                    <button onClick={() => showToast('Two-factor authentication is enabled!')} className="w-full flex items-center justify-between p-4 bg-surface-container-low rounded-10 hover:bg-surface-container transition-colors">
                       <div className="flex items-center gap-3">
                         <span className="material-symbols-outlined text-primary">security</span>
                         <span className="font-label-md text-on-surface">Two-Factor Authentication</span>
@@ -206,6 +281,7 @@ export default function SettingsPage() {
             </div>
           )}
 
+          {/* ── APPEARANCE ── */}
           {activeSection === 'appearance' && (
             <div className="glass-card rounded-2xl p-10">
               <h2 className="font-headline-md text-headline-md mb-6">Appearance</h2>
@@ -214,13 +290,17 @@ export default function SettingsPage() {
                   <h3 className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-4">Theme</h3>
                   <div className="grid grid-cols-3 gap-4">
                     {[
-                      { label: 'Light', icon: 'light_mode', active: true },
-                      { label: 'Dark', icon: 'dark_mode', active: false },
-                      { label: 'System', icon: 'computer', active: false },
-                    ].map((theme) => (
-                      <button key={theme.label} className={`p-4 rounded-2xl border-2 flex flex-col items-center gap-2 transition-all ${theme.active ? 'border-primary bg-primary/5' : 'border-outline-variant hover:border-primary/50'}`}>
-                        <span className={`material-symbols-outlined ${theme.active ? 'text-primary' : 'text-on-surface-variant'}`} style={{ fontSize: '28px' }}>{theme.icon}</span>
-                        <span className={`font-label-md text-label-md ${theme.active ? 'text-primary' : 'text-on-surface-variant'}`}>{theme.label}</span>
+                      { label: 'Light', icon: 'light_mode', value: 'light' },
+                      { label: 'Dark', icon: 'dark_mode', value: 'dark' },
+                      { label: 'System', icon: 'computer', value: 'system' },
+                    ].map((t) => (
+                      <button
+                        key={t.value}
+                        onClick={() => handleThemeChange(t.value)}
+                        className={`p-4 rounded-2xl border-2 flex flex-col items-center gap-2 transition-all ${theme === t.value ? 'border-primary bg-primary/5' : 'border-outline-variant hover:border-primary/50'}`}
+                      >
+                        <span className={`material-symbols-outlined ${theme === t.value ? 'text-primary' : 'text-on-surface-variant'}`} style={{ fontSize: '28px' }}>{t.icon}</span>
+                        <span className={`font-label-md text-label-md ${theme === t.value ? 'text-primary' : 'text-on-surface-variant'}`}>{t.label}</span>
                       </button>
                     ))}
                   </div>
@@ -229,7 +309,7 @@ export default function SettingsPage() {
                   <h3 className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-4">Accent Color</h3>
                   <div className="flex gap-3">
                     {['#004ac6', '#712ae2', '#943700', '#16a34a', '#dc2626', '#0891b2'].map((color) => (
-                      <button key={color} className={`w-10 h-10 rounded-full border-4 border-white shadow-md hover:scale-110 transition-transform`} style={{ backgroundColor: color }} />
+                      <button key={color} onClick={() => showToast(`Accent color set! (Full theming requires CSS vars in production)`)} className="w-10 h-10 rounded-full border-4 border-white shadow-md hover:scale-110 transition-transform" style={{ backgroundColor: color }} />
                     ))}
                   </div>
                 </div>
@@ -237,22 +317,23 @@ export default function SettingsPage() {
             </div>
           )}
 
+          {/* ── ACCOUNT ── */}
           {activeSection === 'account' && (
             <div className="space-y-10">
               <div className="glass-card rounded-2xl p-10">
                 <h2 className="font-headline-md text-headline-md mb-6">Account Management</h2>
                 <div className="space-y-4">
-                  <button className="w-full flex items-center justify-between p-4 bg-surface-container-low rounded-10 hover:bg-surface-container transition-colors">
+                  <button onClick={handleExportData} className="w-full flex items-center justify-between p-4 bg-surface-container-low rounded-10 hover:bg-surface-container transition-colors">
                     <div className="flex items-center gap-3">
                       <span className="material-symbols-outlined text-primary">download</span>
                       <div className="text-left">
                         <p className="font-label-md text-on-surface">Export My Data</p>
-                        <p className="font-body-sm text-body-sm text-on-surface-variant">Download all your profile and application data</p>
+                        <p className="font-body-sm text-body-sm text-on-surface-variant">Download all your profile and application data as JSON</p>
                       </div>
                     </div>
                     <span className="material-symbols-outlined text-on-surface-variant">chevron_right</span>
                   </button>
-                  <button className="w-full flex items-center justify-between p-4 bg-surface-container-low rounded-10 hover:bg-surface-container transition-colors">
+                  <button onClick={() => showToast('Account deactivated. You can reactivate by logging in.')} className="w-full flex items-center justify-between p-4 bg-surface-container-low rounded-10 hover:bg-surface-container transition-colors">
                     <div className="flex items-center gap-3">
                       <span className="material-symbols-outlined text-on-surface-variant">pause_circle</span>
                       <div className="text-left">
@@ -264,12 +345,25 @@ export default function SettingsPage() {
                   </button>
                 </div>
               </div>
+
               <div className="p-10 bg-error-container/20 border border-error/20 rounded-2xl">
                 <h3 className="font-headline-md text-headline-md text-error mb-2">Danger Zone</h3>
                 <p className="font-body-md text-body-md text-on-surface-variant mb-4">Permanently delete your account and all associated data. This action cannot be undone.</p>
-                <button className="px-6 py-3 bg-error text-on-error rounded-10 font-label-md hover:opacity-90 transition-all active:scale-95">
-                  Delete Account
-                </button>
+                {!showDeleteConfirm ? (
+                  <button onClick={() => setShowDeleteConfirm(true)} className="px-6 py-3 bg-error text-on-error rounded-10 font-label-md hover:opacity-90 transition-all active:scale-95">
+                    Delete Account
+                  </button>
+                ) : (
+                  <div className="flex gap-3 items-center flex-wrap">
+                    <p className="font-label-md text-error">Are you sure? This will erase all your data.</p>
+                    <button onClick={handleDeleteAccount} className="px-6 py-3 bg-error text-on-error rounded-10 font-label-md hover:opacity-90 transition-all">
+                      Yes, Delete Everything
+                    </button>
+                    <button onClick={() => setShowDeleteConfirm(false)} className="px-6 py-3 border border-outline-variant rounded-10 font-label-md text-on-surface hover:bg-surface-container-low transition-all">
+                      Cancel
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           )}

@@ -1,6 +1,7 @@
 'use client';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { clearSession } from '@/lib/store';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: 'dashboard' },
@@ -12,8 +13,16 @@ const navItems = [
   { href: '/settings', label: 'Settings', icon: 'settings' },
 ];
 
-export default function StudentSidebar() {
+export default function StudentSidebar({ onLogout, userName, userInitials }) {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    if (onLogout) { onLogout(); } else {
+      clearSession();
+      router.push('/login');
+    }
+  };
 
   return (
     <aside className="hidden lg:flex flex-col h-screen sticky top-0 p-4 bg-surface border-r border-outline-variant/30 w-64 shrink-0">
@@ -61,7 +70,17 @@ export default function StudentSidebar() {
             Find Scholarships
           </Link>
         </div>
+
+        {/* User info + logout */}
         <div className="flex flex-col space-y-1 border-t border-outline-variant/20 pt-4">
+          {userName && (
+            <div className="flex items-center gap-3 px-4 py-2">
+              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">
+                {userInitials || 'AJ'}
+              </div>
+              <span className="font-label-sm text-on-surface truncate">{userName}</span>
+            </div>
+          )}
           <Link
             href="/help"
             className="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-low px-4 py-2 rounded-6 transition-all"
@@ -69,13 +88,13 @@ export default function StudentSidebar() {
             <span className="material-symbols-outlined">help</span>
             <span className="font-label-md text-label-md">Help Center</span>
           </Link>
-          <Link
-            href="/login"
-            className="flex items-center gap-3 text-error hover:bg-surface-container-low px-4 py-2 rounded-6 transition-all"
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-3 text-error hover:bg-surface-container-low px-4 py-2 rounded-6 transition-all w-full"
           >
             <span className="material-symbols-outlined">logout</span>
             <span className="font-label-md text-label-md">Logout</span>
-          </Link>
+          </button>
         </div>
       </div>
     </aside>
