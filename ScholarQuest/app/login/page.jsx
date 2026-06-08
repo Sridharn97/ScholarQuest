@@ -1,15 +1,22 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { validateLogin, setSession } from '@/lib/store';
+import { validateLogin, setSession, isLoggedIn } from '@/lib/store';
 
 export default function LoginPage() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // If already logged in, redirect immediately
+  useEffect(() => {
+    if (isLoggedIn()) {
+      router.replace('/dashboard');
+    }
+  }, [router]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -30,18 +37,17 @@ export default function LoginPage() {
       return;
     }
     setSession(user);
-    setTimeout(() => router.push('/dashboard'), 300);
+    // Use window.location for a hard navigation to guarantee the redirect works
+    window.location.href = '/dashboard';
   };
 
   return (
     <div className="min-h-screen bg-background flex">
       {/* ===== LEFT: ILLUSTRATION PANEL ===== */}
       <div className="hidden lg:flex w-[52%] relative flex-col overflow-hidden" style={{ background: 'linear-gradient(135deg, #001e6b 0%, #004ac6 50%, #712ae2 100%)' }}>
-        {/* Decorative circles */}
         <div className="absolute top-0 left-0 w-96 h-96 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, #ffffff 0%, transparent 70%)', transform: 'translate(-30%, -30%)' }} />
         <div className="absolute bottom-0 right-0 w-80 h-80 rounded-full opacity-15" style={{ background: 'radial-gradient(circle, #b4c5ff 0%, transparent 70%)', transform: 'translate(30%, 30%)' }} />
 
-        {/* Top brand */}
         <div className="relative z-10 p-10">
           <Link href="/" className="flex items-center gap-3">
             <div className="w-9 h-9 bg-white/20 rounded-10 flex items-center justify-center">
@@ -51,7 +57,6 @@ export default function LoginPage() {
           </Link>
         </div>
 
-        {/* Center content */}
         <div className="relative z-10 flex-1 flex flex-col justify-center px-12">
           <h2 className="text-4xl font-extrabold text-white leading-tight mb-4" style={{ fontFamily: 'Manrope, sans-serif' }}>
             Welcome back.<br />
@@ -61,8 +66,6 @@ export default function LoginPage() {
           <p className="text-white/70 text-base leading-relaxed mb-10 max-w-sm">
             Thousands of new scholarships are added every week. Sign in to see your latest AI-powered matches.
           </p>
-
-          {/* Feature chips */}
           <div className="space-y-3 mb-10">
             {[
               { icon: 'auto_awesome', text: '98% match accuracy with AI profiling' },
@@ -76,14 +79,9 @@ export default function LoginPage() {
             ))}
           </div>
 
-          {/* Image */}
-          <div className="relative w-full h-52 rounded-2xl overflow-hidden border border-white/10">
-            <Image src="/student_success.png" alt="Scholar success" fill sizes="52vw" className="object-cover object-top" />
-            <div className="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent" />
-            <div className="absolute bottom-4 left-4">
-              <p className="text-white font-bold text-sm">Jordan M. — Berkeley &apos;25</p>
-              <p className="text-white/70 text-xs">Won $45,000 Full-Ride Scholarship</p>
-            </div>
+          <div className="p-4 bg-white/10 rounded-2xl border border-white/10">
+            <p className="text-white/60 text-xs mb-2 uppercase tracking-widest">Demo Credentials</p>
+            <p className="text-white text-sm"><span className="text-white/50">Sign up first at</span> /signup <span className="text-white/50">then use your email & password</span></p>
           </div>
         </div>
       </div>
@@ -91,12 +89,10 @@ export default function LoginPage() {
       {/* ===== RIGHT: FORM PANEL ===== */}
       <div className="flex-1 flex flex-col justify-center items-center px-8 py-12 bg-white">
         <div className="w-full max-w-[420px]">
-          {/* Mobile brand */}
           <Link href="/" className="flex items-center gap-2 mb-10 lg:hidden">
             <span className="text-primary font-extrabold text-2xl tracking-tight">ScholarQuest</span>
           </Link>
 
-          {/* Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-extrabold text-gray-900 mb-2" style={{ fontFamily: 'Manrope, sans-serif' }}>Sign in</h1>
             <p className="text-gray-500 text-base">New to ScholarQuest?{' '}
@@ -104,21 +100,13 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* Error */}
           {error && (
             <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-10 text-red-600 text-sm flex items-center gap-2">
-              <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>error</span>
+              <span className="material-symbols-outlined shrink-0" style={{ fontSize: '18px' }}>error</span>
               {error}
             </div>
           )}
 
-          {/* Demo hint */}
-          <div className="mb-6 p-3 bg-primary/5 border border-primary/20 rounded-10 text-sm text-primary flex items-start gap-2">
-            <span className="material-symbols-outlined shrink-0" style={{ fontSize: '18px' }}>info</span>
-            <span>Don&apos;t have an account? <Link href="/signup" className="font-bold underline">Sign up first</Link>, then log in with your credentials.</span>
-          </div>
-
-          {/* Form */}
           <form className="space-y-5" onSubmit={handleSubmit}>
             <div className="space-y-1.5">
               <label htmlFor="login_email" className="block text-sm font-semibold text-gray-700">Email address</label>
@@ -148,14 +136,8 @@ export default function LoginPage() {
                   className="w-full h-11 px-4 pr-12 border border-gray-200 rounded-10 text-sm text-gray-900 placeholder:text-gray-400 bg-gray-50 focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/15 outline-none transition-all"
                   required
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                >
-                  <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>
-                    {showPassword ? 'visibility_off' : 'visibility'}
-                  </span>
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
+                  <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>{showPassword ? 'visibility_off' : 'visibility'}</span>
                 </button>
               </div>
             </div>
@@ -178,11 +160,10 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Admin link */}
           <div className="mt-8 pt-6 border-t border-gray-100 text-center">
-            <Link href="/admin-login" className="inline-flex items-center gap-2 text-gray-400 text-sm hover:text-primary transition-colors">
-              <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>shield</span>
-              Administrator? Access Admin Portal
+            <Link href="/provider-login" className="inline-flex items-center gap-2 text-gray-400 text-sm hover:text-primary transition-colors">
+              <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>corporate_fare</span>
+              Company or Institute? Access Partner Portal
             </Link>
           </div>
         </div>

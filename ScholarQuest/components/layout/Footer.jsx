@@ -65,8 +65,8 @@ export default function Footer() {
             {
               title: 'Organizations',
               links: [
-                { label: 'Post a Scholarship', href: '/admin-signup' },
-                { label: 'Admin Portal', href: '/admin-login' },
+                { label: 'Post a Scholarship', href: '/provider-signup' },
+                { label: 'Company / Institute Portal', href: '/provider-login' },
                 { label: 'Partner Program', href: '#' },
                 { label: 'API Access', href: '#' },
               ],

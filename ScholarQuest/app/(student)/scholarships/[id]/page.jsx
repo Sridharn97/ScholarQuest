@@ -1,17 +1,74 @@
+'use client';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-
-export const metadata = { title: 'Scholarship Details | ScholarQuest' };
-
-const requirements = [
-  { icon: 'school', label: 'GPA Requirement', value: '3.5 minimum' },
-  { icon: 'work', label: 'Experience', value: '2+ years internship' },
-  { icon: 'public', label: 'Nationality', value: 'US Citizens & PR' },
-  { icon: 'event', label: 'Year', value: 'Junior or Senior' },
-];
-
-const documents = ['Official academic transcript (sealed)', 'Two letters of recommendation', 'Personal statement (800–1200 words)', 'FAFSA or financial aid award letter (if applicable)'];
+import { useRouter } from 'next/navigation';
+import { getAdminScholarships, addCardToColumn, ensureDefaults, getTracker } from '@/lib/store';
 
 export default function ScholarshipDetailsPage({ params }) {
+  const router = useRouter();
+  const [scholarship, setScholarship] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [saved, setSaved] = useState(false);
+  
+  // Safe param unwrapping
+  const [resolvedParams, setResolvedParams] = useState(null);
+
+  useEffect(() => {
+    ensureDefaults();
+    Promise.resolve(params).then(res => {
+      setResolvedParams(res);
+      const id = Number(res?.id);
+      const list = getAdminScholarships();
+      const found = list.find(s => s.id === id);
+      
+      // Fallback if not found
+      if (found) {
+        setScholarship(found);
+      } else {
+        setScholarship(list[0]);
+      }
+      
+      // Check if already saved in tracker
+      const tracker = getTracker();
+      const isSaved = tracker.some(col => col.cards.some(c => c.title === (found || list[0]).name));
+      setSaved(isSaved);
+      
+      setLoading(false);
+    });
+  }, [params]);
+
+  const handleSaveToTracker = () => {
+    if (!scholarship || saved) return;
+    addCardToColumn('col_interested', {
+      title: scholarship.name,
+      desc: scholarship.desc || 'Saved from Discovery',
+      type: scholarship.category || 'Scholarship',
+      date: scholarship.deadline
+    });
+    setSaved(true);
+  };
+
+  if (loading || !scholarship) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <span className="material-symbols-outlined text-primary animate-spin" style={{ fontSize: '36px' }}>progress_activity</span>
+      </div>
+    );
+  }
+
+  const requirements = [
+    { icon: 'school', label: 'GPA Requirement', value: '3.5 minimum' },
+    { icon: 'public', label: 'Nationality', value: 'US Citizens & PR' },
+    { icon: 'event', label: 'Target Year', value: 'Undergrad / Graduate' },
+    { icon: 'category', label: 'Field of Study', value: scholarship.category || 'General' },
+  ];
+
+  const documents = [
+    'Official academic transcript',
+    'Personal statement & essay',
+    'Letters of recommendation (optional)',
+  ];
+
   return (
     <div className="max-w-container-max mx-auto px-gutter py-10">
       {/* Breadcrumb */}
@@ -31,16 +88,16 @@ export default function ScholarshipDetailsPage({ params }) {
               <div className="flex items-start justify-between mb-6 flex-wrap gap-4">
                 <div>
                   <div className="flex items-center gap-3 mb-3">
-                    <span className="bg-secondary-container/10 text-secondary px-3 py-1 rounded-6 font-label-sm uppercase tracking-wider">STEM</span>
+                    <span className="bg-secondary/10 text-secondary px-3 py-1 rounded-6 font-label-sm uppercase tracking-wider">{scholarship.category}</span>
                     <div className="flex items-center gap-1 text-tertiary">
                       <span className="material-symbols-outlined" style={{ fontSize: '16px', fontVariationSettings: "'FILL' 1" }}>timer</span>
-                      <span className="font-label-sm text-label-sm">7 days left</span>
+                      <span className="font-label-sm text-label-sm">Active Opportunity</span>
                     </div>
                   </div>
                   <h1 className="font-display-lg text-display-lg text-on-background leading-tight mb-2" style={{ fontFamily: 'Manrope, sans-serif', fontSize: '36px', lineHeight: '44px' }}>
-                    Global Tech Innovators Excellence Award
+                    {scholarship.name}
                   </h1>
-                  <p className="font-body-lg text-body-lg text-on-surface-variant">Sponsored by the <span className="text-primary font-semibold">World Future Foundation</span></p>
+                  <p className="font-body-lg text-body-lg text-on-surface-variant">Sponsored by <span className="text-primary font-semibold">{scholarship.org}</span></p>
                 </div>
                 <div className="relative inline-flex items-center justify-center w-24 h-24 shrink-0">
                   <svg className="w-24 h-24 transform -rotate-90" viewBox="0 0 96 96">
@@ -48,7 +105,7 @@ export default function ScholarshipDetailsPage({ params }) {
                     <circle className="text-secondary" cx="48" cy="48" r="40" fill="transparent" stroke="currentColor" strokeDasharray="251.3" strokeDashoffset="5" strokeWidth="8" />
                   </svg>
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="font-headline-md text-headline-md text-secondary">98%</span>
+                    <span className="font-headline-md text-headline-md text-secondary">{scholarship.match || '92%'}</span>
                     <span className="font-label-sm text-label-sm text-on-surface-variant">match</span>
                   </div>
                 </div>
@@ -56,12 +113,12 @@ export default function ScholarshipDetailsPage({ params }) {
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
-                  { label: 'Award Amount', value: '$45,000', cls: 'text-primary' },
-                  { label: 'Duration', value: '4 Years', cls: '' },
+                  { label: 'Award Amount', value: scholarship.amount, cls: 'text-primary' },
                   { label: 'Renewable', value: 'Yes', cls: 'text-green-700' },
-                  { label: 'Application Deadline', value: 'Oct 15, 2024', cls: '' },
+                  { label: 'Applicants Tracked', value: scholarship.applicants || '0', cls: '' },
+                  { label: 'Deadline Date', value: scholarship.deadline, cls: '' },
                 ].map((s) => (
-                  <div key={s.label} className="bg-surface-container-low rounded-10 p-4">
+                  <div key={s.label} className="bg-surface-container-low rounded-10 p-4 border border-outline-variant/10">
                     <p className="font-label-sm text-label-sm text-on-surface-variant mb-1">{s.label}</p>
                     <p className={`font-headline-md text-headline-md ${s.cls}`}>{s.value}</p>
                   </div>
@@ -73,11 +130,8 @@ export default function ScholarshipDetailsPage({ params }) {
           {/* Description */}
           <div className="glass-card rounded-2xl p-10">
             <h2 className="font-headline-md text-headline-md mb-6">About This Scholarship</h2>
-            <p className="font-body-md text-body-md text-on-surface-variant mb-4 leading-relaxed">
-              The Global Tech Innovators Excellence Award is a prestigious, merit-based scholarship designed to identify and support the next generation of technology leaders. Founded by the World Future Foundation, this award celebrates students who demonstrate exceptional intellectual curiosity, a commitment to ethical innovation, and the drive to solve complex global challenges.
-            </p>
-            <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-              Recipients will gain not just financial support, but also access to a curated network of mentors, industry leaders, and exclusive internship pipelines within our partner organizations across Silicon Valley, London, and Singapore.
+            <p className="font-body-md text-body-md text-on-surface-variant mb-4 leading-relaxed whitespace-pre-wrap">
+              {scholarship.desc}
             </p>
           </div>
 
@@ -86,13 +140,13 @@ export default function ScholarshipDetailsPage({ params }) {
             <h2 className="font-headline-md text-headline-md mb-6">Eligibility Requirements</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               {requirements.map((req) => (
-                <div key={req.label} className="flex items-center gap-4 p-4 bg-surface-container-low rounded-10">
+                <div key={req.label} className="flex items-center gap-4 p-4 bg-surface-container-low rounded-10 border border-outline-variant/10">
                   <div className="w-10 h-10 rounded-6 bg-primary/10 flex items-center justify-center text-primary">
                     <span className="material-symbols-outlined">{req.icon}</span>
                   </div>
                   <div>
                     <p className="font-label-sm text-label-sm text-on-surface-variant">{req.label}</p>
-                    <p className="font-label-md text-label-md text-on-surface">{req.value}</p>
+                    <p className="font-label-md text-label-md text-on-surface font-semibold">{req.value}</p>
                   </div>
                 </div>
               ))}
@@ -113,20 +167,28 @@ export default function ScholarshipDetailsPage({ params }) {
         {/* Right Sidebar */}
         <div className="space-y-10">
           {/* Apply CTA */}
-          <div className="glass-card rounded-2xl p-10 text-center shadow-xl">
+          <div className="glass-card rounded-2xl p-10 text-center shadow-xl border border-outline-variant/15">
             <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mx-auto mb-4">
               <span className="material-symbols-outlined" style={{ fontSize: '32px' }}>school</span>
             </div>
             <h3 className="font-headline-md text-headline-md mb-2">Ready to Apply?</h3>
-            <p className="font-body-sm text-body-sm text-on-surface-variant mb-6">Your profile matches 98% of the requirements. Don&apos;t miss this opportunity!</p>
+            <p className="font-body-sm text-body-sm text-on-surface-variant mb-6">Submit your application directly to **{scholarship.org}**.</p>
             <Link
-              href="/apply/1"
-              className="block w-full py-3 bg-primary text-on-primary rounded-10 font-label-md text-label-md text-center hover:opacity-90 active:scale-95 transition-all shadow-lg shadow-primary/20 mb-3"
+              href={`/apply/${scholarship.id}`}
+              className="block w-full py-3 bg-primary text-on-primary rounded-10 font-label-md text-label-md text-center hover:opacity-90 active:scale-95 transition-all shadow-lg shadow-primary/20 mb-3 font-bold"
             >
               Start Application
             </Link>
-            <button className="block w-full py-3 border border-outline-variant rounded-10 font-label-md text-label-md text-on-surface hover:bg-surface-container-low transition-all">
-              Save to Tracker
+            <button
+              onClick={handleSaveToTracker}
+              disabled={saved}
+              className={`block w-full py-3 border rounded-10 font-label-md text-label-md transition-all ${
+                saved 
+                  ? 'bg-green-50 border-green-200 text-green-700 cursor-default font-semibold' 
+                  : 'border-outline-variant text-on-surface hover:bg-surface-container-low active:scale-95'
+              }`}
+            >
+              {saved ? 'Saved in Tracker ✓' : 'Save to Tracker'}
             </button>
           </div>
 
@@ -134,30 +196,20 @@ export default function ScholarshipDetailsPage({ params }) {
           <div className="glass-card rounded-2xl p-10">
             <h3 className="font-label-md text-label-md text-on-surface-variant mb-4 flex items-center gap-2">
               <span className="material-symbols-outlined text-secondary" style={{ fontSize: '18px' }}>analytics</span>
-              Eligibility Snapshot
+              Eligibility Checklist
             </h3>
             <div className="space-y-3">
               {[
-                { label: 'GPA', val: '3.92 ✓', ok: true },
-                { label: 'Year', val: 'Senior ✓', ok: true },
-                { label: 'Nationality', val: 'US Citizen ✓', ok: true },
-                { label: 'Publication', val: '1 paper ✓', ok: true },
+                { label: 'GPA', val: '3.92 ✓ (Exceeds)', ok: true },
+                { label: 'Profile complete', val: 'Yes ✓', ok: true },
+                { label: 'Nationality', val: 'Match ✓', ok: true },
               ].map((e) => (
-                <div key={e.label} className="flex justify-between items-center">
-                  <span className="font-body-sm text-body-sm text-on-surface-variant">{e.label}</span>
-                  <span className={`font-label-sm text-label-sm font-semibold ${e.ok ? 'text-green-600' : 'text-error'}`}>{e.val}</span>
+                <div key={e.label} className="flex justify-between items-center text-sm">
+                  <span className="font-body-sm text-on-surface-variant">{e.label}</span>
+                  <span className={`font-semibold ${e.ok ? 'text-green-600' : 'text-error'}`}>{e.val}</span>
                 </div>
               ))}
             </div>
-          </div>
-
-          {/* Contact */}
-          <div className="glass-card rounded-2xl p-6">
-            <h3 className="font-label-md text-label-md text-on-surface-variant mb-4">Have Questions?</h3>
-            <a href="mailto:info@worldfuture.org" className="flex items-center gap-3 text-primary hover:underline">
-              <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>mail</span>
-              <span className="font-body-sm">info@worldfuture.org</span>
-            </a>
           </div>
         </div>
       </div>

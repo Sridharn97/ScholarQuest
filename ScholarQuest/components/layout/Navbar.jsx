@@ -51,11 +51,11 @@ export default function Navbar() {
           {/* Desktop specific buttons */}
           <div className="hidden md:flex items-center gap-2">
             <Link
-              href="/admin-login"
+              href="/provider-login"
               className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-gray-500 hover:text-gray-800 transition-colors rounded-6 hover:bg-gray-100/80"
             >
-              <span className="material-symbols-outlined" style={{ fontSize: '15px' }}>shield</span>
-              Admin
+              <span className="material-symbols-outlined" style={{ fontSize: '15px' }}>corporate_fare</span>
+              Company / Institute
             </Link>
 
             <div className="w-px h-5 bg-gray-200 mx-1" />
@@ -123,12 +123,12 @@ export default function Navbar() {
               Get Started Free
             </Link>
             <Link
-              href="/admin-login"
+              href="/provider-login"
               onClick={() => setIsMobileMenuOpen(false)}
               className="flex items-center justify-center gap-1.5 px-4 py-3 mt-2 text-xs font-semibold text-gray-500 border border-gray-200 rounded-10"
             >
-              <span className="material-symbols-outlined" style={{ fontSize: '15px' }}>shield</span>
-              Admin Portal
+              <span className="material-symbols-outlined" style={{ fontSize: '15px' }}>corporate_fare</span>
+              Company / Institute Portal
             </Link>
           </div>
         </div>

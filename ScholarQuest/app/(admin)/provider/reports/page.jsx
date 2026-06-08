@@ -1,4 +1,4 @@
-export const metadata = { title: 'Scholar Admin | Reports & Analytics' };
+export const metadata = { title: 'Sponsor Portal | Reports & Analytics' };
 
 const topScholarships = [
   { name: 'Global Tech Innovators Fund', applicants: 142, awarded: 12, rate: '8.4%' },
@@ -18,21 +18,21 @@ const monthlyData = [
 
 const maxVal = Math.max(...monthlyData.map((d) => d.applications));
 
-export default function ReportsPage() {
+export default function ProviderReportsPage() {
   return (
     <div>
       <div className="mb-10">
         <h2 className="font-headline-lg text-headline-lg text-on-surface">Reports & Analytics</h2>
-        <p className="text-body-md text-on-surface-variant mt-1">Comprehensive insights into platform performance</p>
+        <p className="text-body-md text-on-surface-variant mt-1">Insights into scholarship disbursements and application activity</p>
       </div>
 
       {/* Summary KPIs */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-gutter mb-10">
         {[
-          { label: 'Total Applications', value: '3,240', trend: '+18% MoM', trendf: 'text-green-600' },
-          { label: 'Scholarships Awarded', value: '248', trend: '+12% MoM', trendf: 'text-green-600' },
-          { label: 'Total Value Distributed', value: '$2.8M', trend: '+22% YoY', trendf: 'text-green-600' },
-          { label: 'Avg. Match Score', value: '87%', trend: '+3pts', trendf: 'text-green-600' },
+          { label: 'Total Submissions', value: '528', trend: '+14% MoM', trendf: 'text-green-600' },
+          { label: 'Grants Funded', value: '40', trend: '+10% MoM', trendf: 'text-green-600' },
+          { label: 'Total Funds Disbursed', value: '$850,000', trend: '+15% YoY', trendf: 'text-green-600' },
+          { label: 'Avg. Match score', value: '92%', trend: '+2pts', trendf: 'text-green-600' },
         ].map((k) => (
           <div key={k.label} className="glass-card p-6 rounded-10 border border-outline-variant/20">
             <p className="font-label-sm text-label-sm text-on-surface-variant mb-1">{k.label}</p>
@@ -45,7 +45,7 @@ export default function ReportsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-gutter mb-10">
         {/* Monthly Applications Bar Chart */}
         <div className="glass-card p-6 rounded-10 border border-outline-variant/30">
-          <h4 className="font-headline-md text-headline-md mb-6">Monthly Applications vs. Awards</h4>
+          <h4 className="font-headline-md text-headline-md mb-6">Monthly Activity vs. Funded Grants</h4>
           <div className="space-y-3">
             {monthlyData.map((d) => (
               <div key={d.month} className="flex items-center gap-4">
@@ -63,8 +63,8 @@ export default function ReportsPage() {
             ))}
           </div>
           <div className="flex gap-4 mt-4">
-            <div className="flex items-center gap-2"><div className="w-3 h-3 bg-primary rounded-full" /><span className="font-label-sm text-label-sm text-on-surface-variant">Applications</span></div>
-            <div className="flex items-center gap-2"><div className="w-3 h-3 bg-secondary rounded-full" /><span className="font-label-sm text-label-sm text-on-surface-variant">Awards</span></div>
+            <div className="flex items-center gap-2"><div className="w-3 h-3 bg-primary rounded-full" /><span className="font-label-sm text-label-sm text-on-surface-variant">Submissions</span></div>
+            <div className="flex items-center gap-2"><div className="w-3 h-3 bg-secondary rounded-full" /><span className="font-label-sm text-label-sm text-on-surface-variant">Funded</span></div>
           </div>
         </div>
 
@@ -74,27 +74,24 @@ export default function ReportsPage() {
           <div className="flex items-center justify-center mb-6">
             <div className="relative w-48 h-48">
               <svg className="w-48 h-48 transform -rotate-90" viewBox="0 0 120 120">
-                {/* STEM 42% */}
-                <circle cx="60" cy="60" r="50" fill="transparent" stroke="#004ac6" strokeWidth="20" strokeDasharray="132 212" />
+                {/* STEM 52% */}
+                <circle cx="60" cy="60" r="50" fill="transparent" stroke="#004ac6" strokeWidth="20" strokeDasharray="163.3 212" />
                 {/* Leadership 28% */}
-                <circle cx="60" cy="60" r="50" fill="transparent" stroke="#712ae2" strokeWidth="20" strokeDasharray="88 212" strokeDashoffset="-132" />
-                {/* Arts 18% */}
-                <circle cx="60" cy="60" r="50" fill="transparent" stroke="#943700" strokeWidth="20" strokeDasharray="56.6 212" strokeDashoffset="-220" />
-                {/* Other 12% */}
-                <circle cx="60" cy="60" r="50" fill="transparent" stroke="#c3c6d7" strokeWidth="20" strokeDasharray="37.7 212" strokeDashoffset="-276.6" />
+                <circle cx="60" cy="60" r="50" fill="transparent" stroke="#712ae2" strokeWidth="20" strokeDasharray="88 212" strokeDashoffset="-163.3" />
+                {/* Other 20% */}
+                <circle cx="60" cy="60" r="50" fill="transparent" stroke="#c3c6d7" strokeWidth="20" strokeDasharray="62.8 212" strokeDashoffset="-251.3" />
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="font-headline-md text-headline-md">3,240</span>
-                <span className="font-label-sm text-label-sm text-on-surface-variant">Total</span>
+                <span className="font-headline-md text-headline-md">528</span>
+                <span className="font-label-sm text-label-sm text-on-surface-variant">Total Submissions</span>
               </div>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-2">
             {[
-              { label: 'STEM', pct: '42%', color: 'bg-primary' },
-              { label: 'Leadership', pct: '28%', color: 'bg-secondary' },
-              { label: 'Arts', pct: '18%', color: 'bg-tertiary' },
-              { label: 'Other', pct: '12%', color: 'bg-outline-variant' },
+              { label: 'STEM Program', pct: '52%', color: 'bg-primary' },
+              { label: 'Leadership Award', pct: '28%', color: 'bg-secondary' },
+              { label: 'Other Options', pct: '20%', color: 'bg-outline-variant' },
             ].map((c) => (
               <div key={c.label} className="flex items-center gap-2">
                 <div className={`w-3 h-3 rounded-full ${c.color}`} />
@@ -109,12 +106,12 @@ export default function ReportsPage() {
       {/* Top Scholarships Table */}
       <div className="glass-card rounded-10 border border-outline-variant/30 overflow-hidden">
         <div className="p-6 border-b border-outline-variant/30">
-          <h4 className="font-headline-md text-headline-md">Top Performing Scholarships</h4>
+          <h4 className="font-headline-md text-headline-md">Posted Programs Performance</h4>
         </div>
         <table className="w-full text-left">
           <thead className="bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">
             <tr>
-              {['Scholarship', 'Applications', 'Awarded', 'Success Rate'].map((h) => (
+              {['Program Name', 'Submissions', 'Funded Grants', 'Funding Success Rate'].map((h) => (
                 <th key={h} className="px-6 py-4">{h}</th>
               ))}
             </tr>

@@ -37,8 +37,8 @@ export default function DashboardPage() {
   ];
 
   const recommendations = [
-    { tag: 'STEM Excellence', title: 'Global Tech Innovators Fund', desc: 'Awarded to students demonstrating exceptional leadership in computer science and AI ethics.', amount: '$25,000', deadline: 'Oct 15, 2026', match: '98%' },
-    { tag: 'Leadership', title: 'Future Leaders Foundation', desc: 'Supporting visionary students who are driving change in their local communities.', amount: '$10,000', deadline: 'Nov 02, 2026', match: '92%' },
+    { id: 1, tag: 'STEM Excellence', title: 'Global Tech Innovators Fund', desc: 'Awarded to students demonstrating exceptional leadership in computer science and AI ethics.', amount: '$25,000', deadline: 'Oct 15, 2026', match: '98%' },
+    { id: 2, tag: 'Leadership', title: 'Future Leaders Foundation', desc: 'Supporting visionary students who are driving change in their local communities.', amount: '$10,000', deadline: 'Nov 02, 2026', match: '92%' },
   ];
 
   const deadlines = [
@@ -149,8 +149,8 @@ export default function DashboardPage() {
                     <p className="font-label-md text-on-surface">{rec.deadline}</p>
                   </div>
                 </div>
-                <Link href="/tracker" className="mt-4 block text-center py-2 bg-primary/5 hover:bg-primary/10 text-primary rounded-6 font-label-sm transition-colors">
-                  Track Application →
+                <Link href={`/scholarships/${rec.id}`} className="mt-4 block text-center py-2 bg-primary/5 hover:bg-primary/10 text-primary rounded-6 font-label-sm transition-colors">
+                  View & Apply →
                 </Link>
               </div>
             ))}

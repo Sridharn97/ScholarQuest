@@ -1,8 +1,10 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { getAdminScholarships, getUser, addApplication, addCardToColumn, ensureDefaults } from '@/lib/store';
 
-const steps = [
+const initialSteps = [
   { num: '01', label: 'Personal Info', sub: 'Completed', done: true },
   { num: '02', label: 'Academic Background', sub: 'In Progress', active: true },
   { num: '03', label: 'Statement of Purpose', sub: 'Pending', pending: true },
@@ -10,10 +12,94 @@ const steps = [
 ];
 
 export default function ApplyPage({ params }) {
+  const router = useRouter();
+  const [scholarship, setScholarship] = useState(null);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [gpa, setGpa] = useState('3.92');
+  const [institution, setInstitution] = useState('Stanford University');
+  const [studyField, setStudyField] = useState('Computer Science');
+  const [toast, setToast] = useState('');
+
+  // Safe param unwrapping
+  const [resolvedParams, setResolvedParams] = useState(null);
+
+  useEffect(() => {
+    ensureDefaults();
+    Promise.resolve(params).then(res => {
+      setResolvedParams(res);
+      const id = Number(res?.id);
+      const list = getAdminScholarships();
+      const found = list.find(s => s.id === id) || list[0];
+      setScholarship(found);
+
+      const currentUser = getUser();
+      if (currentUser) {
+        setUser(currentUser);
+        setGpa(currentUser.gpa || '3.92');
+        setInstitution(currentUser.institution || 'Stanford University');
+        setStudyField(currentUser.studyField || 'Computer Science');
+      }
+      setLoading(false);
+    });
+  }, [params]);
+
+  const showToast = (msg) => {
+    setToast(msg);
+    setTimeout(() => setToast(''), 3000);
+  };
+
+  const handleSubmit = (e) => {
+    if (e) e.preventDefault();
+    if (!scholarship || !user) return;
+
+    // Submit the application to the central data store
+    addApplication({
+      studentName: user.name || 'Alex Johnson',
+      studentEmail: user.email || 'student@student.com',
+      scholarshipId: scholarship.id,
+      scholarshipName: scholarship.name,
+      gpa: gpa
+    });
+
+    showToast('Application Submitted Successfully!');
+    setTimeout(() => {
+      router.push('/tracker');
+    }, 1200);
+  };
+
+  const handleSaveForLater = () => {
+    if (!scholarship) return;
+    addCardToColumn('col_preparing', {
+      title: scholarship.name,
+      desc: scholarship.desc || 'Saved during application',
+      type: scholarship.category || 'Scholarship',
+      date: scholarship.deadline
+    });
+
+    showToast('Application Saved to Tracker!');
+    setTimeout(() => {
+      router.push('/tracker');
+    }, 1200);
+  };
+
+  if (loading || !scholarship || !user) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <span className="material-symbols-outlined text-primary animate-spin" style={{ fontSize: '36px' }}>progress_activity</span>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-container-max mx-auto px-gutter py-10">
+      {toast && (
+        <div className="fixed top-6 right-6 z-50 bg-green-600 text-white px-5 py-3 rounded-2xl shadow-xl flex items-center gap-2 font-label-md">
+          <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>check_circle</span>
+          {toast}
+        </div>
+      )}
+
       {/* Header */}
       <header className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
@@ -22,16 +108,22 @@ export default function ApplyPage({ params }) {
             <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>chevron_right</span>
             <span className="font-label-sm text-label-sm text-primary">Active Application</span>
           </nav>
-          <h1 className="font-headline-lg text-headline-lg text-on-surface">Global Leadership & Innovation Fellowship</h1>
+          <h1 className="font-headline-lg text-headline-lg text-on-surface">{scholarship.name}</h1>
           <p className="font-body-md text-body-md text-on-surface-variant mt-1">
-            Offered by the <span className="font-semibold text-primary">Meridian Academic Foundation</span>
+            Offered by <span className="font-semibold text-primary">{scholarship.org}</span>
           </p>
         </div>
         <div className="flex gap-3">
-          <button className="px-6 py-3 border border-outline-variant rounded-2xl font-label-md text-label-md text-on-surface hover:bg-surface-container-low transition-all active:scale-95">
+          <button
+            onClick={handleSaveForLater}
+            className="px-6 py-3 border border-outline-variant rounded-2xl font-label-md text-label-md text-on-surface hover:bg-surface-container-low transition-all active:scale-95"
+          >
             Save for Later
           </button>
-          <button className="px-6 py-3 bg-primary-container text-on-primary-container rounded-2xl font-label-md text-label-md font-bold hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-primary-container/20">
+          <button
+            onClick={handleSubmit}
+            className="px-6 py-3 bg-primary text-white rounded-2xl font-label-md text-label-md font-bold hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-primary/20"
+          >
             Submit Application
           </button>
         </div>
@@ -42,7 +134,7 @@ export default function ApplyPage({ params }) {
         <aside className="lg:col-span-3">
           <div className="sticky top-24 space-y-8">
             <div className="space-y-6">
-              {steps.map((step) => (
+              {initialSteps.map((step) => (
                 <div key={step.num} className={`flex items-center gap-4 cursor-pointer ${step.pending ? 'opacity-40' : ''}`}>
                   <div className={`h-10 w-10 rounded-full flex items-center justify-center shrink-0 ${step.done ? 'bg-primary text-white shadow-md' : step.active ? 'border-2 border-primary text-primary bg-primary-fixed/30' : 'border-2 border-outline text-outline'}`}>
                     {step.done ? <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>check</span> : <span className="font-bold">{step.num}</span>}
@@ -59,46 +151,48 @@ export default function ApplyPage({ params }) {
             <div className="p-6 bg-secondary-container/10 border border-secondary-container/20 rounded-2xl">
               <div className="flex items-center justify-between mb-4">
                 <span className="font-label-md text-label-md text-secondary">Match Score</span>
-                <span className="text-headline-md font-headline-md text-secondary">94%</span>
+                <span className="text-headline-md font-headline-md text-secondary">{scholarship.match || '92%'}</span>
               </div>
               <div className="w-full bg-surface-container-highest rounded-full h-2 overflow-hidden">
-                <div className="bg-secondary h-full" style={{ width: '94%' }} />
+                <div className="bg-secondary h-full" style={{ width: scholarship.match || '92%' }} />
               </div>
-              <p className="font-body-sm text-body-sm text-on-surface-variant mt-4">You exceed the GPA requirements for this fellowship.</p>
+              <p className="font-body-sm text-body-sm text-on-surface-variant mt-4">You match the target requirements for this grant.</p>
             </div>
           </div>
         </aside>
 
         {/* Main Form */}
         <div className="lg:col-span-9">
-          <section className="glass-panel p-10 rounded-2xl shadow-sm border border-outline-variant/20">
+          <section className="glass-panel p-10 rounded-2xl shadow-sm border border-outline-variant/20 bg-white">
             <div className="mb-10">
-              <h2 className="font-headline-md text-headline-md text-on-surface">Academic Background</h2>
-              <p className="font-body-md text-body-md text-on-surface-variant mt-1">Please provide details regarding your current and previous education.</p>
+              <h2 className="font-headline-md text-headline-md text-on-surface">Academic Verification</h2>
+              <p className="font-body-md text-body-md text-on-surface-variant mt-1">Please verify your academic status before submitting.</p>
             </div>
 
-            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+            <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="font-label-md text-label-md text-on-surface">Current University</label>
+                  <label className="font-label-md text-label-md text-on-surface">Current University / Institution</label>
                   <input
                     type="text"
-                    defaultValue="Stanford University"
+                    value={institution}
+                    onChange={(e) => setInstitution(e.target.value)}
                     placeholder="Enter university name"
                     className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all"
                   />
                 </div>
                 <div className="space-y-2">
                   <label className="font-label-md text-label-md text-on-surface">Field of Study</label>
-                  <select className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all appearance-none">
-                    <option>Computer Science</option>
-                    <option>Biotechnology</option>
-                    <option>International Relations</option>
-                    <option>Economics</option>
-                  </select>
+                  <input
+                    type="text"
+                    value={studyField}
+                    onChange={(e) => setStudyField(e.target.value)}
+                    placeholder="Enter field of study"
+                    className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all"
+                  />
                 </div>
                 <div className="space-y-2">
-                  <label className="font-label-md text-label-md text-on-surface">Current GPA (4.0 Scale)</label>
+                  <label className="font-label-md text-label-md text-on-surface">Current Cumulative GPA</label>
                   <input
                     type="number"
                     step="0.01"
@@ -111,28 +205,31 @@ export default function ApplyPage({ params }) {
                   <label className="font-label-md text-label-md text-on-surface">Expected Graduation Date</label>
                   <input
                     type="date"
-                    defaultValue="2025-06-15"
+                    defaultValue="2026-06-15"
                     className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all"
                   />
                 </div>
               </div>
 
               <div className="space-y-2 pt-4">
-                <label className="font-label-md text-label-md text-on-surface">Academic Honors & Awards</label>
+                <label className="font-label-md text-label-md text-on-surface">Academic Honors, Research, or Publications</label>
                 <textarea
                   rows={4}
-                  placeholder="List your notable achievements..."
+                  placeholder="Describe your research work, awards, or papers..."
                   className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all resize-none"
                 />
               </div>
 
               <div className="pt-8 flex justify-between items-center border-t border-outline-variant/10">
-                <button type="button" className="flex items-center gap-2 text-primary font-label-md text-label-md hover:opacity-80 transition-opacity">
+                <Link href={`/scholarships/${scholarship.id}`} className="flex items-center gap-2 text-primary font-label-md text-label-md hover:opacity-80 transition-opacity">
                   <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>arrow_back</span>
-                  Previous Step
-                </button>
-                <button type="button" className="px-8 py-3 bg-primary-container text-on-primary-container rounded-2xl font-label-md text-label-md font-bold hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-primary-container/20">
-                  Save & Continue
+                  Cancel & Exit
+                </Link>
+                <button
+                  type="submit"
+                  className="px-8 py-3 bg-primary text-white rounded-2xl font-label-md text-label-md font-bold hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-primary/20"
+                >
+                  Submit Application
                 </button>
               </div>
             </form>
@@ -146,7 +243,7 @@ export default function ApplyPage({ params }) {
               </div>
               <h3 className="font-headline-md text-headline-md text-on-surface">Document Repository</h3>
               <p className="font-body-md text-body-md text-on-surface-variant max-w-md mt-2">
-                Section locked. Complete Academic Background to enable document uploads for transcripts and letters of recommendation.
+                Section locked. Auto-validation complete. Your uploaded profile documents will be attached automatically upon submission.
               </p>
             </div>
           </section>

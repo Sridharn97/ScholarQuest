@@ -1,24 +1,28 @@
 'use client';
 import Link from 'next/link';
-import { useState } from 'react';
-
-const scholarships = [
-  { id: 1, icon: 'school', category: 'STEM', title: 'Women in Tech Leadership Grant', org: 'Ada Lovelace Institute', amount: '$12,000', match: '92%', deadline: 'Oct 30, 2024' },
-  { id: 2, icon: 'public', category: 'INTERNATIONAL', title: 'Green Future Sustainability Fund', org: 'EcoRoots Global', amount: '$8,500', match: '85%', deadline: 'Dec 01, 2024' },
-  { id: 3, icon: 'draw', category: 'CREATIVE', title: 'Visual Arts Merit Scholarship', org: 'National Endowment for Arts', amount: '$20,000', match: '79%', deadline: 'Jan 15, 2025' },
-  { id: 4, icon: 'volunteer_activism', category: 'COMMUNITY', title: 'Community Hero Fellowship', org: 'Civic Leaders Network', amount: '$5,000', match: '88%', deadline: 'Nov 10, 2024' },
-];
+import { useState, useEffect } from 'react';
+import { getAdminScholarships, ensureDefaults } from '@/lib/store';
 
 const filterTags = ['STEM', 'Full-Ride', 'Minority', 'Art', 'Leadership', 'Research'];
 
 export default function DiscoveryPage() {
+  const [scholarships, setScholarships] = useState([]);
   const [selectedTags, setSelectedTags] = useState(['Full-Ride']);
+
+  useEffect(() => {
+    ensureDefaults();
+    const list = getAdminScholarships().filter(s => s.status === 'Active');
+    setScholarships(list);
+  }, []);
 
   const toggleTag = (tag) => {
     setSelectedTags((prev) =>
       prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
     );
   };
+
+  const featured = scholarships[0] || { id: 1, name: 'Global Tech Innovators Fund', category: 'STEM', amount: '$25,000', deadline: '2026-10-15', org: 'Global Tech Foundation', match: '98%' };
+  const regularScholarships = scholarships.length > 1 ? scholarships.slice(1) : [];
 
   return (
     <div className="flex max-w-container-max mx-auto px-gutter py-10 gap-8">
@@ -87,7 +91,7 @@ export default function DiscoveryPage() {
                   onClick={() => toggleTag(tag)}
                   className={`px-3 py-1 rounded-full text-label-sm font-label-sm cursor-pointer transition-colors ${
                     selectedTags.includes(tag)
-                      ? 'bg-primary/10 border border-primary/30 text-primary'
+                      ? 'bg-primary/10 border border-primary/30 text-primary font-bold'
                       : 'bg-surface-container-high border border-outline-variant/20 hover:bg-primary/10 hover:border-primary/50'
                   }`}
                 >
@@ -104,7 +108,7 @@ export default function DiscoveryPage() {
         {/* Mobile Filter + Count */}
         <div className="flex items-center justify-between mb-4">
           <p className="font-body-sm text-body-sm text-on-surface-variant">
-            Showing <span className="font-bold text-on-surface">1,420 scholarships</span> matching your profile
+            Showing <span className="font-bold text-on-surface">{scholarships.length} scholarships</span> matching your profile
           </p>
           <div className="flex items-center gap-2">
             <span className="font-label-sm text-label-sm text-on-surface-variant">Sort by:</span>
@@ -127,10 +131,10 @@ export default function DiscoveryPage() {
                     <span className="font-label-sm text-label-sm">Top Recommendation</span>
                   </div>
                 </div>
-                <h3 className="font-headline-lg text-headline-lg text-on-background mb-1">Global Innovators Excellence Award</h3>
-                <p className="font-body-md text-body-md text-on-surface-variant mb-6">World Future Foundation</p>
+                <h3 className="font-headline-lg text-headline-lg text-on-background mb-1">{featured.name}</h3>
+                <p className="font-body-md text-body-md text-on-surface-variant mb-6">{featured.org}</p>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-                  {[['Funding', '$45,000', 'text-primary'], ['Deadline', 'Nov 15', 'text-on-surface'], ['Duration', '4 Years', 'text-on-surface'], ['Location', 'USA', 'text-on-surface']].map(([l, v, cls]) => (
+                  {[['Funding', featured.amount, 'text-primary'], ['Deadline', featured.deadline, 'text-on-surface'], ['Duration', '4 Years', 'text-on-surface'], ['Location', 'USA', 'text-on-surface']].map(([l, v, cls]) => (
                     <div key={l}>
                       <p className="font-label-sm text-label-sm text-on-surface-variant mb-1">{l}</p>
                       <p className={`font-headline-md text-headline-md ${cls}`}>{v}</p>
@@ -146,10 +150,10 @@ export default function DiscoveryPage() {
                       <circle className="text-secondary/10" cx="40" cy="40" r="34" fill="transparent" stroke="currentColor" strokeWidth="6" />
                       <circle className="text-secondary" cx="40" cy="40" r="34" fill="transparent" stroke="currentColor" strokeDasharray="213.6" strokeDashoffset="21.36" strokeWidth="6" />
                     </svg>
-                    <span className="absolute font-headline-md text-headline-md text-secondary">98%</span>
+                    <span className="absolute font-headline-md text-headline-md text-secondary">{featured.match || '95%'}</span>
                   </div>
                 </div>
-                <Link href="/scholarships/1" className="bg-primary text-on-primary px-8 py-3 rounded-10 font-label-md text-label-md hover:bg-primary/90 active:scale-95 transition-all shadow-md">
+                <Link href={`/scholarships/${featured.id}`} className="bg-primary text-on-primary px-8 py-3 rounded-10 font-label-md text-label-md hover:bg-primary/90 active:scale-95 transition-all shadow-md">
                   Apply Now
                 </Link>
               </div>
@@ -157,16 +161,16 @@ export default function DiscoveryPage() {
           </div>
 
           {/* Regular Cards */}
-          {scholarships.map((s) => (
+          {regularScholarships.map((s) => (
             <div key={s.id} className="bg-white border border-outline-variant/30 p-6 rounded-2xl hover:border-primary/50 hover:shadow-lg transition-all flex flex-col justify-between group">
               <div>
                 <div className="flex justify-between items-start mb-4">
                   <div className="w-12 h-12 rounded-10 bg-surface-container-high flex items-center justify-center">
-                    <span className="material-symbols-outlined text-primary">{s.icon}</span>
+                    <span className="material-symbols-outlined text-primary">{s.icon || 'school'}</span>
                   </div>
                   <span className="bg-surface-container-low px-2 py-1 rounded text-[10px] font-bold text-on-surface-variant border border-outline-variant/20 uppercase tracking-tighter">{s.category}</span>
                 </div>
-                <h4 className="font-headline-md text-headline-md text-on-surface mb-1">{s.title}</h4>
+                <h4 className="font-headline-md text-headline-md text-on-surface mb-1">{s.name}</h4>
                 <p className="font-body-sm text-body-sm text-on-surface-variant mb-4">{s.org}</p>
                 <div className="flex items-center justify-between mb-6">
                   <div>
@@ -175,7 +179,7 @@ export default function DiscoveryPage() {
                   </div>
                   <div className="text-right">
                     <p className="font-label-sm text-label-sm text-on-surface-variant">Match</p>
-                    <p className="font-headline-md text-headline-md text-secondary">{s.match}</p>
+                    <p className="font-headline-md text-headline-md text-secondary">{s.match || '90%'}</p>
                   </div>
                 </div>
               </div>
@@ -197,13 +201,11 @@ export default function DiscoveryPage() {
           <button className="w-10 h-10 flex items-center justify-center rounded-6 border border-outline-variant/30 hover:border-primary transition-colors">
             <span className="material-symbols-outlined">chevron_left</span>
           </button>
-          {[1, 2, 3].map((p) => (
+          {[1].map((p) => (
             <button key={p} className={`w-10 h-10 flex items-center justify-center rounded-6 font-bold ${p === 1 ? 'bg-primary text-on-primary' : 'border border-outline-variant/30 hover:border-primary transition-colors'}`}>
               {p}
             </button>
           ))}
-          <span className="mx-2">...</span>
-          <button className="w-10 h-10 flex items-center justify-center rounded-6 border border-outline-variant/30 hover:border-primary transition-colors">12</button>
           <button className="w-10 h-10 flex items-center justify-center rounded-6 border border-outline-variant/30 hover:border-primary transition-colors">
             <span className="material-symbols-outlined">chevron_right</span>
           </button>
