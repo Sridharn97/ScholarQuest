@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import SuccessStoriesSection from '@/components/sections/SuccessStoriesSection';
 
 export const metadata = {
   title: 'ScholarQuest | Find Your Academic Future',
@@ -46,28 +47,6 @@ const steps = [
   { num: '01', color: 'bg-primary', title: 'Build Your Profile', desc: 'Enter your academic history, extracurriculars, and financial need to seed our AI engine.' },
   { num: '02', color: 'bg-secondary', title: 'Review AI Matches', desc: 'Browse curated opportunities ranked by match score, award amount, and deadline urgency.' },
   { num: '03', color: 'bg-on-background', title: 'Apply & Win', desc: 'Use our smart-fill tools and application tracker to submit winning applications with ease.' },
-];
-
-const testimonials = [
-  {
-    quote: "ScholarQuest found me a full-ride to Berkeley that I didn't even know existed. The AI Matcher is genuinely life-changing for first-gen students like me.",
-    name: 'Jordan Mitchell',
-    role: 'UC Berkeley, \'25',
-    initials: 'JM',
-    stars: 5,
-  },
-  {
-    quote: "I applied to 12 scholarships in one weekend using the tracker and won 3 of them. The auto-fill feature alone saved me 20+ hours.",
-    name: 'Elena Rodriguez',
-    role: 'STEM Grant Recipient',
-    initials: 'ER',
-  },
-  {
-    quote: "The Eligibility Checker translates complex requirements into simple checklists. As a first-gen student, that clarity was everything.",
-    name: 'Marcus Chen',
-    role: 'Columbia University',
-    initials: 'MC',
-  },
 ];
 
 export default function LandingPage() {
@@ -326,64 +305,7 @@ export default function LandingPage() {
       </section>
 
       {/* ======================== TESTIMONIALS ======================== */}
-      <section className="py-28 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-sm font-bold text-secondary uppercase tracking-widest mb-3">Success Stories</p>
-            <h2 className="text-4xl font-extrabold text-on-background mb-4" style={{ fontFamily: 'Manrope, sans-serif' }}>Empowering Future Leaders</h2>
-            <p className="text-lg text-on-surface-variant">Our scholars are studying at the world&apos;s most prestigious institutions.</p>
-          </div>
-
-          {/* University logos */}
-          <div className="flex flex-wrap justify-center items-center gap-x-12 gap-y-4 mb-16 opacity-40 hover:opacity-80 transition-opacity duration-500">
-            {['STANFORD', 'MIT', 'OXFORD', 'HARVARD', 'BERKELEY', 'COLUMBIA'].map((uni) => (
-              <span key={uni} className="text-xl font-black tracking-[0.2em] text-on-surface">{uni}</span>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Main testimonial */}
-            <div className="lg:col-span-2 bg-gradient-to-br from-primary to-secondary rounded-3xl p-10 text-white flex flex-col justify-between relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-8 opacity-10">
-                <span className="material-symbols-outlined" style={{ fontSize: '140px', fontVariationSettings: "'FILL' 1" }}>format_quote</span>
-              </div>
-              <div className="relative z-10">
-                <div className="flex gap-1 mb-6">
-                  {[1,2,3,4,5].map(i => (
-                    <span key={i} className="material-symbols-outlined text-amber-300" style={{ fontSize: '20px', fontVariationSettings: "'FILL' 1" }}>star</span>
-                  ))}
-                </div>
-                <p className="text-2xl font-semibold leading-relaxed mb-8" style={{ fontFamily: 'Manrope, sans-serif' }}>
-                  &ldquo;{testimonials[0].quote}&rdquo;
-                </p>
-              </div>
-              <div className="relative z-10 flex items-center gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-white/20 border border-white/30 flex items-center justify-center font-bold text-lg">{testimonials[0].initials}</div>
-                <div>
-                  <p className="font-bold">{testimonials[0].name}</p>
-                  <p className="text-white/70 text-sm">{testimonials[0].role}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Side testimonials */}
-            <div className="flex flex-col gap-6">
-              {testimonials.slice(1).map((t) => (
-                <div key={t.name} className="bg-white rounded-3xl p-7 border border-outline-variant/20 shadow-sm flex flex-col justify-between flex-1">
-                  <p className="text-base text-on-surface-variant italic leading-relaxed mb-6">&ldquo;{t.quote}&rdquo;</p>
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-10 bg-primary/10 flex items-center justify-center text-primary font-bold text-sm flex-shrink-0">{t.initials}</div>
-                    <div>
-                      <p className="text-sm font-bold text-on-surface">{t.name}</p>
-                      <p className="text-xs text-on-surface-variant">{t.role}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      <SuccessStoriesSection />
 
       {/* ======================== CTA BANNER ======================== */}
       <section className="py-20 px-6 bg-primary">
