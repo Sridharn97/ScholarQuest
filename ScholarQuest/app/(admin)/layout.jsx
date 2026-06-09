@@ -3,7 +3,7 @@ import ProviderSidebar from '@/components/layout/ProviderSidebar';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { isProviderLoggedIn, getProviderInfo, clearProviderSession, ensureDefaults } from '@/lib/store';
+import { isProviderLoggedIn, getProviderInfo, clearProviderSession, ensureDefaults, isLoggedIn } from '@/lib/store';
 
 export default function ProviderLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -14,7 +14,11 @@ export default function ProviderLayout({ children }) {
   useEffect(() => {
     ensureDefaults();
     if (!isProviderLoggedIn()) {
-      window.location.href = '/provider-login';
+      if (isLoggedIn()) {
+        window.location.href = '/dashboard';
+      } else {
+        window.location.href = '/provider-login';
+      }
       return;
     }
     setProviderInfo(getProviderInfo());

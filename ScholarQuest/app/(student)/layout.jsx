@@ -4,7 +4,7 @@ import MobileBottomNav from '@/components/layout/MobileBottomNav';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { isLoggedIn, getUserName, getUserInitials, clearSession, ensureDefaults } from '@/lib/store';
+import { isLoggedIn, getUserName, getUserInitials, clearSession, ensureDefaults, isProviderLoggedIn } from '@/lib/store';
 
 const mobileMenuLinks = [
   { href: '/messages', label: 'Messages', icon: 'chat' },
@@ -22,7 +22,11 @@ export default function StudentLayout({ children }) {
 
   useEffect(() => {
     if (!isLoggedIn()) {
-      router.replace('/login');
+      if (isProviderLoggedIn()) {
+        router.replace('/provider');
+      } else {
+        router.replace('/login');
+      }
       return;
     }
     ensureDefaults();

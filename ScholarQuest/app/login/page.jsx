@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { validateLogin, setSession, isLoggedIn } from '@/lib/store';
+import { validateLogin, setSession, isLoggedIn, isProviderLoggedIn } from '@/lib/store';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -15,6 +15,8 @@ export default function LoginPage() {
   useEffect(() => {
     if (isLoggedIn()) {
       router.replace('/dashboard');
+    } else if (isProviderLoggedIn()) {
+      router.replace('/provider');
     }
   }, [router]);
 
