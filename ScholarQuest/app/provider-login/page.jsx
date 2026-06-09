@@ -41,64 +41,64 @@ export default function ProviderLoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex bg-slate-50">
+    <div className="h-screen overflow-hidden flex bg-slate-50">
 
       {/* ===== LEFT: LIGHT STATS & PREVIEW PANEL ===== */}
-      <div className="hidden lg:flex w-[52%] flex-col relative overflow-hidden border-r border-slate-200/60" style={{ background: 'linear-gradient(135deg, #f0f4ff 0%, #f8fafc 100%)' }}>
+      <div className="hidden lg:flex w-[52%] flex-col relative overflow-hidden border-r border-slate-200/60 h-full" style={{ background: 'linear-gradient(135deg, #f0f4ff 0%, #f8fafc 100%)' }}>
         <div className="absolute top-1/4 -left-32 w-80 h-80 rounded-full blur-[120px] pointer-events-none" style={{ background: 'rgba(0,74,198,0.1)' }} />
         <div className="absolute bottom-1/4 right-0 w-64 h-64 rounded-full blur-[100px] pointer-events-none" style={{ background: 'rgba(113,42,226,0.08)' }} />
 
-        <div className="relative z-10 flex flex-col h-full p-12">
-          <Link href="/" className="flex items-center gap-3 mb-14">
-            <div className="w-10 h-10 rounded-10 flex items-center justify-center bg-primary shadow-md">
-              <span className="material-symbols-outlined text-white" style={{ fontSize: '20px', fontVariationSettings: "'FILL' 1" }}>corporate_fare</span>
-            </div>
-            <div>
-              <p className="font-extrabold text-slate-900 text-lg tracking-tight leading-none">ScholarQuest</p>
-              <p className="text-slate-400 text-[10px] tracking-widest uppercase mt-1 font-bold">Sponsor Portal</p>
-            </div>
-          </Link>
+        <div className="relative z-10 flex flex-col h-full p-10 justify-between">
+          <div>
+            <Link href="/" className="flex items-center gap-3 mb-8">
+              <img src="/Logo.png.png" alt="Logo" className="w-9 h-9 rounded-full object-cover shadow-md" />
+              <div>
+                <p className="font-extrabold text-slate-900 text-base tracking-tight leading-none">ScholarQuest</p>
+                <p className="text-slate-400 text-[9px] tracking-widest uppercase mt-0.5 font-bold">Sponsor Portal</p>
+              </div>
+            </Link>
 
-          <div className="mb-10">
-            <h1 className="text-5xl font-extrabold text-slate-900 leading-[1.15] mb-4" style={{ fontFamily: 'Manrope, sans-serif' }}>
-              Host Scholarships.<br />
-              <span style={{ background: 'linear-gradient(90deg, #004ac6, #712ae2)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Fund Futures.</span>
-            </h1>
-            <p className="text-slate-600 text-base leading-relaxed max-w-sm font-medium">
-              The dashboard for corporate and institutional partners to create scholarships, track applicant milestones, and fund the next generation of leaders.
-            </p>
+            <div className="mb-4">
+              <h1 className="text-4xl font-extrabold text-slate-900 leading-[1.2] mb-3" style={{ fontFamily: 'Manrope, sans-serif' }}>
+                Host Scholarships.<br />
+                <span style={{ background: 'linear-gradient(90deg, #004ac6, #712ae2)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Fund Futures.</span>
+              </h1>
+              <p className="text-slate-600 text-sm leading-relaxed max-w-sm font-medium">
+                The dashboard for corporate and institutional partners to create scholarships, track applicant milestones, and fund the next generation of leaders.
+              </p>
+            </div>
           </div>
 
-          <div className="relative w-full aspect-square rounded-3xl overflow-hidden border border-slate-200/80 shadow-md mb-8 bg-white">
+          <div className="relative w-full max-w-[350px] aspect-square mx-auto rounded-3xl overflow-hidden border border-slate-200/80 shadow-md bg-white">
             <Image
               src="/provider_login_hero.png"
               alt="Sponsor Portal Illustration"
               fill
               className="object-cover"
-              sizes="50vw"
+              sizes="33vw"
               priority
             />
             <div className="absolute bottom-4 left-4 right-4 z-20">
-              <div className="flex items-center gap-3 bg-white/95 backdrop-blur-md rounded-2xl px-4 py-2.5 border border-slate-200/50 shadow-sm">
-                <div className="w-2.5 h-2.5 rounded-full bg-green-500 flex-shrink-0 animate-pulse" />
-                <p className="text-slate-800 text-xs font-bold">Sponsor Portal Active</p>
-                <span className="ml-auto text-slate-500 text-[10px] font-semibold">Live</span>
+              <div className="flex items-center gap-3 bg-white/95 backdrop-blur-md rounded-2xl px-4 py-2 border border-slate-200/50 shadow-sm">
+                <div className="w-2 h-2 rounded-full bg-green-500 flex-shrink-0 animate-pulse" />
+                <p className="text-slate-800 text-[11px] font-bold">Sponsor Portal Active</p>
+                <span className="ml-auto text-slate-500 text-[9px] font-semibold">Live</span>
               </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4 mt-6">
             {[
               { value: '5,000+', label: 'Active Applications', icon: 'description', color: 'text-primary', bg: 'bg-primary/10' },
               { value: '$1.2M', label: 'Allocated Funds', icon: 'payments', color: 'text-green-600', bg: 'bg-green-100' },
             ].map((stat) => (
-              <div key={stat.label} className="flex items-center gap-3 p-4 rounded-2xl border border-slate-200 bg-white shadow-sm">
-                <div className={`w-10 h-10 rounded-10 ${stat.bg} flex items-center justify-center flex-shrink-0`}>
-                  <span className={`material-symbols-outlined ${stat.color}`} style={{ fontSize: '20px', fontVariationSettings: "'FILL' 1" }}>{stat.icon}</span>
+              <div key={stat.label} className="flex items-center gap-3 p-3 rounded-2xl border border-slate-200 bg-white shadow-sm">
+                <div className={`w-8 h-8 rounded-lg ${stat.bg} flex items-center justify-center flex-shrink-0`}>
+                  <span className={`material-symbols-outlined ${stat.color}`} style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>{stat.icon}</span>
                 </div>
                 <div>
-                  <p className="text-slate-900 font-extrabold text-lg leading-none" style={{ fontFamily: 'Manrope, sans-serif' }}>{stat.value}</p>
-                  <p className="text-slate-500 text-xs mt-1 font-medium">{stat.label}</p>
+                  <p className="text-slate-900 font-extrabold text-base leading-none" style={{ fontFamily: 'Manrope, sans-serif' }}>{stat.value}</p>
+                  <p className="text-slate-500 text-[10px] mt-0.5 font-medium">{stat.label}</p>
                 </div>
               </div>
             ))}
@@ -107,12 +107,10 @@ export default function ProviderLoginPage() {
       </div>
 
       {/* ===== RIGHT: FORM PANEL ===== */}
-      <div className="flex-1 flex flex-col justify-center items-center px-8 py-12 bg-white">
-        <div className="w-full max-w-[400px]">
+      <div className="flex-1 flex flex-col justify-center items-center px-8 py-12 bg-white h-full overflow-y-auto">
+        <div className="w-full max-w-[400px] py-4">
           <div className="flex items-center gap-3 mb-10 lg:hidden">
-            <div className="w-9 h-9 rounded-10 flex items-center justify-center bg-primary">
-              <span className="material-symbols-outlined text-white" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>corporate_fare</span>
-            </div>
+            <img src="/Logo.png.png" alt="Logo" className="w-9 h-9 rounded-full object-cover shadow-sm" />
             <p className="font-extrabold text-slate-900 text-lg tracking-tight">ScholarQuest Portal</p>
           </div>
 

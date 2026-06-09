@@ -74,7 +74,10 @@ export default function StudentLayout({ children }) {
             >
               <span className="material-symbols-outlined">{mobileMenuOpen ? 'close' : 'menu'}</span>
             </button>
-            <Link href="/" className="font-headline-md text-headline-md text-primary font-extrabold tracking-tight">SQ</Link>
+            <Link href="/" className="flex items-center gap-2">
+              <img src="/Logo.png.png" alt="Logo" className="w-8 h-8 rounded-full object-cover" />
+              <span className="font-headline-md text-headline-md text-primary font-extrabold tracking-tight">SQ</span>
+            </Link>
           </div>
 
           {/* Desktop Search */}

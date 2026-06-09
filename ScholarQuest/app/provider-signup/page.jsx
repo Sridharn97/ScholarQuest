@@ -63,68 +63,73 @@ export default function ProviderSignupPage() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-50 flex items-center justify-center p-6 relative overflow-hidden">
-      {/* Background Orbs */}
-      <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full blur-[120px] pointer-events-none" style={{ background: 'rgba(0,74,198,0.06)' }} />
-      <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full blur-[120px] pointer-events-none" style={{ background: 'rgba(113,42,226,0.06)' }} />
+    <div className="h-screen overflow-hidden flex bg-slate-50">
 
-      <div className="w-full max-w-[960px] grid grid-cols-1 lg:grid-cols-12 gap-0 rounded-[32px] overflow-hidden shadow-xl border border-slate-200 bg-white relative z-10">
+      {/* ===== LEFT: LIGHT STATS & PREVIEW PANEL ===== */}
+      <div className="hidden lg:flex w-[52%] flex-col relative overflow-hidden border-r border-slate-200/60 h-full" style={{ background: 'linear-gradient(135deg, #f0f4ff 0%, #f8fafc 100%)' }}>
+        <div className="absolute top-1/4 -left-32 w-80 h-80 rounded-full blur-[120px] pointer-events-none" style={{ background: 'rgba(0,74,198,0.1)' }} />
+        <div className="absolute bottom-1/4 right-0 w-64 h-64 rounded-full blur-[100px] pointer-events-none" style={{ background: 'rgba(113,42,226,0.08)' }} />
 
-        {/* ===== LEFT PANEL: INFO GRID ===== */}
-        <div className="hidden lg:flex lg:col-span-5 flex-col bg-slate-50/80 p-10 justify-between border-r border-slate-200/60">
+        <div className="relative z-10 flex flex-col h-full p-10 justify-between">
           <div>
-            {/* Logo */}
-            <div className="flex items-center gap-3 mb-10">
-              <div className="w-9 h-9 rounded-10 bg-primary flex items-center justify-center shadow-md">
-                <span className="material-symbols-outlined text-white" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>corporate_fare</span>
-              </div>
+            <Link href="/" className="flex items-center gap-3 mb-8">
+              <img src="/Logo.png.png" alt="Logo" className="w-9 h-9 rounded-full object-cover shadow-md" />
               <div>
                 <p className="font-extrabold text-slate-900 text-base tracking-tight leading-none">ScholarQuest</p>
-                <p className="text-slate-400 text-[10px] tracking-widest uppercase mt-1 font-bold">Partner Onboarding</p>
+                <p className="text-slate-400 text-[9px] tracking-widest uppercase mt-0.5 font-bold">Partner Onboarding</p>
               </div>
-            </div>
+            </Link>
 
-            <h2 className="text-3xl font-extrabold text-slate-900 mb-4 leading-tight" style={{ fontFamily: 'Manrope, sans-serif' }}>
-              Empower Students,<br />Create Grants.
-            </h2>
-            <p className="text-slate-600 text-sm leading-relaxed mb-8">
-              Post your scholarship programs on ScholarQuest to directly match with high-performing students. Create, track, and review grant submissions in one integrated pipeline.
-            </p>
-
-            <ul className="space-y-3">
-              {[
-                { icon: 'add_circle', text: 'Create & publish custom scholarships' },
-                { icon: 'description', text: 'Track and review student applications' },
-                { icon: 'analytics', text: 'Monitor grant analytics & impact reports' },
-              ].map((item, idx) => (
-                <li key={idx} className="flex items-center gap-3 bg-white rounded-12 p-3 border border-slate-200/60 shadow-sm">
-                  <span className="material-symbols-outlined text-primary" style={{ fontSize: '20px', fontVariationSettings: "'FILL' 1" }}>{item.icon}</span>
-                  <span className="text-slate-700 text-xs font-semibold">{item.text}</span>
-                </li>
-              ))}
-            </ul>
-
-            <div className="relative w-full aspect-square mt-6 rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm bg-white">
-              <Image
-                src="/provider_signup_hero.png"
-                alt="Partner Onboarding Illustration"
-                fill
-                className="object-cover"
-                sizes="33vw"
-              />
+            <div className="mb-4">
+              <h1 className="text-4xl font-extrabold text-slate-900 leading-[1.2] mb-3" style={{ fontFamily: 'Manrope, sans-serif' }}>
+                Empower Students.<br />
+                <span style={{ background: 'linear-gradient(90deg, #004ac6, #712ae2)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Create Grants.</span>
+              </h1>
+              <p className="text-slate-600 text-sm leading-relaxed max-w-sm font-medium">
+                Post your scholarship programs on ScholarQuest to directly match with high-performing students. Create, track, and review grant submissions in one integrated pipeline.
+              </p>
             </div>
           </div>
 
-          <div className="text-slate-400 text-xs font-medium mt-6">
-            © 2026 ScholarQuest. All rights reserved.
+          <div className="relative w-full max-w-[350px] aspect-square mx-auto rounded-3xl overflow-hidden border border-slate-200/80 shadow-md bg-white">
+            <Image
+              src="/provider_signup_hero.png"
+              alt="Partner Onboarding Illustration"
+              fill
+              className="object-cover"
+              sizes="33vw"
+              priority
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6">
+            {[
+              { text: 'Custom scholarships', icon: 'add_circle' },
+              { text: 'Review applications', icon: 'description' },
+              { text: 'Impact reports', icon: 'analytics' },
+            ].map((item, idx) => (
+              <div key={idx} className="flex items-center gap-2 p-2.5 rounded-2xl border border-slate-200 bg-white shadow-sm">
+                <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <span className="material-symbols-outlined text-primary" style={{ fontSize: '15px', fontVariationSettings: "'FILL' 1" }}>{item.icon}</span>
+                </div>
+                <span className="text-slate-700 text-[10px] font-semibold leading-tight">{item.text}</span>
+              </div>
+            ))}
           </div>
         </div>
+      </div>
 
-        {/* ===== RIGHT PANEL: REGISTRATION FORM ===== */}
-        <div className="lg:col-span-7 bg-white p-10 flex flex-col justify-center">
+      {/* ===== RIGHT: FORM PANEL ===== */}
+      <div className="flex-1 flex flex-col justify-center items-center px-8 py-12 bg-white h-full overflow-y-auto">
+        <div className="w-full max-w-[440px] py-4">
+          <div className="flex items-center gap-3 mb-10 lg:hidden">
+            <img src="/Logo.png.png" alt="Logo" className="w-9 h-9 rounded-full object-cover shadow-sm" />
+            <p className="font-extrabold text-slate-900 text-lg tracking-tight">ScholarQuest Portal</p>
+          </div>
+
           <div className="mb-6">
-            <h2 className="text-2xl font-bold text-slate-900" style={{ fontFamily: 'Manrope, sans-serif' }}>Partner Registration</h2>
-            <p className="text-slate-500 text-sm mt-1">Directly create an account for your Company or Educational Institute.</p>
+            <h2 className="text-3xl font-extrabold text-slate-900 mb-1.5" style={{ fontFamily: 'Manrope, sans-serif' }}>Partner Registration</h2>
+            <p className="text-slate-500 text-base">Directly create an account for your Company or Educational Institute.</p>
           </div>
 
           {error && (
@@ -144,7 +149,7 @@ export default function ProviderSignupPage() {
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <label htmlFor="first_name" className="text-slate-700 text-xs font-semibold block">First Name</label>
+                <label htmlFor="first_name" className="text-slate-700 text-sm font-semibold block">First Name</label>
                 <input
                   id="first_name"
                   type="text"
@@ -154,7 +159,7 @@ export default function ProviderSignupPage() {
                 />
               </div>
               <div className="space-y-1.5">
-                <label htmlFor="last_name" className="text-slate-700 text-xs font-semibold block">Last Name</label>
+                <label htmlFor="last_name" className="text-slate-700 text-sm font-semibold block">Last Name</label>
                 <input
                   id="last_name"
                   type="text"
@@ -166,7 +171,7 @@ export default function ProviderSignupPage() {
             </div>
 
             <div className="space-y-1.5">
-              <label htmlFor="organization" className="text-slate-700 text-xs font-semibold block">Company or Institute Name</label>
+              <label htmlFor="organization" className="text-slate-700 text-sm font-semibold block">Company or Institute Name</label>
               <input
                 id="organization"
                 type="text"
@@ -178,7 +183,7 @@ export default function ProviderSignupPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <label htmlFor="entity_type" className="text-slate-700 text-xs font-semibold block">Entity Type</label>
+                <label htmlFor="entity_type" className="text-slate-700 text-sm font-semibold block">Entity Type</label>
                 <div className="relative">
                   <select
                     id="entity_type"
@@ -191,7 +196,7 @@ export default function ProviderSignupPage() {
                 </div>
               </div>
               <div className="space-y-1.5">
-                <label htmlFor="provider_email" className="text-slate-700 text-xs font-semibold block">Work Email</label>
+                <label htmlFor="provider_email" className="text-slate-700 text-sm font-semibold block">Work Email</label>
                 <input
                   id="provider_email"
                   type="email"
@@ -203,7 +208,7 @@ export default function ProviderSignupPage() {
             </div>
 
             <div className="space-y-1.5">
-              <label htmlFor="provider_password" className="text-slate-700 text-xs font-semibold block">Password</label>
+              <label htmlFor="provider_password" className="text-slate-700 text-sm font-semibold block">Password</label>
               <div className="relative">
                 <input
                   id="provider_password"
@@ -265,6 +270,6 @@ export default function ProviderSignupPage() {
           </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

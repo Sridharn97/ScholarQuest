@@ -44,54 +44,71 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="h-screen overflow-hidden flex bg-background">
       {/* ===== LEFT: ILLUSTRATION PANEL ===== */}
-      <div className="hidden lg:flex w-[52%] relative flex-col overflow-hidden" style={{ background: 'linear-gradient(135deg, #001e6b 0%, #004ac6 50%, #712ae2 100%)' }}>
+      <div className="hidden lg:flex w-[52%] relative flex-col overflow-hidden h-full border-r border-white/5" style={{ background: 'linear-gradient(135deg, #0a0f1e 0%, #001e6b 50%, #1a0a2e 100%)' }}>
         <div className="absolute top-0 left-0 w-96 h-96 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, #ffffff 0%, transparent 70%)', transform: 'translate(-30%, -30%)' }} />
         <div className="absolute bottom-0 right-0 w-80 h-80 rounded-full opacity-15" style={{ background: 'radial-gradient(circle, #b4c5ff 0%, transparent 70%)', transform: 'translate(30%, 30%)' }} />
 
-        <div className="relative z-10 p-10">
-          <Link href="/" className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-white/20 rounded-10 flex items-center justify-center">
-              <span className="material-symbols-outlined text-white" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>school</span>
-            </div>
-            <span className="text-white font-extrabold text-xl tracking-tight">ScholarQuest</span>
-          </Link>
-        </div>
-
-        <div className="relative z-10 flex-1 flex flex-col justify-center px-12">
-          <h2 className="text-4xl font-extrabold text-white leading-tight mb-4" style={{ fontFamily: 'Manrope, sans-serif' }}>
-            Welcome back.<br />
-            Your opportunities<br />
-            are waiting.
-          </h2>
-          <p className="text-white/70 text-base leading-relaxed mb-10 max-w-sm">
-            Thousands of new scholarships are added every week. Sign in to see your latest AI-powered matches.
-          </p>
-          <div className="space-y-3 mb-10">
-            {[
-              { icon: 'auto_awesome', text: '98% match accuracy with AI profiling' },
-              { icon: 'schedule', text: 'Smart deadline reminders sent automatically' },
-              { icon: 'trending_up', text: 'Track every application in one dashboard' },
-            ].map((item) => (
-              <div key={item.text} className="flex items-center gap-3 bg-white/10 rounded-10 px-4 py-3 backdrop-blur-sm">
-                <span className="material-symbols-outlined text-white/90 flex-shrink-0" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>{item.icon}</span>
-                <span className="text-white/90 text-sm">{item.text}</span>
-              </div>
-            ))}
+        <div className="relative z-10 flex flex-col h-full p-10 justify-between">
+          <div>
+            <Link href="/" className="flex items-center gap-3">
+              <img src="/Logo.png.png" alt="Logo" className="w-9 h-9 rounded-full object-cover border-2 border-white/20" />
+              <span className="text-white font-extrabold text-xl tracking-tight">ScholarQuest</span>
+            </Link>
           </div>
 
-          <div className="p-4 bg-white/10 rounded-2xl border border-white/10">
-            <p className="text-white/60 text-xs mb-2 uppercase tracking-widest">Demo Credentials</p>
-            <p className="text-white text-sm"><span className="text-white/50">Sign up first at</span> /signup <span className="text-white/50">then use your email & password</span></p>
+          <div className="my-auto py-2">
+            <div className="mb-6">
+              <h2 className="text-4xl font-extrabold text-white leading-tight mb-3" style={{ fontFamily: 'Manrope, sans-serif' }}>
+                Welcome back.<br />
+                Your opportunities<br />
+                are waiting.
+              </h2>
+              <p className="text-white/70 text-sm leading-relaxed max-w-sm font-medium">
+                Thousands of new scholarships are added every week. Sign in to see your latest AI-powered matches.
+              </p>
+            </div>
+
+            <div className="relative w-full max-w-[340px] aspect-square mx-auto rounded-3xl overflow-hidden border border-white/10 shadow-lg bg-white/5 backdrop-blur-md mb-6">
+              <Image
+                src="/student_login_hero.png"
+                alt="Student Success Illustration"
+                fill
+                className="object-cover"
+                sizes="33vw"
+                priority
+              />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {[
+                { icon: 'auto_awesome', text: '98% Match accuracy' },
+                { icon: 'schedule', text: 'Smart reminders' },
+                { icon: 'trending_up', text: 'Track applications' },
+              ].map((item) => (
+                <div key={item.text} className="flex items-center gap-2 p-2.5 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm shadow-sm">
+                  <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
+                    <span className="material-symbols-outlined text-white/90" style={{ fontSize: '15px', fontVariationSettings: "'FILL' 1" }}>{item.icon}</span>
+                  </div>
+                  <span className="text-white/90 text-[10px] font-semibold leading-tight">{item.text}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="p-3 bg-white/5 rounded-xl border border-white/10 max-w-sm text-center">
+            <p className="text-white/60 text-[10px] mb-1 uppercase tracking-widest font-bold">Demo Credentials</p>
+            <p className="text-white text-xs"><span className="text-white/50">student@student.com</span> <span className="text-white/30">/</span> <span className="text-white/50">student123</span></p>
           </div>
         </div>
       </div>
 
       {/* ===== RIGHT: FORM PANEL ===== */}
-      <div className="flex-1 flex flex-col justify-center items-center px-8 py-12 bg-white">
-        <div className="w-full max-w-[420px]">
-          <Link href="/" className="flex items-center gap-2 mb-10 lg:hidden">
+      <div className="flex-1 flex flex-col justify-center items-center px-8 py-12 bg-white h-full overflow-y-auto">
+        <div className="w-full max-w-[420px] py-4">
+          <Link href="/" className="flex items-center gap-2.5 mb-10 lg:hidden">
+            <img src="/Logo.png.png" alt="Logo" className="w-9 h-9 rounded-full object-cover" />
             <span className="text-primary font-extrabold text-2xl tracking-tight">ScholarQuest</span>
           </Link>
 

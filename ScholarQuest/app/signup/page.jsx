@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { registerUser, setSession, getUser } from '@/lib/store';
+import { registerUser, setSession } from '@/lib/store';
 
 const strengthLabels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
 const strengthColors = ['', 'bg-red-400', 'bg-orange-400', 'bg-yellow-400', 'bg-green-500'];
@@ -50,16 +50,15 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="h-screen overflow-hidden flex bg-background">
       {/* ===== LEFT: FORM PANEL ===== */}
-      <div className="flex-1 flex flex-col justify-center items-center px-8 py-12 bg-white order-1 lg:order-none">
-        <div className="w-full max-w-[440px]">
-          {/* Brand */}
-          <Link href="/" className="flex items-center gap-2 mb-10">
+      <div className="flex-1 flex flex-col justify-center items-center px-8 py-12 bg-white order-1 lg:order-none h-full overflow-y-auto">
+        <div className="w-full max-w-[440px] py-4">
+          <Link href="/" className="flex items-center gap-2.5 mb-10">
+            <img src="/Logo.png.png" alt="Logo" className="w-9 h-9 rounded-full object-cover" />
             <span className="text-primary font-extrabold text-2xl tracking-tight">ScholarQuest</span>
           </Link>
 
-          {/* Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-extrabold text-gray-900 mb-2" style={{ fontFamily: 'Manrope, sans-serif' }}>Create your account</h1>
             <p className="text-gray-500 text-base">Already have an account?{' '}
@@ -67,7 +66,6 @@ export default function SignupPage() {
             </p>
           </div>
 
-          {/* Error */}
           {error && (
             <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-10 text-red-600 text-sm flex items-center gap-2">
               <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>error</span>
@@ -75,7 +73,6 @@ export default function SignupPage() {
             </div>
           )}
 
-          {/* Form */}
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
@@ -156,43 +153,43 @@ export default function SignupPage() {
       </div>
 
       {/* ===== RIGHT: ILLUSTRATION PANEL ===== */}
-      <div className="hidden lg:flex w-[48%] relative flex-col overflow-hidden order-last" style={{ background: 'linear-gradient(135deg, #0a0f1e 0%, #001e6b 40%, #1a0a2e 100%)' }}>
+      <div className="hidden lg:flex w-[48%] relative flex-col overflow-hidden order-last h-full" style={{ background: 'linear-gradient(135deg, #0a0f1e 0%, #001e6b 40%, #1a0a2e 100%)' }}>
         <div className="absolute top-0 right-0 w-96 h-96 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, #b4c5ff 0%, transparent 70%)', transform: 'translate(20%, -20%)' }} />
         <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full opacity-15" style={{ background: 'radial-gradient(circle, #d2bbff 0%, transparent 70%)', transform: 'translate(-20%, 20%)' }} />
 
-        <div className="relative z-10 flex-1 flex flex-col justify-between p-12">
-          <div className="bg-white/8 backdrop-blur-sm rounded-3xl p-7 border border-white/10">
-            <div className="flex gap-1 mb-4">
+        <div className="relative z-10 flex flex-col justify-between p-10 h-full">
+          <div className="bg-white/8 backdrop-blur-sm rounded-2xl p-5 border border-white/10">
+            <div className="flex gap-1 mb-2">
               {[1,2,3,4,5].map(i => (
-                <span key={i} className="material-symbols-outlined text-amber-400" style={{ fontSize: '16px', fontVariationSettings: "'FILL' 1" }}>star</span>
+                <span key={i} className="material-symbols-outlined text-amber-400" style={{ fontSize: '14px', fontVariationSettings: "'FILL' 1" }}>star</span>
               ))}
             </div>
-            <p className="text-white/90 text-lg font-semibold leading-relaxed mb-6" style={{ fontFamily: 'Manrope, sans-serif' }}>
+            <p className="text-white/90 text-base font-semibold leading-relaxed mb-4" style={{ fontFamily: 'Manrope, sans-serif' }}>
               &ldquo;Within 2 weeks of creating my profile, I had matched with 34 scholarships I was eligible for. I won 3 of them.&rdquo;
             </p>
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-10 bg-white/15 border border-white/20 flex items-center justify-center font-bold text-white">PR</div>
+              <div className="w-9 h-9 rounded-lg bg-white/15 border border-white/20 flex items-center justify-center font-bold text-white text-xs">PR</div>
               <div>
-                <p className="text-white font-semibold text-sm">Priya Rao</p>
-                <p className="text-white/50 text-xs">Data Science, UC Berkeley</p>
+                <p className="text-white font-semibold text-xs">Priya Rao</p>
+                <p className="text-white/50 text-[10px]">Data Science, UC Berkeley</p>
               </div>
             </div>
           </div>
 
-          <div className="relative flex-1 my-8 rounded-3xl overflow-hidden border border-white/10">
-            <Image src="/signup_illustration.png" alt="Students finding scholarships" fill sizes="48vw" className="object-cover object-center" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f1e]/70 via-transparent to-transparent" />
+          <div className="relative w-full max-w-[340px] aspect-square mx-auto my-4 rounded-3xl overflow-hidden border border-white/10 shadow-lg bg-white/5 backdrop-blur-md">
+            <Image src="/signup_illustration.png" alt="Students finding scholarships" fill sizes="33vw" className="object-cover object-center" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f1e]/50 via-transparent to-transparent" />
           </div>
 
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-3 gap-3">
             {[
               { value: '50K+', label: 'Scholarships' },
               { value: '$250M', label: 'Total Funding' },
               { value: 'Free', label: 'Always' },
             ].map((s) => (
-              <div key={s.label} className="text-center bg-white/8 rounded-2xl py-4 border border-white/10">
-                <p className="text-2xl font-extrabold text-white" style={{ fontFamily: 'Manrope, sans-serif' }}>{s.value}</p>
-                <p className="text-white/50 text-xs mt-0.5">{s.label}</p>
+              <div key={s.label} className="text-center bg-white/8 rounded-xl py-2.5 border border-white/10">
+                <p className="text-xl font-extrabold text-white" style={{ fontFamily: 'Manrope, sans-serif' }}>{s.value}</p>
+                <p className="text-white/50 text-[9px] mt-0.5 font-medium">{s.label}</p>
               </div>
             ))}
           </div>

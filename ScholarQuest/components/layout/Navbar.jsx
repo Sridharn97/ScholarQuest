@@ -21,9 +21,7 @@ export default function Navbar() {
         {/* Left: Brand + Desktop Nav Links */}
         <div className="flex items-center gap-10">
           <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
-            <div className="w-8 h-8 rounded-6 bg-primary flex items-center justify-center shadow-sm">
-              <span className="material-symbols-outlined text-white" style={{ fontSize: '16px', fontVariationSettings: "'FILL' 1" }}>school</span>
-            </div>
+            <img src="/Logo.png.png" alt="Logo" className="w-8 h-8 rounded-full object-cover shadow-sm" />
             <span className="font-extrabold text-gray-900 text-lg tracking-tight">
               Scholar<span className="text-primary">Quest</span>
             </span>
