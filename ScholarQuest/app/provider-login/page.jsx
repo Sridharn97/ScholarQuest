@@ -69,21 +69,20 @@ export default function ProviderLoginPage() {
             </p>
           </div>
 
-          <div className="relative w-full rounded-3xl overflow-hidden border border-slate-200/80 shadow-lg mb-10 flex-1 min-h-[260px] bg-slate-100">
+          <div className="relative w-full aspect-square rounded-3xl overflow-hidden border border-slate-200/80 shadow-md mb-8 bg-white">
             <Image
-              src="/admin_dashboard.png"
-              alt="Admin Dashboard Preview"
+              src="/provider_login_hero.png"
+              alt="Sponsor Portal Illustration"
               fill
-              className="object-cover object-top"
+              className="object-cover"
               sizes="50vw"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent" />
-            <div className="absolute bottom-5 left-5 right-5">
-              <div className="flex items-center gap-3 bg-white/90 backdrop-blur-md rounded-2xl px-4 py-3 border border-slate-200/50 shadow-sm">
-                <div className="w-3 h-3 rounded-full bg-green-500 flex-shrink-0 animate-pulse" />
-                <p className="text-slate-800 text-sm font-bold">Sponsor Portal Active</p>
-                <span className="ml-auto text-slate-500 text-xs font-semibold">Live</span>
+            <div className="absolute bottom-4 left-4 right-4 z-20">
+              <div className="flex items-center gap-3 bg-white/95 backdrop-blur-md rounded-2xl px-4 py-2.5 border border-slate-200/50 shadow-sm">
+                <div className="w-2.5 h-2.5 rounded-full bg-green-500 flex-shrink-0 animate-pulse" />
+                <p className="text-slate-800 text-xs font-bold">Sponsor Portal Active</p>
+                <span className="ml-auto text-slate-500 text-[10px] font-semibold">Live</span>
               </div>
             </div>
           </div>

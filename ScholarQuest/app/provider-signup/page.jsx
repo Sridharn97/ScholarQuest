@@ -104,10 +104,10 @@ export default function ProviderSignupPage() {
               ))}
             </ul>
 
-            <div className="relative w-full h-44 mt-6 rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm bg-slate-100">
+            <div className="relative w-full aspect-square mt-6 rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm bg-white">
               <Image
-                src="/signup_illustration.png"
-                alt="Partner Onboarding"
+                src="/provider_signup_hero.png"
+                alt="Partner Onboarding Illustration"
                 fill
                 className="object-cover"
                 sizes="33vw"

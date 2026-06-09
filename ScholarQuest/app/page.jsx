@@ -289,9 +289,8 @@ export default function LandingPage() {
       <section className="py-28 px-6 bg-surface-container-lowest">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl aspect-[4/3]">
-              <Image src="/scholarship_cards.png" alt="Scholarship discovery dashboard" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl aspect-square bg-white border border-slate-100">
+              <Image src="/scholarship_discovery_hero.png" alt="Scholarship discovery" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
             </div>
             <div className="flex flex-col gap-6">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/8 rounded-full w-fit">
