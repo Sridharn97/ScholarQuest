@@ -83,24 +83,9 @@ export default function StudentLayout({ children }) {
           {/* Desktop Center Spacing */}
           <div className="hidden lg:flex flex-1 justify-center px-8"></div>
 
-          {/* Right Controls */}
+          {/* Right Controls (Removed per request) */}
           <div className="flex items-center gap-5">
-            <button className="p-2 text-on-surface-variant hover:bg-surface-container hover:text-primary rounded-full transition-all relative flex items-center justify-center">
-              <span className="material-symbols-outlined" style={{ fontSize: '24px' }}>notifications</span>
-              <span className="absolute top-2 right-2.5 w-2 h-2 bg-error rounded-full border border-white shadow-sm" />
-            </button>
-            
-            <div className="h-10 w-px bg-outline-variant/30 mx-1"></div>
-
-            <div className="flex items-center gap-3">
-              <div className="text-right hidden sm:flex flex-col justify-center">
-                <span className="font-label-md text-on-surface font-bold leading-none mb-1">Welcome, {userName.split(' ')[0]}</span>
-                <span className="font-label-sm text-on-surface-variant leading-none">Senior Scholar</span>
-              </div>
-              <div className="w-10 h-10 rounded-full border border-primary/20 bg-primary/10 flex items-center justify-center text-primary font-bold text-sm cursor-pointer hover:bg-primary/20 hover:scale-105 transition-all shadow-sm">
-                {userInitials}
-              </div>
-            </div>
+            {/* User requested removal of this section */}
           </div>
         </header>
 
