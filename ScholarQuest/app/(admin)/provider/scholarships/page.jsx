@@ -97,15 +97,15 @@ export default function ProviderScholarshipsPage() {
           />
         </div>
         <div className="flex gap-2 flex-wrap">
-          {['All', 'Active', 'Draft', 'Closed'].map((f) => (
-            <button
-              key={f}
-              onClick={() => setActiveFilter(f)}
-              className={`px-3 py-2 rounded-6 text-label-sm font-label-md transition-all ${activeFilter === f ? 'bg-primary text-on-primary font-bold' : 'bg-surface-container-high text-on-surface-variant hover:bg-surface-container'}`}
-            >
-              {f}
-            </button>
-          ))}
+          <select
+            value={activeFilter}
+            onChange={(e) => setActiveFilter(e.target.value)}
+            className="bg-surface-container-low border border-outline-variant rounded-6 py-2 px-4 text-body-sm outline-none focus:ring-2 focus:ring-primary/20 font-label-md"
+          >
+            {['All', 'Active', 'Draft', 'Closed'].map((f) => (
+              <option key={f} value={f}>{f}</option>
+            ))}
+          </select>
         </div>
       </div>
 

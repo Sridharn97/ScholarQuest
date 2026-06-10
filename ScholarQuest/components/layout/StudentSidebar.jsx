@@ -27,9 +27,9 @@ export default function StudentSidebar({ onLogout, userName, userInitials }) {
   return (
     <aside className="hidden lg:flex flex-col h-screen sticky top-0 p-4 bg-surface border-r border-outline-variant/30 w-64 shrink-0">
       {/* Logo */}
-      <div className="mb-10 px-4">
-        <Link href="/" className="flex items-center gap-2.5">
-          <img src="/Logo.png.png" alt="Logo" className="w-8 h-8 rounded-full object-cover" />
+      <div className="mb-12 px-2 flex items-center justify-center">
+        <Link href="/" className="flex items-center gap-3 w-full pl-2">
+          <img src="/Logo.png.png" alt="Logo" className="w-10 h-10 rounded-full object-cover shadow-sm border border-outline-variant/20" />
           <span className="font-headline-md text-headline-md text-primary font-extrabold tracking-tight">
             ScholarQuest
           </span>
@@ -37,26 +37,26 @@ export default function StudentSidebar({ onLogout, userName, userInitials }) {
       </div>
 
       {/* Nav Items */}
-      <nav className="flex-1 space-y-1">
+      <nav className="flex-1 space-y-1 overflow-y-auto pr-2 pb-4 scrollbar-thin scrollbar-thumb-outline-variant/30 scrollbar-track-transparent">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 rounded-10 px-4 py-3 font-label-md text-label-md transition-all ${
+              className={`flex items-center gap-4 rounded-12 px-4 py-3.5 font-label-md text-label-md transition-all duration-200 group ${
                 isActive
-                  ? 'bg-secondary-container/10 text-secondary font-bold border-r-4 border-secondary translate-x-1'
-                  : 'text-on-surface-variant hover:bg-surface-container-high hover:opacity-80'
+                  ? 'bg-primary/10 text-primary font-bold shadow-sm'
+                  : 'text-on-surface-variant hover:bg-surface-container hover:text-on-surface'
               }`}
             >
               <span
-                className="material-symbols-outlined"
+                className={`material-symbols-outlined transition-transform duration-200 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`}
                 style={isActive ? { fontVariationSettings: "'FILL' 1" } : {}}
               >
                 {item.icon}
               </span>
-              <span>{item.label}</span>
+              <span className="tracking-wide">{item.label}</span>
             </Link>
           );
         })}

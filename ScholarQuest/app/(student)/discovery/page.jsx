@@ -36,18 +36,12 @@ export default function DiscoveryPage() {
 
           {/* Country */}
           <div className="space-y-4">
-            <label className="font-label-md text-label-md text-on-surface flex items-center justify-between">
-              Country
-              <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>expand_more</span>
-            </label>
-            <div className="space-y-2">
-              {['United States', 'United Kingdom', 'Canada'].map((c, i) => (
-                <label key={c} className="flex items-center gap-2 font-body-sm text-body-sm cursor-pointer">
-                  <input type="checkbox" defaultChecked={i === 0} className="rounded border-outline-variant text-primary" />
-                  {c}
-                </label>
-              ))}
-            </div>
+            <label className="font-label-md text-label-md text-on-surface">Country</label>
+            <select className="w-full bg-surface-container-low border border-outline-variant rounded-6 py-2 px-3 font-body-sm text-body-sm outline-none focus:ring-2 focus:ring-primary/20">
+              <option>United States</option>
+              <option>United Kingdom</option>
+              <option>Canada</option>
+            </select>
           </div>
 
           {/* Degree Type */}
@@ -62,43 +56,38 @@ export default function DiscoveryPage() {
 
           {/* Amount Range */}
           <div className="space-y-4">
-            <label className="font-label-md text-label-md text-on-surface flex justify-between">
-              Amount Range
-              <span className="text-primary">$5k - $50k+</span>
-            </label>
-            <input type="range" className="w-full accent-primary h-2 bg-surface-container-high rounded-6 appearance-none cursor-pointer" />
+            <label className="font-label-md text-label-md text-on-surface">Amount Range</label>
+            <select className="w-full bg-surface-container-low border border-outline-variant rounded-6 py-2 px-3 font-body-sm text-body-sm outline-none focus:ring-2 focus:ring-primary/20">
+              <option>Any Amount</option>
+              <option>$5k - $10k</option>
+              <option>$10k - $25k</option>
+              <option>$25k - $50k+</option>
+            </select>
           </div>
 
           {/* Deadline */}
           <div className="space-y-4">
             <label className="font-label-md text-label-md text-on-surface">Deadline</label>
-            <div className="grid grid-cols-2 gap-2">
-              {['Next 30 Days', 'Next 90 Days'].map((d) => (
-                <button key={d} className="py-2 border border-outline-variant rounded-6 font-body-sm text-body-sm hover:border-primary hover:text-primary transition-colors">
-                  {d}
-                </button>
-              ))}
-            </div>
+            <select className="w-full bg-surface-container-low border border-outline-variant rounded-6 py-2 px-3 font-body-sm text-body-sm outline-none focus:ring-2 focus:ring-primary/20">
+              <option>Any Time</option>
+              <option>Next 30 Days</option>
+              <option>Next 90 Days</option>
+            </select>
           </div>
 
           {/* Tags */}
           <div className="space-y-4">
             <label className="font-label-md text-label-md text-on-surface">Eligibility Tags</label>
-            <div className="flex flex-wrap gap-2">
+            <select 
+              className="w-full bg-surface-container-low border border-outline-variant rounded-6 py-2 px-3 font-body-sm text-body-sm outline-none focus:ring-2 focus:ring-primary/20"
+              value={selectedTags.length > 0 ? selectedTags[0] : ''}
+              onChange={(e) => setSelectedTags(e.target.value ? [e.target.value] : [])}
+            >
+              <option value="">All Tags</option>
               {filterTags.map((tag) => (
-                <span
-                  key={tag}
-                  onClick={() => toggleTag(tag)}
-                  className={`px-3 py-1 rounded-full text-label-sm font-label-sm cursor-pointer transition-colors ${
-                    selectedTags.includes(tag)
-                      ? 'bg-primary/10 border border-primary/30 text-primary font-bold'
-                      : 'bg-surface-container-high border border-outline-variant/20 hover:bg-primary/10 hover:border-primary/50'
-                  }`}
-                >
-                  {tag}
-                </span>
+                <option key={tag} value={tag}>{tag}</option>
               ))}
-            </div>
+            </select>
           </div>
         </div>
       </aside>
