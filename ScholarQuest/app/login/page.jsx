@@ -50,7 +50,7 @@ export default function LoginPage() {
         <div className="absolute top-0 left-0 w-96 h-96 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, #ffffff 0%, transparent 70%)', transform: 'translate(-30%, -30%)' }} />
         <div className="absolute bottom-0 right-0 w-80 h-80 rounded-full opacity-15" style={{ background: 'radial-gradient(circle, #b4c5ff 0%, transparent 70%)', transform: 'translate(30%, 30%)' }} />
 
-        <div className="relative z-10 flex flex-col h-full p-10 justify-between">
+        <div className="relative z-10 flex flex-col h-full p-6 lg:p-8 2xl:p-10 justify-between">
           <div>
             <Link href="/" className="flex items-center gap-3">
               <img src="/Logo.png.png" alt="Logo" className="w-9 h-9 rounded-full object-cover border-2 border-white/20" />
@@ -59,24 +59,22 @@ export default function LoginPage() {
           </div>
 
           <div className="my-auto py-2">
-            <div className="mb-6">
-              <h2 className="text-4xl font-extrabold text-white leading-tight mb-3" style={{ fontFamily: 'Manrope, sans-serif' }}>
-                Welcome back.<br />
-                Your opportunities<br />
-                are waiting.
+            <div className="mb-4 max-w-xl 2xl:max-w-2xl">
+              <h2 className="text-3xl xl:text-[38px] 2xl:text-[42px] font-extrabold text-white leading-[1.15] mb-3" style={{ fontFamily: 'Manrope, sans-serif' }}>
+                Welcome back.<br />Your opportunities are waiting.
               </h2>
-              <p className="text-white/70 text-sm leading-relaxed max-w-sm font-medium">
+              <p className="text-white/70 text-sm leading-relaxed max-w-md font-medium">
                 Thousands of new scholarships are added every week. Sign in to see your latest AI-powered matches.
               </p>
             </div>
 
-            <div className="relative w-full max-w-[340px] aspect-square mx-auto rounded-3xl overflow-hidden border border-white/10 shadow-lg bg-white/5 backdrop-blur-md mb-6">
+            <div className="relative w-full max-w-[420px] xl:max-w-[500px] 2xl:max-w-[560px] aspect-square max-h-[40vh] xl:max-h-[44vh] 2xl:max-h-[46vh] mx-auto rounded-3xl overflow-hidden border border-white/10 shadow-lg bg-white/5 backdrop-blur-md mb-4">
               <Image
                 src="/student_login_hero.png"
                 alt="Student Success Illustration"
                 fill
                 className="object-cover"
-                sizes="33vw"
+                sizes="(max-width: 1024px) 100vw, 33vw"
                 priority
               />
             </div>
@@ -95,11 +93,6 @@ export default function LoginPage() {
                 </div>
               ))}
             </div>
-          </div>
-
-          <div className="p-3 bg-white/5 rounded-xl border border-white/10 max-w-sm text-center">
-            <p className="text-white/60 text-[10px] mb-1 uppercase tracking-widest font-bold">Demo Credentials</p>
-            <p className="text-white text-xs"><span className="text-white/50">student@student.com</span> <span className="text-white/30">/</span> <span className="text-white/50">student123</span></p>
           </div>
         </div>
       </div>

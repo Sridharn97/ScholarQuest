@@ -63,9 +63,9 @@ export default function StudentLayout({ children }) {
     <div className="flex min-h-screen bg-background">
       <StudentSidebar onLogout={handleLogout} userName={userName} userInitials={userInitials} />
 
-      <main className="flex-1 min-w-0 overflow-y-auto relative">
+      <main className="flex-1 min-w-0 overflow-y-auto relative bg-[#F8F9FB]">
         {/* Top Header */}
-        <header className="sticky top-0 z-30 flex justify-between items-center w-full px-8 bg-white/90 backdrop-blur-lg border-b border-outline-variant/20 h-20 shadow-sm transition-all">
+        <header className="sticky top-0 z-30 flex justify-between items-center w-full px-10 py-5 bg-[#F8F9FB]">
           {/* Mobile Menu Toggle & Logo */}
           <div className="lg:hidden flex items-center gap-4">
             <button
@@ -75,17 +75,32 @@ export default function StudentLayout({ children }) {
               <span className="material-symbols-outlined">{mobileMenuOpen ? 'close' : 'menu'}</span>
             </button>
             <Link href="/" className="flex items-center gap-2">
-              <img src="/Logo.png.png" alt="Logo" className="w-9 h-9 rounded-full object-cover shadow-sm" />
               <span className="font-headline-md text-headline-md text-primary font-extrabold tracking-tight">SQ</span>
             </Link>
           </div>
 
-          {/* Desktop Center Spacing */}
-          <div className="hidden lg:flex flex-1 justify-center px-8"></div>
+          {/* Desktop Search Bar */}
+          <div className="hidden lg:block relative w-full max-w-[480px]">
+            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-[20px]">search</span>
+            <input 
+              type="text" 
+              placeholder="Search scholarships, grants, or institutions..." 
+              className="w-full bg-[#F3F4F6] rounded-full py-3 pl-12 pr-4 text-sm font-medium text-gray-700 outline-none border-none focus:ring-2 focus:ring-[#4F39F6]/20 placeholder-gray-400" 
+            />
+          </div>
 
-          {/* Right Controls (Removed per request) */}
-          <div className="flex items-center gap-5">
-            {/* User requested removal of this section */}
+          {/* Right Controls */}
+          <div className="hidden lg:flex items-center gap-6">
+            <div className="relative cursor-pointer hover:bg-gray-100 p-2 rounded-full transition-colors">
+              <span className="material-symbols-outlined text-gray-600 text-[22px]">notifications</span>
+              <span className="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border border-[#F8F9FB]"></span>
+            </div>
+            <div className="cursor-pointer hover:bg-gray-100 p-2 rounded-full transition-colors">
+              <span className="material-symbols-outlined text-gray-600 text-[22px]">settings</span>
+            </div>
+            <div className="font-bold text-[#0A2540] cursor-pointer hover:text-[#4F39F6] transition-colors ml-2">
+              {userName || 'Student'}
+            </div>
           </div>
         </header>
 

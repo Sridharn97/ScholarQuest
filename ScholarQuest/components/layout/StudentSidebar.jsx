@@ -4,13 +4,12 @@ import { usePathname, useRouter } from 'next/navigation';
 import { clearSession } from '@/lib/store';
 
 const navItems = [
-  { href: '/dashboard', label: 'Dashboard', icon: 'dashboard' },
-  { href: '/discovery', label: 'Discovery', icon: 'search' },
-  { href: '/tracker', label: 'Applications', icon: 'assignment' },
-  { href: '/ai-matcher', label: 'AI Matcher', icon: 'auto_awesome' },
-  { href: '/profile', label: 'Profile', icon: 'account_circle' },
-  { href: '/messages', label: 'Messages', icon: 'chat' },
-  { href: '/settings', label: 'Settings', icon: 'settings' },
+  { href: '/dashboard', label: 'Dashboard', icon: 'grid_view' },
+  { href: '/discovery', label: 'Discovery', icon: 'explore' },
+  { href: '/tracker', label: 'Applications', icon: 'description' },
+  { href: '/ai-matcher', label: 'AI Matcher', icon: 'lightbulb' },
+  { href: '/profile', label: 'Profile', icon: 'person_outline' },
+  { href: '/messages', label: 'Messages', icon: 'mail' },
 ];
 
 export default function StudentSidebar({ onLogout, userName, userInitials }) {
@@ -25,81 +24,63 @@ export default function StudentSidebar({ onLogout, userName, userInitials }) {
   };
 
   return (
-    <aside className="hidden lg:flex flex-col h-screen sticky top-0 p-4 bg-surface border-r border-outline-variant/30 w-64 shrink-0">
+    <aside className="hidden lg:flex flex-col h-screen sticky top-0 bg-[#FAFAFA] border-r border-outline-variant/30 w-[260px] shrink-0">
       {/* Logo */}
-      <div className="mb-12 px-2 flex items-center justify-center">
-        <Link href="/" className="flex items-center gap-3 w-full pl-2">
-          <img src="/Logo.png.png" alt="Logo" className="w-10 h-10 rounded-full object-cover shadow-sm border border-outline-variant/20" />
-          <span className="font-headline-md text-headline-md text-primary font-extrabold tracking-tight">
-            ScholarQuest
-          </span>
+      <div className="pt-10 pb-8 px-8">
+        <Link href="/" className="block">
+          <h1 className="text-[#0A2540] font-bold text-2xl tracking-tight leading-tight">ScholarQuest</h1>
+          <p className="text-sm text-gray-500 mt-1">Higher Ed Funding</p>
         </Link>
       </div>
 
       {/* Nav Items */}
-      <nav className="flex-1 space-y-1 overflow-y-auto pr-2 pb-4 scrollbar-thin scrollbar-thumb-outline-variant/30 scrollbar-track-transparent">
+      <nav className="flex-1 space-y-2 mt-4 px-4 overflow-y-auto">
         {navItems.map((item) => {
-          const isActive = pathname === item.href;
+          const isActive = pathname === item.href || (item.href === '/dashboard' && pathname === '/');
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-4 rounded-12 px-4 py-3.5 font-label-md text-label-md transition-all duration-200 group ${
-                isActive
-                  ? 'bg-primary/10 text-primary font-bold shadow-sm'
-                  : 'text-on-surface-variant hover:bg-surface-container hover:text-on-surface'
-              }`}
+              className={`flex items-center gap-4 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200 ${isActive
+                  ? 'bg-[#EAE4FF] text-[#4F39F6]'
+                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                }`}
             >
-              <span
-                className={`material-symbols-outlined transition-transform duration-200 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`}
-                style={isActive ? { fontVariationSettings: "'FILL' 1" } : {}}
-              >
+              <span className="material-symbols-outlined text-[20px]" style={isActive ? { fontVariationSettings: "'FILL' 1" } : {}}>
                 {item.icon}
               </span>
-              <span className="tracking-wide">{item.label}</span>
+              <span>{item.label}</span>
             </Link>
           );
         })}
       </nav>
 
       {/* Bottom CTA */}
-      <div className="mt-auto pt-6 space-y-4">
-        <div className="bg-primary/5 rounded-2xl p-4 border border-primary/10">
-          <p className="font-label-sm text-label-sm text-primary mb-2">Need funding?</p>
-          <Link
-            href="/discovery"
-            className="block w-full py-2 px-4 bg-primary text-white rounded-6 font-label-md text-center hover:bg-primary/90 transition-colors"
-          >
-            Find Scholarships
-          </Link>
-        </div>
+      <div className="mt-auto p-6 space-y-6 bg-white border-t border-gray-100 shadow-[0_-4px_20px_rgba(0,0,0,0.02)]">
+        <button className="w-full py-3 bg-[#0A2540] text-white rounded-xl font-medium text-sm hover:bg-[#0A2540]/90 transition-colors">
+          Apply Now
+        </button>
 
-        {/* User info + logout */}
-        <div className="flex flex-col space-y-1 border-t border-outline-variant/20 pt-4">
-          {userName && (
-            <div className="flex items-center gap-3 px-4 py-2">
-              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">
-                {userInitials || 'AJ'}
-              </div>
-              <span className="font-label-sm text-on-surface truncate">{userName}</span>
+        <div className="flex items-center justify-between w-full">
+          <div className="flex items-center gap-3 overflow-hidden">
+            <div className="w-10 h-10 rounded-full bg-[#0A2540] flex items-center justify-center text-white font-bold shrink-0">
+              {userInitials || 'ST'}
             </div>
-          )}
-          <Link
-            href="/help"
-            className="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-low px-4 py-2 rounded-6 transition-all"
-          >
-            <span className="material-symbols-outlined">help</span>
-            <span className="font-label-md text-label-md">Help Center</span>
-          </Link>
+            <div className="flex flex-col overflow-hidden">
+              <span className="text-sm font-bold text-gray-900 leading-tight truncate">{userName || 'Student'}</span>
+              <span className="text-xs text-gray-500 truncate">Student</span>
+            </div>
+          </div>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 text-error hover:bg-surface-container-low px-4 py-2 rounded-6 transition-all w-full"
+            className="text-gray-400 hover:text-red-500 transition-colors p-2 rounded-full hover:bg-red-50 shrink-0 ml-2"
+            title="Logout"
           >
-            <span className="material-symbols-outlined">logout</span>
-            <span className="font-label-md text-label-md">Logout</span>
+            <span className="material-symbols-outlined text-[20px]">logout</span>
           </button>
         </div>
       </div>
     </aside>
   );
 }
+
