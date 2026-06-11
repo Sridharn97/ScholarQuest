@@ -58,38 +58,46 @@ export default function LoginPage() {
             </Link>
           </div>
 
-          <div className="my-auto py-2">
-            <div className="mb-4 max-w-xl 2xl:max-w-2xl">
-              <h2 className="text-3xl xl:text-[38px] 2xl:text-[42px] font-extrabold text-white leading-[1.15] mb-3" style={{ fontFamily: 'Manrope, sans-serif' }}>
-                Welcome back.<br />Your opportunities are waiting.
-              </h2>
-              <p className="text-white/70 text-sm leading-relaxed max-w-md font-medium">
-                Thousands of new scholarships are added every week. Sign in to see your latest AI-powered matches.
+          <div className="my-auto py-2 flex flex-col justify-center gap-4 lg:gap-6 xl:gap-8 flex-1">
+            <div className="bg-white/8 backdrop-blur-sm rounded-2xl p-4 xl:p-5 border border-white/10">
+              <div className="flex gap-1 mb-1.5">
+                {[1, 2, 3, 4, 5].map(i => (
+                  <span key={i} className="material-symbols-outlined text-amber-400" style={{ fontSize: '14px', fontVariationSettings: "'FILL' 1" }}>star</span>
+                ))}
+              </div>
+              <p className="text-white/90 text-sm xl:text-base font-semibold leading-relaxed mb-3 xl:mb-4" style={{ fontFamily: 'Manrope, sans-serif' }}>
+                &ldquo;ScholarQuest has completely changed my life. I log in every day to find new opportunities, and the matches are spot on.&rdquo;
               </p>
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 xl:w-9 xl:h-9 rounded-lg bg-white/15 border border-white/20 flex items-center justify-center font-bold text-white text-xs">AJ</div>
+                <div>
+                  <p className="text-white font-semibold text-xs">Alex Johnson</p>
+                  <p className="text-white/50 text-[10px]">Computer Science, Stanford</p>
+                </div>
+              </div>
             </div>
 
-            <div className="relative w-full max-w-[420px] xl:max-w-[500px] 2xl:max-w-[560px] aspect-square max-h-[40vh] xl:max-h-[44vh] 2xl:max-h-[46vh] mx-auto rounded-3xl overflow-hidden border border-white/10 shadow-lg bg-white/5 backdrop-blur-md mb-4">
+            <div className="group relative w-full max-w-[240px] lg:max-w-[280px] xl:max-w-[320px] 2xl:max-w-[340px] aspect-square mx-auto rounded-3xl overflow-hidden border border-white/10 shadow-lg bg-white/5 backdrop-blur-md transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(255,255,255,0.1)] cursor-default">
               <Image
-                src="/student_login_hero.png"
+                src="/student_login_hero_new_2.png"
                 alt="Student Success Illustration"
                 fill
-                className="object-cover"
+                className="object-cover transition-transform duration-700 group-hover:scale-110 object-center"
                 sizes="(max-width: 1024px) 100vw, 33vw"
                 priority
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f1e]/50 via-transparent to-transparent pointer-events-none" />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 gap-3">
               {[
-                { icon: 'auto_awesome', text: '98% Match accuracy' },
-                { icon: 'schedule', text: 'Smart reminders' },
-                { icon: 'trending_up', text: 'Track applications' },
-              ].map((item) => (
-                <div key={item.text} className="flex items-center gap-2 p-2.5 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm shadow-sm">
-                  <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
-                    <span className="material-symbols-outlined text-white/90" style={{ fontSize: '15px', fontVariationSettings: "'FILL' 1" }}>{item.icon}</span>
-                  </div>
-                  <span className="text-white/90 text-[10px] font-semibold leading-tight">{item.text}</span>
+                { value: '98%', label: 'Match Accuracy' },
+                { value: '24/7', label: 'Smart Reminders' },
+                { value: '1-Click', label: 'Applications' },
+              ].map((s) => (
+                <div key={s.label} className="text-center bg-white/8 rounded-xl py-2.5 border border-white/10">
+                  <p className="text-xl font-extrabold text-white" style={{ fontFamily: 'Manrope, sans-serif' }}>{s.value}</p>
+                  <p className="text-white/50 text-[9px] mt-0.5 font-medium">{s.label}</p>
                 </div>
               ))}
             </div>
