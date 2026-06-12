@@ -88,7 +88,7 @@ export default function ProfilePage() {
   if (!user) return null;
 
   return (
-    <div className="max-w-container-max mx-auto px-gutter py-10">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-6">
       {/* Success toast */}
       {saved && (
         <div className="fixed top-6 right-6 z-50 bg-green-600 text-white px-5 py-3 rounded-2xl shadow-xl flex items-center gap-2 animate-subtle-float">
@@ -97,316 +97,303 @@ export default function ProfilePage() {
         </div>
       )}
 
-      {/* Profile Hero */}
-      <div className="glass-card rounded-[2rem] p-10 mb-10 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-secondary/10 rounded-full blur-3xl -mr-40 -mt-40" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -ml-32 -mb-32" />
-
-        <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center gap-8">
-          {/* Avatar */}
-          <div className="relative shrink-0">
-            <div className="w-28 h-28 rounded-3xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-extrabold text-4xl shadow-xl">
-              {user?.initials || 'AJ'}
-            </div>
-            <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
-              <span className="material-symbols-outlined text-white" style={{ fontSize: '14px', fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-            </div>
-          </div>
-
-          {/* Info */}
-          <div className="flex-1 min-w-0">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-4">
-              <div>
-                <h1 className="font-headline-lg text-headline-lg text-on-background" style={{ fontFamily: 'Manrope, sans-serif' }}>{user?.name || 'Alex Johnson'}</h1>
-                <p className="font-body-md text-body-md text-on-surface-variant">{user?.studyField || 'Computer Science'} · {user?.institution || 'Stanford University'}</p>
+      {/* 1. Hero Card */}
+      <div className="glass-card rounded-2xl overflow-hidden shadow-sm border border-outline-variant/30 bg-surface-bright">
+        {/* Banner */}
+        <div className="h-48 bg-gradient-to-r from-primary/80 to-secondary/80 relative">
+          <div className="absolute inset-0 hero-gradient opacity-50 mix-blend-overlay"></div>
+          {editMode && (
+            <button className="absolute top-4 right-4 p-2 bg-surface-bright/80 hover:bg-surface-bright rounded-full shadow-sm transition-colors text-primary">
+              <span className="material-symbols-outlined" style={{fontSize: '20px'}}>photo_camera</span>
+            </button>
+          )}
+        </div>
+        
+        <div className="px-6 sm:px-10 pb-10 relative -mt-20">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 mb-4">
+            {/* Avatar */}
+            <div className="relative inline-block shrink-0">
+              <div className="w-40 h-40 rounded-full bg-surface-bright p-1 shadow-xl border border-outline-variant/20">
+                <div className="w-full h-full rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-extrabold text-5xl">
+                  {user?.initials || 'AJ'}
+                </div>
               </div>
-              <div className="flex gap-2 sm:ml-auto">
-                {editMode ? (
-                  <>
-                    <button onClick={handleSave} className="flex items-center gap-2 px-5 py-2 rounded-10 font-label-md bg-primary text-on-primary transition-all shadow-md">
-                      <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>save</span>
-                      Save Profile
-                    </button>
-                    <button onClick={() => setEditMode(false)} className="flex items-center gap-2 px-5 py-2 rounded-10 font-label-md border border-outline-variant text-on-surface hover:bg-surface-container-low transition-all">
-                      Cancel
-                    </button>
-                  </>
-                ) : (
-                  <button onClick={() => setEditMode(true)} className="flex items-center gap-2 px-5 py-2 rounded-10 font-label-md border border-outline-variant text-on-surface hover:bg-surface-container-low transition-all">
-                    <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>edit</span>
+              <div className="absolute bottom-2 right-2 w-10 h-10 bg-green-500 rounded-full border-4 border-surface-bright flex items-center justify-center shadow-sm">
+                <span className="material-symbols-outlined text-white" style={{ fontSize: '20px', fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-2 w-full sm:w-auto">
+              {editMode ? (
+                <>
+                  <button onClick={handleSave} className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-2 rounded-full font-label-md bg-primary text-on-primary transition-all shadow-md hover:shadow-lg hover:bg-primary/90">
+                    Save Profile
+                  </button>
+                  <button onClick={() => setEditMode(false)} className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-2 rounded-full font-label-md bg-transparent border-2 border-outline-variant text-on-surface hover:bg-surface-container-low transition-all">
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button onClick={() => setEditMode(true)} className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-2 rounded-full font-label-md bg-transparent border-2 border-primary text-primary hover:bg-primary/5 transition-all">
                     Edit Profile
                   </button>
-                )}
-              </div>
-            </div>
-
-            {/* Quick Stats */}
-            <div className="flex flex-wrap gap-6">
-              {[
-                { label: 'Scholarships Applied', value: '18', color: 'text-primary' },
-                { label: 'GPA', value: user?.gpa || '—', color: 'text-green-600' },
-                { label: 'Profile Strength', value: `${completion}%`, color: 'text-on-surface' },
-              ].map((stat) => (
-                <div key={stat.label}>
-                  <p className="font-label-sm text-label-sm text-on-surface-variant">{stat.label}</p>
-                  <p className={`font-headline-md text-headline-md font-bold ${stat.color}`}>{stat.value}</p>
-                </div>
-              ))}
+                </>
+              )}
             </div>
           </div>
 
-          {/* Profile Completion Ring */}
-          <div className="shrink-0 text-center">
-            <div className="relative w-24 h-24 mx-auto">
-              <svg className="w-full h-full transform -rotate-90" viewBox="0 0 96 96">
-                <circle className="text-surface-container-highest" cx="48" cy="48" r="42" fill="transparent" stroke="currentColor" strokeWidth="8" />
-                <circle className="text-secondary" cx="48" cy="48" r="42" fill="transparent" stroke="currentColor" strokeWidth="8" strokeDasharray={circumference} strokeDashoffset={offset} strokeLinecap="round" />
-              </svg>
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="font-headline-md text-headline-md text-on-surface">{completion}%</span>
+          {/* Profile Info */}
+          <div className="max-w-2xl">
+            {editMode ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                <input value={form.firstName || ''} onChange={e => setForm({...form, firstName: e.target.value})} placeholder="First Name" className="w-full px-4 py-2 bg-surface-container-lowest border border-outline-variant/50 rounded-lg text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary/20" />
+                <input value={form.lastName || ''} onChange={e => setForm({...form, lastName: e.target.value})} placeholder="Last Name" className="w-full px-4 py-2 bg-surface-container-lowest border border-outline-variant/50 rounded-lg text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary/20" />
+              </div>
+            ) : (
+              <h1 className="font-headline-lg text-3xl font-bold text-on-surface mb-1" style={{ fontFamily: 'Manrope, sans-serif' }}>{user?.name || 'Alex Johnson'}</h1>
+            )}
+            
+            <p className="font-body-lg text-on-surface font-medium mb-1">{user?.studyField || 'Computer Science'} at {user?.institution || 'Stanford University'}</p>
+            <p className="font-body-sm text-on-surface-variant flex items-center gap-1 mb-2">
+              <span className="material-symbols-outlined text-[16px]">location_on</span>
+              {user?.nationality || 'San Francisco Bay Area'}
+            </p>
+
+            {editMode ? (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4 bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30">
+                <div className="space-y-1">
+                   <label className="font-label-sm text-on-surface-variant">Phone</label>
+                   <input value={form.phone || ''} onChange={e => setForm({...form, phone: e.target.value})} placeholder="Phone" className="w-full px-3 py-1.5 border border-outline-variant/50 rounded-md text-sm outline-none focus:border-primary" />
+                </div>
+                <div className="space-y-1 sm:col-span-2">
+                   <label className="font-label-sm text-on-surface-variant">LinkedIn URL</label>
+                   <input value={form.linkedin || ''} onChange={e => setForm({...form, linkedin: e.target.value})} placeholder="linkedin.com/in/..." className="w-full px-3 py-1.5 border border-outline-variant/50 rounded-md text-sm outline-none focus:border-primary" />
+                </div>
+              </div>
+            ) : (
+              <p className="font-label-md text-primary cursor-pointer hover:underline inline-flex items-center gap-1">Contact info</p>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* 2. Analytics (Private Dashboard) */}
+      <div className="glass-card rounded-2xl p-6 sm:p-8 shadow-sm border border-outline-variant/30 bg-surface-bright">
+        <h2 className="font-headline-md text-xl font-bold mb-1">Analytics</h2>
+        <p className="font-body-sm text-on-surface-variant mb-6 flex items-center gap-1.5">
+          <span className="material-symbols-outlined text-[16px]">visibility</span> Private to you
+        </p>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-4 divide-y md:divide-y-0 md:divide-x divide-outline-variant/20">
+          <div className="flex items-start gap-4 pt-4 md:pt-0">
+            <span className="material-symbols-outlined text-on-surface text-3xl">group</span>
+            <div>
+              <p className="font-headline-md text-xl font-bold">18</p>
+              <p className="font-body-sm text-on-surface hover:text-primary cursor-pointer hover:underline">Scholarships applied</p>
+              <p className="font-body-sm text-on-surface-variant text-[13px] mt-1">Track your active applications.</p>
+            </div>
+          </div>
+          
+          <div className="flex items-start gap-4 pt-4 md:pt-0 md:pl-6">
+            <span className="material-symbols-outlined text-on-surface text-3xl">school</span>
+            <div>
+              <p className="font-headline-md text-xl font-bold">{user?.gpa || '—'}</p>
+              <p className="font-body-sm text-on-surface hover:text-primary cursor-pointer hover:underline">Cumulative GPA</p>
+              <p className="font-body-sm text-on-surface-variant text-[13px] mt-1">Verified academic standing.</p>
+            </div>
+          </div>
+          
+          <div className="flex items-start gap-4 pt-4 md:pt-0 md:pl-6">
+            <span className="material-symbols-outlined text-on-surface text-3xl">auto_awesome</span>
+            <div className="w-full">
+              <p className="font-headline-md text-xl font-bold">{completion}%</p>
+              <p className="font-body-sm text-on-surface mb-2">Profile strength</p>
+              <div className="h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+                <div className="h-full bg-primary rounded-full transition-all duration-1000 ease-out" style={{ width: `${completion}%` }} />
               </div>
             </div>
-            <p className="font-label-sm text-label-sm text-on-surface-variant mt-2">Complete</p>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. About */}
+      <div className="glass-card rounded-2xl p-6 sm:p-8 shadow-sm border border-outline-variant/30 bg-surface-bright">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="font-headline-md text-xl font-bold">About</h2>
+          {!editMode && (
+            <button onClick={() => setEditMode(true)} className="p-2 hover:bg-surface-container-low rounded-full transition-colors text-on-surface-variant hover:text-primary">
+              <span className="material-symbols-outlined">edit</span>
+            </button>
+          )}
+        </div>
+        
+        {editMode ? (
+          <textarea rows={5} value={form.bio} onChange={e => setForm({...form, bio: e.target.value})} placeholder="Write a compelling summary about your academic journey, goals, and what makes you a great scholarship candidate..." className="w-full px-4 py-3 bg-surface-container-lowest border border-outline-variant/50 rounded-xl font-body-md outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 transition-all resize-none shadow-inner" />
+        ) : (
+          <div className="relative">
+            <p className="font-body-md text-on-surface leading-relaxed whitespace-pre-wrap">
+              {form.bio || 'Add a bio to tell scholarship providers about yourself. Highlighting your achievements and aspirations can significantly increase your chances of standing out.'}
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* 4. Experience / Education */}
+      <div className="glass-card rounded-2xl p-6 sm:p-8 shadow-sm border border-outline-variant/30 bg-surface-bright">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="font-headline-md text-xl font-bold">Education</h2>
+          <div className="flex gap-2">
+            <button className="p-2 hover:bg-surface-container-low rounded-full transition-colors text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined">add</span></button>
+            {!editMode && <button onClick={() => setEditMode(true)} className="p-2 hover:bg-surface-container-low rounded-full transition-colors text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined">edit</span></button>}
           </div>
         </div>
 
-        {/* Tabs */}
-        <div className="relative z-10 flex gap-1 mt-8 border-t border-outline-variant/20 pt-6 flex-wrap">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-10 font-label-md text-label-md transition-all ${activeTab === tab.id ? 'bg-primary text-on-primary shadow-md' : 'text-on-surface-variant hover:bg-surface-container-low'}`}
-            >
-              <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>{tab.icon}</span>
-              <span className="hidden sm:inline">{tab.label}</span>
-            </button>
+        <div className="space-y-6">
+          {[
+            { school: user?.institution || 'Your Institution', degree: user?.studyField || 'Your Field of Study', period: 'Aug 2022 – Present', gpa: user?.gpa || '—' },
+          ].map((edu, idx) => (
+            <div key={idx} className="flex gap-4">
+              <div className="shrink-0 mt-1">
+                <div className="w-12 h-12 bg-surface-container flex items-center justify-center rounded-sm">
+                  <span className="material-symbols-outlined text-primary text-2xl">account_balance</span>
+                </div>
+              </div>
+              <div className="flex-1 pb-6 border-b border-outline-variant/20 last:border-0 last:pb-0">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="font-headline-md text-lg font-bold text-on-surface">{edu.school}</h3>
+                    <p className="font-body-md text-on-surface">{edu.degree}</p>
+                    <p className="font-body-sm text-on-surface-variant mt-1">{edu.period}</p>
+                    {edu.gpa !== '—' && (
+                       <p className="font-body-sm text-on-surface mt-2">Grade: {edu.gpa}</p>
+                    )}
+                  </div>
+                </div>
+                
+                {editMode && (
+                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30">
+                    <div className="space-y-1">
+                      <label className="font-label-sm text-on-surface-variant">Institution</label>
+                      <input value={form.institution || ''} onChange={e => setForm({...form, institution: e.target.value})} placeholder="Institution" className="w-full px-3 py-2 border border-outline-variant/50 rounded-md text-sm outline-none focus:border-primary" />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="font-label-sm text-on-surface-variant">GPA</label>
+                      <input type="number" step="0.01" value={form.gpa || ''} onChange={e => setForm({...form, gpa: e.target.value})} placeholder="GPA" className="w-full px-3 py-2 border border-outline-variant/50 rounded-md text-sm outline-none focus:border-primary" />
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
           ))}
         </div>
       </div>
 
-      {/* Tab Content */}
-      {activeTab === 'overview' && (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          <div className="lg:col-span-2 space-y-10">
-            {/* Bio */}
-            <div className="glass-card rounded-2xl p-10">
-              <h2 className="font-headline-md text-headline-md mb-4">About Me</h2>
-              {editMode ? (
-                <textarea rows={4} value={form.bio} onChange={e => setForm({...form, bio: e.target.value})} className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all resize-none" />
-              ) : (
-                <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">{form.bio || 'Add a bio to tell scholarship providers about yourself.'}</p>
-              )}
-            </div>
-
-            {/* Skills */}
-            <div className="glass-card rounded-2xl p-10">
-              <h2 className="font-headline-md text-headline-md mb-4">Skills &amp; Expertise</h2>
-              <div className="flex flex-wrap gap-2">
-                {skills.map((skill) => (
-                  <span key={skill} className="px-4 py-2 bg-primary/10 text-primary border border-primary/20 rounded-full font-label-sm text-label-sm flex items-center gap-2">
-                    {skill}
-                    {editMode && <button onClick={() => removeSkill(skill)} className="hover:text-error transition-colors"><span className="material-symbols-outlined" style={{ fontSize: '14px' }}>close</span></button>}
-                  </span>
-                ))}
-                {editMode && (
-                  showSkillInput ? (
-                    <div className="flex items-center gap-2">
-                      <input
-                        autoFocus
-                        value={newSkill}
-                        onChange={e => setNewSkill(e.target.value)}
-                        onKeyDown={e => e.key === 'Enter' && addSkill()}
-                        placeholder="Skill name"
-                        className="px-3 py-1.5 border border-primary rounded-full text-sm outline-none w-32"
-                      />
-                      <button onClick={addSkill} className="px-3 py-1.5 bg-primary text-white rounded-full text-sm">Add</button>
-                    </div>
-                  ) : (
-                    <button onClick={() => setShowSkillInput(true)} className="px-4 py-2 border-2 border-dashed border-outline-variant rounded-full font-label-sm text-on-surface-variant hover:border-primary hover:text-primary transition-all flex items-center gap-1">
-                      <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>add</span> Add Skill
-                    </button>
-                  )
-                )}
-              </div>
-            </div>
-
-            {/* Interests */}
-            <div className="glass-card rounded-2xl p-10">
-              <h2 className="font-headline-md text-headline-md mb-4">Research Interests</h2>
-              <div className="flex flex-wrap gap-2">
-                {interests.map((interest) => (
-                  <span key={interest} className="px-4 py-2 bg-secondary/10 text-secondary border border-secondary/20 rounded-full font-label-sm text-label-sm flex items-center gap-2">
-                    {interest}
-                    {editMode && <button onClick={() => removeInterest(interest)} className="hover:text-error transition-colors"><span className="material-symbols-outlined" style={{ fontSize: '14px' }}>close</span></button>}
-                  </span>
-                ))}
-                {editMode && (
-                  showInterestInput ? (
-                    <div className="flex items-center gap-2">
-                      <input
-                        autoFocus
-                        value={newInterest}
-                        onChange={e => setNewInterest(e.target.value)}
-                        onKeyDown={e => e.key === 'Enter' && addInterest()}
-                        placeholder="Interest"
-                        className="px-3 py-1.5 border border-secondary rounded-full text-sm outline-none w-32"
-                      />
-                      <button onClick={addInterest} className="px-3 py-1.5 bg-secondary text-white rounded-full text-sm">Add</button>
-                    </div>
-                  ) : (
-                    <button onClick={() => setShowInterestInput(true)} className="px-4 py-2 border-2 border-dashed border-outline-variant rounded-full font-label-sm text-on-surface-variant hover:border-secondary hover:text-secondary transition-all flex items-center gap-1">
-                      <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>add</span> Add Interest
-                    </button>
-                  )
-                )}
-              </div>
-            </div>
+      {/* 5. Skills & Interests */}
+      <div className="glass-card rounded-2xl p-6 sm:p-8 shadow-sm border border-outline-variant/30 bg-surface-bright">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="font-headline-md text-xl font-bold">Skills</h2>
+          <div className="flex gap-2">
+            {editMode ? (
+              <button onClick={() => setShowSkillInput(!showSkillInput)} className="p-2 hover:bg-surface-container-low rounded-full transition-colors text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined">add</span></button>
+            ) : (
+               <button onClick={() => setEditMode(true)} className="p-2 hover:bg-surface-container-low rounded-full transition-colors text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined">edit</span></button>
+            )}
           </div>
+        </div>
 
-          <div className="space-y-10">
-            {/* Contact Info */}
-            <div className="glass-card rounded-2xl p-10">
-              <h3 className="font-headline-md text-headline-md mb-4">Contact Info</h3>
-              {editMode ? (
-                <div className="space-y-3">
-                  {[
-                    { key: 'phone', icon: 'phone', placeholder: '+1 (555) 123-4567', label: 'Phone' },
-                    { key: 'linkedin', icon: 'link', placeholder: 'linkedin.com/in/yourname', label: 'LinkedIn' },
-                  ].map(field => (
-                    <div key={field.key} className="space-y-1">
-                      <label className="font-label-sm text-on-surface-variant">{field.label}</label>
-                      <input
-                        value={form[field.key] || ''}
-                        onChange={e => setForm({...form, [field.key]: e.target.value})}
-                        placeholder={field.placeholder}
-                        className="w-full px-3 py-2 border border-outline-variant rounded-6 text-sm outline-none focus:border-primary"
-                      />
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {[
-                    { icon: 'mail', label: user?.email || 'No email set' },
-                    { icon: 'location_on', label: user?.nationality || 'Location not set' },
-                    { icon: 'link', label: user?.linkedin || 'LinkedIn not set' },
-                  ].map((item) => (
-                    <div key={item.label} className="flex items-center gap-3">
-                      <span className="material-symbols-outlined text-primary" style={{ fontSize: '20px' }}>{item.icon}</span>
-                      <span className="font-body-sm text-body-sm text-on-surface-variant">{item.label}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+        {editMode && showSkillInput && (
+          <div className="flex items-center gap-2 mb-6 bg-surface-container-lowest p-1.5 rounded-xl border border-primary/50 shadow-sm max-w-sm">
+            <input
+              autoFocus
+              value={newSkill}
+              onChange={e => setNewSkill(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && addSkill()}
+              placeholder="Add a new skill..."
+              className="flex-1 px-3 py-1.5 bg-transparent text-sm outline-none"
+            />
+            <button onClick={addSkill} className="px-4 py-1.5 bg-primary text-white font-label-sm rounded-lg hover:bg-primary/90 transition-colors">Add</button>
+          </div>
+        )}
 
-            {/* Profile completion tasks */}
-            <div className="glass-card rounded-2xl p-10">
-              <h3 className="font-headline-md text-headline-md mb-4">Complete Your Profile</h3>
-              <div className="space-y-3">
-                {[
-                  { task: 'Add GPA', done: !!(user?.gpa) },
-                  { task: 'Add Bio', done: !!(user?.bio) },
-                  { task: 'Add Institution', done: !!(user?.institution) },
-                  { task: 'Add Phone', done: !!(user?.phone) },
-                  { task: 'Add LinkedIn', done: !!(user?.linkedin) },
-                  { task: 'Add Skills', done: skills.length > 0 },
-                ].map((item) => (
-                  <div key={item.task} className="flex items-center gap-3">
-                    <span className={`material-symbols-outlined ${item.done ? 'text-green-600' : 'text-outline-variant'}`} style={{ fontSize: '20px', fontVariationSettings: "'FILL' 1" }}>
-                      {item.done ? 'check_circle' : 'radio_button_unchecked'}
-                    </span>
-                    <span className={`font-body-sm text-body-sm ${item.done ? 'line-through text-on-surface-variant' : 'text-on-surface'}`}>{item.task}</span>
-                  </div>
-                ))}
+        <div className="space-y-4">
+          {skills.map((skill, idx) => (
+            <div key={skill} className={`pb-4 ${idx !== skills.length - 1 ? 'border-b border-outline-variant/20' : ''}`}>
+              <div className="flex items-center justify-between">
+                <p className="font-headline-md text-base font-bold text-on-surface">{skill}</p>
+                {editMode && <button onClick={() => removeSkill(skill)} className="p-1 hover:bg-error/10 text-on-surface-variant hover:text-error rounded-full transition-colors"><span className="material-symbols-outlined text-[18px]">delete</span></button>}
               </div>
-              {!editMode && (
-                <button onClick={() => setEditMode(true)} className="mt-4 w-full py-2 bg-primary/10 text-primary rounded-6 font-label-sm hover:bg-primary/20 transition-colors">
-                  Edit Profile to Complete
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 6. Documents / Licenses & Certifications Equivalent */}
+      <div className="glass-card rounded-2xl p-6 sm:p-8 shadow-sm border border-outline-variant/30 bg-surface-bright">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="font-headline-md text-xl font-bold">Verified Documents</h2>
+          <label className="p-2 hover:bg-surface-container-low rounded-full transition-colors text-on-surface-variant hover:text-primary cursor-pointer">
+            <span className="material-symbols-outlined">add</span>
+            <input type="file" className="hidden" onChange={() => alert('File upload (would connect to backend in production)')} />
+          </label>
+        </div>
+
+        <div className="space-y-6">
+          {[
+            { name: 'Official_Transcript_2024.pdf', type: 'Transcript', size: '1.2 MB', date: 'Oct 2024' },
+            { name: 'Resume_AlexJohnson.pdf', type: 'Resume', size: '0.8 MB', date: 'Sep 2024' },
+          ].map((doc, idx) => (
+            <div key={idx} className="flex gap-4">
+              <div className="shrink-0 mt-1">
+                <div className="w-12 h-12 bg-surface-container flex items-center justify-center rounded-sm">
+                  <span className="material-symbols-outlined text-on-surface text-2xl">description</span>
+                </div>
+              </div>
+              <div className="flex-1 pb-6 border-b border-outline-variant/20 last:border-0 last:pb-0">
+                <h3 className="font-headline-md text-lg font-bold text-on-surface">{doc.type}</h3>
+                <p className="font-body-md text-on-surface">{doc.name}</p>
+                <p className="font-body-sm text-on-surface-variant mt-1">Issued {doc.date}</p>
+                <button className="mt-3 px-4 py-1.5 border border-outline-variant rounded-full font-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-all flex items-center gap-2">
+                   Show document <span className="material-symbols-outlined text-[16px]">open_in_new</span>
                 </button>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {activeTab === 'academic' && (
-        <div className="glass-card rounded-2xl p-10">
-          <h2 className="font-headline-md text-headline-md mb-6">Academic History</h2>
-          <div className="space-y-6">
-            {[
-              { school: user?.institution || 'Your Institution', degree: user?.studyField || 'Your Field of Study', period: '2022 – Present', gpa: user?.gpa || '—', status: 'Current' },
-            ].map((edu) => (
-              <div key={edu.school} className="p-10 bg-surface-container-low rounded-2xl flex flex-col md:flex-row gap-6 justify-between">
-                <div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="material-symbols-outlined text-primary">school</span>
-                    <h3 className="font-headline-md text-headline-md">{edu.school}</h3>
-                  </div>
-                  <p className="font-body-md text-body-md text-on-surface-variant">{edu.degree}</p>
-                  <p className="font-label-sm text-label-sm text-outline mt-1">{edu.period}</p>
-                </div>
-                <div className="text-right shrink-0">
-                  <p className="font-label-sm text-label-sm text-on-surface-variant">GPA</p>
-                  <p className="font-headline-md text-headline-md text-primary">{edu.gpa}</p>
-                  <span className="font-label-sm px-2 py-0.5 rounded-full bg-green-100 text-green-700">{edu.status}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-          {editMode && (
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-1">
-                <label className="font-label-md text-on-surface">GPA</label>
-                <input type="number" step="0.01" value={form.gpa || ''} onChange={e => setForm({...form, gpa: e.target.value})} placeholder="3.92" className="w-full px-4 py-2 border border-outline-variant rounded-10 outline-none focus:border-primary" />
-              </div>
-              <div className="space-y-1">
-                <label className="font-label-md text-on-surface">Institution</label>
-                <input value={form.institution || ''} onChange={e => setForm({...form, institution: e.target.value})} placeholder="Stanford University" className="w-full px-4 py-2 border border-outline-variant rounded-10 outline-none focus:border-primary" />
               </div>
             </div>
-          )}
+          ))}
         </div>
-      )}
+      </div>
 
-      {activeTab === 'documents' && (
-        <div className="glass-card rounded-2xl p-10">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="font-headline-md text-headline-md">My Documents</h2>
-            <label className="flex items-center gap-2 px-5 py-2 bg-primary text-on-primary rounded-10 font-label-md hover:opacity-90 transition-all cursor-pointer">
-              <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>upload</span>
-              Upload New
-              <input type="file" className="hidden" onChange={() => alert('File upload (would connect to backend in production)')} />
-            </label>
+      {/* 7. Honors & Awards */}
+      <div className="glass-card rounded-2xl p-6 sm:p-8 shadow-sm border border-outline-variant/30 bg-surface-bright">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="font-headline-md text-xl font-bold">Honors & Awards</h2>
+          <div className="flex gap-2">
+            <button className="p-2 hover:bg-surface-container-low rounded-full transition-colors text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined">add</span></button>
+            {!editMode && <button onClick={() => setEditMode(true)} className="p-2 hover:bg-surface-container-low rounded-full transition-colors text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined">edit</span></button>}
           </div>
-          <div className="space-y-4">
-            {[
-              { name: 'Official_Transcript_2024.pdf', size: '1.2 MB', date: 'Oct 10, 2024', status: 'Verified' },
-              { name: 'Resume_AlexJohnson.pdf', size: '0.8 MB', date: 'Sep 15, 2024', status: 'Verified' },
-              { name: 'RecommendationLetter_Prof_Kumar.pdf', size: '0.5 MB', date: 'Sep 20, 2024', status: 'Pending' },
-            ].map((doc) => (
-              <div key={doc.name} className="flex items-center gap-4 p-4 bg-surface-container-low rounded-10 hover:bg-surface-container transition-colors">
-                <div className="w-12 h-12 rounded-10 bg-primary/10 flex items-center justify-center text-primary shrink-0">
-                  <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>description</span>
+        </div>
+        
+        <div className="space-y-6">
+          {[
+            { title: 'Dean\'s List', issuer: 'Stanford University', date: 'May 2023', description: 'Awarded for maintaining a GPA above 3.8 during the academic year.' },
+            { title: 'National Merit Scholar', issuer: 'National Merit Scholarship Corporation', date: 'Sep 2022', description: 'Recognized for outstanding academic achievement in high school.' },
+          ].map((award, idx) => (
+            <div key={idx} className="flex gap-4">
+              <div className="shrink-0 mt-1">
+                <div className="w-12 h-12 bg-surface-container flex items-center justify-center rounded-sm">
+                  <span className="material-symbols-outlined text-tertiary text-2xl">emoji_events</span>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-label-md text-on-surface truncate">{doc.name}</p>
-                  <p className="font-body-sm text-body-sm text-on-surface-variant">{doc.size} · Uploaded {doc.date}</p>
-                </div>
-                <span className={`font-label-sm px-3 py-1 rounded-full shrink-0 ${doc.status === 'Verified' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}`}>{doc.status}</span>
               </div>
-            ))}
-          </div>
+              <div className="flex-1 pb-6 border-b border-outline-variant/20 last:border-0 last:pb-0">
+                <h3 className="font-headline-md text-lg font-bold text-on-surface">{award.title}</h3>
+                <p className="font-body-md text-on-surface">{award.issuer}</p>
+                <p className="font-body-sm text-on-surface-variant mt-1">Issued {award.date}</p>
+                <p className="font-body-sm text-on-surface mt-2 leading-relaxed">{award.description}</p>
+              </div>
+            </div>
+          ))}
         </div>
-      )}
-
-      {activeTab === 'activity' && (
-        <div className="glass-card rounded-2xl p-10">
-          <h2 className="font-headline-md text-headline-md mb-6">Recent Activity</h2>
-          <ActivityFeed />
-        </div>
-      )}
+      </div>
     </div>
   );
 }
