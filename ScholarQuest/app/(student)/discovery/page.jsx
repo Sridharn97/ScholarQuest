@@ -8,6 +8,7 @@ const filterTags = ['STEM', 'Full-Ride', 'Minority', 'Art', 'Leadership', 'Resea
 export default function DiscoveryPage() {
   const [scholarships, setScholarships] = useState([]);
   const [selectedTags, setSelectedTags] = useState(['Full-Ride']);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     ensureDefaults();
@@ -21,185 +22,162 @@ export default function DiscoveryPage() {
     );
   };
 
-  const featured = scholarships[0] || { id: 1, name: 'Global Tech Innovators Fund', category: 'STEM', amount: '$25,000', deadline: '2026-10-15', org: 'Global Tech Foundation', match: '98%' };
-  const regularScholarships = scholarships.length > 1 ? scholarships.slice(1) : [];
+  const filteredScholarships = scholarships.filter(s => 
+    s.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    s.org.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const featured = filteredScholarships[0] || { id: 1, name: 'Global Tech Innovators Fund', category: 'STEM', amount: '$25,000', deadline: '2026-10-15', org: 'Global Tech Foundation', match: '98%' };
+  const allScholarships = [featured, ...(filteredScholarships.length > 1 ? filteredScholarships.slice(1) : [])];
 
   return (
-    <div className="flex max-w-container-max mx-auto px-gutter py-10 gap-8">
-      {/* ===== FILTERS SIDEBAR ===== */}
-      <aside className="hidden xl:block w-72 flex-shrink-0">
-        <div className="sticky top-24 bg-white rounded-10 border border-outline-variant/30 p-6 space-y-10">
-          <div className="flex items-center justify-between">
-            <h2 className="font-headline-md text-headline-md text-on-surface">Filters</h2>
-            <button className="text-primary font-label-sm text-label-sm hover:underline" onClick={() => setSelectedTags([])}>Reset All</button>
-          </div>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+      
+      <div className="flex flex-col lg:flex-row gap-6">
+        
+        {/* COMPACT SIDEBAR FILTERS */}
+        <aside className="w-full lg:w-64 flex-shrink-0">
+          <div className="sticky top-24 glass-card bg-surface-bright border border-outline-variant/30 p-5 rounded-2xl shadow-sm space-y-6">
+            <div className="flex items-center justify-between border-b border-outline-variant/20 pb-3">
+              <h2 className="font-headline-md text-base font-bold text-on-surface flex items-center gap-2">
+                <span className="material-symbols-outlined text-[18px]">tune</span> Filters
+              </h2>
+              <button className="text-on-surface-variant font-label-sm text-xs hover:text-primary transition-colors" onClick={() => setSelectedTags([])}>Clear</button>
+            </div>
 
-          {/* Country */}
-          <div className="space-y-4">
-            <label className="font-label-md text-label-md text-on-surface">Country</label>
-            <select className="w-full bg-surface-container-low border border-outline-variant rounded-6 py-2 px-3 font-body-sm text-body-sm outline-none focus:ring-2 focus:ring-primary/20">
-              <option>United States</option>
-              <option>United Kingdom</option>
-              <option>Canada</option>
-            </select>
-          </div>
-
-          {/* Degree Type */}
-          <div className="space-y-4">
-            <label className="font-label-md text-label-md text-on-surface">Degree Type</label>
-            <select className="w-full bg-surface-container-low border border-outline-variant rounded-6 py-2 px-3 font-body-sm text-body-sm outline-none focus:ring-2 focus:ring-primary/20">
-              <option>Undergraduate</option>
-              <option>Master&apos;s</option>
-              <option>PhD / Doctoral</option>
-            </select>
-          </div>
-
-          {/* Amount Range */}
-          <div className="space-y-4">
-            <label className="font-label-md text-label-md text-on-surface">Amount Range</label>
-            <select className="w-full bg-surface-container-low border border-outline-variant rounded-6 py-2 px-3 font-body-sm text-body-sm outline-none focus:ring-2 focus:ring-primary/20">
-              <option>Any Amount</option>
-              <option>$5k - $10k</option>
-              <option>$10k - $25k</option>
-              <option>$25k - $50k+</option>
-            </select>
-          </div>
-
-          {/* Deadline */}
-          <div className="space-y-4">
-            <label className="font-label-md text-label-md text-on-surface">Deadline</label>
-            <select className="w-full bg-surface-container-low border border-outline-variant rounded-6 py-2 px-3 font-body-sm text-body-sm outline-none focus:ring-2 focus:ring-primary/20">
-              <option>Any Time</option>
-              <option>Next 30 Days</option>
-              <option>Next 90 Days</option>
-            </select>
-          </div>
-
-          {/* Tags */}
-          <div className="space-y-4">
-            <label className="font-label-md text-label-md text-on-surface">Eligibility Tags</label>
-            <select 
-              className="w-full bg-surface-container-low border border-outline-variant rounded-6 py-2 px-3 font-body-sm text-body-sm outline-none focus:ring-2 focus:ring-primary/20"
-              value={selectedTags.length > 0 ? selectedTags[0] : ''}
-              onChange={(e) => setSelectedTags(e.target.value ? [e.target.value] : [])}
-            >
-              <option value="">All Tags</option>
-              {filterTags.map((tag) => (
-                <option key={tag} value={tag}>{tag}</option>
+            {/* Dropdowns */}
+            <div className="space-y-4">
+              {[
+                { label: 'Country', options: ['Any Country', 'USA', 'UK', 'Canada'] },
+                { label: 'Degree', options: ['Any Degree', 'Undergrad', 'Master', 'PhD'] },
+                { label: 'Amount', options: ['Any Amount', '$5k+', '$10k+', '$25k+'] },
+              ].map((filter) => (
+                <div key={filter.label} className="space-y-1.5">
+                  <label className="font-label-md text-xs font-bold text-on-surface-variant">{filter.label}</label>
+                  <div className="relative">
+                    <select className="w-full appearance-none bg-surface-container-lowest border border-outline-variant/50 rounded-lg py-2 pl-3 pr-8 font-body-sm text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 transition-all cursor-pointer">
+                      {filter.options.map(opt => <option key={opt}>{opt}</option>)}
+                    </select>
+                    <span className="absolute right-2 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline-variant pointer-events-none text-[16px]">expand_more</span>
+                  </div>
+                </div>
               ))}
-            </select>
-          </div>
-        </div>
-      </aside>
+            </div>
 
-      {/* ===== SCHOLARSHIP GRID ===== */}
-      <main className="flex-1 min-w-0">
-        {/* Mobile Filter + Count */}
-        <div className="flex items-center justify-between mb-4">
-          <p className="font-body-sm text-body-sm text-on-surface-variant">
-            Showing <span className="font-bold text-on-surface">{scholarships.length} scholarships</span> matching your profile
-          </p>
-          <div className="flex items-center gap-2">
-            <span className="font-label-sm text-label-sm text-on-surface-variant">Sort by:</span>
-            <button className="font-label-sm text-label-sm flex items-center gap-1">
-              Match Score <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>arrow_drop_down</span>
-            </button>
-          </div>
-        </div>
+            {/* Tags */}
+            <div className="space-y-2">
+              <label className="font-label-md text-xs font-bold text-on-surface-variant">Tags</label>
+              <div className="flex flex-wrap gap-1.5">
+                {filterTags.map((tag) => {
+                  const isActive = selectedTags.includes(tag);
+                  return (
+                    <button
+                      key={tag}
+                      onClick={() => toggleTag(tag)}
+                      className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition-colors border ${
+                        isActive 
+                          ? 'bg-primary text-white border-primary' 
+                          : 'bg-surface-container-lowest text-on-surface-variant border-outline-variant/40 hover:border-primary/50 hover:text-on-surface'
+                      }`}
+                    >
+                      {tag}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Featured Card */}
-          <div className="glass-card md:col-span-2 p-6 rounded-2xl relative overflow-hidden group hover:shadow-xl transition-all duration-300">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/10 rounded-full blur-3xl -mr-32 -mt-32" />
-            <div className="relative z-10 flex flex-col md:flex-row justify-between gap-6">
-              <div className="flex-1">
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="bg-secondary/10 text-secondary px-3 py-1 rounded-6 text-label-sm font-label-sm uppercase tracking-wider">Featured Match</span>
-                  <div className="flex items-center gap-1 text-tertiary">
-                    <span className="material-symbols-outlined" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>stars</span>
-                    <span className="font-label-sm text-label-sm">Top Recommendation</span>
-                  </div>
-                </div>
-                <h3 className="font-headline-lg text-headline-lg text-on-background mb-1">{featured.name}</h3>
-                <p className="font-body-md text-body-md text-on-surface-variant mb-6">{featured.org}</p>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-                  {[['Funding', featured.amount, 'text-primary'], ['Deadline', featured.deadline, 'text-on-surface'], ['Duration', '4 Years', 'text-on-surface'], ['Location', 'USA', 'text-on-surface']].map(([l, v, cls]) => (
-                    <div key={l}>
-                      <p className="font-label-sm text-label-sm text-on-surface-variant mb-1">{l}</p>
-                      <p className={`font-headline-md text-headline-md ${cls}`}>{v}</p>
+          </div>
+        </aside>
+
+        {/* MAIN CONTENT AREA */}
+        <main className="flex-1 min-w-0 space-y-6">
+          
+          {/* Top Search Bar */}
+          <div className="glass-card bg-surface-bright border border-outline-variant/30 p-3 rounded-2xl shadow-sm flex items-center justify-between gap-4">
+            <div className="relative w-full max-w-md">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline-variant text-[20px]">search</span>
+              <input 
+                type="text" 
+                placeholder="Search scholarships..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 bg-surface-container-lowest border border-outline-variant/50 rounded-xl font-body-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 transition-all text-sm"
+              />
+            </div>
+            
+            <div className="flex items-center gap-2 pr-2">
+              <span className="font-label-sm text-xs text-on-surface-variant hidden sm:inline">Sort:</span>
+              <button className="font-label-sm text-sm font-bold flex items-center gap-1 hover:text-primary transition-colors text-on-surface">
+                Match Score <span className="material-symbols-outlined text-[16px]">swap_vert</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between px-1">
+            <h2 className="font-headline-md text-base font-bold text-on-surface">{allScholarships.length} Results Found</h2>
+          </div>
+
+          {/* Compact Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+            {allScholarships.map((s, idx) => {
+              const isFeatured = idx === 0;
+              return (
+                <Link href={`/scholarships/${s.id}`} key={s.id} className="block group">
+                  <div className={`h-full bg-surface-bright border p-4 rounded-2xl transition-all duration-200 flex flex-col justify-between ${
+                    isFeatured 
+                      ? 'border-primary/50 shadow-sm shadow-primary/10 hover:shadow-md' 
+                      : 'border-outline-variant/30 hover:border-outline-variant hover:shadow-sm'
+                  }`}>
+                    <div>
+                      <div className="flex justify-between items-start mb-3">
+                        <span className="bg-surface-container-low px-2 py-1 rounded-md text-[10px] font-bold text-on-surface-variant border border-outline-variant/20 uppercase tracking-wider">
+                          {s.category}
+                        </span>
+                        {isFeatured && (
+                          <span className="text-[10px] font-bold text-primary bg-primary/10 px-2 py-1 rounded-md flex items-center gap-1">
+                            <span className="material-symbols-outlined text-[12px]" style={{fontVariationSettings: "'FILL' 1"}}>stars</span> Top Match
+                          </span>
+                        )}
+                      </div>
+                      
+                      <h4 className="font-headline-md text-base font-bold text-on-surface mb-1 group-hover:text-primary transition-colors line-clamp-2 leading-tight">
+                        {s.name}
+                      </h4>
+                      <p className="font-body-sm text-xs text-on-surface-variant mb-4 line-clamp-1">{s.org}</p>
                     </div>
-                  ))}
-                </div>
-              </div>
-              <div className="flex md:flex-col justify-between items-center md:items-end w-full md:w-auto">
-                <div className="text-right">
-                  <p className="font-label-sm text-label-sm text-on-surface-variant mb-2">Match Score</p>
-                  <div className="relative inline-flex items-center justify-center w-20 h-20">
-                    <svg className="w-20 h-20 transform -rotate-90" viewBox="0 0 80 80">
-                      <circle className="text-secondary/10" cx="40" cy="40" r="34" fill="transparent" stroke="currentColor" strokeWidth="6" />
-                      <circle className="text-secondary" cx="40" cy="40" r="34" fill="transparent" stroke="currentColor" strokeDasharray="213.6" strokeDashoffset="21.36" strokeWidth="6" />
-                    </svg>
-                    <span className="absolute font-headline-md text-headline-md text-secondary">{featured.match || '95%'}</span>
+
+                    <div>
+                      <div className="grid grid-cols-2 gap-2 mb-4 p-2 bg-surface-container-lowest rounded-xl border border-outline-variant/20">
+                        <div>
+                          <p className="text-[10px] text-on-surface-variant uppercase tracking-wider">Amount</p>
+                          <p className="font-label-md text-sm font-bold text-on-surface">{s.amount}</p>
+                        </div>
+                        <div>
+                          <p className="text-[10px] text-on-surface-variant uppercase tracking-wider">Match</p>
+                          <p className={`font-label-md text-sm font-bold ${isFeatured ? 'text-primary' : 'text-green-600'}`}>
+                            {s.match || '90%'}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-on-surface-variant flex items-center gap-1">
+                          <span className="material-symbols-outlined text-[14px]">event</span>
+                          {s.deadline}
+                        </span>
+                        <span className="material-symbols-outlined text-outline-variant group-hover:text-primary group-hover:translate-x-0.5 transition-all text-[18px]">
+                          arrow_forward
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <Link href={`/scholarships/${featured.id}`} className="bg-primary text-on-primary px-8 py-3 rounded-10 font-label-md text-label-md hover:bg-primary/90 active:scale-95 transition-all shadow-md">
-                  Apply Now
                 </Link>
-              </div>
-            </div>
+              );
+            })}
           </div>
-
-          {/* Regular Cards */}
-          {regularScholarships.map((s) => (
-            <div key={s.id} className="bg-white border border-outline-variant/30 p-6 rounded-2xl hover:border-primary/50 hover:shadow-lg transition-all flex flex-col justify-between group">
-              <div>
-                <div className="flex justify-between items-start mb-4">
-                  <div className="w-12 h-12 rounded-10 bg-surface-container-high flex items-center justify-center">
-                    <span className="material-symbols-outlined text-primary">{s.icon || 'school'}</span>
-                  </div>
-                  <span className="bg-surface-container-low px-2 py-1 rounded text-[10px] font-bold text-on-surface-variant border border-outline-variant/20 uppercase tracking-tighter">{s.category}</span>
-                </div>
-                <h4 className="font-headline-md text-headline-md text-on-surface mb-1">{s.name}</h4>
-                <p className="font-body-sm text-body-sm text-on-surface-variant mb-4">{s.org}</p>
-                <div className="flex items-center justify-between mb-6">
-                  <div>
-                    <p className="font-label-sm text-label-sm text-on-surface-variant">Amount</p>
-                    <p className="font-headline-md text-headline-md text-primary">{s.amount}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-label-sm text-label-sm text-on-surface-variant">Match</p>
-                    <p className="font-headline-md text-headline-md text-secondary">{s.match || '90%'}</p>
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center justify-between pt-4 border-t border-outline-variant/10">
-                <span className="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1">
-                  <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>schedule</span>
-                  {s.deadline}
-                </span>
-                <Link href={`/scholarships/${s.id}`} className="text-primary font-label-md text-label-md hover:underline underline-offset-4 flex items-center gap-1">
-                  View & Apply <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>arrow_forward</span>
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Pagination */}
-        <div className="mt-10 flex items-center justify-center gap-2">
-          <button className="w-10 h-10 flex items-center justify-center rounded-6 border border-outline-variant/30 hover:border-primary transition-colors">
-            <span className="material-symbols-outlined">chevron_left</span>
-          </button>
-          {[1].map((p) => (
-            <button key={p} className={`w-10 h-10 flex items-center justify-center rounded-6 font-bold ${p === 1 ? 'bg-primary text-on-primary' : 'border border-outline-variant/30 hover:border-primary transition-colors'}`}>
-              {p}
-            </button>
-          ))}
-          <button className="w-10 h-10 flex items-center justify-center rounded-6 border border-outline-variant/30 hover:border-primary transition-colors">
-            <span className="material-symbols-outlined">chevron_right</span>
-          </button>
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 }
