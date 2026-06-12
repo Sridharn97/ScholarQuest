@@ -31,7 +31,7 @@ export default function DashboardPage() {
           <p className="text-[#64748B] text-xs font-bold tracking-wide mb-1">Matched</p>
           <h3 className="text-3xl font-extrabold text-[#0A2540]">156</h3>
         </div>
-        
+
         {/* Card 2 */}
         <div className="bg-white rounded-2xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)] border border-gray-100">
           <div className="flex justify-between items-start mb-6">
@@ -87,7 +87,7 @@ export default function DashboardPage() {
               <line x1="0" y1="70" x2="500" y2="70" stroke="#F1F5F9" strokeWidth="2" />
               <line x1="0" y1="110" x2="500" y2="110" stroke="#F1F5F9" strokeWidth="2" />
               <line x1="0" y1="150" x2="500" y2="150" stroke="#F1F5F9" strokeWidth="2" />
-              
+
               <defs>
                 <linearGradient id="blueArea" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.15" />
@@ -96,7 +96,7 @@ export default function DashboardPage() {
               </defs>
               <path d="M 0 130 C 100 110, 150 80, 250 70 C 350 60, 400 110, 500 40 L 500 150 L 0 150 Z" fill="url(#blueArea)" />
               <path d="M 0 130 C 100 110, 150 80, 250 70 C 350 60, 400 110, 500 40" fill="none" stroke="#2563EB" strokeWidth="3" strokeLinecap="round" />
-              
+
               <circle cx="250" cy="70" r="3" fill="#2563EB" />
               <circle cx="125" cy="100" r="3" fill="#2563EB" />
             </svg>
@@ -113,7 +113,7 @@ export default function DashboardPage() {
             <p className="text-blue-200 text-[10px] font-bold tracking-widest uppercase mb-1">SECURED AMOUNT</p>
             <h2 className="text-white text-[42px] font-extrabold leading-none mb-1 tracking-tight">$32,500</h2>
             <p className="text-blue-200 text-sm font-medium mb-8">of $50,000 goal</p>
-            
+
             <div className="flex justify-between text-white text-xs font-bold mb-2">
               <span>65% Completed</span>
               <span>$17,500 to go</span>
@@ -122,7 +122,7 @@ export default function DashboardPage() {
               <div className="h-full bg-[#6EE7B7] rounded-full w-[65%]"></div>
             </div>
           </div>
-          
+
           <div className="relative z-10 mt-6 bg-[#16489E] rounded-xl p-4 flex gap-4 items-start shadow-sm border border-[#2152A6]">
             <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0">
               <span className="material-symbols-outlined text-[#6EE7B7] text-[20px]">lightbulb</span>
@@ -139,10 +139,10 @@ export default function DashboardPage() {
           <h3 className="text-lg font-bold text-[#0A2540] mb-6">Success by Category</h3>
           <div className="space-y-5">
             {[
-              {label: 'STEM', val: '85%', color: 'bg-[#1D4ED8]'},
-              {label: 'Arts', val: '42%', color: 'bg-[#7C3AED]'},
-              {label: 'Community', val: '68%', color: 'bg-[#065F46]'},
-              {label: 'Leadership', val: '55%', color: 'bg-[#2563EB]'}
+              { label: 'STEM', val: '85%', color: 'bg-[#1D4ED8]' },
+              { label: 'Arts', val: '42%', color: 'bg-[#7C3AED]' },
+              { label: 'Community', val: '68%', color: 'bg-[#065F46]' },
+              { label: 'Leadership', val: '55%', color: 'bg-[#2563EB]' }
             ].map(item => (
               <div key={item.label}>
                 <div className="flex justify-between text-xs font-bold text-[#0A2540] mb-2">
@@ -150,7 +150,7 @@ export default function DashboardPage() {
                   <span>{item.val}</span>
                 </div>
                 <div className="h-2 w-full bg-[#F1F5F9] rounded-full overflow-hidden">
-                  <div className={`h-full ${item.color} rounded-full`} style={{width: item.val}}></div>
+                  <div className={`h-full ${item.color} rounded-full`} style={{ width: item.val }}></div>
                 </div>
               </div>
             ))}
@@ -177,7 +177,7 @@ export default function DashboardPage() {
               <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
             </div>
           </div>
-          
+
           <button className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-12 h-12 bg-[#0A2540] rounded-full text-white flex items-center justify-center shadow-lg border-4 border-[#F8F9FB] hover:scale-105 transition-transform z-10">
             <span className="material-symbols-outlined text-[24px]">add</span>
           </button>
@@ -205,7 +205,7 @@ export default function DashboardPage() {
               </div>
               <div className="text-xs font-bold text-[#EF4444]">4 Days Left</div>
             </div>
-            
+
             <div className="flex items-center bg-white rounded-xl p-4 border border-[#F1F5F9]">
               <div className="flex flex-col items-center justify-center min-w-[50px] pr-4 border-r border-[#E2E8F0]">
                 <span className="text-[10px] font-extrabold text-[#64748B] uppercase tracking-widest">Oct</span>
@@ -238,7 +238,7 @@ export default function DashboardPage() {
             <h3 className="text-lg font-bold text-[#0A2540]">AI Smart Matches</h3>
             <span className="bg-[#A7F3D0] text-[#065F46] text-[10px] font-bold px-3 py-1.5 rounded-md uppercase tracking-wider">NEW ACTIVITY</span>
           </div>
-          
+
           <div className="grid grid-cols-2 gap-4 flex-1">
             <div className="bg-[#F8FAFC] rounded-xl p-5 border border-[#F1F5F9] flex flex-col">
               <div className="flex justify-between items-start mb-6">
@@ -253,7 +253,7 @@ export default function DashboardPage() {
                 Match Details <span className="material-symbols-outlined text-[14px]">chevron_right</span>
               </button>
             </div>
-            
+
             <div className="bg-[#F8FAFC] rounded-xl p-5 border border-[#F1F5F9] flex flex-col">
               <div className="flex justify-between items-start mb-6">
                 <span className="text-xs font-extrabold text-[#7C3AED] bg-white px-2.5 py-1 rounded-md shadow-sm border border-gray-100">$5,000</span>
@@ -268,7 +268,7 @@ export default function DashboardPage() {
               </button>
             </div>
           </div>
-          
+
           <div className="mt-4 border border-dashed border-[#CBD5E1] rounded-xl p-5 text-center flex flex-col items-center justify-center">
             <span className="material-symbols-outlined text-[#94A3B8] mb-1">person_search</span>
             <p className="text-xs text-[#64748B] mb-1 font-medium">Want better matches?</p>
@@ -276,7 +276,7 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-      
+
     </div>
   );
 }

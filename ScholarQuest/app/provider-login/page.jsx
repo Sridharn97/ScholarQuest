@@ -79,6 +79,8 @@ export default function ProviderLoginPage() {
               height={350}
               className="w-full h-full object-contain drop-shadow-md"
               unoptimized
+              priority
+              loading="eager"
             />
             <div className="absolute bottom-4 left-4 right-4 z-20">
               <div className="flex items-center gap-3 bg-white/95 backdrop-blur-md rounded-2xl px-4 py-2 border border-slate-200/50 shadow-sm">

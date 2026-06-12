@@ -8,7 +8,6 @@ import { isLoggedIn, getUserName, getUserInitials, clearSession, ensureDefaults,
 
 const mobileMenuLinks = [
   { href: '/messages', label: 'Messages', icon: 'chat' },
-  { href: '/settings', label: 'Settings', icon: 'settings' },
   { href: '/help', label: 'Help Center', icon: 'help' },
 ];
 
@@ -91,16 +90,7 @@ export default function StudentLayout({ children }) {
 
           {/* Right Controls */}
           <div className="hidden lg:flex items-center gap-6">
-            <div className="relative cursor-pointer hover:bg-gray-100 p-2 rounded-full transition-colors">
-              <span className="material-symbols-outlined text-gray-600 text-[22px]">notifications</span>
-              <span className="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border border-[#F8F9FB]"></span>
-            </div>
-            <div className="cursor-pointer hover:bg-gray-100 p-2 rounded-full transition-colors">
-              <span className="material-symbols-outlined text-gray-600 text-[22px]">settings</span>
-            </div>
-            <div className="font-bold text-[#0A2540] cursor-pointer hover:text-[#4F39F6] transition-colors ml-2">
-              {userName || 'Student'}
-            </div>
+            {/* Removed as requested */}
           </div>
         </header>
 

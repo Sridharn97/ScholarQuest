@@ -27,10 +27,13 @@ export default function StudentSidebar({ onLogout, userName, userInitials }) {
   return (
     <aside className="hidden lg:flex flex-col h-screen sticky top-0 bg-[#FAFAFA] border-r border-outline-variant/30 w-[260px] shrink-0">
       {/* Logo */}
-      <div className="pt-10 pb-8 px-8">
-        <Link href="/" className="block">
-          <h1 className="text-[#0A2540] font-bold text-2xl tracking-tight leading-tight">ScholarQuest</h1>
-          <p className="text-sm text-gray-500 mt-1">Higher Ed Funding</p>
+      <div className="pt-10 pb-8 px-6">
+        <Link href="/" className="flex items-center gap-3 block">
+          <img src="/Logo.png.png" alt="ScholarQuest Logo" className="w-10 h-10 rounded-full object-cover shadow-sm border border-slate-200" />
+          <div>
+            <h1 className="text-[#0A2540] font-bold text-2xl tracking-tight leading-none">ScholarQuest</h1>
+            <p className="text-[10px] uppercase tracking-widest text-gray-500 mt-1 font-bold">Higher Ed Funding</p>
+          </div>
         </Link>
       </div>
 
