@@ -10,6 +10,7 @@ const navItems = [
   { href: '/ai-matcher', label: 'AI Matcher', icon: 'lightbulb' },
   { href: '/profile', label: 'Profile', icon: 'person_outline' },
   { href: '/messages', label: 'Messages', icon: 'mail' },
+  { href: '/help', label: 'Help Center', icon: 'help' },
 ];
 
 export default function StudentSidebar({ onLogout, userName, userInitials }) {
