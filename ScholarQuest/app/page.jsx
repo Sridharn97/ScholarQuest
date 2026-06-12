@@ -19,9 +19,9 @@ const stats = [
 const features = [
   {
     icon: 'psychology',
-    color: 'from-blue-500 to-blue-600',
-    bg: 'bg-blue-50',
-    textColor: 'text-blue-600',
+    color: 'from-purple-500 to-purple-600',
+    bg: 'bg-purple-50',
+    textColor: 'text-purple-600',
     title: 'AI-Powered Matching',
     desc: 'Our proprietary algorithm analyzes 40+ profile data points to surface the scholarships you actually qualify for — ranked by match score.',
   },
@@ -55,7 +55,7 @@ export default function LandingPage() {
       <Navbar />
 
       {/* ======================== HERO ======================== */}
-      <section className="relative overflow-hidden pt-16 pb-24 px-6" style={{ background: 'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0,74,198,0.08), transparent), radial-gradient(ellipse 60% 40% at 80% 50%, rgba(113,42,226,0.07), transparent)' }}>
+      <section className="relative overflow-hidden pt-16 pb-24 px-6" style={{ background: 'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(168,85,247,0.08), transparent), radial-gradient(ellipse 60% 40% at 80% 50%, rgba(236,72,153,0.07), transparent)' }}>
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center min-h-[580px]">
 
@@ -119,15 +119,19 @@ export default function LandingPage() {
 
             {/* Right — Hero Image */}
             <div className="relative hidden lg:flex items-center justify-center">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 rounded-3xl" />
-              <div className="relative w-full aspect-square max-w-[520px]">
+              {/* Colorful floating orbs behind hero image */}
+              <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full opacity-40 filter blur-[80px]" style={{ background: 'radial-gradient(circle, rgba(216,180,254,0.6) 0%, rgba(216,180,254,0) 70%)' }} />
+              <div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] rounded-full opacity-40 filter blur-[80px]" style={{ background: 'radial-gradient(circle, rgba(249,168,212,0.6) 0%, rgba(249,168,212,0) 70%)' }} />
+
+              <div className="relative w-full aspect-square max-w-[520px] rounded-3xl overflow-hidden border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.06)] bg-white/40 backdrop-blur-md flex items-center justify-center p-4">
                 <Image
-                  src="/hero_students.png"
+                  src="/hero_students_new.png"
                   alt="Students finding scholarships with ScholarQuest"
                   fill
                   sizes="(max-width: 1024px) 100vw, 52vw"
-                  className="object-contain rounded-3xl"
+                  className="object-contain p-6 drop-shadow-md"
                   priority
+                  unoptimized
                 />
               </div>
 
@@ -224,15 +228,16 @@ export default function LandingPage() {
                 Try AI Matching Free
               </Link>
             </div>
-            <div className="relative h-72 lg:h-full min-h-[360px]">
-              <Image src="/ai_matcher.png" alt="AI Scholarship Matching" fill sizes="(max-width: 1024px) 100vw, 48vw" className="object-cover" />
+            <div className="relative h-72 lg:h-full min-h-[360px] flex items-center justify-center p-8 bg-gradient-to-br from-[#faf5ff] via-[#fdf2f8] to-[#fffbeb]">
+              <div className="absolute top-[-10%] right-[-10%] w-[300px] h-[300px] rounded-full opacity-40 filter blur-[60px]" style={{ background: 'radial-gradient(circle, rgba(216,180,254,0.5) 0%, rgba(216,180,254,0) 70%)' }} />
+              <Image src="/ai_matcher_new.png" alt="AI Scholarship Matching" fill sizes="(max-width: 1024px) 100vw, 48vw" className="object-contain z-10 p-12 drop-shadow-md" unoptimized />
             </div>
           </div>
         </div>
       </section>
 
       {/* ======================== HOW IT WORKS ======================== */}
-      <section className="py-28 px-6" style={{ background: 'radial-gradient(ellipse 80% 50% at 50% 100%, rgba(0,74,198,0.04), transparent)' }}>
+      <section className="py-28 px-6" style={{ background: 'radial-gradient(ellipse 80% 50% at 50% 100%, rgba(168,85,247,0.04), transparent)' }}>
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 max-w-xl mx-auto">
             <p className="text-sm font-bold text-secondary uppercase tracking-widest mb-3">Simple Process</p>
@@ -268,8 +273,9 @@ export default function LandingPage() {
       <section className="py-28 px-6 bg-surface-container-lowest">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl aspect-square bg-white border border-slate-100">
-              <Image src="/scholarship_discovery_hero.png" alt="Scholarship discovery" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
+            <div className="relative rounded-3xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.06)] aspect-square bg-white/40 backdrop-blur-md border border-white/60 flex items-center justify-center p-8">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#faf5ff] via-[#fdf2f8] to-[#fffbeb] -z-10" />
+              <Image src="/scholarship_discovery_new.png" alt="Scholarship discovery" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-contain drop-shadow-md p-10 z-10" unoptimized />
             </div>
             <div className="flex flex-col gap-6">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/8 rounded-full w-fit">
