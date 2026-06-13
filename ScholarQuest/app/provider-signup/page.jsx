@@ -66,13 +66,13 @@ export default function ProviderSignupPage() {
     <div className="h-screen overflow-hidden flex bg-slate-50">
 
       {/* ===== LEFT: LIGHT STATS & PREVIEW PANEL ===== */}
-      <div className="hidden lg:flex w-[52%] flex-col relative overflow-hidden border-r border-purple-100/50 h-full bg-gradient-to-br from-[#faf5ff] via-[#fdf2f8] to-[#fffbeb]">
+      <div className="hidden lg:flex w-1/2 flex-col relative overflow-hidden border-r border-purple-100/50 h-full bg-gradient-to-br from-[#faf5ff] via-[#fdf2f8] to-[#fffbeb]">
         {/* Colorful floating orbs to match illustrations */}
         <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full opacity-40 filter blur-[80px]" style={{ background: 'radial-gradient(circle, rgba(216,180,254,0.5) 0%, rgba(216,180,254,0) 70%)' }} />
         <div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] rounded-full opacity-40 filter blur-[80px]" style={{ background: 'radial-gradient(circle, rgba(249,168,212,0.5) 0%, rgba(249,168,212,0) 70%)' }} />
         <div className="absolute top-[40%] left-[20%] w-[300px] h-[300px] rounded-full opacity-30 filter blur-[60px]" style={{ background: 'radial-gradient(circle, rgba(253,186,116,0.3) 0%, rgba(253,186,116,0) 70%)' }} />
 
-        <div className="relative z-10 flex flex-col h-full p-10 justify-between">
+        <div className="relative z-10 flex flex-col h-full p-10 pb-16 justify-between">
           <div>
             <Link href="/" className="flex items-center gap-3 mb-8">
               <img src="/Logo.png.png" alt="Logo" className="w-9 h-9 rounded-full object-cover shadow-sm" />
@@ -87,20 +87,20 @@ export default function ProviderSignupPage() {
                 Empower Students.<br />
                 <span className="text-primary">Create Grants.</span>
               </h1>
-              <p className="text-slate-600 text-sm leading-relaxed max-w-sm font-medium">
-                Post your scholarship programs on ScholarQuest to directly match with high-performing students. Create, track, and review grant submissions in one integrated pipeline.
-              </p>
+
             </div>
           </div>
 
-          <div className="relative w-[350px] h-[350px] mx-auto my-4 rounded-3xl overflow-hidden border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.06)] bg-white/40 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="relative w-[480px] h-[480px] mx-auto my-4 rounded-3xl overflow-hidden border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.06)] bg-white/40 backdrop-blur-md flex items-center justify-center p-4">
             <Image
-              src="/provider_signup_hero_new.png"
+              src="/provider_signup_hero_v3.png"
               alt="Partner Onboarding Illustration"
-              width={350}
-              height={350}
+              width={480}
+              height={480}
               className="w-full h-full object-contain drop-shadow-md"
               unoptimized
+              priority
+              loading="eager"
             />
           </div>
 
@@ -122,8 +122,8 @@ export default function ProviderSignupPage() {
       </div>
 
       {/* ===== RIGHT: FORM PANEL ===== */}
-      <div className="flex-1 flex flex-col justify-center items-center px-8 py-12 bg-white h-full overflow-y-auto">
-        <div className="w-full max-w-[440px] py-4">
+      <div className="flex-1 bg-white h-full overflow-hidden flex flex-col justify-center items-center px-8">
+        <div className="w-full max-w-[540px]">
           <div className="flex items-center gap-3 mb-10 lg:hidden">
             <img src="/Logo.png.png" alt="Logo" className="w-9 h-9 rounded-full object-cover shadow-sm" />
             <p className="font-extrabold text-slate-900 text-lg tracking-tight">ScholarQuest Portal</p>
