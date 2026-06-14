@@ -34,18 +34,18 @@ export default function ProviderReportsPage() {
           { label: 'Total Funds Disbursed', value: '$850,000', trend: '+15% YoY', trendUp: true, icon: 'payments', cls: 'bg-secondary/10 text-secondary' },
           { label: 'Avg. Match score', value: '92%', trend: '+2pts', trendUp: true, icon: 'psychiatry', cls: 'bg-blue-100 text-blue-700' },
         ].map((stat) => (
-          <div key={stat.label} className="relative overflow-hidden bg-white p-6 rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 group">
-            <div className="flex justify-between items-start mb-4">
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${stat.cls} shadow-inner`}>
-                <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1", fontSize: '24px' }}>{stat.icon}</span>
+          <div key={stat.label} className="relative overflow-hidden bg-white p-4 rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 group">
+            <div className="flex justify-between items-start mb-3">
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${stat.cls} shadow-inner`}>
+                <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1", fontSize: '20px' }}>{stat.icon}</span>
               </div>
-              <div className={`flex items-center gap-1 font-label-sm text-xs px-2 py-1 rounded-full ${stat.trendUp ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
-                <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>{stat.trendUp ? 'trending_up' : 'priority_high'}</span>
+              <div className={`flex items-center gap-1 font-label-sm text-[11px] px-2 py-0.5 rounded-full ${stat.trendUp ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+                <span className="material-symbols-outlined" style={{ fontSize: '12px' }}>{stat.trendUp ? 'trending_up' : 'priority_high'}</span>
                 {stat.trend}
               </div>
             </div>
-            <p className="font-label-md text-on-surface-variant mb-1">{stat.label}</p>
-            <h4 className="font-headline-lg text-4xl text-on-surface">{stat.value}</h4>
+            <p className="font-label-sm text-on-surface-variant mb-0.5">{stat.label}</p>
+            <h4 className="font-headline-md text-2xl text-on-surface">{stat.value}</h4>
           </div>
         ))}
       </div>

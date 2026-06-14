@@ -68,18 +68,18 @@ export default function ProviderDashboard() {
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
         {kpis.map((kpi) => (
-          <div key={kpi.label} className="relative overflow-hidden bg-white p-6 rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 group">
-            <div className="flex justify-between items-start mb-4">
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${kpi.iconCls} shadow-inner`}>
-                <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1", fontSize: '24px' }}>{kpi.icon}</span>
+          <div key={kpi.label} className="relative overflow-hidden bg-white p-4 rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 group">
+            <div className="flex justify-between items-start mb-3">
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${kpi.iconCls} shadow-inner`}>
+                <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1", fontSize: '20px' }}>{kpi.icon}</span>
               </div>
-              <div className={`flex items-center gap-1 font-label-sm text-xs px-2 py-1 rounded-full ${kpi.badgeCls}`}>
-                <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>trending_up</span>
+              <div className={`flex items-center gap-1 font-label-sm text-[11px] px-2 py-0.5 rounded-full ${kpi.badgeCls}`}>
+                <span className="material-symbols-outlined" style={{ fontSize: '12px' }}>trending_up</span>
                 {kpi.badge}
               </div>
             </div>
-            <p className="font-label-md text-on-surface-variant mb-1">{kpi.label}</p>
-            <h4 className="font-headline-lg text-4xl text-on-surface">{kpi.value}</h4>
+            <p className="font-label-sm text-on-surface-variant mb-0.5">{kpi.label}</p>
+            <h4 className="font-headline-md text-2xl text-on-surface">{kpi.value}</h4>
           </div>
         ))}
       </div>
