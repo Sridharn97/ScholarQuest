@@ -66,17 +66,20 @@ export default function ProviderDashboard() {
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
         {kpis.map((kpi) => (
-          <div key={kpi.label} className="glass-card p-6 rounded-10 border border-outline-variant/10 flex flex-col gap-2 hover:-translate-y-1 transition-transform">
-            <div className="flex justify-between items-start">
-              <div className={`w-10 h-10 rounded-6 flex items-center justify-center ${kpi.iconCls}`}>
-                <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>{kpi.icon}</span>
+          <div key={kpi.label} className="relative overflow-hidden bg-white p-6 rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 group">
+            <div className="flex justify-between items-start mb-4">
+              <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${kpi.iconCls} shadow-inner`}>
+                <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1", fontSize: '24px' }}>{kpi.icon}</span>
               </div>
-              <span className={`text-label-sm font-label-md px-2 py-1 rounded-full ${kpi.badgeCls}`}>{kpi.badge}</span>
+              <div className={`flex items-center gap-1 font-label-sm text-xs px-2 py-1 rounded-full ${kpi.badgeCls}`}>
+                <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>trending_up</span>
+                {kpi.badge}
+              </div>
             </div>
-            <p className="text-label-md font-label-md text-on-surface-variant mt-2">{kpi.label}</p>
-            <h3 className="text-headline-lg font-headline-lg" style={{ fontFamily: 'Manrope, sans-serif' }}>{kpi.value}</h3>
+            <p className="font-label-md text-on-surface-variant mb-1">{kpi.label}</p>
+            <h4 className="font-headline-lg text-4xl text-on-surface">{kpi.value}</h4>
           </div>
         ))}
       </div>
