@@ -63,7 +63,6 @@ export default function ProviderDashboard() {
       {/* Page Header */}
       <div className="mb-10">
         <h2 className="font-headline-lg text-headline-lg text-on-surface">Welcome back, {providerInfo.name.split(' ')[0]}</h2>
-        <p className="text-body-lg text-on-surface-variant mt-1">Management dashboard for **{providerInfo.organization}**.</p>
       </div>
 
       {/* KPI Cards */}

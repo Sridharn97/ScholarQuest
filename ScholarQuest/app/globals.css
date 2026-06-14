@@ -132,6 +132,55 @@
   }
 }
 
+/* ===================== Admin Theme Overrides (Blue/Slate) ===================== */
+@layer base {
+  .theme-admin {
+    --color-primary: #2563eb; /* Blue-600 */
+    --color-secondary: #475569; /* Slate-600 */
+    --color-tertiary: #0ea5e9; /* Sky-500 */
+    --color-background: #f8fafc; /* Slate-50 */
+    --color-surface: #ffffff;
+    --color-surface-bright: #ffffff;
+    --color-surface-dim: #f1f5f9;
+    --color-surface-container-lowest: #ffffff;
+    --color-surface-container-low: #f8fafc;
+    --color-surface-container: #f1f5f9;
+    --color-surface-container-high: #e2e8f0;
+    --color-surface-container-highest: #cbd5e1;
+    --color-surface-variant: #e2e8f0;
+    --color-surface-tint: #2563eb;
+    --color-on-background: #0f172a; /* Slate-900 */
+    --color-on-surface: #0f172a;
+    --color-on-surface-variant: #334155;
+    --color-on-primary: #ffffff;
+    --color-on-secondary: #ffffff;
+    --color-on-tertiary: #ffffff;
+    --color-on-primary-fixed: #1e3a8a;
+    --color-on-primary-fixed-variant: #1e40af;
+    --color-on-secondary-fixed: #0f172a;
+    --color-on-secondary-fixed-variant: #1e293b;
+    --color-on-tertiary-fixed: #082f49;
+    --color-on-tertiary-fixed-variant: #0c4a6e;
+    --color-primary-container: #3b82f6;
+    --color-secondary-container: #64748b;
+    --color-tertiary-container: #38bdf8;
+    --color-on-primary-container: #eff6ff;
+    --color-on-secondary-container: #f8fafc;
+    --color-on-tertiary-container: #f0f9ff;
+    --color-primary-fixed: #dbeafe;
+    --color-primary-fixed-dim: #bfdbfe;
+    --color-secondary-fixed: #f1f5f9;
+    --color-secondary-fixed-dim: #e2e8f0;
+    --color-tertiary-fixed: #e0f2fe;
+    --color-tertiary-fixed-dim: #bae6fd;
+    --color-inverse-primary: #93c5fd;
+    --color-inverse-surface: #0f172a;
+    --color-inverse-on-surface: #f8fafc;
+    --color-outline: #64748b;
+    --color-outline-variant: #cbd5e1;
+  }
+}
+
 /* ===================== Global Base ===================== */
 @layer base {
   * { box-sizing: border-box; }

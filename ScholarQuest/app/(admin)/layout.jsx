@@ -38,7 +38,7 @@ export default function ProviderLayout({ children }) {
 
   if (!authChecked) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="theme-admin min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
           <span className="material-symbols-outlined text-primary animate-spin" style={{ fontSize: '40px' }}>progress_activity</span>
           <p className="text-on-surface-variant font-label-md">Loading Portal...</p>
@@ -48,7 +48,7 @@ export default function ProviderLayout({ children }) {
   }
 
   return (
-    <div className="bg-background text-on-surface font-sans min-h-screen flex relative">
+    <div className="theme-admin bg-background text-on-surface font-sans min-h-screen flex relative">
       <ProviderSidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} onLogout={handleLogout} />
       
       <main className="lg:ml-64 flex-1 flex flex-col min-h-screen min-w-0 w-full transition-all duration-300">
@@ -73,32 +73,7 @@ export default function ProviderLayout({ children }) {
             </div>
           </div>
           
-          <div className="flex items-center gap-2 lg:gap-4">
-            <button className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-all text-on-surface-variant relative">
-              <span className="material-symbols-outlined">notifications</span>
-              <span className="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border border-white" />
-            </button>
-            <div className="h-8 w-[1px] bg-outline-variant/30 mx-1 lg:mx-2" />
-            
-            {/* Provider info */}
-            <div className="hidden sm:flex items-center gap-3">
-              <div className="text-right">
-                <p className="font-label-md text-on-surface leading-tight font-bold">{providerInfo?.name || 'Sponsor'}</p>
-                <p className="font-label-sm text-on-surface-variant text-xs">{providerInfo?.organization || 'Company or Institute'}</p>
-              </div>
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold text-sm">
-                {providerInfo?.initials || 'GC'}
-              </div>
-            </div>
-            
-            <button
-              onClick={handleLogout}
-              className="bg-error/10 text-error px-3 lg:px-4 py-2 rounded-10 font-label-md text-label-sm lg:text-label-md hover:bg-error/20 transition-colors whitespace-nowrap flex items-center gap-1"
-            >
-              <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>logout</span>
-              <span className="hidden sm:inline">Logout</span>
-            </button>
-          </div>
+
         </header>
 
         {/* Page Content */}
