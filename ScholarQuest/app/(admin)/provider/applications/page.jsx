@@ -80,85 +80,126 @@ export default function ProviderApplicationsPage() {
         </div>
       )}
 
-      {/* View Application Modal */}
+      {/* View Application Slide-Over Panel */}
       {viewApp && (
-        <div className="fixed inset-0 z-40 bg-black/50 flex items-center justify-center p-4" onClick={() => setViewApp(null)}>
-          <div className="bg-white rounded-3xl p-8 w-full max-w-lg shadow-2xl" onClick={e => e.stopPropagation()}>
-            <div className="flex items-start justify-between mb-6">
+        <>
+          <div className="fixed inset-0 z-40 bg-on-surface/20 backdrop-blur-sm transition-opacity" onClick={() => setViewApp(null)} />
+          <div 
+            className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out border-l border-outline-variant/20 animate-in slide-in-from-right"
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="px-6 py-6 border-b border-outline-variant/20 flex items-start justify-between bg-surface-container-lowest">
               <div className="flex items-center gap-4">
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center font-bold text-lg ${viewApp.color}`}>{viewApp.initials}</div>
+                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center font-bold text-xl shadow-inner ${viewApp.color}`}>
+                  {viewApp.initials}
+                </div>
                 <div>
                   <h3 className="font-headline-md text-headline-md text-on-surface">{viewApp.student}</h3>
-                  <p className="font-body-sm text-on-surface-variant">{viewApp.email}</p>
+                  <p className="font-body-md text-on-surface-variant flex items-center gap-1">
+                    <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>mail</span>
+                    {viewApp.email}
+                  </p>
                 </div>
               </div>
-              <button onClick={() => setViewApp(null)} className="text-on-surface-variant hover:text-on-surface">
+              <button onClick={() => setViewApp(null)} className="p-2 rounded-full text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors">
                 <span className="material-symbols-outlined">close</span>
               </button>
             </div>
 
-            <div className="space-y-4 mb-6">
-              {[
-                { label: 'Scholarship Program', value: viewApp.scholarship },
-                { label: 'Submitted Date', value: viewApp.submitted },
-                { label: 'Calculated Match Score', value: `${viewApp.score}%` },
-                { label: 'Status', value: viewApp.status },
-              ].map(item => (
-                <div key={item.label} className="flex items-center justify-between p-3 bg-surface-container-low rounded-10 border border-outline-variant/10">
-                  <span className="font-label-sm text-on-surface-variant">{item.label}</span>
-                  {item.label === 'Status' ? (
-                    <span className={`px-3 py-1 rounded-full font-label-sm ${STATUS_CONFIG[viewApp.status]?.cls}`}>{viewApp.status}</span>
-                  ) : (
-                    <span className="font-label-md text-on-surface font-bold">{item.value}</span>
-                  )}
+            {/* Scrollable Content */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-6">
+              {/* Match Score Section */}
+              <div className="p-5 bg-gradient-to-br from-surface-container-low to-surface-container rounded-2xl border border-outline-variant/10 shadow-sm">
+                <div className="flex justify-between items-center mb-3">
+                  <h4 className="font-label-md text-on-surface flex items-center gap-2">
+                    <span className="material-symbols-outlined text-primary">psychiatry</span>
+                    AI Alignment Score
+                  </h4>
+                  <span className="font-headline-md text-primary font-bold">{viewApp.score}%</span>
                 </div>
-              ))}
-              <div className="p-3 bg-surface-container-low rounded-10 border border-outline-variant/10">
-                <div className="flex justify-between mb-2">
-                  <span className="font-label-sm text-on-surface-variant">AI Alignment Score</span>
-                  <span className="font-label-md text-on-surface font-bold">{viewApp.score}%</span>
+                <div className="w-full h-3 bg-white rounded-full overflow-hidden shadow-inner">
+                  <div className="bg-gradient-to-r from-primary to-secondary h-full rounded-full transition-all duration-1000" style={{ width: `${viewApp.score}%` }} />
                 </div>
-                <div className="w-full h-3 bg-outline-variant/20 rounded-full overflow-hidden">
-                  <div className="bg-gradient-to-r from-primary to-secondary h-full rounded-full transition-all" style={{ width: `${viewApp.score}%` }} />
+                <p className="text-body-sm text-on-surface-variant mt-3 leading-relaxed">
+                  This candidate strongly matches the requirements for {viewApp.scholarship}.
+                </p>
+              </div>
+
+              {/* Application Details */}
+              <div>
+                <h4 className="font-label-md text-on-surface mb-3 uppercase tracking-wider text-xs">Application Details</h4>
+                <div className="space-y-3">
+                  {[
+                    { label: 'Program', value: viewApp.scholarship, icon: 'school' },
+                    { label: 'Submitted', value: viewApp.submitted, icon: 'calendar_today' },
+                    { label: 'Status', value: viewApp.status, icon: 'info' },
+                  ].map(item => (
+                    <div key={item.label} className="flex flex-col p-4 bg-white rounded-xl border border-outline-variant/20 shadow-sm hover:border-primary/30 transition-colors">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="material-symbols-outlined text-on-surface-variant" style={{ fontSize: '16px' }}>{item.icon}</span>
+                        <span className="font-label-sm text-on-surface-variant">{item.label}</span>
+                      </div>
+                      {item.label === 'Status' ? (
+                        <div className="mt-1">
+                          <span className={`px-3 py-1 rounded-full font-label-sm inline-flex items-center gap-1 ${STATUS_CONFIG[viewApp.status]?.cls}`}>
+                            <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>{STATUS_CONFIG[viewApp.status]?.icon}</span>
+                            {viewApp.status}
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="font-label-md text-on-surface ml-6">{item.value}</span>
+                      )}
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
 
-            {/* Action buttons */}
-            <div className="flex gap-3 flex-wrap">
-              {viewApp.status !== 'Approved' && (
-                <button
-                  onClick={() => handleUpdateStatus(viewApp.id, 'Approved')}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 bg-green-600 text-white rounded-10 font-label-md hover:opacity-90 transition-all active:scale-95"
-                >
-                  <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>check_circle</span>
-                  Approve
-                </button>
-              )}
-              {viewApp.status !== 'Under Review' && (
-                <button
-                  onClick={() => handleUpdateStatus(viewApp.id, 'Under Review')}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 bg-blue-600 text-white rounded-10 font-label-md hover:opacity-90 transition-all active:scale-95"
-                >
-                  <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>pending</span>
-                  Review
-                </button>
-              )}
-              {viewApp.status !== 'Rejected' && (
-                <button
-                  onClick={() => handleUpdateStatus(viewApp.id, 'Rejected')}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 bg-error text-on-error rounded-10 font-label-md hover:opacity-90 transition-all active:scale-95"
-                >
-                  <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>cancel</span>
-                  Reject
-                </button>
-              )}
+            {/* Sticky Footer Actions */}
+            <div className="p-6 border-t border-outline-variant/20 bg-surface-container-lowest">
+              <div className="flex gap-3 mb-4">
+                {viewApp.status !== 'Approved' && (
+                  <button
+                    onClick={() => handleUpdateStatus(viewApp.id, 'Approved')}
+                    className="flex-1 flex items-center justify-center gap-2 py-3 bg-green-600 text-white rounded-xl font-label-md shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all active:scale-95"
+                    title="Approve this application"
+                  >
+                    <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>check_circle</span>
+                    Approve
+                  </button>
+                )}
+                {viewApp.status !== 'Under Review' && (
+                  <button
+                    onClick={() => handleUpdateStatus(viewApp.id, 'Under Review')}
+                    className="flex-1 flex items-center justify-center gap-2 py-3 bg-blue-600 text-white rounded-xl font-label-md shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all active:scale-95"
+                    title="Mark as Under Review"
+                  >
+                    <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>pending</span>
+                    Review
+                  </button>
+                )}
+                {viewApp.status !== 'Rejected' && (
+                  <button
+                    onClick={() => handleUpdateStatus(viewApp.id, 'Rejected')}
+                    className="flex-1 flex items-center justify-center gap-2 py-3 bg-white border border-error text-error rounded-xl font-label-md hover:bg-error/5 transition-all active:scale-95"
+                    title="Reject this application"
+                  >
+                    <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>cancel</span>
+                    Reject
+                  </button>
+                )}
+              </div>
+              <button 
+                onClick={() => setDeleteConfirm(viewApp.id)} 
+                className="w-full py-2 flex items-center justify-center gap-2 text-on-surface-variant hover:text-error transition-colors font-label-sm"
+              >
+                <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>delete</span>
+                Remove Application Record
+              </button>
             </div>
-            <button onClick={() => setDeleteConfirm(viewApp.id)} className="mt-3 w-full py-2 text-error font-label-sm hover:underline">
-              Remove Submission log
-            </button>
           </div>
-        </div>
+        </>
       )}
 
       {/* Delete Confirm */}
@@ -188,19 +229,28 @@ export default function ProviderApplicationsPage() {
       </div>
 
       {/* Stats Row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-gutter mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
         {[
-          { label: 'Total Applications', value: counts.total, icon: 'description', cls: 'bg-primary/10 text-primary' },
-          { label: 'Under Review', value: counts.review, icon: 'pending', cls: 'bg-blue-100 text-blue-700' },
-          { label: 'Approved / Funded', value: counts.approved, icon: 'check_circle', cls: 'bg-green-100 text-green-700' },
-          { label: 'Pending Review', value: counts.pending, icon: 'hourglass_empty', cls: 'bg-orange-100 text-orange-700' },
+          { label: 'Total Applications', value: counts.total, icon: 'description', cls: 'bg-primary/10 text-primary', trend: '+12% this week', trendUp: true },
+          { label: 'Under Review', value: counts.review, icon: 'pending', cls: 'bg-blue-100 text-blue-700', trend: 'Steady', trendUp: true },
+          { label: 'Approved / Funded', value: counts.approved, icon: 'check_circle', cls: 'bg-green-100 text-green-700', trend: '+2 this month', trendUp: true },
+          { label: 'Pending Review', value: counts.pending, icon: 'hourglass_empty', cls: 'bg-orange-100 text-orange-700', trend: 'Needs action', trendUp: false },
         ].map((stat) => (
-          <div key={stat.label} className="glass-card p-6 rounded-10 border border-outline-variant/20">
-            <div className={`w-10 h-10 rounded-6 flex items-center justify-center mb-3 ${stat.cls}`}>
-              <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>{stat.icon}</span>
+          <div key={stat.label} className="relative overflow-hidden bg-white p-6 rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 group">
+            <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity transform group-hover:scale-110">
+              <span className="material-symbols-outlined" style={{ fontSize: '100px' }}>{stat.icon}</span>
             </div>
-            <p className="font-label-sm text-label-sm text-on-surface-variant">{stat.label}</p>
-            <h4 className="font-headline-md text-headline-md">{stat.value}</h4>
+            <div className="flex justify-between items-start mb-4">
+              <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${stat.cls} shadow-inner`}>
+                <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1", fontSize: '24px' }}>{stat.icon}</span>
+              </div>
+              <div className={`flex items-center gap-1 font-label-sm text-xs px-2 py-1 rounded-full ${stat.trendUp ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+                <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>{stat.trendUp ? 'trending_up' : 'priority_high'}</span>
+                {stat.trend}
+              </div>
+            </div>
+            <p className="font-label-md text-on-surface-variant mb-1">{stat.label}</p>
+            <h4 className="font-headline-lg text-4xl text-on-surface">{stat.value}</h4>
           </div>
         ))}
       </div>
@@ -240,28 +290,38 @@ export default function ProviderApplicationsPage() {
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-outline-variant/30">
+            <tbody className="divide-y divide-outline-variant/20 bg-white">
               {filtered.length === 0 ? (
-                <tr><td colSpan={6} className="px-6 py-12 text-center text-on-surface-variant">No applications found.</td></tr>
+                <tr>
+                  <td colSpan={6} className="px-6 py-20 text-center">
+                    <div className="flex flex-col items-center justify-center opacity-60">
+                      <span className="material-symbols-outlined mb-4" style={{ fontSize: '64px' }}>folder_open</span>
+                      <h4 className="font-headline-md text-on-surface mb-2">No Applications Found</h4>
+                      <p className="font-body-md text-on-surface-variant max-w-sm">Try adjusting your search terms or filters to find what you're looking for.</p>
+                    </div>
+                  </td>
+                </tr>
               ) : filtered.map((row) => (
-                <tr key={row.id} className="hover:bg-surface-container-low transition-colors">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${row.color}`}>{row.initials}</div>
+                <tr key={row.id} className="hover:bg-surface-container-low hover:shadow-sm transition-all group">
+                  <td className="px-6 py-5">
+                    <div className="flex items-center gap-4">
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm shrink-0 shadow-sm group-hover:scale-105 transition-transform ${row.color}`}>
+                        {row.initials}
+                      </div>
                       <div>
-                        <p className="font-semibold text-on-surface whitespace-nowrap">{row.student}</p>
+                        <p className="font-label-md text-on-surface whitespace-nowrap group-hover:text-primary transition-colors">{row.student}</p>
                         <p className="font-body-sm text-xs text-on-surface-variant">{row.email}</p>
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-on-surface whitespace-nowrap">{row.scholarship}</td>
-                  <td className="px-6 py-4 text-on-surface-variant whitespace-nowrap">{row.submitted}</td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <div className="w-20 h-2 bg-outline-variant/20 rounded-full overflow-hidden">
-                        <div className="bg-secondary h-full rounded-full" style={{ width: `${row.score}%` }} />
+                  <td className="px-6 py-5 text-on-surface whitespace-nowrap font-body-md">{row.scholarship}</td>
+                  <td className="px-6 py-5 text-on-surface-variant whitespace-nowrap font-body-sm">{row.submitted}</td>
+                  <td className="px-6 py-5">
+                    <div className="flex items-center gap-3">
+                      <div className="w-24 h-2 bg-outline-variant/20 rounded-full overflow-hidden shadow-inner">
+                        <div className="bg-secondary h-full rounded-full group-hover:shadow-[0_0_8px_rgba(236,72,153,0.6)] transition-all" style={{ width: `${row.score}%` }} />
                       </div>
-                      <span className="text-label-sm font-semibold whitespace-nowrap">{row.score}%</span>
+                      <span className="font-label-sm font-bold whitespace-nowrap text-secondary">{row.score}%</span>
                     </div>
                   </td>
                   <td className="px-6 py-4">
