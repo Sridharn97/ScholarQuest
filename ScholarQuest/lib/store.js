@@ -552,7 +552,8 @@ export function addAdminScholarship(scholarship) {
     icon: scholarship.icon || 'school',
     org: scholarship.org || 'Sponsor Organization',
     match: scholarship.match || '90%',
-    desc: scholarship.desc || 'A valuable scholarship opportunity.'
+    desc: scholarship.desc || 'A valuable scholarship opportunity.',
+    formSections: scholarship.formSections || []
   };
   list.unshift(newItem);
   set(KEYS.ADMIN_SCHOLARSHIPS, list);

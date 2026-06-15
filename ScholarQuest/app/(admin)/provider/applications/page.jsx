@@ -84,7 +84,7 @@ export default function ProviderApplicationsPage() {
       {viewApp && (
         <>
           <div className="fixed inset-0 z-40 bg-on-surface/20 backdrop-blur-sm transition-opacity" onClick={() => setViewApp(null)} />
-          <div 
+          <div
             className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out border-l border-outline-variant/20 animate-in slide-in-from-right"
             onClick={e => e.stopPropagation()}
           >
@@ -190,8 +190,8 @@ export default function ProviderApplicationsPage() {
                   </button>
                 )}
               </div>
-              <button 
-                onClick={() => setDeleteConfirm(viewApp.id)} 
+              <button
+                onClick={() => setDeleteConfirm(viewApp.id)}
                 className="w-full py-2 flex items-center justify-center gap-2 text-on-surface-variant hover:text-error transition-colors font-label-sm"
               >
                 <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>delete</span>
