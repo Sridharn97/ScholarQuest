@@ -394,7 +394,8 @@ export function getAdminApplications() {
   return get(KEYS.ADMIN_APPLICATIONS) || DEFAULT_ADMIN_APPLICATIONS;
 }
 
-export function addApplication({ studentName, studentEmail, scholarshipId, scholarshipName, gpa }) {
+export function addApplication(data) {
+  const { studentName, studentEmail, scholarshipId, scholarshipName, gpa, institution, studyField, gradDate, honors, customResponses } = data;
   const apps = getAdminApplications();
   const colors = ['bg-primary/10 text-primary', 'bg-secondary/10 text-secondary', 'bg-tertiary-container/10 text-tertiary'];
   const randomColor = colors[Math.floor(Math.random() * colors.length)];
@@ -411,7 +412,12 @@ export function addApplication({ studentName, studentEmail, scholarshipId, schol
     submitted: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
     score,
     status: 'Pending',
-    customResponses: arguments[0].customResponses || []
+    gpa,
+    institution,
+    studyField,
+    gradDate,
+    honors,
+    customResponses: customResponses || []
   };
   apps.unshift(newApp);
   set(KEYS.ADMIN_APPLICATIONS, apps);

@@ -85,7 +85,7 @@ export default function ProviderApplicationsPage() {
         <>
           <div className="fixed inset-0 z-40 bg-on-surface/20 backdrop-blur-sm transition-opacity" onClick={() => setViewApp(null)} />
           <div
-            className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out border-l border-outline-variant/20 animate-in slide-in-from-right"
+            className="fixed inset-y-0 right-0 z-50 w-[50vw] bg-white shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out border-l border-outline-variant/20 animate-in slide-in-from-right"
             onClick={e => e.stopPropagation()}
           >
             {/* Header */}
@@ -129,31 +129,95 @@ export default function ProviderApplicationsPage() {
               {/* Application Details */}
               <div>
                 <h4 className="font-label-md text-on-surface mb-3 uppercase tracking-wider text-xs">Application Details</h4>
-                <div className="space-y-3">
-                  {[
-                    { label: 'Program', value: viewApp.scholarship, icon: 'school' },
-                    { label: 'Submitted', value: viewApp.submitted, icon: 'calendar_today' },
-                    { label: 'Status', value: viewApp.status, icon: 'info' },
-                  ].map(item => (
-                    <div key={item.label} className="flex flex-col p-4 bg-white rounded-xl border border-outline-variant/20 shadow-sm hover:border-primary/30 transition-colors">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="material-symbols-outlined text-on-surface-variant" style={{ fontSize: '16px' }}>{item.icon}</span>
-                        <span className="font-label-sm text-on-surface-variant">{item.label}</span>
-                      </div>
-                      {item.label === 'Status' ? (
-                        <div className="mt-1">
-                          <span className={`px-3 py-1 rounded-full font-label-sm inline-flex items-center gap-1 ${STATUS_CONFIG[viewApp.status]?.cls}`}>
-                            <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>{STATUS_CONFIG[viewApp.status]?.icon}</span>
-                            {viewApp.status}
-                          </span>
-                        </div>
-                      ) : (
-                        <span className="font-label-md text-on-surface ml-6">{item.value}</span>
-                      )}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="col-span-2 flex flex-col p-4 bg-white rounded-xl border border-outline-variant/20 shadow-sm hover:border-primary/30 transition-colors">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="material-symbols-outlined text-on-surface-variant" style={{ fontSize: '16px' }}>school</span>
+                      <span className="font-label-sm text-on-surface-variant">Program</span>
                     </div>
-                  ))}
+                    <span className="font-label-md text-on-surface ml-6">{viewApp.scholarship}</span>
+                  </div>
+
+                  <div className="flex flex-col p-4 bg-white rounded-xl border border-outline-variant/20 shadow-sm hover:border-primary/30 transition-colors">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="material-symbols-outlined text-on-surface-variant" style={{ fontSize: '16px' }}>calendar_today</span>
+                      <span className="font-label-sm text-on-surface-variant">Submitted</span>
+                    </div>
+                    <span className="font-label-md text-on-surface ml-6">{viewApp.submitted}</span>
+                  </div>
+
+                  <div className="flex flex-col p-4 bg-white rounded-xl border border-outline-variant/20 shadow-sm hover:border-primary/30 transition-colors">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="material-symbols-outlined text-on-surface-variant" style={{ fontSize: '16px' }}>info</span>
+                      <span className="font-label-sm text-on-surface-variant">Status</span>
+                    </div>
+                    <div className="mt-1 ml-6">
+                      <span className={`px-3 py-1 rounded-full font-label-sm inline-flex items-center gap-1 ${STATUS_CONFIG[viewApp.status]?.cls}`}>
+                        <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>{STATUS_CONFIG[viewApp.status]?.icon}</span>
+                        {viewApp.status}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
+
+              {/* Academic Background */}
+              {(viewApp.institution || viewApp.studyField || viewApp.gpa) && (
+                <div>
+                  <h4 className="font-label-md text-on-surface mb-3 mt-6 uppercase tracking-wider text-xs">Academic Background</h4>
+                  <div className="grid grid-cols-2 gap-3">
+                    {viewApp.institution && (
+                      <div className="col-span-2 flex flex-col p-4 bg-white rounded-xl border border-outline-variant/20 shadow-sm hover:border-primary/30 transition-colors">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="material-symbols-outlined text-on-surface-variant" style={{ fontSize: '16px' }}>account_balance</span>
+                          <span className="font-label-sm text-on-surface-variant">Institution</span>
+                        </div>
+                        <span className="font-label-md text-on-surface ml-6">{viewApp.institution}</span>
+                      </div>
+                    )}
+                    
+                    {viewApp.studyField && (
+                      <div className="col-span-2 flex flex-col p-4 bg-white rounded-xl border border-outline-variant/20 shadow-sm hover:border-primary/30 transition-colors">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="material-symbols-outlined text-on-surface-variant" style={{ fontSize: '16px' }}>book</span>
+                          <span className="font-label-sm text-on-surface-variant">Field of Study</span>
+                        </div>
+                        <span className="font-label-md text-on-surface ml-6">{viewApp.studyField}</span>
+                      </div>
+                    )}
+
+                    {viewApp.gpa && (
+                      <div className="flex flex-col p-4 bg-white rounded-xl border border-outline-variant/20 shadow-sm hover:border-primary/30 transition-colors">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="material-symbols-outlined text-on-surface-variant" style={{ fontSize: '16px' }}>grade</span>
+                          <span className="font-label-sm text-on-surface-variant">GPA</span>
+                        </div>
+                        <span className="font-label-md text-on-surface ml-6">{viewApp.gpa}</span>
+                      </div>
+                    )}
+
+                    {viewApp.gradDate && (
+                      <div className="flex flex-col p-4 bg-white rounded-xl border border-outline-variant/20 shadow-sm hover:border-primary/30 transition-colors">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="material-symbols-outlined text-on-surface-variant" style={{ fontSize: '16px' }}>event</span>
+                          <span className="font-label-sm text-on-surface-variant">Graduation</span>
+                        </div>
+                        <span className="font-label-md text-on-surface ml-6">{viewApp.gradDate}</span>
+                      </div>
+                    )}
+
+                    {viewApp.honors && (
+                      <div className="col-span-2 flex flex-col p-4 bg-white rounded-xl border border-outline-variant/20 shadow-sm hover:border-primary/30 transition-colors">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="material-symbols-outlined text-on-surface-variant" style={{ fontSize: '16px' }}>workspace_premium</span>
+                          <span className="font-label-sm text-on-surface-variant">Honors / Research</span>
+                        </div>
+                        <span className="font-label-md text-on-surface ml-6">{viewApp.honors}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* Custom Form Responses */}
               {viewApp.customResponses && viewApp.customResponses.length > 0 && (

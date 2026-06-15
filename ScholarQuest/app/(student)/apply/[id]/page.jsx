@@ -19,6 +19,8 @@ export default function ApplyPage({ params }) {
   const [gpa, setGpa] = useState('3.92');
   const [institution, setInstitution] = useState('Stanford University');
   const [studyField, setStudyField] = useState('Computer Science');
+  const [gradDate, setGradDate] = useState('2026-06-15');
+  const [honors, setHonors] = useState('');
   const [toast, setToast] = useState('');
   const [customResponses, setCustomResponses] = useState({});
 
@@ -61,6 +63,10 @@ export default function ApplyPage({ params }) {
       scholarshipId: scholarship.id,
       scholarshipName: scholarship.name,
       gpa: gpa,
+      institution: institution,
+      studyField: studyField,
+      gradDate: gradDate,
+      honors: honors,
       customResponses: Object.values(customResponses)
     });
 
@@ -232,7 +238,8 @@ export default function ApplyPage({ params }) {
                   <label className="font-label-md text-label-md text-on-surface">Expected Graduation Date</label>
                   <input
                     type="date"
-                    defaultValue="2026-06-15"
+                    value={gradDate}
+                    onChange={(e) => setGradDate(e.target.value)}
                     className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all"
                   />
                 </div>
@@ -242,6 +249,8 @@ export default function ApplyPage({ params }) {
                 <label className="font-label-md text-label-md text-on-surface">Academic Honors, Research, or Publications</label>
                 <textarea
                   rows={4}
+                  value={honors}
+                  onChange={(e) => setHonors(e.target.value)}
                   placeholder="Describe your research work, awards, or papers..."
                   className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all resize-none"
                 />
