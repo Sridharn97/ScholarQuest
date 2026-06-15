@@ -154,6 +154,28 @@ export default function ProviderApplicationsPage() {
                   ))}
                 </div>
               </div>
+
+              {/* Custom Form Responses */}
+              {viewApp.customResponses && viewApp.customResponses.length > 0 && (
+                <div>
+                  <h4 className="font-label-md text-on-surface mb-3 mt-6 uppercase tracking-wider text-xs">Custom Form Responses</h4>
+                  <div className="space-y-3">
+                    {viewApp.customResponses.map((resp, idx) => (
+                      <div key={idx} className="flex flex-col p-4 bg-white rounded-xl border border-outline-variant/20 shadow-sm hover:border-primary/30 transition-colors">
+                        <span className="font-label-sm text-on-surface-variant mb-1">{resp.question}</span>
+                        {resp.type === 'text' ? (
+                          <span className="font-label-md text-on-surface">{resp.answer}</span>
+                        ) : (
+                          <a href="#" className="font-label-md text-primary hover:underline flex items-center gap-1">
+                            <span className="material-symbols-outlined" style={{fontSize: '16px'}}>attach_file</span>
+                            {resp.answer}
+                          </a>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Sticky Footer Actions */}

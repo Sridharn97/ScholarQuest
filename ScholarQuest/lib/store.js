@@ -410,7 +410,8 @@ export function addApplication({ studentName, studentEmail, scholarshipId, schol
     scholarship: scholarshipName,
     submitted: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
     score,
-    status: 'Pending'
+    status: 'Pending',
+    customResponses: arguments[0].customResponses || []
   };
   apps.unshift(newApp);
   set(KEYS.ADMIN_APPLICATIONS, apps);

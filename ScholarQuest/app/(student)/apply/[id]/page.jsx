@@ -20,6 +20,7 @@ export default function ApplyPage({ params }) {
   const [institution, setInstitution] = useState('Stanford University');
   const [studyField, setStudyField] = useState('Computer Science');
   const [toast, setToast] = useState('');
+  const [customResponses, setCustomResponses] = useState({});
 
   // Safe param unwrapping
   const [resolvedParams, setResolvedParams] = useState(null);
@@ -59,7 +60,8 @@ export default function ApplyPage({ params }) {
       studentEmail: user.email || 'student@student.com',
       scholarshipId: scholarship.id,
       scholarshipName: scholarship.name,
-      gpa: gpa
+      gpa: gpa,
+      customResponses: Object.values(customResponses)
     });
 
     showToast('Application Submitted Successfully!');
@@ -90,6 +92,31 @@ export default function ApplyPage({ params }) {
       </div>
     );
   }
+
+  // Derive steps dynamically based on formSections
+  const currentSteps = (() => {
+    const baseSteps = [
+      { num: '01', label: 'Personal Info', sub: 'Completed', done: true },
+      { num: '02', label: 'Academic Background', sub: 'In Progress', active: true },
+    ];
+
+    if (scholarship.formSections?.length > 0) {
+      scholarship.formSections.forEach((sec, idx) => {
+        baseSteps.push({
+          num: String(idx + 3).padStart(2, '0'),
+          label: sec.title || 'Custom Section',
+          sub: 'Pending',
+          pending: true
+        });
+      });
+    } else {
+      baseSteps.push(
+        { num: '03', label: 'Statement of Purpose', sub: 'Pending', pending: true },
+        { num: '04', label: 'Document Uploads', sub: 'Pending', pending: true }
+      );
+    }
+    return baseSteps;
+  })();
 
   return (
     <div className="max-w-container-max mx-auto px-gutter py-10">
@@ -134,7 +161,7 @@ export default function ApplyPage({ params }) {
         <aside className="lg:col-span-3">
           <div className="sticky top-24 space-y-8">
             <div className="space-y-6">
-              {initialSteps.map((step) => (
+              {currentSteps.map((step) => (
                 <div key={step.num} className={`flex items-center gap-4 cursor-pointer ${step.pending ? 'opacity-40' : ''}`}>
                   <div className={`h-10 w-10 rounded-full flex items-center justify-center shrink-0 ${step.done ? 'bg-primary text-white shadow-md' : step.active ? 'border-2 border-primary text-primary bg-primary-fixed/30' : 'border-2 border-outline text-outline'}`}>
                     {step.done ? <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>check</span> : <span className="font-bold">{step.num}</span>}
@@ -219,6 +246,47 @@ export default function ApplyPage({ params }) {
                   className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all resize-none"
                 />
               </div>
+
+              {/* Dynamic Application Sections */}
+              {scholarship.formSections && scholarship.formSections.map((section) => (
+                <div key={section.id} className="pt-8 space-y-6">
+                  <div className="border-t border-outline-variant/30 pt-6">
+                    <h3 className="font-title-lg text-title-lg text-on-surface">{section.title}</h3>
+                  </div>
+                  {section.questions.map((q) => (
+                    <div key={q.id} className="space-y-2">
+                      <label className="font-label-md text-label-md text-on-surface">{q.text} *</label>
+                      {q.type === 'text' ? (
+                        <textarea
+                          rows={3}
+                          value={customResponses[q.id]?.answer || ''}
+                          onChange={(e) => setCustomResponses({ ...customResponses, [q.id]: { question: q.text, answer: e.target.value, type: q.type } })}
+                          placeholder="Enter your response here..."
+                          className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all resize-none"
+                          required
+                        />
+                      ) : (
+                        <div className="mt-2 flex items-center justify-center w-full">
+                          <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-outline-variant border-dashed rounded-10 cursor-pointer bg-surface-container-lowest hover:bg-surface-container-low transition-colors">
+                            <div className="flex flex-col items-center justify-center pt-5 pb-6 text-center">
+                              <span className="material-symbols-outlined text-primary mb-2" style={{ fontSize: '28px' }}>upload_file</span>
+                              <p className="mb-2 font-body-sm text-body-sm text-on-surface-variant max-w-[200px] truncate">
+                                {customResponses[q.id] ? <span className="text-primary font-bold">{customResponses[q.id].answer}</span> : <><span className="font-semibold text-primary">Click to upload</span> or drag and drop</>}
+                              </p>
+                              <p className="font-label-sm text-label-sm text-on-surface-variant">Expected format: {q.type.toUpperCase()}</p>
+                            </div>
+                            <input type="file" className="hidden" accept={q.type} onChange={(e) => {
+                              if (e.target.files[0]) {
+                                setCustomResponses({ ...customResponses, [q.id]: { question: q.text, answer: e.target.files[0].name, type: q.type } });
+                              }
+                            }} required />
+                          </label>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ))}
 
               <div className="pt-8 flex justify-between items-center border-t border-outline-variant/10">
                 <Link href={`/scholarships/${scholarship.id}`} className="flex items-center gap-2 text-primary font-label-md text-label-md hover:opacity-80 transition-opacity">
