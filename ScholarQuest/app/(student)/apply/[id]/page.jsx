@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { getAdminScholarships, getUser, addApplication, addCardToColumn, ensureDefaults } from '@/lib/store';
+import { getAdminScholarships, getUser, addApplication, addCardToColumn, ensureDefaults, getAdminApplications } from '@/lib/store';
 
 const initialSteps = [
   { num: '01', label: 'Personal Info', sub: 'Completed', done: true },
@@ -23,6 +23,7 @@ export default function ApplyPage({ params }) {
   const [honors, setHonors] = useState('');
   const [toast, setToast] = useState('');
   const [customResponses, setCustomResponses] = useState({});
+  const [hasApplied, setHasApplied] = useState(false);
 
   // Safe param unwrapping
   const [resolvedParams, setResolvedParams] = useState(null);
@@ -42,6 +43,10 @@ export default function ApplyPage({ params }) {
         setGpa(currentUser.gpa || '3.92');
         setInstitution(currentUser.institution || 'Stanford University');
         setStudyField(currentUser.studyField || 'Computer Science');
+
+        const apps = getAdminApplications();
+        const alreadyApplied = apps.some(a => a.email === currentUser.email && a.scholarship === found.name);
+        setHasApplied(alreadyApplied);
       }
       setLoading(false);
     });
@@ -54,7 +59,7 @@ export default function ApplyPage({ params }) {
 
   const handleSubmit = (e) => {
     if (e) e.preventDefault();
-    if (!scholarship || !user) return;
+    if (!scholarship || !user || hasApplied) return;
 
     // Submit the application to the central data store
     addApplication({
@@ -99,29 +104,51 @@ export default function ApplyPage({ params }) {
     );
   }
 
-  // Derive steps dynamically based on formSections
+  // Derive steps dynamically based on formSections and input
   const currentSteps = (() => {
-    const baseSteps = [
-      { num: '01', label: 'Personal Info', sub: 'Completed', done: true },
-      { num: '02', label: 'Academic Background', sub: 'In Progress', active: true },
-    ];
+    let allPreviousDone = true;
+    const steps = [];
+
+    // Step 1: Personal Info
+    steps.push({ num: '01', label: 'Personal Info', sub: 'Completed', done: true });
+
+    // Step 2: Academic Background
+    const academicDone = !!(institution && studyField && gpa && gradDate);
+    if (academicDone) {
+      steps.push({ num: '02', label: 'Academic Background', sub: 'Completed', done: true });
+    } else {
+      steps.push({ num: '02', label: 'Academic Background', sub: 'In Progress', active: true });
+      allPreviousDone = false;
+    }
 
     if (scholarship.formSections?.length > 0) {
       scholarship.formSections.forEach((sec, idx) => {
-        baseSteps.push({
+        // A section is complete if every question has an answer
+        const isDone = sec.questions.length > 0 && sec.questions.every(q => customResponses[q.id]?.answer);
+        
+        let statusObj = {};
+        if (isDone) {
+          statusObj = { sub: 'Completed', done: true };
+        } else if (allPreviousDone) {
+          statusObj = { sub: 'In Progress', active: true };
+          allPreviousDone = false;
+        } else {
+          statusObj = { sub: 'Pending', pending: true };
+        }
+
+        steps.push({
           num: String(idx + 3).padStart(2, '0'),
           label: sec.title || 'Custom Section',
-          sub: 'Pending',
-          pending: true
+          ...statusObj
         });
       });
     } else {
-      baseSteps.push(
-        { num: '03', label: 'Statement of Purpose', sub: 'Pending', pending: true },
+      steps.push(
+        { num: '03', label: 'Statement of Purpose', sub: allPreviousDone ? 'In Progress' : 'Pending', active: allPreviousDone, pending: !allPreviousDone },
         { num: '04', label: 'Document Uploads', sub: 'Pending', pending: true }
       );
     }
-    return baseSteps;
+    return steps;
   })();
 
   return (
@@ -155,9 +182,10 @@ export default function ApplyPage({ params }) {
           </button>
           <button
             onClick={handleSubmit}
-            className="px-6 py-3 bg-primary text-white rounded-2xl font-label-md text-label-md font-bold hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-primary/20"
+            disabled={hasApplied}
+            className={`px-6 py-3 rounded-2xl font-label-md text-label-md font-bold transition-all shadow-lg ${hasApplied ? 'bg-surface-container-high text-on-surface-variant cursor-not-allowed shadow-none' : 'bg-primary text-white hover:opacity-90 active:scale-95 shadow-primary/20'}`}
           >
-            Submit Application
+            {hasApplied ? 'Already Applied' : 'Submit Application'}
           </button>
         </div>
       </header>
@@ -196,7 +224,22 @@ export default function ApplyPage({ params }) {
 
         {/* Main Form */}
         <div className="lg:col-span-9">
-          <section className="glass-panel p-10 rounded-2xl shadow-sm border border-outline-variant/20 bg-white">
+          {hasApplied ? (
+            <div className="glass-panel p-10 rounded-2xl shadow-sm border border-outline-variant/20 bg-white flex flex-col items-center justify-center text-center py-32">
+              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6 shadow-inner">
+                <span className="material-symbols-outlined text-green-600" style={{ fontSize: '40px' }}>task_alt</span>
+              </div>
+              <h2 className="font-headline-md text-headline-md text-on-surface mb-2">Application Received</h2>
+              <p className="font-body-md text-on-surface-variant max-w-md">
+                You have already submitted an application for the <strong>{scholarship.name}</strong>. You can track its status from your dashboard tracker.
+              </p>
+              <Link href="/tracker" className="mt-8 px-8 py-3 bg-primary text-white rounded-xl font-label-md shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all active:scale-95">
+                Go to Tracker
+              </Link>
+            </div>
+          ) : (
+            <>
+              <section className="glass-panel p-10 rounded-2xl shadow-sm border border-outline-variant/20 bg-white">
             <div className="mb-10">
               <h2 className="font-headline-md text-headline-md text-on-surface">Academic Verification</h2>
               <p className="font-body-md text-body-md text-on-surface-variant mt-1">Please verify your academic status before submitting.</p>
@@ -284,7 +327,7 @@ export default function ApplyPage({ params }) {
                               </p>
                               <p className="font-label-sm text-label-sm text-on-surface-variant">Expected format: {q.type.toUpperCase()}</p>
                             </div>
-                            <input type="file" className="hidden" accept={q.type} onChange={(e) => {
+                            <input type="file" className="sr-only" accept={`${q.type}, ${q.type === '.png' ? 'image/png' : q.type === '.jpg' ? 'image/jpeg' : 'application/pdf'}`} onChange={(e) => {
                               if (e.target.files[0]) {
                                 setCustomResponses({ ...customResponses, [q.id]: { question: q.text, answer: e.target.files[0].name, type: q.type } });
                               }
@@ -304,9 +347,10 @@ export default function ApplyPage({ params }) {
                 </Link>
                 <button
                   type="submit"
-                  className="px-8 py-3 bg-primary text-white rounded-2xl font-label-md text-label-md font-bold hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-primary/20"
+                  disabled={hasApplied}
+                  className={`px-8 py-3 rounded-2xl font-label-md text-label-md font-bold transition-all shadow-lg ${hasApplied ? 'bg-surface-container-high text-on-surface-variant cursor-not-allowed shadow-none' : 'bg-primary text-white hover:opacity-90 active:scale-95 shadow-primary/20'}`}
                 >
-                  Submit Application
+                  {hasApplied ? 'Already Applied' : 'Submit Application'}
                 </button>
               </div>
             </form>
@@ -324,6 +368,8 @@ export default function ApplyPage({ params }) {
               </p>
             </div>
           </section>
+            </>
+          )}
         </div>
       </div>
     </div>

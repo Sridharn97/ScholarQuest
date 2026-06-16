@@ -57,13 +57,15 @@
   --spacing-container-max: 1280px;
   --spacing-margin-mobile: 16px;
 
-  /* Border Radius */
-  --radius-DEFAULT: 0.25rem;
-  --radius-lg: 0.5rem;
-  --radius-xl: 0.75rem;
-  --radius-2xl: 1rem;
-  --radius-3xl: 1.5rem;
-  --radius-4xl: 2rem;
+  /* Border Radius - Very Soft & Rounded UI */
+  --radius-DEFAULT: 1rem;
+  --radius-sm: 0.75rem;
+  --radius-md: 1.25rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 1.75rem;
+  --radius-2xl: 2rem;
+  --radius-3xl: 2.5rem;
+  --radius-4xl: 3rem;
 
   /* Font Families */
   --font-sans: 'Inter', sans-serif;

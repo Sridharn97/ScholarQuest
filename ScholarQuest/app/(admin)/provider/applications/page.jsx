@@ -85,7 +85,7 @@ export default function ProviderApplicationsPage() {
         <>
           <div className="fixed inset-0 z-40 bg-on-surface/20 backdrop-blur-sm transition-opacity" onClick={() => setViewApp(null)} />
           <div
-            className="fixed inset-y-0 right-0 z-50 w-[50vw] bg-white shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out border-l border-outline-variant/20 animate-in slide-in-from-right"
+            className="fixed inset-y-0 right-0 z-50 w-[50vw] bg-white shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out border-l border-outline-variant/20 animate-in slide-in-from-right rounded-l-[3rem]"
             onClick={e => e.stopPropagation()}
           >
             {/* Header */}
