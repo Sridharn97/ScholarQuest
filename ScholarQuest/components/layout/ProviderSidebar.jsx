@@ -8,6 +8,7 @@ const navItems = [
   { href: '/provider', label: 'Overview', icon: 'dashboard' },
   { href: '/provider/scholarships', label: 'Scholarships', icon: 'school' },
   { href: '/provider/applications', label: 'Applications', icon: 'description' },
+  { href: '/provider/messages', label: 'Messages', icon: 'forum' },
   { href: '/provider/reports', label: 'Reports', icon: 'analytics' },
   { href: '/provider/settings', label: 'Settings', icon: 'settings' },
 ];

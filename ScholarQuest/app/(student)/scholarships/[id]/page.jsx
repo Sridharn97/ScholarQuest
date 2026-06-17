@@ -2,13 +2,14 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { getAdminScholarships, addCardToColumn, ensureDefaults, getTracker } from '@/lib/store';
+import { getAdminScholarships, addCardToColumn, ensureDefaults, getTracker, getUser, getAdminApplications } from '@/lib/store';
 
 export default function ScholarshipDetailsPage({ params }) {
   const router = useRouter();
   const [scholarship, setScholarship] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saved, setSaved] = useState(false);
+  const [applicationStatus, setApplicationStatus] = useState(null);
   
   // Safe param unwrapping
   const [resolvedParams, setResolvedParams] = useState(null);
@@ -33,6 +34,16 @@ export default function ScholarshipDetailsPage({ params }) {
       const isSaved = tracker.some(col => col.cards.some(c => c.title === (found || list[0]).name));
       setSaved(isSaved);
       
+      // Check if already applied
+      const currentUser = getUser();
+      if (currentUser) {
+        const apps = getAdminApplications();
+        const myApp = apps.find(a => a.email === currentUser.email && a.scholarship === (found || list[0]).name);
+        if (myApp) {
+          setApplicationStatus(myApp.status);
+        }
+      }
+
       setLoading(false);
     });
   }, [params]);
@@ -173,12 +184,26 @@ export default function ScholarshipDetailsPage({ params }) {
             </div>
             <h3 className="font-headline-md text-headline-md mb-2">Ready to Apply?</h3>
             <p className="font-body-sm text-body-sm text-on-surface-variant mb-6">Submit your application directly to **{scholarship.org}**.</p>
-            <Link
-              href={`/apply/${scholarship.id}`}
-              className="block w-full py-3 bg-primary text-on-primary rounded-10 font-label-md text-label-md text-center hover:opacity-90 active:scale-95 transition-all shadow-lg shadow-primary/20 mb-3 font-bold"
-            >
-              Start Application
-            </Link>
+            {applicationStatus ? (
+              <div
+                className={`block w-full py-3 rounded-10 font-label-md text-label-md text-center shadow-sm mb-3 font-bold cursor-default ${
+                  applicationStatus === 'Accepted' ? 'bg-green-100 text-green-700 border border-green-200' :
+                  applicationStatus === 'Rejected' ? 'bg-red-50 text-red-600 border border-red-200' :
+                  'bg-blue-50 text-blue-700 border border-blue-200'
+                }`}
+              >
+                {applicationStatus === 'Accepted' ? 'Status: Accepted 🎉' : 
+                 applicationStatus === 'Rejected' ? 'Status: Rejected' : 
+                 'Already Applied'}
+              </div>
+            ) : (
+              <Link
+                href={`/apply/${scholarship.id}`}
+                className="block w-full py-3 bg-primary text-on-primary rounded-10 font-label-md text-label-md text-center hover:opacity-90 active:scale-95 transition-all shadow-lg shadow-primary/20 mb-3 font-bold"
+              >
+                Start Application
+              </Link>
+            )}
             <button
               onClick={handleSaveToTracker}
               disabled={saved}

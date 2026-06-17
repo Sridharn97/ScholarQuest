@@ -68,30 +68,7 @@ const DEFAULT_TRACKER = [
   { id: 'col_rejected', label: 'Rejected', color: 'text-error', badgeBg: 'bg-error-container text-on-error-container', cards: [] },
 ];
 
-const DEFAULT_MESSAGES = [
-  {
-    id: 1, name: 'Gates Foundation', avatar: 'GF',
-    avatarBg: 'bg-primary/10 text-primary',
-    lastMessage: 'Thank you for your application. We are pleased to inform you...',
-    time: '2h ago', unread: 2, online: true,
-    thread: [
-      { id: 1, content: 'Hello! We have reviewed your initial application for the Gates Scholarship.', isMe: false, time: '10:02 AM' },
-      { id: 2, content: 'Thank you for reaching out! I am very excited about this opportunity.', isMe: true, time: '10:15 AM' },
-      { id: 3, content: 'Your profile shows impressive academic achievements. We would like to invite you to the second round of evaluation.', isMe: false, time: '10:30 AM' },
-      { id: 4, content: 'That is wonderful news! What documents will be required for the next stage?', isMe: true, time: '10:45 AM' },
-      { id: 5, content: 'Thank you for your application. We are pleased to inform you that you have been selected for the final interview round. Congratulations!', isMe: false, time: '11:20 AM' },
-    ],
-  },
-  {
-    id: 2, name: 'World Future Foundation', avatar: 'WF',
-    avatarBg: 'bg-secondary/10 text-secondary',
-    lastMessage: 'Your application documents have been received.',
-    time: 'Yesterday', unread: 0, online: false,
-    thread: [
-      { id: 1, content: 'Your application documents have been received and are under review.', isMe: false, time: 'Yesterday' },
-    ],
-  },
-];
+const DEFAULT_MESSAGES = [];
 
 const DEFAULT_ACTIVITY = [
   { id: 1, icon: 'auto_awesome', iconColor: 'text-secondary', title: 'New Match Found', sub: 'Global Tech Innovators Fund (98% match)', time: 'Just now' },
@@ -290,7 +267,55 @@ export function deleteCard(cardId) {
 // ─── Messages ─────────────────────────────────────────────────
 
 export function getMessages() {
-  return get(KEYS.MESSAGES) || DEFAULT_MESSAGES;
+  const storedConvs = get(KEYS.MESSAGES) || DEFAULT_MESSAGES;
+  const scholarships = getAdminScholarships();
+  
+  const uniqueOrgs = [...new Set(scholarships.map(s => s.org).filter(Boolean))];
+  
+  const allProviders = get(KEYS.PROVIDERS) || [];
+  allProviders.forEach(p => {
+    if (p.organization && !uniqueOrgs.includes(p.organization)) {
+      uniqueOrgs.push(p.organization);
+    }
+  });
+
+  PROVIDER_CREDENTIALS.forEach(p => {
+    if (p.organization && !uniqueOrgs.includes(p.organization)) {
+      uniqueOrgs.push(p.organization);
+    }
+  });
+
+  const updatedConvs = storedConvs.filter(c => uniqueOrgs.includes(c.name) || uniqueOrgs.includes(c.name.replace(' Support', '')));
+  let changed = updatedConvs.length !== storedConvs.length;
+
+  // Ensure every provider has a support thread
+  uniqueOrgs.forEach(org => {
+    const exists = updatedConvs.find(c => c.name === org || c.name === `${org} Support`);
+    if (!exists) {
+      const avatarStr = org.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase() || 'P';
+      const colors = ['bg-primary/10 text-primary', 'bg-secondary/10 text-secondary', 'bg-tertiary-container/10 text-tertiary', 'bg-blue-500/10 text-blue-600'];
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      
+      updatedConvs.push({
+        id: Date.now() + Math.floor(Math.random() * 10000),
+        name: org,
+        avatar: avatarStr,
+        avatarBg: randomColor,
+        lastMessage: `Welcome to ${org} support.`,
+        time: 'Just now', unread: 0, online: true,
+        thread: [
+          { id: 1, content: `Hello! If you have any questions about our scholarships, feel free to ask here.`, isMe: false, time: 'Just now' }
+        ]
+      });
+      changed = true;
+    }
+  });
+
+  if (changed) {
+    set(KEYS.MESSAGES, updatedConvs);
+  }
+  
+  return updatedConvs;
 }
 
 export function sendMessage(convId, text) {
@@ -304,30 +329,27 @@ export function sendMessage(convId, text) {
   conv.lastMessage = text;
   conv.time = 'Just now';
   set(KEYS.MESSAGES, convs);
-
-  // Simulate a reply after 1.5 seconds
-  setTimeout(() => {
-    const replies = [
-      'Thank you for your message! We will get back to you shortly.',
-      'We have received your inquiry and will respond within 24 hours.',
-      'Great question! Our team will look into this for you.',
-    ];
-    const reply = { id: Date.now() + 1, content: replies[Math.floor(Math.random() * replies.length)], isMe: false, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
-    const updatedConvs = getMessages();
-    const updatedConv = updatedConvs.find(c => c.id === convId);
-    if (updatedConv) {
-      updatedConv.thread.push(reply);
-      updatedConv.lastMessage = reply.content;
-      updatedConv.time = 'Just now';
-      set(KEYS.MESSAGES, updatedConvs);
-    }
-  }, 1500);
 }
 
 export function markAsRead(convId) {
   const convs = getMessages();
   const conv = convs.find(c => c.id === convId);
   if (conv) { conv.unread = 0; set(KEYS.MESSAGES, convs); }
+}
+
+export function providerSendMessage(convId, text) {
+  const convs = getMessages();
+  const conv = convs.find(c => c.id === convId);
+  if (!conv) return;
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  // Provider sending a message looks like `isMe: false` from the student's perspective
+  const msg = { id: Date.now(), content: text, isMe: false, time: timeStr };
+  conv.thread.push(msg);
+  conv.lastMessage = text;
+  conv.time = 'Just now';
+  conv.unread = (conv.unread || 0) + 1; // Increment unread counter for student
+  set(KEYS.MESSAGES, convs);
 }
 
 // ─── Activity Log ─────────────────────────────────────────────

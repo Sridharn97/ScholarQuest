@@ -1,8 +1,8 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
-import { getMessages, sendMessage, markAsRead } from '@/lib/store';
+import { getMessages, providerSendMessage, getProviderInfo, getUserName, getUserInitials } from '@/lib/store';
 
-export default function MessagesPage() {
+export default function ProviderMessagesPage() {
   const [convs, setConvs] = useState([]);
   const [activeConv, setActiveConv] = useState(null);
   const [newMessage, setNewMessage] = useState('');
@@ -11,9 +11,34 @@ export default function MessagesPage() {
   const messagesEndRef = useRef(null);
 
   const load = () => {
-    const data = getMessages();
-    setConvs(data);
-    setActiveConv(prev => prev || (data.length > 0 ? data[0].id : null));
+    const provider = getProviderInfo();
+    const org = provider?.organization || '';
+    const allConvs = getMessages();
+    const myConv = allConvs.find(c => c.name === org || c.name === `${org} Support`);
+    
+    if (myConv) {
+      const hasStudentMessage = myConv.thread.some(msg => msg.isMe);
+      if (hasStudentMessage) {
+        setConvs([{
+          id: myConv.id,
+          name: getUserName(),
+          avatar: getUserInitials(),
+          avatarBg: 'bg-blue-500/10 text-blue-600',
+          lastMessage: myConv.lastMessage,
+          time: myConv.time,
+          unread: myConv.unread || 0, // Should read from unread count if applicable
+          online: true,
+          thread: myConv.thread
+        }]);
+        setActiveConv(myConv.id);
+      } else {
+        setConvs([]);
+        setActiveConv(null);
+      }
+    } else {
+      setConvs([]);
+      setActiveConv(null);
+    }
   };
 
   useEffect(() => {
@@ -29,14 +54,14 @@ export default function MessagesPage() {
   const handleSelectConv = (id) => {
     setActiveConv(id);
     setShowMobileList(false);
-    markAsRead(id);
   };
 
   const handleSend = () => {
     const text = newMessage.trim();
-    if (!text) return;
-    sendMessage(activeConv, text);
+    if (!text || !activeConv) return;
+    providerSendMessage(activeConv, text);
     setNewMessage('');
+    load();
   };
 
   const handleKeyDown = (e) => {
@@ -49,20 +74,15 @@ export default function MessagesPage() {
   );
 
   const activeConvData = convs.find(c => c.id === activeConv);
-  const totalUnread = convs.reduce((sum, c) => sum + (c.unread || 0), 0);
+  const totalUnread = 0; // Not tracking provider unread in demo
 
   return (
     <div className="flex h-[calc(100vh-64px)] bg-surface-container-lowest overflow-hidden relative">
       {/* Conversations Sidebar */}
-      <div className={`${showMobileList ? 'flex' : 'hidden'} md:flex w-full md:w-80 flex-shrink-0 border-r border-outline-variant/20 flex-col bg-white z-10`}>
+      <div className={`${showMobileList ? 'flex' : 'hidden'} md:flex w-full md:w-80 flex-shrink-0 border-r border-outline-variant/20 flex-col bg-white z-10 rounded-l-3xl`}>
         <div className="p-6 border-b border-outline-variant/10">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="font-headline-md text-headline-md">Messages</h2>
-            {totalUnread > 0 && (
-              <span className="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-[11px] text-white font-bold">
-                {totalUnread}
-              </span>
-            )}
+            <h2 className="font-headline-md text-headline-md">Student Messages</h2>
           </div>
           <div className="relative">
             <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline-variant" style={{ fontSize: '18px' }}>search</span>
@@ -70,8 +90,8 @@ export default function MessagesPage() {
               type="text"
               value={search}
               onChange={e => setSearch(e.target.value)}
-              placeholder="Search messages..."
-              className="w-full bg-surface-container-low border border-outline-variant/30 rounded-10 py-2 pl-9 pr-4 text-body-sm outline-none focus:ring-2 focus:ring-primary/20"
+              placeholder="Search students..."
+              className="w-full bg-surface-container-low border border-outline-variant/30 rounded-2xl py-2 pl-9 pr-4 text-body-sm outline-none focus:ring-2 focus:ring-primary/20"
             />
           </div>
         </div>
@@ -112,11 +132,11 @@ export default function MessagesPage() {
       </div>
 
       {/* Chat Area */}
-      <div className={`${!showMobileList ? 'flex' : 'hidden'} md:flex flex-1 flex-col min-w-0 bg-surface-container-lowest`}>
+      <div className={`${!showMobileList ? 'flex' : 'hidden'} md:flex flex-1 flex-col min-w-0 bg-surface-container-lowest rounded-r-3xl`}>
         {/* Chat Header */}
         <div className="flex items-center gap-4 p-4 border-b border-outline-variant/20 bg-white shadow-sm shrink-0">
           <button
-            className="md:hidden p-2 -ml-2 text-on-surface-variant hover:bg-surface-container rounded-6"
+            className="md:hidden p-2 -ml-2 text-on-surface-variant hover:bg-surface-container rounded-2xl"
             onClick={() => setShowMobileList(true)}
           >
             <span className="material-symbols-outlined">arrow_back</span>
@@ -140,6 +160,7 @@ export default function MessagesPage() {
           ) : (
              <div className="flex-1 min-w-0 font-label-md text-on-surface">Select a conversation</div>
           )}
+          
           <div className="flex gap-1 sm:gap-2 shrink-0">
             <button className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors text-on-surface-variant">
               <span className="material-symbols-outlined">call</span>
@@ -151,37 +172,40 @@ export default function MessagesPage() {
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-lg space-y-4">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
           <div className="text-center">
             <span className="font-label-sm text-label-sm text-on-surface-variant bg-surface-container-low px-4 py-1 rounded-full">Today</span>
           </div>
-          {activeConvData?.thread?.map((msg) => (
-            <div key={msg.id} className={`flex gap-2 sm:gap-3 ${msg.isMe ? 'justify-end' : 'justify-start'}`}>
-              {!msg.isMe && activeConvData && (
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 self-end ${activeConvData.avatarBg}`}>
-                  {activeConvData.avatar}
+          {activeConvData?.thread?.map((msg) => {
+            const providerIsMe = !msg.isMe; // Reverse isMe since student is true
+            return (
+              <div key={msg.id} className={`flex gap-2 sm:gap-3 ${providerIsMe ? 'justify-end' : 'justify-start'}`}>
+                {!providerIsMe && activeConvData && (
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 self-end ${activeConvData.avatarBg}`}>
+                    {activeConvData.avatar}
+                  </div>
+                )}
+                <div className={`max-w-[85%] sm:max-w-[70%] ${providerIsMe ? 'items-end' : 'items-start'} flex flex-col gap-1`}>
+                  <div className={`px-3 py-2 sm:px-4 sm:py-3 rounded-3xl ${providerIsMe ? 'bg-primary text-white rounded-tr-sm' : 'bg-white border border-outline-variant/20 text-on-surface rounded-tl-sm'}`}>
+                    <p className="font-body-md text-body-md leading-relaxed">{msg.content}</p>
+                  </div>
+                  <span className="font-label-sm text-label-sm text-outline px-2">{msg.time}</span>
                 </div>
-              )}
-              <div className={`max-w-[85%] sm:max-w-[70%] ${msg.isMe ? 'items-end' : 'items-start'} flex flex-col gap-1`}>
-                <div className={`px-3 py-2 sm:px-4 sm:py-3 rounded-2xl ${msg.isMe ? 'bg-primary text-white rounded-tr-sm' : 'bg-white border border-outline-variant/20 text-on-surface rounded-tl-sm'}`}>
-                  <p className="font-body-md text-body-md leading-relaxed">{msg.content}</p>
-                </div>
-                <span className="font-label-sm text-label-sm text-outline px-2">{msg.time}</span>
+                {providerIsMe && (
+                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs shrink-0 self-end">
+                    Me
+                  </div>
+                )}
               </div>
-              {msg.isMe && (
-                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs shrink-0 self-end">
-                  Me
-                </div>
-              )}
-            </div>
-          ))}
+            );
+          })}
           <div ref={messagesEndRef} />
         </div>
 
         {/* Message Input */}
-        <div className="p-3 sm:p-4 border-t border-outline-variant/20 bg-white shrink-0 mb-16 md:mb-0">
-          <div className="flex items-center gap-2 sm:gap-3 bg-surface-container-low border border-outline-variant/30 rounded-2xl p-1 sm:p-2">
-            <button className="p-2 text-on-surface-variant hover:text-primary transition-colors rounded-6 shrink-0">
+        <div className="p-3 sm:p-4 border-t border-outline-variant/20 bg-white shrink-0 mb-16 md:mb-0 rounded-br-3xl">
+          <div className="flex items-center gap-2 sm:gap-3 bg-surface-container-low border border-outline-variant/30 rounded-full p-1 sm:p-2">
+            <button className="p-2 text-on-surface-variant hover:text-primary transition-colors rounded-full shrink-0">
               <span className="material-symbols-outlined">attach_file</span>
             </button>
             <input
@@ -189,13 +213,14 @@ export default function MessagesPage() {
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Type a message..."
+              placeholder="Type a message to the student..."
               className="flex-1 bg-transparent outline-none font-body-md text-on-surface placeholder:text-outline-variant py-2 min-w-0"
+              disabled={!activeConvData}
             />
             <button
               onClick={handleSend}
-              disabled={!newMessage.trim()}
-              className="w-10 h-10 bg-primary text-white rounded-10 flex items-center justify-center hover:opacity-90 transition-all active:scale-95 shrink-0 disabled:opacity-40"
+              disabled={!newMessage.trim() || !activeConvData}
+              className="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center hover:opacity-90 transition-all active:scale-95 shrink-0 disabled:opacity-40"
             >
               <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>send</span>
             </button>
