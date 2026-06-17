@@ -77,9 +77,9 @@ export default function ProviderMessagesPage() {
   const totalUnread = 0; // Not tracking provider unread in demo
 
   return (
-    <div className="flex h-[calc(100vh-64px)] bg-surface-container-lowest overflow-hidden relative">
+    <div className="flex h-[calc(100vh-64px)] bg-[#f8fafc] overflow-hidden relative">
       {/* Conversations Sidebar */}
-      <div className={`${showMobileList ? 'flex' : 'hidden'} md:flex w-full md:w-80 flex-shrink-0 border-r border-outline-variant/20 flex-col bg-white z-10 rounded-l-3xl`}>
+      <div className={`${showMobileList ? 'flex' : 'hidden'} md:flex w-full md:w-80 flex-shrink-0 border-r border-purple-100/50 flex-col bg-white/60 backdrop-blur-md z-10 rounded-l-3xl shadow-[4px_0_24px_-12px_rgba(0,0,0,0.1)]`}>
         <div className="p-6 border-b border-outline-variant/10">
           <div className="flex items-center justify-between mb-3">
             <h2 className="font-headline-md text-headline-md">Student Messages</h2>
@@ -106,7 +106,7 @@ export default function ProviderMessagesPage() {
             <button
               key={conv.id}
               onClick={() => handleSelectConv(conv.id)}
-              className={`w-full flex items-center gap-3 p-4 border-b border-outline-variant/10 hover:bg-surface-container-low transition-colors text-left ${activeConv === conv.id ? 'bg-primary/5 border-l-4 border-l-primary' : 'border-l-4 border-transparent'}`}
+              className={`w-full flex items-center gap-3 p-4 border-b border-slate-100 hover:bg-white transition-all duration-300 text-left ${activeConv === conv.id ? 'bg-white shadow-[0_4px_15px_-3px_rgba(0,0,0,0.05)] border-l-4 border-l-primary' : 'border-l-4 border-transparent'}`}
             >
               <div className="relative shrink-0">
                 <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-sm ${conv.avatarBg}`}>
@@ -132,11 +132,11 @@ export default function ProviderMessagesPage() {
       </div>
 
       {/* Chat Area */}
-      <div className={`${!showMobileList ? 'flex' : 'hidden'} md:flex flex-1 flex-col min-w-0 bg-surface-container-lowest rounded-r-3xl`}>
+      <div className={`${!showMobileList ? 'flex' : 'hidden'} md:flex flex-1 flex-col min-w-0 bg-transparent rounded-r-3xl`}>
         {/* Chat Header */}
-        <div className="flex items-center gap-4 p-4 border-b border-outline-variant/20 bg-white shadow-sm shrink-0">
+        <div className="flex items-center gap-4 p-4 lg:p-5 border-b border-purple-100/50 bg-white/80 backdrop-blur-md shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] z-10 shrink-0">
           <button
-            className="md:hidden p-2 -ml-2 text-on-surface-variant hover:bg-surface-container rounded-2xl"
+            className="md:hidden p-2 -ml-2 text-slate-500 hover:bg-slate-100 rounded-xl"
             onClick={() => setShowMobileList(true)}
           >
             <span className="material-symbols-outlined">arrow_back</span>
@@ -162,10 +162,7 @@ export default function ProviderMessagesPage() {
           )}
           
           <div className="flex gap-1 sm:gap-2 shrink-0">
-            <button className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors text-on-surface-variant">
-              <span className="material-symbols-outlined">call</span>
-            </button>
-            <button className="hidden sm:flex w-10 h-10 items-center justify-center rounded-full hover:bg-surface-container-low transition-colors text-on-surface-variant">
+            <button className="hidden sm:flex w-10 h-10 items-center justify-center rounded-full hover:bg-slate-100 transition-colors text-slate-400 hover:text-slate-700">
               <span className="material-symbols-outlined">more_vert</span>
             </button>
           </div>
@@ -185,11 +182,11 @@ export default function ProviderMessagesPage() {
                     {activeConvData.avatar}
                   </div>
                 )}
-                <div className={`max-w-[85%] sm:max-w-[70%] ${providerIsMe ? 'items-end' : 'items-start'} flex flex-col gap-1`}>
-                  <div className={`px-3 py-2 sm:px-4 sm:py-3 rounded-3xl ${providerIsMe ? 'bg-primary text-white rounded-tr-sm' : 'bg-white border border-outline-variant/20 text-on-surface rounded-tl-sm'}`}>
-                    <p className="font-body-md text-body-md leading-relaxed">{msg.content}</p>
+                <div className={`max-w-[85%] sm:max-w-[70%] ${providerIsMe ? 'items-end' : 'items-start'} flex flex-col gap-1.5`}>
+                  <div className={`px-4 py-2.5 sm:px-5 sm:py-3 rounded-2xl shadow-sm ${providerIsMe ? 'bg-gradient-to-r from-primary to-purple-500 text-white rounded-br-sm' : 'bg-white border border-slate-100 text-slate-800 rounded-bl-sm'}`}>
+                    <p className="font-body-md text-sm sm:text-base leading-relaxed">{msg.content}</p>
                   </div>
-                  <span className="font-label-sm text-label-sm text-outline px-2">{msg.time}</span>
+                  <span className="text-[10px] sm:text-xs text-slate-400 px-2 font-medium">{msg.time}</span>
                 </div>
                 {providerIsMe && (
                   <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs shrink-0 self-end">
@@ -203,9 +200,9 @@ export default function ProviderMessagesPage() {
         </div>
 
         {/* Message Input */}
-        <div className="p-3 sm:p-4 border-t border-outline-variant/20 bg-white shrink-0 mb-16 md:mb-0 rounded-br-3xl">
-          <div className="flex items-center gap-2 sm:gap-3 bg-surface-container-low border border-outline-variant/30 rounded-full p-1 sm:p-2">
-            <button className="p-2 text-on-surface-variant hover:text-primary transition-colors rounded-full shrink-0">
+        <div className="p-3 sm:p-5 bg-white/80 backdrop-blur-md border-t border-purple-100/50 shrink-0 mb-16 md:mb-0 rounded-br-3xl z-10">
+          <div className="flex items-center gap-2 sm:gap-3 bg-white border border-slate-200 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.05)] rounded-full p-1.5 sm:p-2 focus-within:border-primary/40 focus-within:ring-4 focus-within:ring-primary/10 transition-all duration-300">
+            <button className="p-2 text-slate-400 hover:text-primary transition-colors rounded-full shrink-0">
               <span className="material-symbols-outlined">attach_file</span>
             </button>
             <input
@@ -214,18 +211,18 @@ export default function ProviderMessagesPage() {
               onChange={(e) => setNewMessage(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Type a message to the student..."
-              className="flex-1 bg-transparent outline-none font-body-md text-on-surface placeholder:text-outline-variant py-2 min-w-0"
+              className="flex-1 bg-transparent outline-none text-sm sm:text-base text-slate-800 placeholder:text-slate-400 py-2 min-w-0"
               disabled={!activeConvData}
             />
             <button
               onClick={handleSend}
               disabled={!newMessage.trim() || !activeConvData}
-              className="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center hover:opacity-90 transition-all active:scale-95 shrink-0 disabled:opacity-40"
+              className="w-10 h-10 sm:w-11 sm:h-11 bg-gradient-to-r from-primary to-purple-600 text-white rounded-full flex items-center justify-center shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 transition-all hover:scale-105 active:scale-95 shrink-0 disabled:opacity-50 disabled:hover:scale-100 disabled:shadow-none"
             >
-              <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>send</span>
+              <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1", fontSize: '18px' }}>send</span>
             </button>
           </div>
-          <p className="text-[10px] text-outline mt-1 text-center">Press Enter to send</p>
+          <p className="text-[10px] text-slate-400 mt-2 text-center font-medium">Press Enter to send</p>
         </div>
       </div>
     </div>

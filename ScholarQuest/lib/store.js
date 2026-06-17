@@ -349,9 +349,18 @@ export function providerSendMessage(convId, text) {
   conv.lastMessage = text;
   conv.time = 'Just now';
   conv.unread = (conv.unread || 0) + 1; // Increment unread counter for student
+  conv.hiddenForStudent = false;
   set(KEYS.MESSAGES, convs);
 }
 
+export function leaveConversation(convId) {
+  const convs = getMessages();
+  const conv = convs.find(c => c.id === convId);
+  if (conv) {
+    conv.hiddenForStudent = true;
+    set(KEYS.MESSAGES, convs);
+  }
+}
 // ─── Activity Log ─────────────────────────────────────────────
 
 export function getActivity() {
