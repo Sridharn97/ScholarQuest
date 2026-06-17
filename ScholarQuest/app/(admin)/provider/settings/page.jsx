@@ -3,110 +3,116 @@ import { useState, useEffect } from 'react';
 import { getProviderInfo } from '@/lib/store';
 
 export default function ProviderSettingsPage() {
-  const [notifications, setNotifications] = useState({ newApplications: true, lowMatch: false, weeklyReport: true });
   const [providerInfo, setProviderInfo] = useState({ name: 'Sponsor Coordinator', initials: 'SC', role: 'Coordinator', organization: 'Company or Institute' });
-  const toggle = (key) => setNotifications(prev => ({ ...prev, [key]: !prev[key] }));
 
   useEffect(() => {
     const info = getProviderInfo();
     if (info) setProviderInfo(info);
   }, []);
 
-  const Toggle = ({ checked, onChange }) => (
-    <button onClick={onChange} className={`w-12 h-6 rounded-full relative transition-all ${checked ? 'bg-primary' : 'bg-outline-variant/40'}`}>
-      <span className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-all ${checked ? 'left-7' : 'left-1'}`} />
-    </button>
-  );
-
   return (
-    <div>
-      <div className="mb-10">
-        <h2 className="font-headline-lg text-headline-lg text-on-surface">Portal Settings</h2>
-        <p className="text-body-md text-on-surface-variant mt-1">Manage notifications, settings, and partner credentials for your organization</p>
+    <div className="max-w-3xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+      <div className="mb-6">
+        <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight" style={{ fontFamily: 'Manrope, sans-serif' }}>Settings</h2>
+        <p className="text-slate-500 mt-1 text-sm">Manage your profile and security preferences.</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-        <div className="lg:col-span-2 space-y-10">
-          {/* Organization Settings */}
-          <div className="glass-card p-10 rounded-2xl border border-outline-variant/20">
-            <h3 className="font-headline-md text-headline-md mb-6">Organization Configuration</h3>
-            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="space-y-6">
+        
+        {/* Profile / Organization Details */}
+        <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+          <div className="p-5 sm:p-6 border-b border-slate-100 bg-slate-50/50">
+            <div className="flex items-center gap-3 mb-1">
+              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>person</span>
+              </div>
+              <h3 className="text-lg font-bold text-slate-900" style={{ fontFamily: 'Manrope, sans-serif' }}>Profile Details</h3>
+            </div>
+            <p className="text-sm text-slate-500 ml-11">View and update your personal and organizational profile.</p>
+          </div>
+          <div className="p-5 sm:p-6">
+            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {[
                   { id: 'org_name', label: 'Organization Name', value: providerInfo.organization, type: 'text', disabled: true },
-                  { id: 'rep_name', label: 'Representative Name', value: providerInfo.name, type: 'text', disabled: true },
-                  { id: 'rep_email', label: 'Email Address', value: providerInfo.email || 'representative@organization.com', type: 'email', disabled: true },
+                  { id: 'rep_name', label: 'Representative Name', value: providerInfo.name, type: 'text', disabled: false },
+                  { id: 'rep_email', label: 'Work Email', value: providerInfo.email || 'representative@organization.com', type: 'email', disabled: false },
                   { id: 'rep_role', label: 'Assigned Role', value: providerInfo.role, type: 'text', disabled: true },
                 ].map((field) => (
-                  <div key={field.id} className="space-y-2">
-                    <label htmlFor={field.id} className="font-label-md text-label-md text-on-surface">{field.label}</label>
-                    <input id={field.id} type={field.type} defaultValue={field.value} disabled={field.disabled} className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none opacity-80" />
+                  <div key={field.id} className="space-y-1.5">
+                    <label htmlFor={field.id} className="block text-sm font-bold text-slate-700">{field.label}</label>
+                    <input 
+                      id={field.id} 
+                      type={field.type} 
+                      defaultValue={field.value} 
+                      disabled={field.disabled} 
+                      className={`w-full px-3 h-10 rounded-xl text-sm outline-none transition-all ${field.disabled ? 'bg-slate-50 border border-slate-200 text-slate-500 cursor-not-allowed' : 'bg-white border border-slate-200 text-slate-900 focus:border-primary focus:ring-4 focus:ring-primary/10 hover:border-slate-300 shadow-sm'}`}
+                    />
                   </div>
                 ))}
               </div>
-              <p className="text-xs text-on-surface-variant italic">Note: Institutional details are verified and locked. Contact support to change organization details.</p>
+              <div className="pt-3 flex items-center justify-between">
+                <p className="text-xs text-slate-400 font-medium">Some details are locked by your administrator.</p>
+                <button className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold rounded-xl shadow-sm transition-all active:scale-95">
+                  Save Changes
+                </button>
+              </div>
             </form>
           </div>
-
-          {/* Notification Settings */}
-          <div className="glass-card p-10 rounded-2xl border border-outline-variant/20">
-            <h3 className="font-headline-md text-headline-md mb-6">Sponsor Notifications</h3>
-            <div className="space-y-4">
-              {[
-                { key: 'newApplications', label: 'New Submission Alerts', desc: 'Get notified as soon as a student submits an application to your program' },
-                { key: 'lowMatch', label: 'Low Compatibility Filter', desc: 'Flag or hide submissions that score below 70% match rating' },
-                { key: 'weeklyReport', label: 'Weekly Summary Report', desc: 'Receive a summary of applicant volumes and deadlines every Monday morning' },
-              ].map((item) => (
-                <div key={item.key} className="flex items-start justify-between gap-4 p-4 bg-surface-container-low rounded-10">
-                  <div>
-                    <p className="font-label-md text-on-surface">{item.label}</p>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5">{item.desc}</p>
-                  </div>
-                  <Toggle checked={notifications[item.key]} onChange={() => toggle(item.key)} />
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
 
-        {/* Sidebar */}
-        <div className="space-y-10">
-          {/* Profile Card */}
-          <div className="glass-card p-10 rounded-2xl border border-outline-variant/20">
-            <h3 className="font-headline-md text-headline-md mb-4">Partner Profile</h3>
-            <div className="flex flex-col items-center text-center mb-6">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-extrabold text-xl mb-3">
-                {providerInfo.initials}
+        {/* Change Password */}
+        <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+          <div className="p-5 sm:p-6 border-b border-slate-100 bg-slate-50/50">
+            <div className="flex items-center gap-3 mb-1">
+              <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600">
+                <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>lock</span>
               </div>
-              <p className="font-label-md text-on-surface">{providerInfo.name}</p>
-              <p className="font-body-sm text-body-sm text-on-surface-variant">{providerInfo.role}</p>
-              <span className="mt-2 px-3 py-1 bg-primary/10 text-primary rounded-full font-label-sm">{providerInfo.organization}</span>
+              <h3 className="text-lg font-bold text-slate-900" style={{ fontFamily: 'Manrope, sans-serif' }}>Change Password</h3>
             </div>
-            <button className="w-full py-2 border border-outline-variant rounded-10 font-label-md text-on-surface hover:bg-surface-container-low transition-all">
-              Edit Profile
-            </button>
+            <p className="text-sm text-slate-500 ml-11">Ensure your account is using a long, random password to stay secure.</p>
           </div>
-
-          {/* Security */}
-          <div className="glass-card p-10 rounded-2xl border border-outline-variant/20">
-            <h3 className="font-headline-md text-headline-md mb-4">Security</h3>
-            <div className="space-y-3">
-              {[
-                { label: 'Change Password', icon: 'lock' },
-                { label: 'Two-Factor Authentication', icon: 'security' },
-                { label: 'Authorized Sign-ins', icon: 'history' },
-              ].map((item) => (
-                <button key={item.label} className="w-full flex items-center justify-between p-3 rounded-10 hover:bg-surface-container-low transition-colors">
-                  <div className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-primary" style={{ fontSize: '20px' }}>{item.icon}</span>
-                    <span className="font-label-md text-on-surface">{item.label}</span>
-                  </div>
-                  <span className="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+          <div className="p-5 sm:p-6">
+            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+              <div className="space-y-3 max-w-md">
+                <div className="space-y-1.5">
+                  <label htmlFor="current_password" className="block text-sm font-bold text-slate-700">Current Password</label>
+                  <input 
+                    id="current_password" 
+                    type="password" 
+                    placeholder="Enter current password"
+                    className="w-full px-3 h-10 rounded-xl text-sm outline-none transition-all bg-white border border-slate-200 text-slate-900 focus:border-primary focus:ring-4 focus:ring-primary/10 hover:border-slate-300 shadow-sm"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label htmlFor="new_password" className="block text-sm font-bold text-slate-700">New Password</label>
+                  <input 
+                    id="new_password" 
+                    type="password" 
+                    placeholder="Min. 8 characters"
+                    className="w-full px-3 h-10 rounded-xl text-sm outline-none transition-all bg-white border border-slate-200 text-slate-900 focus:border-primary focus:ring-4 focus:ring-primary/10 hover:border-slate-300 shadow-sm"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label htmlFor="confirm_password" className="block text-sm font-bold text-slate-700">Confirm New Password</label>
+                  <input 
+                    id="confirm_password" 
+                    type="password" 
+                    placeholder="Confirm new password"
+                    className="w-full px-3 h-10 rounded-xl text-sm outline-none transition-all bg-white border border-slate-200 text-slate-900 focus:border-primary focus:ring-4 focus:ring-primary/10 hover:border-slate-300 shadow-sm"
+                  />
+                </div>
+              </div>
+              
+              <div className="pt-3 border-t border-slate-100 flex items-center justify-end">
+                <button className="px-4 py-2 bg-primary hover:bg-primary/90 text-white text-sm font-bold rounded-xl shadow-md shadow-primary/20 transition-all active:scale-95">
+                  Update Password
                 </button>
-              ))}
-            </div>
+              </div>
+            </form>
           </div>
         </div>
+
       </div>
     </div>
   );

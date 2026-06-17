@@ -52,61 +52,66 @@ export default function ProviderReportsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-gutter mb-10">
         {/* Monthly Applications Bar Chart */}
-        <div className="glass-card p-6 rounded-10 border border-outline-variant/30">
+        <div className="glass-card p-5 sm:p-6 rounded-10 border border-outline-variant/30">
           <h4 className="font-headline-md text-headline-md mb-6">Monthly Activity vs. Funded Grants</h4>
-          <div className="space-y-3">
+          <div className="space-y-4">
             {monthlyData.map((d) => (
-              <div key={d.month} className="flex items-center gap-4">
+              <div key={d.month} className="flex items-center gap-3">
                 <span className="font-label-sm text-label-sm text-on-surface-variant w-8">{d.month}</span>
-                <div className="flex-1 space-y-1">
-                  <div className="h-3 bg-primary/20 rounded-full overflow-hidden">
-                    <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${(d.applications / maxVal) * 100}%` }} />
+                <div className="flex-1 space-y-1.5">
+                  {/* Submissions Bar */}
+                  <div className="h-2.5 bg-surface-container-highest/20 rounded-full overflow-hidden">
+                    <div className="h-full bg-primary rounded-full transition-all duration-700 ease-out" style={{ width: `${(d.applications / maxVal) * 100}%` }} />
                   </div>
-                  <div className="h-2 bg-secondary/20 rounded-full overflow-hidden">
-                    <div className="h-full bg-secondary rounded-full transition-all" style={{ width: `${(d.awarded / maxVal) * 100}%` }} />
+                  {/* Funded Bar */}
+                  <div className="h-1.5 bg-surface-container-highest/20 rounded-full overflow-hidden">
+                    <div className="h-full bg-secondary rounded-full transition-all duration-700 ease-out" style={{ width: `${(d.awarded / maxVal) * 100}%` }} />
                   </div>
                 </div>
-                <span className="font-label-sm text-label-sm text-on-surface-variant w-12 text-right">{d.applications}</span>
+                <span className="font-label-sm text-label-sm text-on-surface w-10 text-right">{d.applications}</span>
               </div>
             ))}
           </div>
-          <div className="flex gap-4 mt-4">
+          <div className="flex gap-4 mt-6">
             <div className="flex items-center gap-2"><div className="w-3 h-3 bg-primary rounded-full" /><span className="font-label-sm text-label-sm text-on-surface-variant">Submissions</span></div>
             <div className="flex items-center gap-2"><div className="w-3 h-3 bg-secondary rounded-full" /><span className="font-label-sm text-label-sm text-on-surface-variant">Funded</span></div>
           </div>
         </div>
 
         {/* Category Breakdown Donut */}
-        <div className="glass-card p-6 rounded-10 border border-outline-variant/30">
+        <div className="glass-card p-5 sm:p-6 rounded-10 border border-outline-variant/30">
           <h4 className="font-headline-md text-headline-md mb-6">Applications by Category</h4>
-          <div className="flex items-center justify-center mb-6">
-            <div className="relative w-48 h-48">
-              <svg className="w-48 h-48 transform -rotate-90" viewBox="0 0 120 120">
-                {/* STEM 52% */}
-                <circle cx="60" cy="60" r="50" fill="transparent" stroke="#004ac6" strokeWidth="20" strokeDasharray="163.3 212" />
-                {/* Leadership 28% */}
-                <circle cx="60" cy="60" r="50" fill="transparent" stroke="#712ae2" strokeWidth="20" strokeDasharray="88 212" strokeDashoffset="-163.3" />
-                {/* Other 20% */}
-                <circle cx="60" cy="60" r="50" fill="transparent" stroke="#c3c6d7" strokeWidth="20" strokeDasharray="62.8 212" strokeDashoffset="-251.3" />
+          <div className="flex flex-col items-center justify-center">
+            <div className="relative w-40 h-40 mb-6">
+              <svg className="w-40 h-40 transform -rotate-90 drop-shadow-sm" viewBox="0 0 120 120">
+                {/* Background */}
+                <circle cx="60" cy="60" r="48" fill="transparent" stroke="currentColor" strokeWidth="12" className="text-surface-container-highest/20" />
+                {/* STEM 52% (52% of 301.59 = 156.8) */}
+                <circle cx="60" cy="60" r="48" fill="transparent" stroke="#004ac6" strokeWidth="12" strokeDasharray="156.8 301.6" strokeLinecap="round" className="transition-all duration-1000 ease-out" />
+                {/* Leadership 28% (28% of 301.59 = 84.4) */}
+                <circle cx="60" cy="60" r="48" fill="transparent" stroke="#712ae2" strokeWidth="12" strokeDasharray="84.4 301.6" strokeDashoffset="-156.8" strokeLinecap="round" className="transition-all duration-1000 ease-out" />
+                {/* Other 20% (20% of 301.59 = 60.3) */}
+                <circle cx="60" cy="60" r="48" fill="transparent" stroke="#c3c6d7" strokeWidth="12" strokeDasharray="60.3 301.6" strokeDashoffset="-241.2" strokeLinecap="round" className="transition-all duration-1000 ease-out" />
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="font-headline-md text-headline-md">528</span>
-                <span className="font-label-sm text-label-sm text-on-surface-variant">Total Submissions</span>
+                <span className="font-headline-md text-2xl text-on-surface">528</span>
+                <span className="font-label-sm text-[10px] text-on-surface-variant uppercase tracking-widest mt-0.5">Total</span>
               </div>
             </div>
-          </div>
-          <div className="grid grid-cols-2 gap-2">
-            {[
-              { label: 'STEM Program', pct: '52%', color: 'bg-primary' },
-              { label: 'Leadership Award', pct: '28%', color: 'bg-secondary' },
-              { label: 'Other Options', pct: '20%', color: 'bg-outline-variant' },
-            ].map((c) => (
-              <div key={c.label} className="flex items-center gap-2">
-                <div className={`w-3 h-3 rounded-full ${c.color}`} />
-                <span className="font-body-sm text-body-sm text-on-surface-variant">{c.label}</span>
-                <span className="font-label-sm text-label-sm font-bold ml-auto">{c.pct}</span>
-              </div>
-            ))}
+            
+            <div className="w-full grid grid-cols-2 gap-y-3 gap-x-2">
+              {[
+                { label: 'STEM Program', pct: '52%', color: 'bg-[#004ac6]' },
+                { label: 'Leadership', pct: '28%', color: 'bg-[#712ae2]' },
+                { label: 'Other', pct: '20%', color: 'bg-[#c3c6d7]' },
+              ].map((c) => (
+                <div key={c.label} className="flex items-center gap-2">
+                  <div className={`w-2.5 h-2.5 rounded-full ${c.color} flex-shrink-0`} />
+                  <span className="font-body-sm text-xs text-on-surface-variant truncate">{c.label}</span>
+                  <span className="font-label-sm text-xs font-bold ml-auto">{c.pct}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
