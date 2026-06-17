@@ -30,6 +30,7 @@ export default function ProfilePage() {
           gpa: u.gpa || '',
           institution: u.institution || '',
           phone: u.phone || '',
+          countryCode: u.countryCode || '+1',
           linkedin: u.linkedin || '',
           nationality: u.nationality || '',
         });
@@ -165,7 +166,28 @@ export default function ProfilePage() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4 bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30">
                 <div className="space-y-1">
                    <label className="font-label-sm text-on-surface-variant">Phone</label>
-                   <input value={form.phone || ''} onChange={e => setForm({...form, phone: e.target.value})} placeholder="Phone" className="w-full px-3 py-1.5 border border-outline-variant/50 rounded-md text-sm outline-none focus:border-primary" />
+                   <div className="flex w-full border border-outline-variant/50 rounded-md overflow-hidden focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/20 bg-white">
+                     <select 
+                       value={form.countryCode || '+1'} 
+                       onChange={e => setForm({...form, countryCode: e.target.value})} 
+                       className="px-2 py-1.5 bg-surface-container-low text-sm outline-none border-r border-outline-variant/50 cursor-pointer hover:bg-surface-container transition-colors"
+                     >
+                       <option value="+1">+1 (US/CA)</option>
+                       <option value="+44">+44 (UK)</option>
+                       <option value="+91">+91 (IN)</option>
+                       <option value="+61">+61 (AU)</option>
+                       <option value="+81">+81 (JP)</option>
+                       <option value="+86">+86 (CN)</option>
+                       <option value="+49">+49 (DE)</option>
+                       <option value="+33">+33 (FR)</option>
+                     </select>
+                     <input 
+                       value={form.phone || ''} 
+                       onChange={e => setForm({...form, phone: e.target.value})} 
+                       placeholder="Phone number" 
+                       className="flex-1 px-3 py-1.5 text-sm outline-none bg-transparent" 
+                     />
+                   </div>
                 </div>
                 <div className="space-y-1 sm:col-span-2">
                    <label className="font-label-sm text-on-surface-variant">LinkedIn URL</label>

@@ -11,6 +11,7 @@ const navItems = [
   { href: '/provider/messages', label: 'Messages', icon: 'forum' },
   { href: '/provider/reports', label: 'Reports', icon: 'analytics' },
   { href: '/provider/settings', label: 'Settings', icon: 'settings' },
+  { href: '/help', label: 'Help Center', icon: 'help' },
 ];
 
 export default function ProviderSidebar({ isOpen, setIsOpen, onLogout }) {
