@@ -46,7 +46,7 @@ export default function LoginPage() {
   return (
     <div className="h-screen overflow-hidden flex bg-white">
       {/* ===== LEFT: FORM PANEL ===== */}
-      <div className="flex-1 flex flex-col justify-center items-center px-8 bg-white h-full overflow-hidden order-1 lg:order-none">
+      <div className="flex-1 flex flex-col justify-center items-center px-8 bg-white h-full overflow-hidden order-1 lg:order-2">
         <div className="w-full max-w-[440px] py-4">
           <Link href="/" className="flex items-center gap-2.5 mb-10">
             <img src="/Logo.png.png" alt="Logo" className="w-9 h-9 rounded-full object-cover" />
@@ -130,7 +130,7 @@ export default function LoginPage() {
       </div>
 
       {/* ===== RIGHT: ILLUSTRATION PANEL ===== */}
-      <div className="hidden lg:flex w-[48%] relative flex-col overflow-hidden h-full bg-gradient-to-br from-[#faf5ff] via-[#fdf2f8] to-[#fffbeb] border-l border-purple-100/50 order-last">
+      <div className="hidden lg:flex w-[48%] relative flex-col overflow-hidden h-full bg-gradient-to-br from-[#faf5ff] via-[#fdf2f8] to-[#fffbeb] border-r border-purple-100/50 order-last lg:order-1">
         {/* Colorful floating orbs to match illustrations */}
         <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full opacity-40 filter blur-[80px]" style={{ background: 'radial-gradient(circle, rgba(216,180,254,0.5) 0%, rgba(216,180,254,0) 70%)' }} />
         <div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] rounded-full opacity-40 filter blur-[80px]" style={{ background: 'radial-gradient(circle, rgba(249,168,212,0.5) 0%, rgba(249,168,212,0) 70%)' }} />
@@ -163,6 +163,7 @@ export default function LoginPage() {
               height={340}
               className="w-full h-full object-contain drop-shadow-md" 
               unoptimized
+              priority
             />
           </div>
 

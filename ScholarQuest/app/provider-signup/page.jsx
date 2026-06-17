@@ -65,8 +65,8 @@ export default function ProviderSignupPage() {
   return (
     <div className="h-screen overflow-hidden flex bg-slate-50">
 
-      {/* ===== LEFT: LIGHT STATS & PREVIEW PANEL ===== */}
-      <div className="hidden lg:flex w-1/2 flex-col relative overflow-hidden border-r border-purple-100/50 h-full bg-gradient-to-br from-[#faf5ff] via-[#fdf2f8] to-[#fffbeb]">
+      {/* ===== RIGHT: LIGHT STATS & PREVIEW PANEL ===== */}
+      <div className="hidden lg:flex w-1/2 flex-col relative overflow-hidden border-l border-purple-100/50 h-full bg-gradient-to-br from-[#faf5ff] via-[#fdf2f8] to-[#fffbeb] lg:order-2">
         {/* Colorful floating orbs to match illustrations */}
         <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full opacity-40 filter blur-[80px]" style={{ background: 'radial-gradient(circle, rgba(216,180,254,0.5) 0%, rgba(216,180,254,0) 70%)' }} />
         <div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] rounded-full opacity-40 filter blur-[80px]" style={{ background: 'radial-gradient(circle, rgba(249,168,212,0.5) 0%, rgba(249,168,212,0) 70%)' }} />
@@ -121,8 +121,8 @@ export default function ProviderSignupPage() {
         </div>
       </div>
 
-      {/* ===== RIGHT: FORM PANEL ===== */}
-      <div className="flex-1 bg-white h-full overflow-hidden flex flex-col justify-center items-center px-8">
+      {/* ===== LEFT: FORM PANEL ===== */}
+      <div className="flex-1 bg-white h-full overflow-hidden flex flex-col justify-center items-center px-8 lg:order-1">
         <div className="w-full max-w-[540px]">
           <div className="flex items-center gap-3 mb-10 lg:hidden">
             <img src="/Logo.png.png" alt="Logo" className="w-9 h-9 rounded-full object-cover shadow-sm" />
