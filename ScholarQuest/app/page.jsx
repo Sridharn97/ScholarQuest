@@ -80,8 +80,8 @@ export default function LandingPage() {
               </p>
 
               {/* Search bar */}
-              <div className="flex flex-col sm:flex-row gap-3 bg-white border border-outline-variant/40 rounded-2xl p-2 shadow-lg shadow-black/5 max-w-xl">
-                <div className="flex items-center gap-3 flex-1 px-3">
+              <div className="flex flex-col sm:flex-row gap-2 bg-surface-bright border border-outline-variant/40 rounded-full p-2 shadow-lg shadow-black/5 max-w-xl focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary/50 transition-all">
+                <div className="flex items-center gap-3 flex-1 px-4">
                   <span className="material-symbols-outlined text-primary flex-shrink-0">search</span>
                   <input
                     type="text"
@@ -91,7 +91,7 @@ export default function LandingPage() {
                 </div>
                 <Link
                   href="/signup"
-                  className="bg-primary text-white px-7 py-3 rounded-10 text-sm font-bold hover:bg-primary/90 active:scale-[0.97] transition-all shadow-md shadow-primary/25 text-center whitespace-nowrap"
+                  className="bg-primary text-white px-8 py-3 rounded-full text-sm font-bold hover:bg-primary/90 active:scale-[0.97] transition-all shadow-md shadow-primary/25 text-center whitespace-nowrap flex items-center justify-center"
                 >
                   Get Started Free
                 </Link>

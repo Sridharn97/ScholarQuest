@@ -56,7 +56,7 @@ export default function SignupPage() {
         <div className="w-full max-w-[440px] py-2">
           <Link href="/" className="flex items-center gap-2.5 mb-6">
             <img src="/Logo.png.png" alt="Logo" className="w-9 h-9 rounded-full object-cover" />
-            <span className="text-primary font-extrabold text-2xl tracking-tight">ScholarQuest</span>
+            <span className="font-extrabold text-2xl tracking-tight bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent" style={{ fontFamily: 'Manrope, sans-serif' }}>ScholarQuest</span>
           </Link>
 
           <div className="mb-5">

@@ -30,8 +30,8 @@ export default function StudentSidebar({ onLogout, userName, userInitials }) {
         <Link href="/" className="flex items-center gap-3 block">
           <img src="/Logo.png.png" alt="ScholarQuest Logo" className="w-10 h-10 rounded-full object-cover shadow-sm border border-slate-200" />
           <div>
-            <h1 className="text-[#0A2540] font-bold text-2xl tracking-tight leading-none">ScholarQuest</h1>
-            <p className="text-[10px] uppercase tracking-widest text-gray-500 mt-1 font-bold">Higher Ed Funding</p>
+            <h1 className="font-extrabold text-2xl tracking-tight leading-none bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent" style={{ fontFamily: 'Manrope, sans-serif' }}>ScholarQuest</h1>
+            <p className="text-[10px] uppercase tracking-widest text-on-surface-variant mt-1 font-bold">Higher Ed Funding</p>
           </div>
         </Link>
       </div>

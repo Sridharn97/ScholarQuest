@@ -74,7 +74,7 @@ export default function StudentLayout({ children }) {
               <span className="material-symbols-outlined">{mobileMenuOpen ? 'close' : 'menu'}</span>
             </button>
             <Link href="/" className="flex items-center gap-2">
-              <span className="font-headline-md text-headline-md text-primary font-extrabold tracking-tight">SQ</span>
+              <span className="font-extrabold text-2xl tracking-tight bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent" style={{ fontFamily: 'Manrope, sans-serif' }}>ScholarQuest</span>
             </Link>
           </div>
 
