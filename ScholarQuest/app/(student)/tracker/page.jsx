@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { getTracker, saveTracker, addCardToColumn, moveCard, deleteCard, addActivity } from '@/lib/store';
+import { getTracker, saveTracker, addCardToColumn, moveCard, deleteCard, addActivity, updateCard } from '@/lib/store';
 
 export default function TrackerPage() {
   const [columns, setColumns] = useState([]);
@@ -11,6 +11,10 @@ export default function TrackerPage() {
   const [newCardAmount, setNewCardAmount] = useState('');
   const [showMoveMenu, setShowMoveMenu] = useState(null); // { cardId, fromColId }
   const [toast, setToast] = useState('');
+  const [showDisbursementModal, setShowDisbursementModal] = useState(false);
+  const [activeDisbursementCard, setActiveDisbursementCard] = useState(null);
+  const [thankYouNote, setThankYouNote] = useState('');
+  const [disbursementMethod, setDisbursementMethod] = useState('direct');
 
   const load = () => setColumns(getTracker());
 
@@ -51,8 +55,31 @@ export default function TrackerPage() {
   };
 
   const handleAcceptOffer = (card, colId) => {
-    addActivity({ icon: 'celebration', iconColor: 'text-green-600', title: 'Offer Accepted!', sub: `${card.title} — ${card.amount}`, time: 'Just now' });
-    showToast(`🎉 Congratulations! Offer accepted for ${card.title}!`);
+    setActiveDisbursementCard(card);
+    setShowDisbursementModal(true);
+  };
+
+  const handleCompleteDisbursement = () => {
+    if (!activeDisbursementCard) return;
+    
+    // Mark card as funded
+    updateCard(activeDisbursementCard.id, { 
+      accepted: false, // Turn off the prompt
+      funded: true 
+    });
+    
+    addActivity({ 
+      icon: 'account_balance', 
+      iconColor: 'text-green-600', 
+      title: 'Disbursement Setup Complete', 
+      sub: `${activeDisbursementCard.title}`, 
+      time: 'Just now' 
+    });
+    
+    setShowDisbursementModal(false);
+    setActiveDisbursementCard(null);
+    setThankYouNote('');
+    showToast('🎉 Setup complete! Funds are on the way.');
   };
 
   return (
@@ -106,6 +133,79 @@ export default function TrackerPage() {
                 Add to Tracker
               </button>
               <button onClick={() => setShowAddModal(false)} className="px-6 py-3 border border-outline-variant rounded-10 font-label-md text-on-surface hover:bg-surface-container-low transition-all">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Disbursement Setup Modal */}
+      {showDisbursementModal && (
+        <div className="fixed inset-0 z-40 bg-black/40 flex items-center justify-center p-4" onClick={() => setShowDisbursementModal(false)}>
+          <div className="bg-white rounded-3xl p-8 w-full max-w-lg shadow-2xl overflow-y-auto max-h-[90vh]" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center gap-3 mb-6 text-green-600">
+              <span className="material-symbols-outlined text-4xl">celebration</span>
+              <h3 className="font-headline-md text-headline-md text-on-surface">Accept Offer</h3>
+            </div>
+            <p className="text-on-surface-variant font-body-md mb-6">
+              Congratulations on your offer for <strong>{activeDisbursementCard?.title}</strong>! Complete these final steps to receive your funds.
+            </p>
+
+            <div className="space-y-6">
+              {/* Thank You Note */}
+              <div>
+                <label className="font-label-md text-on-surface mb-2 block">1. Thank the Sponsor</label>
+                <textarea
+                  value={thankYouNote}
+                  onChange={e => setThankYouNote(e.target.value)}
+                  rows={3}
+                  placeholder="Express your gratitude... (Optional)"
+                  className="w-full px-4 py-3 border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 resize-none"
+                />
+              </div>
+
+              {/* Enrollment Proof */}
+              <div>
+                <label className="font-label-md text-on-surface mb-2 block">2. Verify Enrollment</label>
+                <div className="border-2 border-dashed border-outline-variant/40 rounded-xl p-4 flex items-center justify-between bg-surface-container-lowest">
+                  <div className="flex items-center gap-3 text-on-surface-variant">
+                    <span className="material-symbols-outlined">upload_file</span>
+                    <span className="font-body-sm text-sm">Upload unofficial transcript or schedule</span>
+                  </div>
+                  <button className="px-4 py-1.5 bg-surface-variant text-on-surface-variant rounded-lg font-label-sm text-xs hover:bg-outline-variant/30 transition-colors">
+                    Browse
+                  </button>
+                </div>
+              </div>
+
+              {/* Payment Method */}
+              <div>
+                <label className="font-label-md text-on-surface mb-2 block">3. Disbursement Method</label>
+                <div className="grid grid-cols-2 gap-3">
+                  <button 
+                    onClick={() => setDisbursementMethod('direct')}
+                    className={`py-3 px-4 border rounded-xl font-label-md text-sm transition-all flex flex-col items-center gap-2 ${disbursementMethod === 'direct' ? 'border-primary bg-primary/10 text-primary' : 'border-outline-variant text-on-surface-variant'}`}
+                  >
+                    <span className="material-symbols-outlined">account_balance</span>
+                    Direct to School
+                  </button>
+                  <button 
+                    onClick={() => setDisbursementMethod('check')}
+                    className={`py-3 px-4 border rounded-xl font-label-md text-sm transition-all flex flex-col items-center gap-2 ${disbursementMethod === 'check' ? 'border-primary bg-primary/10 text-primary' : 'border-outline-variant text-on-surface-variant'}`}
+                  >
+                    <span className="material-symbols-outlined">mail</span>
+                    Check by Mail
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-3 mt-8 pt-6 border-t border-outline-variant/20">
+              <button onClick={handleCompleteDisbursement} className="flex-1 py-3 bg-green-600 text-white rounded-10 font-label-md hover:bg-green-700 transition-all active:scale-95 shadow-sm">
+                Submit & Accept
+              </button>
+              <button onClick={() => setShowDisbursementModal(false)} className="px-6 py-3 border border-outline-variant rounded-10 font-label-md text-on-surface hover:bg-surface-container-low transition-all">
                 Cancel
               </button>
             </div>
@@ -254,6 +354,17 @@ export default function TrackerPage() {
                             🎉 Accept Offer
                           </button>
                         </>
+                      )}
+
+                      {/* Funded / Disbursement Pending */}
+                      {card.funded && (
+                        <div className="mt-2 bg-green-50 border border-green-200 rounded-lg p-3">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="material-symbols-outlined text-green-600" style={{ fontSize: '18px' }}>account_balance</span>
+                            <span className="font-bold text-green-800 text-[12px] uppercase">Disbursement Pending</span>
+                          </div>
+                          <p className="text-green-700 text-[11px] font-medium leading-tight">Your enrollment verification and payment details have been received. Funds typically arrive in 7-10 business days.</p>
+                        </div>
                       )}
                     </div>
                   ))

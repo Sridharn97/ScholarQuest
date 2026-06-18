@@ -264,6 +264,18 @@ export function deleteCard(cardId) {
   saveTracker(cols);
 }
 
+export function updateCard(cardId, updates) {
+  const cols = getTracker();
+  for (const col of cols) {
+    const idx = col.cards.findIndex(c => c.id === cardId);
+    if (idx !== -1) {
+      col.cards[idx] = { ...col.cards[idx], ...updates };
+      break;
+    }
+  }
+  saveTracker(cols);
+}
+
 // ─── Messages ─────────────────────────────────────────────────
 
 export function getMessages() {
