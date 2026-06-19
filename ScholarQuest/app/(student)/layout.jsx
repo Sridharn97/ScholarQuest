@@ -81,10 +81,10 @@ export default function StudentLayout({ children }) {
           {/* Desktop Search Bar */}
           <div className="hidden lg:block relative w-full max-w-[480px]">
             <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-[20px]">search</span>
-            <input 
-              type="text" 
-              placeholder="Search scholarships, grants, or institutions..." 
-              className="w-full bg-[#F3F4F6] rounded-full py-3 pl-12 pr-4 text-sm font-medium text-gray-700 outline-none border-none focus:ring-2 focus:ring-[#4F39F6]/20 placeholder-gray-400" 
+            <input
+              type="text"
+              placeholder="Search scholarships, grants, or institutions..."
+              className="w-full bg-[#F3F4F6] rounded-full py-3 pl-12 pr-4 text-sm font-medium text-gray-700 outline-none border-none focus:ring-2 focus:ring-[#4F39F6]/20 placeholder-gray-400"
             />
           </div>
 
@@ -106,9 +106,8 @@ export default function StudentLayout({ children }) {
                     key={link.href}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-10 transition-all ${
-                      isActive ? 'bg-primary/10 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container-low'
-                    }`}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-10 transition-all ${isActive ? 'bg-primary/10 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container-low'
+                      }`}
                   >
                     <span className="material-symbols-outlined" style={isActive ? { fontVariationSettings: "'FILL' 1" } : {}}>{link.icon}</span>
                     <span className="font-label-md">{link.label}</span>

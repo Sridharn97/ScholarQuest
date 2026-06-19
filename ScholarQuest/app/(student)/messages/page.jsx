@@ -62,26 +62,26 @@ export default function MessagesPage() {
   const totalUnread = convs.reduce((sum, c) => sum + (c.unread || 0), 0);
 
   return (
-    <div className="flex h-[calc(100vh-64px)] bg-[#f8fafc] overflow-hidden relative">
+    <div className="flex h-[calc(100vh-130px)] bg-[#f8fafc] overflow-hidden relative shadow-sm border border-outline-variant/20 m-4 rounded-xl">
       {/* Conversations Sidebar */}
       <div className={`${showMobileList ? 'flex' : 'hidden'} md:flex w-full md:w-80 flex-shrink-0 border-r border-purple-100/50 flex-col bg-white/60 backdrop-blur-md z-10 shadow-[4px_0_24px_-12px_rgba(0,0,0,0.1)]`}>
-        <div className="p-6 border-b border-outline-variant/10">
+        <div className="p-4 pb-3 border-b border-outline-variant/10">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="font-headline-md text-headline-md">Messages</h2>
+            <h2 className="font-headline-md text-base font-bold text-on-surface">Messages</h2>
             {totalUnread > 0 && (
-              <span className="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-[11px] text-white font-bold">
-                {totalUnread}
+              <span className="px-2 py-0.5 rounded-full bg-primary flex items-center justify-center text-[10px] text-white font-bold">
+                {totalUnread} New
               </span>
             )}
           </div>
           <div className="relative">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline-variant" style={{ fontSize: '18px' }}>search</span>
+            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline-variant" style={{ fontSize: '16px' }}>search</span>
             <input
               type="text"
               value={search}
               onChange={e => setSearch(e.target.value)}
-              placeholder="Search messages..."
-              className="w-full bg-surface-container-low border border-outline-variant/30 rounded-10 py-2 pl-9 pr-4 text-body-sm outline-none focus:ring-2 focus:ring-primary/20"
+              placeholder="Search..."
+              className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg py-1.5 pl-8 pr-4 text-xs outline-none focus:border-primary focus:ring-1 focus:ring-primary/20"
             />
           </div>
         </div>
@@ -89,31 +89,31 @@ export default function MessagesPage() {
         <div className="flex-1 overflow-y-auto">
           {filteredConvs.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-40 text-on-surface-variant">
-              <span className="material-symbols-outlined" style={{ fontSize: '36px' }}>search_off</span>
-              <p className="font-label-sm mt-2">No conversations found</p>
+              <span className="material-symbols-outlined" style={{ fontSize: '24px' }}>search_off</span>
+              <p className="font-label-sm text-xs mt-2">No conversations found</p>
             </div>
           ) : filteredConvs.map((conv) => (
             <button
               key={conv.id}
               onClick={() => handleSelectConv(conv.id)}
-              className={`w-full flex items-center gap-3 p-4 border-b border-slate-100 hover:bg-white transition-all duration-300 text-left ${activeConv === conv.id ? 'bg-white shadow-[0_4px_15px_-3px_rgba(0,0,0,0.05)] border-l-4 border-l-primary' : 'border-l-4 border-transparent'}`}
+              className={`w-full flex items-center gap-3 px-4 py-3 transition-colors text-left border-l-2 ${activeConv === conv.id ? 'bg-primary/5 border-primary' : 'border-transparent hover:bg-surface-container-lowest'}`}
             >
               <div className="relative shrink-0">
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-sm ${conv.avatarBg}`}>
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs ${conv.avatarBg}`}>
                   {conv.avatar}
                 </div>
-                {conv.online && <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white" />}
+                {conv.online && <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white" />}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between mb-1">
-                  <span className={`font-label-md text-label-md truncate ${activeConv === conv.id ? 'text-primary' : 'text-on-surface'}`}>{conv.name}</span>
-                  <span className="font-label-sm text-label-sm text-outline shrink-0 ml-2">{conv.time}</span>
+                <div className="flex items-center justify-between mb-0.5">
+                  <span className={`font-label-sm text-sm truncate ${activeConv === conv.id ? 'font-bold text-primary' : 'font-semibold text-on-surface'}`}>{conv.name}</span>
+                  <span className="font-label-sm text-[10px] text-outline shrink-0 ml-2">{conv.time}</span>
                 </div>
-                <p className="font-body-sm text-body-sm text-on-surface-variant truncate">{conv.lastMessage}</p>
+                <p className={`font-body-sm text-xs truncate ${conv.unread > 0 ? 'text-on-surface font-semibold' : 'text-on-surface-variant'}`}>{conv.lastMessage}</p>
               </div>
               {conv.unread > 0 && (
-                <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center shrink-0">
-                  <span className="text-[10px] text-white font-bold">{conv.unread}</span>
+                <div className="w-4 h-4 rounded-full bg-primary flex items-center justify-center shrink-0">
+                  <span className="text-[9px] text-white font-bold">{conv.unread}</span>
                 </div>
               )}
             </button>
@@ -124,76 +124,98 @@ export default function MessagesPage() {
       {/* Chat Area */}
       <div className={`${!showMobileList ? 'flex' : 'hidden'} md:flex flex-1 flex-col min-w-0 bg-transparent`}>
         {/* Chat Header */}
-        <div className="flex items-center gap-4 p-4 lg:p-5 border-b border-purple-100/50 bg-white/80 backdrop-blur-md shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] z-10 shrink-0">
+        <div className="flex items-center gap-3 p-3 px-4 border-b border-outline-variant/20 bg-white/90 backdrop-blur-md shadow-sm z-10 shrink-0">
           <button
-            className="md:hidden p-2 -ml-2 text-slate-500 hover:bg-slate-100 rounded-xl"
+            className="md:hidden p-1.5 -ml-1 text-slate-500 hover:bg-slate-100 rounded-lg"
             onClick={() => setShowMobileList(true)}
           >
-            <span className="material-symbols-outlined">arrow_back</span>
+            <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>arrow_back</span>
           </button>
 
           {activeConvData ? (
             <>
-              <div className="relative">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${activeConvData.avatarBg}`}>
+              <div className="relative shrink-0">
+                <div className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs ${activeConvData.avatarBg}`}>
                   {activeConvData.avatar}
                 </div>
                 {activeConvData.online && <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white" />}
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-label-md text-on-surface truncate">{activeConvData.name}</p>
-                <p className={`font-body-sm text-body-sm truncate ${activeConvData.online ? 'text-green-600' : 'text-on-surface-variant'}`}>
-                  {activeConvData.online ? 'Online now' : 'Offline'}
+              <div className="flex-1 min-w-0 flex flex-col justify-center">
+                <p className="font-label-sm font-bold text-sm text-on-surface truncate leading-tight">{activeConvData.name}</p>
+                <p className={`font-body-sm text-[11px] truncate leading-tight ${activeConvData.online ? 'text-green-600 font-medium' : 'text-on-surface-variant'}`}>
+                  {activeConvData.online ? 'Online' : 'Offline'}
                 </p>
               </div>
             </>
           ) : (
-             <div className="flex-1 min-w-0 font-label-md text-on-surface">Select a conversation</div>
+            <div className="flex-1 min-w-0 font-label-md text-sm text-on-surface">Select a conversation</div>
           )}
-          <div className="flex gap-1 sm:gap-2 shrink-0">
-            <button 
+          <div className="flex gap-1 shrink-0">
+            <button
               onClick={() => handleLeave(activeConvData.id)}
-              className="flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 text-sm font-semibold rounded-full hover:bg-red-50 text-red-500 hover:text-red-600 transition-colors"
+              className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-red-50 text-red-500 hover:text-red-600 transition-colors"
+              title="Leave"
             >
               <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>logout</span>
-              <span className="hidden sm:inline">Leave</span>
             </button>
           </div>
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-lg space-y-4">
-          <div className="text-center">
-            <span className="font-label-sm text-label-sm text-on-surface-variant bg-surface-container-low px-4 py-1 rounded-full">Today</span>
+        <div className="flex-1 overflow-y-auto p-4 space-y-1 bg-[#f8fafc]">
+          <div className="text-center mb-4 mt-2">
+            <span className="font-label-sm text-[10px] uppercase font-bold tracking-wider text-on-surface-variant bg-surface-container-low px-3 py-1 rounded-full shadow-sm">Today</span>
           </div>
-          {activeConvData?.thread?.map((msg) => (
-            <div key={msg.id} className={`flex gap-2 sm:gap-3 ${msg.isMe ? 'justify-end' : 'justify-start'}`}>
-              {!msg.isMe && activeConvData && (
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 self-end ${activeConvData.avatarBg}`}>
-                  {activeConvData.avatar}
+          {activeConvData?.thread?.map((msg, index, arr) => {
+            const isMe = msg.isMe;
+            const prevMsg = arr[index - 1];
+            const nextMsg = arr[index + 1];
+            const isFirstInGroup = !prevMsg || prevMsg.isMe !== isMe;
+            const isLastInGroup = !nextMsg || nextMsg.isMe !== isMe;
+
+            return (
+              <div key={msg.id} className={`flex gap-2 w-full ${isMe ? 'justify-end' : 'justify-start'} ${isFirstInGroup ? 'mt-4' : ''}`}>
+                {!isMe && (
+                  <div className="w-6 shrink-0 flex items-end">
+                    {isLastInGroup && activeConvData && (
+                      <div className={`w-6 h-6 rounded-full flex items-center justify-center font-bold text-[10px] shadow-sm ${activeConvData.avatarBg}`}>
+                        {activeConvData.avatar}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                <div className={`max-w-[75%] sm:max-w-[65%] flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
+                  <div
+                    className={`px-3.5 py-2 shadow-sm relative group
+                      ${isMe ? 'bg-primary text-white' : 'bg-white border border-slate-100 text-slate-800'}
+                      ${isFirstInGroup && isLastInGroup ? 'rounded-2xl' : ''}
+                      ${isFirstInGroup && !isLastInGroup ? (isMe ? 'rounded-t-2xl rounded-bl-2xl rounded-br-sm' : 'rounded-t-2xl rounded-br-2xl rounded-bl-sm') : ''}
+                      ${!isFirstInGroup && isLastInGroup ? (isMe ? 'rounded-b-2xl rounded-tl-2xl rounded-tr-sm' : 'rounded-b-2xl rounded-tr-2xl rounded-tl-sm') : ''}
+                      ${!isFirstInGroup && !isLastInGroup ? (isMe ? 'rounded-l-2xl rounded-r-sm' : 'rounded-r-2xl rounded-l-sm') : ''}
+                    `}
+                  >
+                    <p className="font-body-md text-[13.5px] leading-relaxed">{msg.content}</p>
+                    <div className={`text-[9px] mt-0.5 opacity-60 ${isMe ? 'text-right' : 'text-left'}`}>
+                      {msg.time}
+                    </div>
+                  </div>
                 </div>
-              )}
-              <div className={`max-w-[85%] sm:max-w-[70%] ${msg.isMe ? 'items-end' : 'items-start'} flex flex-col gap-1.5`}>
-                <div className={`px-4 py-2.5 sm:px-5 sm:py-3 rounded-2xl shadow-sm ${msg.isMe ? 'bg-gradient-to-r from-primary to-purple-500 text-white rounded-br-sm' : 'bg-white border border-slate-100 text-slate-800 rounded-bl-sm'}`}>
-                  <p className="font-body-md text-sm sm:text-base leading-relaxed">{msg.content}</p>
-                </div>
-                <span className="text-[10px] sm:text-xs text-slate-400 px-2 font-medium">{msg.time}</span>
+
+                {isMe && (
+                  <div className="w-6 shrink-0" />
+                )}
               </div>
-              {msg.isMe && (
-                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs shrink-0 self-end">
-                  Me
-                </div>
-              )}
-            </div>
-          ))}
-          <div ref={messagesEndRef} />
+            );
+          })}
+          <div ref={messagesEndRef} className="h-2" />
         </div>
 
         {/* Message Input */}
-        <div className="p-3 sm:p-5 bg-white/80 backdrop-blur-md border-t border-purple-100/50 shrink-0 mb-16 md:mb-0 z-10">
-          <div className="flex items-center gap-2 sm:gap-3 bg-white border border-slate-200 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.05)] rounded-full p-1.5 sm:p-2 focus-within:border-primary/40 focus-within:ring-4 focus-within:ring-primary/10 transition-all duration-300">
-            <button className="p-2 text-slate-400 hover:text-primary transition-colors rounded-full shrink-0">
-              <span className="material-symbols-outlined">attach_file</span>
+        <div className="p-3 bg-white/90 backdrop-blur-md border-t border-outline-variant/20 shrink-0 z-10 mb-16 md:mb-0">
+          <div className="max-w-4xl mx-auto flex items-center gap-2 bg-surface-container-lowest border border-outline-variant/40 rounded-full p-1 pl-3 pr-1 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all shadow-sm">
+            <button className="text-slate-400 hover:text-primary transition-colors shrink-0 flex items-center justify-center" title="Attach file">
+              <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>attach_file</span>
             </button>
             <input
               type="text"
@@ -201,18 +223,17 @@ export default function MessagesPage() {
               onChange={(e) => setNewMessage(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Type a message..."
-              className="flex-1 bg-transparent outline-none text-sm sm:text-base text-slate-800 placeholder:text-slate-400 py-2 min-w-0"
+              className="flex-1 bg-transparent outline-none text-[14px] text-slate-800 placeholder:text-slate-400 py-1.5 min-w-0"
               disabled={!activeConvData}
             />
             <button
               onClick={handleSend}
               disabled={!newMessage.trim() || !activeConvData}
-              className="w-10 h-10 sm:w-11 sm:h-11 bg-gradient-to-r from-primary to-purple-600 text-white rounded-full flex items-center justify-center shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 transition-all hover:scale-105 active:scale-95 shrink-0 disabled:opacity-50 disabled:hover:scale-100 disabled:shadow-none"
+              className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center hover:bg-primary/90 transition-all hover:scale-105 active:scale-95 shrink-0 disabled:opacity-50 disabled:hover:scale-100"
             >
-              <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1", fontSize: '18px' }}>send</span>
+              <span className="material-symbols-outlined" style={{ fontSize: '16px', fontVariationSettings: "'FILL' 1" }}>send</span>
             </button>
           </div>
-          <p className="text-[10px] text-slate-400 mt-2 text-center font-medium">Press Enter to send</p>
         </div>
       </div>
     </div>

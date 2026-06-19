@@ -15,7 +15,7 @@ export default function ProviderMessagesPage() {
     const org = provider?.organization || '';
     const allConvs = getMessages();
     const myConv = allConvs.find(c => c.name === org || c.name === `${org} Support`);
-    
+
     if (myConv) {
       const hasStudentMessage = myConv.thread.some(msg => msg.isMe);
       if (hasStudentMessage) {
@@ -77,7 +77,7 @@ export default function ProviderMessagesPage() {
   const totalUnread = 0; // Not tracking provider unread in demo
 
   return (
-    <div className="flex h-[calc(100vh-64px)] bg-[#f8fafc] overflow-hidden relative">
+    <div className="flex h-[calc(100vh-140px)] w-full bg-white overflow-hidden relative rounded-2xl shadow-sm border border-outline-variant/20">
       {/* Conversations Sidebar */}
       <div className={`${showMobileList ? 'flex' : 'hidden'} md:flex w-full md:w-80 flex-shrink-0 border-r border-purple-100/50 flex-col bg-white/60 backdrop-blur-md z-10 rounded-l-3xl shadow-[4px_0_24px_-12px_rgba(0,0,0,0.1)]`}>
         <div className="p-6 border-b border-outline-variant/10">
@@ -158,9 +158,9 @@ export default function ProviderMessagesPage() {
               </div>
             </>
           ) : (
-             <div className="flex-1 min-w-0 font-label-md text-on-surface">Select a conversation</div>
+            <div className="flex-1 min-w-0 font-label-md text-on-surface">Select a conversation</div>
           )}
-          
+
           <div className="flex gap-1 sm:gap-2 shrink-0">
             <button className="hidden sm:flex w-10 h-10 items-center justify-center rounded-full hover:bg-slate-100 transition-colors text-slate-400 hover:text-slate-700">
               <span className="material-symbols-outlined">more_vert</span>
