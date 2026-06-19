@@ -362,8 +362,8 @@ export default function ProfilePage() {
 
         <div className="space-y-6">
           {[
-            { name: 'Official_Transcript_2024.pdf', type: 'Transcript', size: '1.2 MB', date: 'Oct 2024' },
-            { name: 'Resume_AlexJohnson.pdf', type: 'Resume', size: '0.8 MB', date: 'Sep 2024' },
+            { name: 'Official_Transcript_2026.pdf', type: 'Transcript', size: '1.2 MB', date: 'Oct 2026' },
+            { name: 'Resume_AlexJohnson.pdf', type: 'Resume', size: '0.8 MB', date: 'Sep 2026' },
           ].map((doc, idx) => (
             <div key={idx} className="flex gap-4">
               <div className="shrink-0 mt-1">

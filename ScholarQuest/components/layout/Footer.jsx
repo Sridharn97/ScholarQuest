@@ -6,15 +6,15 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
 
         {/* Top: Brand + Newsletter */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 py-16 border-b border-white/8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 py-8 border-b border-white/8">
           <div>
-            <div className="flex items-center gap-2.5 mb-5">
+            <div className="flex items-center gap-2.5 mb-3">
               <div className="w-9 h-9 rounded-10 bg-primary flex items-center justify-center">
                 <span className="material-symbols-outlined text-white" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>school</span>
               </div>
               <span className="font-extrabold text-white text-xl tracking-tight">ScholarQuest</span>
             </div>
-            <p className="text-gray-400 text-base leading-relaxed max-w-sm mb-6">
+            <p className="text-gray-400 text-base leading-relaxed max-w-sm mb-4">
               Empowering academic futures through intelligent scholarship discovery and application management.
             </p>
             <div className="flex gap-3">
@@ -42,7 +42,7 @@ export default function Footer() {
         </div>
 
         {/* Mid: Links */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-10 py-14">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 py-8">
           {[
             {
               title: 'Platform',
@@ -82,8 +82,8 @@ export default function Footer() {
             },
           ].map((col) => (
             <div key={col.title}>
-              <p className="text-white font-semibold text-sm mb-5">{col.title}</p>
-              <ul className="space-y-3">
+              <p className="text-white font-semibold text-sm mb-3">{col.title}</p>
+              <ul className="space-y-2">
                 {col.links.map((link) => (
                   <li key={link.label}>
                     <Link href={link.href} className="text-gray-400 text-sm hover:text-white transition-colors">
@@ -97,8 +97,8 @@ export default function Footer() {
         </div>
 
         {/* Bottom: Legal */}
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 py-6 border-t border-white/8">
-          <p className="text-gray-500 text-sm">© 2024 ScholarQuest. All rights reserved.</p>
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 py-4 border-t border-white/8">
+          <p className="text-gray-500 text-sm">© 2026 ScholarQuest. All rights reserved.</p>
           <div className="flex items-center gap-6">
             {['Privacy', 'Terms', 'Cookies', 'Sitemap'].map((item) => (
               <Link key={item} href="#" className="text-gray-500 text-sm hover:text-gray-300 transition-colors">{item}</Link>

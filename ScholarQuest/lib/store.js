@@ -416,8 +416,8 @@ export function getStats() {
 // ─── Provider Dashboard / Scholarship Data ────────────────────
 
 const DEFAULT_ADMIN_APPLICATIONS = [
-  { id: 1, initials: 'EK', color: 'bg-primary/10 text-primary', student: 'Elena Kovalev', email: 'elena.k@stanford.edu', scholarship: 'Global Tech Innovators Fund', submitted: 'Oct 24, 2024', score: 96, status: 'Approved' },
-  { id: 2, initials: 'JM', color: 'bg-secondary/10 text-secondary', student: 'Julian Martinez', email: 'j.martinez@mit.edu', scholarship: 'Future Leaders Foundation', submitted: 'Oct 23, 2024', score: 82, status: 'Under Review' },
+  { id: 1, initials: 'EK', color: 'bg-primary/10 text-primary', student: 'Elena Kovalev', email: 'elena.k@stanford.edu', scholarship: 'Global Tech Innovators Fund', submitted: 'Oct 24, 2026', score: 96, status: 'Approved' },
+  { id: 2, initials: 'JM', color: 'bg-secondary/10 text-secondary', student: 'Julian Martinez', email: 'j.martinez@mit.edu', scholarship: 'Future Leaders Foundation', submitted: 'Oct 23, 2026', score: 82, status: 'Under Review' },
 ];
 
 const DEFAULT_ADMIN_SCHOLARSHIPS = [
