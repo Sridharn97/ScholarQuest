@@ -33,10 +33,10 @@ export default function Navbar() {
           {/* Left: Brand */}
           <div className="flex justify-start items-center">
             <Link href="/" className="flex items-center gap-2.5 flex-shrink-0 group">
-              <div className="relative w-8 h-8 rounded-full shadow-sm bg-white overflow-hidden border border-slate-100 group-hover:shadow-md transition-all">
+              <div className="relative w-10 h-10 rounded-full shadow-sm bg-white overflow-hidden border border-slate-100 group-hover:shadow-md transition-all">
                  <img src="/Logo.png.png" alt="Logo" className="w-full h-full object-cover" />
               </div>
-              <span className={`font-extrabold text-lg tracking-tight transition-colors duration-300 ${isScrolled ? 'text-slate-800' : 'text-slate-900'}`}>
+              <span className={`font-extrabold text-xl tracking-tight transition-colors duration-300 ${isScrolled ? 'text-slate-800' : 'text-slate-900'}`}>
                 Scholar<span className="text-primary">Quest</span>
               </span>
             </Link>
