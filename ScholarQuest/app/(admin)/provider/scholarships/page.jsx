@@ -73,50 +73,53 @@ export default function ProviderScholarshipsPage() {
         </div>
       )}
 
-      <div className="flex items-center justify-between mb-10">
+      <div className="flex items-center justify-between mb-12">
         <div>
-          <h2 className="font-headline-lg text-headline-lg text-on-surface">Posted Scholarships</h2>
-          <p className="text-body-md text-on-surface-variant mt-1">Manage and track your organization&apos;s scholarship opportunities</p>
+          <h2 className="font-headline-lg text-3xl font-bold text-on-surface">Posted Scholarships</h2>
+          <p className="text-body-lg text-on-surface-variant mt-2">Manage and track your organization&apos;s scholarship opportunities</p>
         </div>
-        <Link href="/provider/scholarships/new" className="bg-primary text-on-primary px-6 py-3 rounded-10 font-label-md text-label-md hover:opacity-90 transition-all flex items-center gap-2 shadow-md shadow-primary/20">
+        <Link href="/provider/scholarships/new" className="bg-primary text-on-primary px-8 py-3.5 rounded-xl font-bold text-label-md hover:bg-primary-container transition-all flex items-center gap-2 shadow-md">
           <span className="material-symbols-outlined">add</span>
           Post Scholarship
         </Link>
       </div>
 
       {/* Filter Options */}
-      <div className="glass-card rounded-10 border border-outline-variant/30 overflow-hidden mb-10 p-6 flex flex-col sm:flex-row gap-4 items-center justify-between">
-        <div className="relative w-full max-w-xs">
-          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" style={{ fontSize: '18px' }}>search</span>
+      <div className="flex flex-col sm:flex-row gap-4 items-center justify-between mb-8">
+        <div className="relative w-full max-w-sm">
+          <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" style={{ fontSize: '20px' }}>search</span>
           <input
             type="text"
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Search programs..."
-            className="w-full bg-surface-container-low border border-outline-variant rounded-6 py-2 pl-9 pr-4 text-body-sm outline-none focus:ring-2 focus:ring-primary/20"
+            className="w-full bg-white border border-slate-200 rounded-xl py-3 pl-11 pr-4 text-sm outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all"
           />
         </div>
-        <div className="flex gap-2 flex-wrap">
-          <select
-            value={activeFilter}
-            onChange={(e) => setActiveFilter(e.target.value)}
-            className="bg-surface-container-low border border-outline-variant rounded-6 py-2 px-4 text-body-sm outline-none focus:ring-2 focus:ring-primary/20 font-label-md"
-          >
-            {['All', 'Active', 'Draft', 'Closed'].map((f) => (
-              <option key={f} value={f}>{f}</option>
-            ))}
-          </select>
+        <div className="flex gap-3 w-full sm:w-auto">
+          <div className="relative w-full sm:w-auto">
+            <select
+              value={activeFilter}
+              onChange={(e) => setActiveFilter(e.target.value)}
+              className="w-full sm:w-48 bg-white border border-slate-200 rounded-xl py-3 pl-4 pr-10 text-sm outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 shadow-sm transition-all appearance-none font-semibold text-slate-700 cursor-pointer"
+            >
+              {['All', 'Active', 'Draft', 'Closed'].map((f) => (
+                <option key={f} value={f}>{f}</option>
+              ))}
+            </select>
+            <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" style={{ fontSize: '20px' }}>expand_more</span>
+          </div>
         </div>
       </div>
 
       {/* Grid of Scholarship Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filtered.length === 0 ? (
-          <div className="md:col-span-2 lg:col-span-3 text-center py-20 text-on-surface-variant">
+          <div className="md:col-span-2 lg:col-span-3 text-center py-24 text-on-surface-variant">
             No scholarships found matching criteria.
           </div>
         ) : filtered.map((program) => (
-          <div key={program.id} className="glass-card rounded-[1.5rem] p-6 border border-outline-variant/20 hover:shadow-lg transition-all flex flex-col justify-between h-[280px]">
+          <div key={program.id} className="clean-card rounded-3xl p-8 hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col justify-between h-[320px]">
             <div>
               <div className="flex justify-between items-start mb-4">
                 <span className={`px-2.5 py-1 rounded-6 text-label-sm font-label-md uppercase tracking-wider ${STATUS_CLS[program.status]}`}>

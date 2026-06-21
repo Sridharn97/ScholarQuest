@@ -61,14 +61,15 @@ export default function ProviderDashboard() {
       )}
 
       {/* Page Header */}
-      <div className="mb-10">
-        <h2 className="font-headline-lg text-headline-lg text-on-surface">Welcome back, {providerInfo.name.split(' ')[0]}</h2>
+      <div className="mb-12">
+        <h2 className="font-headline-lg text-4xl font-bold text-on-surface">Welcome back, {providerInfo.name.split(' ')[0]}</h2>
+        <p className="text-on-surface-variant text-lg mt-2">Here is what's happening with your programs today.</p>
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
         {kpis.map((kpi) => (
-          <div key={kpi.label} className="relative overflow-hidden bg-white p-4 rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 group">
+          <div key={kpi.label} className="relative overflow-hidden clean-card p-6 rounded-2xl hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
             <div className="flex justify-between items-start mb-3">
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${kpi.iconCls} shadow-inner`}>
                 <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1", fontSize: '20px' }}>{kpi.icon}</span>
@@ -85,10 +86,10 @@ export default function ProviderDashboard() {
       </div>
 
       {/* Charts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-gutter mb-10">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
         {/* Application Status Breakdown */}
-        <div className="glass-card p-6 rounded-10 border border-outline-variant/30">
-          <h4 className="font-headline-md text-headline-md mb-6">Application Status Breakdown</h4>
+        <div className="clean-card p-8 rounded-2xl">
+          <h4 className="font-headline-md text-xl font-semibold mb-8">Application Status Breakdown</h4>
           <div className="space-y-4">
             {[
               { label: 'Approved', count: applications.filter(a => a.status === 'Approved').length, color: 'bg-green-500' },
@@ -113,9 +114,9 @@ export default function ProviderDashboard() {
         </div>
 
         {/* Application Trends */}
-        <div className="glass-card p-6 rounded-10 border border-outline-variant/30">
-          <div className="flex justify-between items-center mb-6">
-            <h4 className="font-headline-md text-headline-md">Application Trends</h4>
+        <div className="clean-card p-8 rounded-2xl">
+          <div className="flex justify-between items-center mb-8">
+            <h4 className="font-headline-md text-xl font-semibold">Application Trends</h4>
           </div>
           <div className="h-64 w-full flex items-end justify-between px-2">
             {barLabels.map((label, i) => (
@@ -129,9 +130,9 @@ export default function ProviderDashboard() {
       </div>
 
       {/* Recent Submissions Table */}
-      <div className="glass-card rounded-10 border border-outline-variant/30 overflow-hidden">
+      <div className="clean-card rounded-2xl overflow-hidden mb-8">
         <div className="p-6 flex justify-between items-center border-b border-outline-variant/30">
-          <h4 className="font-headline-md text-headline-md">Recent Submissions</h4>
+          <h4 className="font-headline-md text-xl font-semibold">Recent Submissions</h4>
           <Link href="/provider/applications" className="text-primary font-label-md text-label-md hover:underline">View All</Link>
         </div>
         <div className="overflow-x-auto">

@@ -303,26 +303,26 @@ export default function ProviderApplicationsPage() {
         </div>
       )}
 
-      <div className="flex items-center justify-between mb-10">
+      <div className="flex items-center justify-between mb-12">
         <div>
-          <h2 className="font-headline-lg text-headline-lg text-on-surface">Application Submissions</h2>
-          <p className="text-body-md text-on-surface-variant mt-1">Track and review applications submitted to your programs</p>
+          <h2 className="font-headline-lg text-3xl font-bold text-on-surface">Application Submissions</h2>
+          <p className="text-body-lg text-on-surface-variant mt-2">Track and review applications submitted to your programs</p>
         </div>
-        <button onClick={handleExport} className="bg-primary text-on-primary px-6 py-3 rounded-10 font-label-md text-label-md hover:opacity-90 transition-all flex items-center gap-2">
+        <button onClick={handleExport} className="bg-surface-variant text-on-surface-variant hover:bg-surface-container-high px-6 py-3 rounded-xl font-label-md transition-all flex items-center gap-2">
           <span className="material-symbols-outlined">download</span>
           Export CSV
         </button>
       </div>
 
       {/* Stats Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
         {[
           { label: 'Total Applications', value: counts.total, icon: 'description', cls: 'bg-primary/10 text-primary', trend: '+12% this week', trendUp: true },
           { label: 'Under Review', value: counts.review, icon: 'pending', cls: 'bg-blue-100 text-blue-700', trend: 'Steady', trendUp: true },
           { label: 'Approved / Funded', value: counts.approved, icon: 'check_circle', cls: 'bg-green-100 text-green-700', trend: '+2 this month', trendUp: true },
           { label: 'Pending Review', value: counts.pending, icon: 'hourglass_empty', cls: 'bg-orange-100 text-orange-700', trend: 'Needs action', trendUp: false },
         ].map((stat) => (
-          <div key={stat.label} className="relative overflow-hidden bg-white p-4 rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 group">
+          <div key={stat.label} className="relative overflow-hidden clean-card p-6 rounded-2xl hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
             <div className="flex justify-between items-start mb-3">
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${stat.cls} shadow-inner`}>
                 <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1", fontSize: '20px' }}>{stat.icon}</span>
@@ -339,28 +339,31 @@ export default function ProviderApplicationsPage() {
       </div>
 
       {/* Table */}
-      <div className="glass-card rounded-10 border border-outline-variant/30 overflow-hidden">
-        <div className="p-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between border-b border-outline-variant/30">
-          <div className="relative w-full max-w-xs">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" style={{ fontSize: '18px' }}>search</span>
+      <div className="clean-card rounded-2xl overflow-hidden mb-12 shadow-sm">
+        <div className="p-5 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between border-b border-slate-100 bg-white">
+          <div className="relative w-full max-w-sm">
+            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" style={{ fontSize: '20px' }}>search</span>
             <input
               type="text"
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search by student or program..."
-              className="w-full bg-surface-container-low border border-outline-variant rounded-6 py-2 pl-9 pr-4 text-body-sm outline-none focus:ring-2 focus:ring-primary/20"
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 pl-11 pr-4 text-sm outline-none focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all hover:border-slate-300"
             />
           </div>
-          <div className="flex gap-2 flex-wrap">
-            <select
-              value={activeFilter}
-              onChange={(e) => setActiveFilter(e.target.value)}
-              className="bg-surface-container-low border border-outline-variant rounded-6 py-2 px-4 text-body-sm outline-none focus:ring-2 focus:ring-primary/20 font-label-md"
-            >
-              {filters.map((f) => (
-                <option key={f} value={f}>{f}</option>
-              ))}
-            </select>
+          <div className="flex gap-3 w-full sm:w-auto">
+            <div className="relative w-full sm:w-auto">
+              <select
+                value={activeFilter}
+                onChange={(e) => setActiveFilter(e.target.value)}
+                className="w-full sm:w-40 bg-slate-50 border border-slate-200 rounded-xl py-2.5 pl-4 pr-10 text-sm outline-none focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all appearance-none font-semibold text-slate-700 cursor-pointer hover:border-slate-300"
+              >
+                {filters.map((f) => (
+                  <option key={f} value={f}>{f}</option>
+                ))}
+              </select>
+              <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" style={{ fontSize: '20px' }}>expand_more</span>
+            </div>
           </div>
         </div>
 
@@ -373,10 +376,10 @@ export default function ProviderApplicationsPage() {
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-outline-variant/20 bg-white">
+            <tbody className="divide-y divide-outline-variant/20 bg-white text-body-lg">
               {filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-20 text-center">
+                  <td colSpan={6} className="px-6 py-24 text-center">
                     <div className="flex flex-col items-center justify-center opacity-60">
                       <span className="material-symbols-outlined mb-4" style={{ fontSize: '64px' }}>folder_open</span>
                       <h4 className="font-headline-md text-on-surface mb-2">No Applications Found</h4>

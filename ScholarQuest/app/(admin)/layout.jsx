@@ -51,9 +51,9 @@ export default function ProviderLayout({ children }) {
     <div className="theme-admin bg-background text-on-surface font-sans min-h-screen flex relative">
       <ProviderSidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} onLogout={handleLogout} />
 
-      <main className="lg:ml-64 flex-1 flex flex-col min-h-screen min-w-0 w-full transition-all duration-300">
+      <main className="lg:ml-64 flex-1 flex flex-col min-h-screen min-w-0 w-full bg-background transition-all duration-300">
         {/* Fixed Provider Topbar */}
-        <header className="sticky top-0 z-10 flex justify-between items-center px-4 lg:px-lg h-16 bg-white/80 backdrop-blur-md shadow-sm border-b border-outline-variant/20">
+        <header className="sticky top-0 z-10 flex justify-between items-center px-6 lg:px-10 h-20 bg-surface shadow-sm border-b border-outline-variant/30">
 
           <div className="flex items-center gap-4 flex-1">
             <button
@@ -77,8 +77,10 @@ export default function ProviderLayout({ children }) {
         </header>
 
         {/* Page Content */}
-        <div className="p-4 lg:p-xl flex-1 overflow-y-auto">
-          {children}
+        <div className="p-6 lg:p-10 flex-1 overflow-y-auto">
+          <div className="max-w-[1600px] mx-auto">
+            {children}
+          </div>
         </div>
       </main>
     </div>

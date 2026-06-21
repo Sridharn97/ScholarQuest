@@ -21,20 +21,20 @@ const maxVal = Math.max(...monthlyData.map((d) => d.applications));
 export default function ProviderReportsPage() {
   return (
     <div>
-      <div className="mb-10">
-        <h2 className="font-headline-lg text-headline-lg text-on-surface">Reports & Analytics</h2>
-        <p className="text-body-md text-on-surface-variant mt-1">Insights into scholarship disbursements and application activity</p>
+      <div className="mb-12">
+        <h2 className="font-headline-lg text-3xl font-bold text-on-surface">Reports & Analytics</h2>
+        <p className="text-body-lg text-on-surface-variant mt-2">Insights into scholarship disbursements and application activity</p>
       </div>
 
       {/* Summary KPIs */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
         {[
           { label: 'Total Submissions', value: '528', trend: '+14% MoM', trendUp: true, icon: 'description', cls: 'bg-primary/10 text-primary' },
           { label: 'Grants Funded', value: '40', trend: '+10% MoM', trendUp: true, icon: 'check_circle', cls: 'bg-green-100 text-green-700' },
           { label: 'Total Funds Disbursed', value: '$850,000', trend: '+15% YoY', trendUp: true, icon: 'payments', cls: 'bg-secondary/10 text-secondary' },
           { label: 'Avg. Match score', value: '92%', trend: '+2pts', trendUp: true, icon: 'psychiatry', cls: 'bg-blue-100 text-blue-700' },
         ].map((stat) => (
-          <div key={stat.label} className="relative overflow-hidden bg-white p-4 rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 group">
+          <div key={stat.label} className="relative overflow-hidden clean-card p-6 rounded-2xl hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
             <div className="flex justify-between items-start mb-3">
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${stat.cls} shadow-inner`}>
                 <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1", fontSize: '20px' }}>{stat.icon}</span>
@@ -50,10 +50,10 @@ export default function ProviderReportsPage() {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-gutter mb-10">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
         {/* Monthly Applications Bar Chart */}
-        <div className="glass-card p-5 sm:p-6 rounded-10 border border-outline-variant/30">
-          <h4 className="font-headline-md text-headline-md mb-6">Monthly Activity vs. Funded Grants</h4>
+        <div className="clean-card p-8 rounded-2xl">
+          <h4 className="font-headline-md text-xl font-semibold mb-8">Monthly Activity vs. Funded Grants</h4>
           <div className="space-y-4">
             {monthlyData.map((d) => (
               <div key={d.month} className="flex items-center gap-3">
@@ -79,8 +79,8 @@ export default function ProviderReportsPage() {
         </div>
 
         {/* Category Breakdown Donut */}
-        <div className="glass-card p-5 sm:p-6 rounded-10 border border-outline-variant/30">
-          <h4 className="font-headline-md text-headline-md mb-6">Applications by Category</h4>
+        <div className="clean-card p-8 rounded-2xl">
+          <h4 className="font-headline-md text-xl font-semibold mb-8">Applications by Category</h4>
           <div className="flex flex-col items-center justify-center">
             <div className="relative w-40 h-40 mb-6">
               <svg className="w-40 h-40 transform -rotate-90 drop-shadow-sm" viewBox="0 0 120 120">
@@ -117,9 +117,9 @@ export default function ProviderReportsPage() {
       </div>
 
       {/* Top Scholarships Table */}
-      <div className="glass-card rounded-10 border border-outline-variant/30 overflow-hidden">
-        <div className="p-6 border-b border-outline-variant/30">
-          <h4 className="font-headline-md text-headline-md">Posted Programs Performance</h4>
+      <div className="clean-card rounded-2xl overflow-hidden mb-12">
+        <div className="p-8 border-b border-outline-variant/30">
+          <h4 className="font-headline-md text-xl font-semibold">Posted Programs Performance</h4>
         </div>
         <table className="w-full text-left">
           <thead className="bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">

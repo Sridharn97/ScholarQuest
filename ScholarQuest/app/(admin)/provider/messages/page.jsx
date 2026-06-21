@@ -79,10 +79,10 @@ export default function ProviderMessagesPage() {
   return (
     <div className="flex h-[calc(100vh-140px)] w-full bg-white overflow-hidden relative rounded-2xl shadow-sm border border-outline-variant/20">
       {/* Conversations Sidebar */}
-      <div className={`${showMobileList ? 'flex' : 'hidden'} md:flex w-full md:w-80 flex-shrink-0 border-r border-purple-100/50 flex-col bg-white/60 backdrop-blur-md z-10 rounded-l-3xl shadow-[4px_0_24px_-12px_rgba(0,0,0,0.1)]`}>
-        <div className="p-6 border-b border-outline-variant/10">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="font-headline-md text-headline-md">Student Messages</h2>
+      <div className={`${showMobileList ? 'flex' : 'hidden'} md:flex w-full md:w-80 flex-shrink-0 border-r border-outline-variant/30 flex-col bg-surface z-10 rounded-l-2xl shadow-sm`}>
+        <div className="p-6 border-b border-outline-variant/30">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-headline-md text-xl font-semibold">Student Messages</h2>
           </div>
           <div className="relative">
             <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline-variant" style={{ fontSize: '18px' }}>search</span>
@@ -132,11 +132,11 @@ export default function ProviderMessagesPage() {
       </div>
 
       {/* Chat Area */}
-      <div className={`${!showMobileList ? 'flex' : 'hidden'} md:flex flex-1 flex-col min-w-0 bg-transparent rounded-r-3xl`}>
+      <div className={`${!showMobileList ? 'flex' : 'hidden'} md:flex flex-1 flex-col min-w-0 bg-surface rounded-r-2xl`}>
         {/* Chat Header */}
-        <div className="flex items-center gap-4 p-4 lg:p-5 border-b border-purple-100/50 bg-white/80 backdrop-blur-md shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] z-10 shrink-0">
+        <div className="flex items-center gap-4 p-4 lg:p-6 border-b border-outline-variant/30 bg-surface z-10 shrink-0">
           <button
-            className="md:hidden p-2 -ml-2 text-slate-500 hover:bg-slate-100 rounded-xl"
+            className="md:hidden p-2 -ml-2 text-on-surface-variant hover:bg-surface-container rounded-xl"
             onClick={() => setShowMobileList(true)}
           >
             <span className="material-symbols-outlined">arrow_back</span>
@@ -200,9 +200,9 @@ export default function ProviderMessagesPage() {
         </div>
 
         {/* Message Input */}
-        <div className="p-3 sm:p-5 bg-white/80 backdrop-blur-md border-t border-purple-100/50 shrink-0 mb-16 md:mb-0 rounded-br-3xl z-10">
-          <div className="flex items-center gap-2 sm:gap-3 bg-white border border-slate-200 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.05)] rounded-full p-1.5 sm:p-2 focus-within:border-primary/40 focus-within:ring-4 focus-within:ring-primary/10 transition-all duration-300">
-            <button className="p-2 text-slate-400 hover:text-primary transition-colors rounded-full shrink-0">
+        <div className="p-4 sm:p-6 bg-surface border-t border-outline-variant/30 shrink-0 mb-16 md:mb-0 rounded-br-2xl z-10">
+          <div className="flex items-center gap-2 sm:gap-4 bg-surface-container-lowest border border-outline-variant/50 shadow-sm rounded-full p-2 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all duration-300">
+            <button className="p-2 text-on-surface-variant hover:text-primary transition-colors rounded-full shrink-0">
               <span className="material-symbols-outlined">attach_file</span>
             </button>
             <input
