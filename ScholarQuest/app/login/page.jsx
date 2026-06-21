@@ -40,7 +40,7 @@ export default function LoginPage() {
     }
     setSession(user);
     // Use window.location for a hard navigation to guarantee the redirect works
-    window.location.href = '/dashboard';
+    router.push('/dashboard');
   };
 
   return (

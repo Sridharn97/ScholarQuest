@@ -15,9 +15,9 @@ export default function ProviderLayout({ children }) {
     ensureDefaults();
     if (!isProviderLoggedIn()) {
       if (isLoggedIn()) {
-        window.location.href = '/dashboard';
+        router.push('/dashboard');
       } else {
-        window.location.href = '/provider-login';
+        router.push('/provider-login');
       }
       return;
     }
@@ -33,7 +33,7 @@ export default function ProviderLayout({ children }) {
 
   const handleLogout = () => {
     clearProviderSession();
-    window.location.href = '/provider-login';
+    router.push('/provider-login');
   };
 
   if (!authChecked) {

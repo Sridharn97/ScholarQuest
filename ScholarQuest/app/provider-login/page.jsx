@@ -2,9 +2,11 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { validateProviderLogin, setProviderSession, isProviderLoggedIn, ensureDefaults, isLoggedIn } from '@/lib/store';
 
 export default function ProviderLoginPage() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -12,11 +14,11 @@ export default function ProviderLoginPage() {
   useEffect(() => {
     ensureDefaults();
     if (isProviderLoggedIn()) {
-      window.location.href = '/provider';
+      router.push('/provider');
     } else if (isLoggedIn()) {
-      window.location.href = '/dashboard';
+      router.push('/dashboard');
     }
-  }, []);
+  }, [router]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -37,7 +39,7 @@ export default function ProviderLoginPage() {
       return;
     }
     setProviderSession(provider);
-    window.location.href = '/provider';
+    router.push('/provider');
   };
 
   return (
