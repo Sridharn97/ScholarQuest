@@ -48,10 +48,10 @@ export default function ProviderLayout({ children }) {
   }
 
   return (
-    <div className="theme-admin bg-background text-on-surface font-sans min-h-screen flex relative">
+    <div className="theme-admin bg-background text-on-surface font-sans h-screen flex relative overflow-hidden">
       <ProviderSidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} onLogout={handleLogout} />
 
-      <main className="lg:ml-64 flex-1 flex flex-col min-h-screen min-w-0 w-full bg-background transition-all duration-300">
+      <main className="lg:ml-64 flex-1 flex flex-col h-screen min-w-0 w-full bg-background transition-all duration-300 overflow-hidden">
         {/* Fixed Provider Topbar */}
         <header className="sticky top-0 z-10 flex justify-between items-center px-6 lg:px-10 h-20 bg-surface shadow-sm border-b border-outline-variant/30">
 

@@ -136,12 +136,15 @@ export default function ProviderDashboard() {
           <Link href="/provider/applications" className="text-primary font-label-md text-label-md hover:underline">View All</Link>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full text-left">
+          <table className="w-full text-left table-fixed">
             <thead className="bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">
               <tr>
-                {['Student', 'Scholarship Program', 'Submission Date', 'Match Score', 'Status', 'Quick Actions'].map((h) => (
-                  <th key={h} className="px-6 py-4 whitespace-nowrap">{h}</th>
-                ))}
+                <th className="px-4 py-3 w-[23%] text-xs whitespace-nowrap overflow-hidden text-ellipsis align-middle">Student</th>
+                <th className="px-4 py-3 w-[25%] text-xs whitespace-nowrap overflow-hidden text-ellipsis align-middle">Scholarship Program</th>
+                <th className="px-4 py-3 w-[14%] text-xs whitespace-nowrap overflow-hidden text-ellipsis align-middle">Submission Date</th>
+                <th className="px-4 py-3 w-[14%] text-xs whitespace-nowrap overflow-hidden text-ellipsis align-middle">Match Score</th>
+                <th className="px-4 py-3 w-[11%] text-xs whitespace-nowrap align-middle">Status</th>
+                <th className="px-4 py-3 w-[13%] text-xs whitespace-nowrap align-middle">Quick Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-outline-variant/30 text-body-md">
@@ -153,31 +156,31 @@ export default function ProviderDashboard() {
                 </tr>
               ) : recentApplications.map((row) => (
                 <tr key={row.id} className="hover:bg-surface-container-low transition-colors">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs ${row.color}`}>{row.initials}</div>
-                      <span className="whitespace-nowrap">{row.student}</span>
+                  <td className="px-4 py-4 whitespace-nowrap overflow-hidden text-ellipsis align-middle">
+                    <div className="flex items-center gap-3 w-full">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${row.color}`}>{row.initials}</div>
+                      <span className="whitespace-nowrap overflow-hidden text-ellipsis min-w-0 text-sm">{row.student}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">{row.scholarship}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{row.submitted}</td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 py-4 whitespace-nowrap overflow-hidden text-ellipsis align-middle text-sm">{row.scholarship}</td>
+                  <td className="px-4 py-4 whitespace-nowrap overflow-hidden text-ellipsis align-middle text-xs">{row.submitted}</td>
+                  <td className="px-4 py-4 whitespace-nowrap overflow-hidden text-ellipsis align-middle">
                     <div className="flex items-center gap-2">
-                      <div className="w-24 h-2 bg-outline-variant/20 rounded-full overflow-hidden">
+                      <div className="w-20 h-1.5 bg-outline-variant/20 rounded-full overflow-hidden shrink-0">
                         <div className="bg-secondary h-full" style={{ width: `${row.score}%` }} />
                       </div>
-                      <span className="text-label-sm">{row.score}%</span>
+                      <span className="text-xs font-bold whitespace-nowrap text-secondary">{row.score}%</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4">
-                    <span className={`px-3 py-1 rounded-full font-label-sm text-label-sm ${STATUS_CLS[row.status]}`}>{row.status}</span>
+                  <td className="px-4 py-4 whitespace-nowrap align-middle">
+                    <span className={`inline-block px-2.5 py-1 rounded-full text-[11px] font-bold ${STATUS_CLS[row.status]}`}>{row.status}</span>
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="flex gap-1">
+                  <td className="px-4 py-4 whitespace-nowrap align-middle">
+                    <div className="flex gap-0.5">
                       {row.status !== 'Approved' && (
                         <button
                           onClick={() => handleQuickAction(row.id, 'Approved')}
-                          className="w-7 h-7 flex items-center justify-center text-green-600 hover:bg-green-50 rounded-6 transition-colors"
+                          className="w-7 h-7 flex items-center justify-center text-green-600 hover:bg-green-50 rounded-6 transition-colors shrink-0"
                           title="Approve"
                         >
                           <span className="material-symbols-outlined" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>check_circle</span>
@@ -186,13 +189,13 @@ export default function ProviderDashboard() {
                       {row.status !== 'Rejected' && (
                         <button
                           onClick={() => handleQuickAction(row.id, 'Rejected')}
-                          className="w-7 h-7 flex items-center justify-center text-error hover:bg-error/10 rounded-6 transition-colors"
+                          className="w-7 h-7 flex items-center justify-center text-error hover:bg-error/10 rounded-6 transition-colors shrink-0"
                           title="Reject"
                         >
                           <span className="material-symbols-outlined" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>cancel</span>
                         </button>
                       )}
-                      <Link href="/provider/applications" className="w-7 h-7 flex items-center justify-center text-primary hover:bg-primary/10 rounded-6 transition-colors" title="View All">
+                      <Link href="/provider/applications" className="w-7 h-7 flex items-center justify-center text-primary hover:bg-primary/10 rounded-6 transition-colors shrink-0" title="View All">
                         <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>open_in_new</span>
                       </Link>
                     </div>

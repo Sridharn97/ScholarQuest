@@ -368,12 +368,15 @@ export default function ProviderApplicationsPage() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left">
+          <table className="w-full text-left table-fixed">
             <thead className="bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">
               <tr>
-                {['Student Applicant', 'Scholarship Program', 'Submission Date', 'Match Alignment', 'Status', 'Actions'].map((h) => (
-                  <th key={h} className="px-6 py-4 whitespace-nowrap">{h}</th>
-                ))}
+                <th className="px-4 py-3 w-[23%] text-xs whitespace-nowrap overflow-hidden text-ellipsis align-middle">Student Applicant</th>
+                <th className="px-4 py-3 w-[25%] text-xs whitespace-nowrap overflow-hidden text-ellipsis align-middle">Scholarship Program</th>
+                <th className="px-4 py-3 w-[14%] text-xs whitespace-nowrap overflow-hidden text-ellipsis align-middle">Submission Date</th>
+                <th className="px-4 py-3 w-[14%] text-xs whitespace-nowrap overflow-hidden text-ellipsis align-middle">Match Alignment</th>
+                <th className="px-4 py-3 w-[11%] text-xs whitespace-nowrap align-middle">Status</th>
+                <th className="px-4 py-3 w-[13%] text-xs whitespace-nowrap align-middle">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-outline-variant/20 bg-white text-body-lg">
@@ -389,58 +392,58 @@ export default function ProviderApplicationsPage() {
                 </tr>
               ) : filtered.map((row) => (
                 <tr key={row.id} className="hover:bg-surface-container-low hover:shadow-sm transition-all group">
-                  <td className="px-6 py-5">
-                    <div className="flex items-center gap-4">
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm shrink-0 shadow-sm group-hover:scale-105 transition-transform ${row.color}`}>
+                  <td className="px-4 py-4 whitespace-nowrap overflow-hidden text-ellipsis align-middle">
+                    <div className="flex items-center gap-3 w-full">
+                      <div className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm shrink-0 shadow-sm group-hover:scale-105 transition-transform ${row.color}`}>
                         {row.initials}
                       </div>
-                      <div>
-                        <p className="font-label-md text-on-surface whitespace-nowrap group-hover:text-primary transition-colors">{row.student}</p>
-                        <p className="font-body-sm text-xs text-on-surface-variant">{row.email}</p>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-label-md text-sm text-on-surface whitespace-nowrap overflow-hidden text-ellipsis group-hover:text-primary transition-colors">{row.student}</p>
+                        <p className="font-body-sm text-[11px] text-on-surface-variant whitespace-nowrap overflow-hidden text-ellipsis">{row.email}</p>
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-5 text-on-surface whitespace-nowrap font-body-md">{row.scholarship}</td>
-                  <td className="px-6 py-5 text-on-surface-variant whitespace-nowrap font-body-sm">{row.submitted}</td>
-                  <td className="px-6 py-5">
-                    <div className="flex items-center gap-3">
-                      <div className="w-24 h-2 bg-outline-variant/20 rounded-full overflow-hidden shadow-inner">
+                  <td className="px-4 py-4 text-on-surface text-sm whitespace-nowrap overflow-hidden text-ellipsis align-middle">{row.scholarship}</td>
+                  <td className="px-4 py-4 text-on-surface-variant text-xs whitespace-nowrap overflow-hidden text-ellipsis align-middle">{row.submitted}</td>
+                  <td className="px-4 py-4 whitespace-nowrap overflow-hidden text-ellipsis align-middle">
+                    <div className="flex items-center gap-2">
+                      <div className="w-20 h-1.5 bg-outline-variant/20 rounded-full overflow-hidden shadow-inner shrink-0">
                         <div className="bg-secondary h-full rounded-full group-hover:shadow-[0_0_8px_rgba(236,72,153,0.6)] transition-all" style={{ width: `${row.score}%` }} />
                       </div>
-                      <span className="font-label-sm font-bold whitespace-nowrap text-secondary">{row.score}%</span>
+                      <span className="text-xs font-bold text-secondary whitespace-nowrap">{row.score}%</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4">
-                    <span className={`px-3 py-1 rounded-full font-label-sm text-label-sm whitespace-nowrap ${STATUS_CONFIG[row.status]?.cls}`}>
+                  <td className="px-4 py-4 whitespace-nowrap align-middle">
+                    <span className={`inline-block px-2.5 py-1 rounded-full text-[11px] font-bold ${STATUS_CONFIG[row.status]?.cls}`}>
                       {row.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="flex gap-1">
+                  <td className="px-4 py-4 whitespace-nowrap align-middle">
+                    <div className="flex gap-0.5">
                       <button
                         onClick={() => setViewApp(row)}
-                        className="w-8 h-8 flex items-center justify-center text-primary hover:bg-primary/10 rounded-6 transition-colors"
+                        className="w-8 h-8 flex items-center justify-center text-primary hover:bg-primary/10 rounded-6 transition-colors shrink-0"
                         title="View Details"
                       >
                         <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>open_in_new</span>
                       </button>
                       <button
                         onClick={() => handleUpdateStatus(row.id, 'Approved')}
-                        className="w-8 h-8 flex items-center justify-center text-green-600 hover:bg-green-50 rounded-6 transition-colors"
+                        className="w-8 h-8 flex items-center justify-center text-green-600 hover:bg-green-50 rounded-6 transition-colors shrink-0"
                         title="Approve"
                       >
                         <span className="material-symbols-outlined" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>check_circle</span>
                       </button>
                       <button
                         onClick={() => handleUpdateStatus(row.id, 'Rejected')}
-                        className="w-8 h-8 flex items-center justify-center text-error hover:bg-error/10 rounded-6 transition-colors"
+                        className="w-8 h-8 flex items-center justify-center text-error hover:bg-error/10 rounded-6 transition-colors shrink-0"
                         title="Reject"
                       >
                         <span className="material-symbols-outlined" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>cancel</span>
                       </button>
                       <button
                         onClick={() => setDeleteConfirm(row.id)}
-                        className="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:text-error hover:bg-error/10 rounded-6 transition-colors"
+                        className="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:text-error hover:bg-error/10 rounded-6 transition-colors shrink-0"
                         title="Delete"
                       >
                         <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>delete</span>
