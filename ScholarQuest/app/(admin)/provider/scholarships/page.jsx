@@ -4,9 +4,9 @@ import Link from 'next/link';
 import { getAdminScholarships, updateAdminScholarship, deleteAdminScholarship } from '@/lib/store';
 
 const STATUS_CLS = {
-  Active: 'bg-emerald-50 text-emerald-600',
-  Draft: 'bg-slate-100 text-slate-600',
-  Closed: 'bg-slate-200 text-slate-600',
+  Active: 'bg-green-100 text-green-700',
+  Draft: 'bg-surface-variant text-on-surface-variant',
+  Closed: 'bg-outline-variant/30 text-on-surface-variant',
 };
 
 export default function ProviderScholarshipsPage() {
@@ -51,184 +51,176 @@ export default function ProviderScholarshipsPage() {
 
   const getAvatars = (applicants) => {
     if (!applicants || applicants < 2) {
-      return <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center text-[9px] font-bold text-blue-700 border-2 border-white z-10">S</div>;
+      return <div className="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-[10px] font-bold text-on-primary-container border-2 border-white z-10">S</div>;
     }
     if (applicants > 100) {
       return (
         <>
-          <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center text-[9px] font-bold text-blue-700 border-2 border-white z-10">JD</div>
-          <div className="w-7 h-7 rounded-full bg-pink-100 flex items-center justify-center text-[9px] font-bold text-pink-700 border-2 border-white z-20">ML</div>
-          <div className="w-7 h-7 rounded-full bg-emerald-100 flex items-center justify-center text-[9px] font-bold text-emerald-700 border-2 border-white z-30">+{applicants - 2}</div>
+          <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-[10px] font-bold text-blue-700 border-2 border-white z-10">JD</div>
+          <div className="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center text-[10px] font-bold text-pink-700 border-2 border-white z-20">ML</div>
+          <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-[10px] font-bold text-emerald-700 border-2 border-white z-30">+{applicants - 2}</div>
         </>
       );
     }
     return (
       <>
-        <div className="w-7 h-7 rounded-full bg-purple-100 flex items-center justify-center text-[9px] font-bold text-purple-700 border-2 border-white z-10">AK</div>
-        <div className="w-7 h-7 rounded-full bg-orange-100 flex items-center justify-center text-[9px] font-bold text-orange-700 border-2 border-white z-20">RB</div>
+        <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-[10px] font-bold text-purple-700 border-2 border-white z-10">AK</div>
+        <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-[10px] font-bold text-orange-700 border-2 border-white z-20">RB</div>
       </>
     );
   };
 
   return (
-    <div className="max-w-[1100px] mx-auto py-8">
+    <div>
       {toast && (
-        <div className="fixed top-6 right-6 z-50 bg-emerald-600 text-white px-5 py-3 rounded-2xl shadow-xl flex items-center gap-2 font-medium text-sm">
-          <span className="material-symbols-outlined text-[20px]">check_circle</span>
+        <div className="fixed top-6 right-6 z-50 bg-green-600 text-white px-5 py-3 rounded-2xl shadow-xl flex items-center gap-2 font-label-md">
+          <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>check_circle</span>
           {toast}
         </div>
       )}
 
       {/* Delete Confirmation Modal */}
       {deleteConfirm && (
-        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setDeleteConfirm(null)}>
+        <div className="fixed inset-0 z-50 bg-on-surface/40 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setDeleteConfirm(null)}>
           <div className="bg-white rounded-3xl p-8 w-full max-w-sm shadow-2xl text-center" onClick={e => e.stopPropagation()}>
-            <span className="material-symbols-outlined text-red-500 text-[48px] mb-2" style={{ fontVariationSettings: "'FILL' 1" }}>delete_forever</span>
-            <h3 className="text-xl font-bold text-slate-900 mb-2">Delete Scholarship?</h3>
-            <p className="text-slate-500 text-sm mb-8">This will remove the program permanently. This action cannot be undone.</p>
+            <span className="material-symbols-outlined text-error text-[48px] mb-2" style={{ fontVariationSettings: "'FILL' 1" }}>delete_forever</span>
+            <h3 className="font-headline-md text-headline-md text-on-surface mb-2">Delete Scholarship?</h3>
+            <p className="font-body-md text-on-surface-variant mb-8">This will remove the program permanently. This action cannot be undone.</p>
             <div className="flex gap-3">
-              <button onClick={() => setDeleteConfirm(null)} className="flex-1 py-3 border border-slate-200 rounded-xl font-bold text-sm text-slate-700 hover:bg-slate-50 transition-colors">Cancel</button>
-              <button onClick={() => handleDelete(deleteConfirm)} className="flex-1 py-3 bg-red-600 text-white rounded-xl font-bold text-sm hover:bg-red-700 transition-colors">Delete</button>
+              <button onClick={() => setDeleteConfirm(null)} className="flex-1 py-3 border border-outline-variant rounded-xl font-label-md text-on-surface hover:bg-surface-container-low transition-colors">Cancel</button>
+              <button onClick={() => handleDelete(deleteConfirm)} className="flex-1 py-3 bg-error text-white rounded-xl font-label-md hover:bg-red-700 transition-colors">Delete</button>
             </div>
           </div>
         </div>
       )}
 
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-12">
         <div>
-          <h2 className="text-[28px] font-bold text-slate-900 tracking-tight">Posted Scholarships</h2>
-          <p className="text-slate-500 mt-1.5 text-[14px]">Manage, track, and optimize your organization's funding opportunities.</p>
+          <h2 className="font-headline-lg text-3xl font-bold text-on-surface">Posted Scholarships</h2>
+          <p className="text-body-lg text-on-surface-variant mt-2">Manage, track, and optimize your organization's funding opportunities.</p>
         </div>
-        <div className="flex items-center gap-3">
-          <button className="flex items-center gap-2 px-4 py-2 border border-slate-200 rounded-lg text-slate-700 hover:bg-slate-50 text-sm font-semibold transition-colors bg-white shadow-sm">
-            <span className="material-symbols-outlined text-[18px]">filter_list</span>
-            Filters
-          </button>
-          <div className="relative shadow-sm">
+        <div className="flex items-center gap-4">
+          <div className="relative">
+            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant" style={{ fontSize: '20px' }}>search</span>
+            <input
+              type="text"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Search programs..."
+              className="w-64 bg-surface-container-lowest border border-outline-variant/30 rounded-xl py-2.5 pl-11 pr-4 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+            />
+          </div>
+          <div className="relative">
             <select
               value={activeFilter}
               onChange={(e) => setActiveFilter(e.target.value)}
-              className="appearance-none bg-white border border-slate-200 rounded-lg py-2 pl-4 pr-10 text-sm font-semibold text-slate-700 hover:bg-slate-50 outline-none cursor-pointer"
+              className="appearance-none bg-surface-container-lowest border border-outline-variant/30 rounded-xl py-2.5 pl-4 pr-10 text-sm font-label-md text-on-surface outline-none cursor-pointer focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
             >
               <option value="All">All Statuses</option>
               <option value="Active">Active</option>
               <option value="Closed">Closed</option>
               <option value="Draft">Draft</option>
             </select>
-            <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none text-[18px]">expand_more</span>
+            <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-[18px]">expand_more</span>
           </div>
         </div>
       </div>
 
-      {/* Top Stats */}
-      <div className="grid grid-cols-4 gap-6 mb-10">
-        <div className="bg-white rounded-[20px] p-5 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] border border-slate-100 flex items-center gap-4">
-          <div className="w-11 h-11 rounded-xl bg-blue-50 text-[#003B95] flex items-center justify-center">
-            <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>verified_user</span>
+      {/* Stats Row */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        {[
+          { label: 'Active Programs', value: scholarships.filter(s => s.status === 'Active').length, icon: 'verified_user', cls: 'bg-primary/10 text-primary', trend: '+2 this month', trendUp: true },
+          { label: 'Total Applicants', value: '4,281', icon: 'group', cls: 'bg-blue-100 text-blue-700', trend: '+12% MoM', trendUp: true },
+          { label: 'Total Awarded', value: '$125,000', icon: 'payments', cls: 'bg-green-100 text-green-700', trend: '+5% YoY', trendUp: true },
+          { label: 'Pending Review', value: '142', icon: 'schedule', cls: 'bg-orange-100 text-orange-700', trend: 'Needs action', trendUp: false },
+        ].map((stat) => (
+          <div key={stat.label} className="relative overflow-hidden clean-card p-6 rounded-2xl hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
+            <div className="flex justify-between items-start mb-3">
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${stat.cls} shadow-inner`}>
+                <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1", fontSize: '20px' }}>{stat.icon}</span>
+              </div>
+              <div className={`flex items-center gap-1 font-label-sm text-[11px] px-2 py-0.5 rounded-full ${stat.trendUp ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+                <span className="material-symbols-outlined" style={{ fontSize: '12px' }}>{stat.trendUp ? 'trending_up' : 'priority_high'}</span>
+                {stat.trend}
+              </div>
+            </div>
+            <p className="font-label-sm text-on-surface-variant mb-0.5">{stat.label}</p>
+            <h4 className="font-headline-md text-2xl text-on-surface">{stat.value}</h4>
           </div>
-          <div>
-            <div className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-0.5">Active Programs</div>
-            <div className="text-[22px] font-bold text-slate-900 leading-none">12</div>
-          </div>
-        </div>
-        <div className="bg-white rounded-[20px] p-5 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] border border-slate-100 flex items-center gap-4">
-          <div className="w-11 h-11 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
-            <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>group</span>
-          </div>
-          <div>
-            <div className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-0.5">Total Applicants</div>
-            <div className="text-[22px] font-bold text-slate-900 leading-none">4,281</div>
-          </div>
-        </div>
-        <div className="bg-white rounded-[20px] p-5 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] border border-slate-100 flex items-center gap-4">
-          <div className="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-            <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>payments</span>
-          </div>
-          <div>
-            <div className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-0.5">Total Awarded</div>
-            <div className="text-[22px] font-bold text-slate-900 leading-none">$125,000</div>
-          </div>
-        </div>
-        <div className="bg-white rounded-[20px] p-5 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] border border-slate-100 flex items-center gap-4">
-          <div className="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
-            <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>schedule</span>
-          </div>
-          <div>
-            <div className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-0.5">Pending Review</div>
-            <div className="text-[22px] font-bold text-slate-900 leading-none">142</div>
-          </div>
-        </div>
+        ))}
       </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filtered.map((program) => (
-          <div key={program.id} className="bg-white rounded-[24px] p-6 shadow-[0_8px_30px_-12px_rgba(0,0,0,0.06)] border border-slate-100 flex flex-col h-[320px]">
-            <div className="flex justify-between items-center mb-5">
-              <span className={`px-2.5 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider ${STATUS_CLS[program.status] || STATUS_CLS.Draft}`}>
+          <div key={program.id} className="clean-card p-6 rounded-2xl flex flex-col hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group relative">
+            <div className="flex justify-between items-start mb-4">
+              <span className={`px-2.5 py-1 rounded-full font-label-sm text-[10px] uppercase tracking-wider ${STATUS_CLS[program.status] || STATUS_CLS.Draft}`}>
                 {program.status}
               </span>
-              <span className="text-[9px] text-slate-300 font-bold uppercase tracking-widest">{program.category || 'STEM'}</span>
-            </div>
-            
-            <h3 className="font-bold text-[18px] text-slate-800 mb-1 leading-snug line-clamp-2">{program.name}</h3>
-            <div className="flex items-baseline gap-1.5 mb-5">
-              <span className="font-bold text-[18px] text-[#003B95]">{program.amount}</span>
-              <span className="text-[12px] text-slate-400 font-medium">Total Grant</span>
-            </div>
-
-            <div className="bg-slate-50 rounded-2xl p-4 flex justify-between items-center mb-auto border border-slate-100/50">
-              <div>
-                <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Applicants</div>
-                <div className="flex items-baseline gap-1.5">
-                  <span className="text-[20px] font-bold text-slate-800 leading-none">{program.applicants || 0}</span>
-                  <span className={`text-[10px] font-semibold ${program.status === 'Closed' ? 'text-slate-400' : 'text-blue-500'}`}>
-                    {program.status === 'Closed' ? 'Final Count' : '+0 today'}
-                  </span>
-                </div>
-              </div>
-              <div className="flex -space-x-1.5">
-                {getAvatars(program.applicants)}
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between pt-5">
-              {program.status === 'Closed' ? (
-                <button className="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2.5 px-5 rounded-xl text-[13px] transition-colors">
-                  View Report
-                </button>
-              ) : (
-                <button className="bg-[#003B95] hover:bg-blue-800 text-white font-bold py-2.5 px-5 rounded-xl text-[13px] transition-colors">
-                  Manage Applicants
-                </button>
-              )}
-              
               <div className="flex items-center gap-1">
                 <button 
-                  onClick={() => handleToggleStatus(program.id, program.status)} // Not optimal since pencil usually means edit, but keeping functionality same
-                  className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
+                  onClick={() => handleToggleStatus(program.id, program.status)}
+                  className="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-primary/10 rounded-full transition-colors"
+                  title="Toggle Status"
                 >
-                  <span className="material-symbols-outlined text-[18px]">edit</span>
+                  <span className="material-symbols-outlined text-[18px]">sync_alt</span>
                 </button>
                 <button 
                   onClick={() => setDeleteConfirm(program.id)}
-                  className="w-8 h-8 flex items-center justify-center text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                  className="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:text-error hover:bg-error/10 rounded-full transition-colors"
+                  title="Delete"
                 >
                   <span className="material-symbols-outlined text-[18px]">delete</span>
                 </button>
               </div>
             </div>
+            
+            <h3 className="font-headline-md text-xl text-on-surface mb-1 line-clamp-2 pr-4">{program.name}</h3>
+            <p className="font-body-sm text-on-surface-variant mb-4">{program.category || 'STEM'}</p>
+            
+            <div className="flex items-baseline gap-1.5 mb-6">
+              <span className="font-headline-md text-2xl text-primary font-bold">{program.amount}</span>
+              <span className="font-label-sm text-on-surface-variant">Total Grant</span>
+            </div>
+
+            <div className="bg-surface-container-lowest rounded-xl p-4 flex justify-between items-center mb-6 border border-outline-variant/30">
+              <div>
+                <div className="font-label-sm text-[10px] text-on-surface-variant uppercase tracking-widest mb-1">Applicants</div>
+                <div className="flex items-baseline gap-2">
+                  <span className="font-headline-md text-xl text-on-surface">{program.applicants || 0}</span>
+                  <span className={`font-label-sm text-[11px] ${program.status === 'Closed' ? 'text-on-surface-variant' : 'text-green-600'}`}>
+                    {program.status === 'Closed' ? 'Final Count' : '+0 today'}
+                  </span>
+                </div>
+              </div>
+              <div className="flex -space-x-2">
+                {getAvatars(program.applicants)}
+              </div>
+            </div>
+
+            <div className="mt-auto">
+              {program.status === 'Closed' ? (
+                <Link href="/provider/reports" className="w-full block text-center bg-surface-container text-on-surface font-label-md py-3 px-5 rounded-xl hover:bg-surface-container-high transition-colors">
+                  View Report
+                </Link>
+              ) : (
+                <Link href="/provider/applications" className="w-full block text-center bg-primary text-white font-label-md py-3 px-5 rounded-xl hover:opacity-90 transition-opacity">
+                  Manage Applicants
+                </Link>
+              )}
+            </div>
           </div>
         ))}
 
         {/* Post New Scholarship Card */}
-        <Link href="/provider/scholarships/new" className="bg-slate-50/50 rounded-[24px] border-2 border-dashed border-slate-200 flex flex-col items-center justify-center h-[320px] hover:bg-slate-50 hover:border-slate-300 transition-all group cursor-pointer p-6 text-center">
-          <div className="w-14 h-14 rounded-full bg-white border border-slate-200 shadow-sm flex items-center justify-center text-[#003B95] mb-4 group-hover:scale-110 transition-transform">
-            <span className="material-symbols-outlined text-[24px]">add</span>
+        <Link href="/provider/scholarships/new" className="clean-card rounded-2xl border-2 border-dashed border-outline-variant/50 flex flex-col items-center justify-center h-full min-h-[350px] hover:bg-surface-container-lowest hover:border-primary/50 transition-all group p-6 text-center shadow-none hover:shadow-md">
+          <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-4 group-hover:scale-110 transition-transform">
+            <span className="material-symbols-outlined text-[32px]">add</span>
           </div>
-          <h3 className="font-bold text-[16px] text-slate-800 mb-2">Post New Scholarship</h3>
-          <p className="text-[13px] text-slate-500 max-w-[180px] leading-relaxed">Reach thousands of eligible students today.</p>
+          <h3 className="font-headline-md text-xl text-on-surface mb-2 group-hover:text-primary transition-colors">Post New Scholarship</h3>
+          <p className="font-body-md text-on-surface-variant max-w-[200px]">Reach thousands of eligible students today.</p>
         </Link>
       </div>
     </div>
