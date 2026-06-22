@@ -368,15 +368,15 @@ export default function ProviderApplicationsPage() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left table-fixed">
+          <table className="w-full text-left">
             <thead className="bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">
               <tr>
-                <th className="px-4 py-3 w-[23%] text-xs whitespace-nowrap overflow-hidden text-ellipsis align-middle">Student Applicant</th>
-                <th className="px-4 py-3 w-[25%] text-xs whitespace-nowrap overflow-hidden text-ellipsis align-middle">Scholarship Program</th>
-                <th className="px-4 py-3 w-[14%] text-xs whitespace-nowrap overflow-hidden text-ellipsis align-middle">Submission Date</th>
-                <th className="px-4 py-3 w-[14%] text-xs whitespace-nowrap overflow-hidden text-ellipsis align-middle">Match Alignment</th>
-                <th className="px-4 py-3 w-[11%] text-xs whitespace-nowrap align-middle">Status</th>
-                <th className="px-4 py-3 w-[13%] text-xs whitespace-nowrap align-middle">Actions</th>
+                <th className="px-4 py-3 text-xs whitespace-nowrap align-middle">Student Applicant</th>
+                <th className="px-4 py-3 text-xs whitespace-nowrap align-middle">Scholarship Program</th>
+                <th className="px-4 py-3 text-xs whitespace-nowrap align-middle">Submission Date</th>
+                <th className="px-4 py-3 text-xs whitespace-nowrap align-middle">Match Alignment</th>
+                <th className="px-4 py-3 text-xs whitespace-nowrap align-middle">Status</th>
+                <th className="px-4 py-3 text-xs whitespace-nowrap align-middle">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-outline-variant/20 bg-white text-body-lg">
@@ -392,20 +392,20 @@ export default function ProviderApplicationsPage() {
                 </tr>
               ) : filtered.map((row) => (
                 <tr key={row.id} className="hover:bg-surface-container-low hover:shadow-sm transition-all group">
-                  <td className="px-4 py-4 whitespace-nowrap overflow-hidden text-ellipsis align-middle">
+                  <td className="px-4 py-4 whitespace-nowrap align-middle">
                     <div className="flex items-center gap-3 w-full">
                       <div className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm shrink-0 shadow-sm group-hover:scale-105 transition-transform ${row.color}`}>
                         {row.initials}
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="font-label-md text-sm text-on-surface whitespace-nowrap overflow-hidden text-ellipsis group-hover:text-primary transition-colors">{row.student}</p>
-                        <p className="font-body-sm text-[11px] text-on-surface-variant whitespace-nowrap overflow-hidden text-ellipsis">{row.email}</p>
+                        <p className="font-label-md text-sm text-on-surface whitespace-nowrap group-hover:text-primary transition-colors">{row.student}</p>
+                        <p className="font-body-sm text-[11px] text-on-surface-variant whitespace-nowrap">{row.email}</p>
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-4 text-on-surface text-sm whitespace-nowrap overflow-hidden text-ellipsis align-middle">{row.scholarship}</td>
-                  <td className="px-4 py-4 text-on-surface-variant text-xs whitespace-nowrap overflow-hidden text-ellipsis align-middle">{row.submitted}</td>
-                  <td className="px-4 py-4 whitespace-nowrap overflow-hidden text-ellipsis align-middle">
+                  <td className="px-4 py-4 text-on-surface text-sm whitespace-nowrap align-middle">{row.scholarship}</td>
+                  <td className="px-4 py-4 text-on-surface-variant text-xs whitespace-nowrap align-middle">{row.submitted}</td>
+                  <td className="px-4 py-4 whitespace-nowrap align-middle">
                     <div className="flex items-center gap-2">
                       <div className="w-20 h-1.5 bg-outline-variant/20 rounded-full overflow-hidden shadow-inner shrink-0">
                         <div className="bg-secondary h-full rounded-full group-hover:shadow-[0_0_8px_rgba(236,72,153,0.6)] transition-all" style={{ width: `${row.score}%` }} />
@@ -427,20 +427,24 @@ export default function ProviderApplicationsPage() {
                       >
                         <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>open_in_new</span>
                       </button>
-                      <button
-                        onClick={() => handleUpdateStatus(row.id, 'Approved')}
-                        className="w-8 h-8 flex items-center justify-center text-green-600 hover:bg-green-50 rounded-6 transition-colors shrink-0"
-                        title="Approve"
-                      >
-                        <span className="material-symbols-outlined" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                      </button>
-                      <button
-                        onClick={() => handleUpdateStatus(row.id, 'Rejected')}
-                        className="w-8 h-8 flex items-center justify-center text-error hover:bg-error/10 rounded-6 transition-colors shrink-0"
-                        title="Reject"
-                      >
-                        <span className="material-symbols-outlined" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>cancel</span>
-                      </button>
+                      {row.status !== 'Approved' && (
+                        <button
+                          onClick={() => handleUpdateStatus(row.id, 'Approved')}
+                          className="w-8 h-8 flex items-center justify-center text-green-600 hover:bg-green-50 rounded-6 transition-colors shrink-0"
+                          title="Approve"
+                        >
+                          <span className="material-symbols-outlined" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                        </button>
+                      )}
+                      {row.status !== 'Rejected' && (
+                        <button
+                          onClick={() => handleUpdateStatus(row.id, 'Rejected')}
+                          className="w-8 h-8 flex items-center justify-center text-error hover:bg-error/10 rounded-6 transition-colors shrink-0"
+                          title="Reject"
+                        >
+                          <span className="material-symbols-outlined" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>cancel</span>
+                        </button>
+                      )}
                       <button
                         onClick={() => setDeleteConfirm(row.id)}
                         className="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:text-error hover:bg-error/10 rounded-6 transition-colors shrink-0"

@@ -136,15 +136,15 @@ export default function ProviderDashboard() {
           <Link href="/provider/applications" className="text-primary font-label-md text-label-md hover:underline">View All</Link>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full text-left table-fixed">
+          <table className="w-full text-left">
             <thead className="bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">
               <tr>
-                <th className="px-4 py-3 w-[23%] text-xs whitespace-nowrap overflow-hidden text-ellipsis align-middle">Student</th>
-                <th className="px-4 py-3 w-[25%] text-xs whitespace-nowrap overflow-hidden text-ellipsis align-middle">Scholarship Program</th>
-                <th className="px-4 py-3 w-[14%] text-xs whitespace-nowrap overflow-hidden text-ellipsis align-middle">Submission Date</th>
-                <th className="px-4 py-3 w-[14%] text-xs whitespace-nowrap overflow-hidden text-ellipsis align-middle">Match Score</th>
-                <th className="px-4 py-3 w-[11%] text-xs whitespace-nowrap align-middle">Status</th>
-                <th className="px-4 py-3 w-[13%] text-xs whitespace-nowrap align-middle">Quick Actions</th>
+                <th className="px-4 py-3 text-xs whitespace-nowrap align-middle">Student</th>
+                <th className="px-4 py-3 text-xs whitespace-nowrap align-middle">Scholarship Program</th>
+                <th className="px-4 py-3 text-xs whitespace-nowrap align-middle">Submission Date</th>
+                <th className="px-4 py-3 text-xs whitespace-nowrap align-middle">Match Score</th>
+                <th className="px-4 py-3 text-xs whitespace-nowrap align-middle">Status</th>
+                <th className="px-4 py-3 text-xs whitespace-nowrap align-middle">Quick Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-outline-variant/30 text-body-md">
@@ -156,15 +156,15 @@ export default function ProviderDashboard() {
                 </tr>
               ) : recentApplications.map((row) => (
                 <tr key={row.id} className="hover:bg-surface-container-low transition-colors">
-                  <td className="px-4 py-4 whitespace-nowrap overflow-hidden text-ellipsis align-middle">
+                  <td className="px-4 py-4 whitespace-nowrap align-middle">
                     <div className="flex items-center gap-3 w-full">
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${row.color}`}>{row.initials}</div>
-                      <span className="whitespace-nowrap overflow-hidden text-ellipsis min-w-0 text-sm">{row.student}</span>
+                      <span className="whitespace-nowrap text-sm">{row.student}</span>
                     </div>
                   </td>
-                  <td className="px-4 py-4 whitespace-nowrap overflow-hidden text-ellipsis align-middle text-sm">{row.scholarship}</td>
-                  <td className="px-4 py-4 whitespace-nowrap overflow-hidden text-ellipsis align-middle text-xs">{row.submitted}</td>
-                  <td className="px-4 py-4 whitespace-nowrap overflow-hidden text-ellipsis align-middle">
+                  <td className="px-4 py-4 whitespace-nowrap align-middle text-sm">{row.scholarship}</td>
+                  <td className="px-4 py-4 whitespace-nowrap align-middle text-xs">{row.submitted}</td>
+                  <td className="px-4 py-4 whitespace-nowrap align-middle">
                     <div className="flex items-center gap-2">
                       <div className="w-20 h-1.5 bg-outline-variant/20 rounded-full overflow-hidden shrink-0">
                         <div className="bg-secondary h-full" style={{ width: `${row.score}%` }} />
