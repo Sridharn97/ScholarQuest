@@ -392,20 +392,7 @@ export default function TrackerPage() {
               </div>
 
               <div>
-                <label className="text-sm font-medium text-on-surface mb-1.5 block">2. Verify Enrollment</label>
-                <div className="border border-dashed border-outline-variant/50 rounded-lg p-4 flex flex-col sm:flex-row items-center justify-between gap-3 bg-surface-container-low">
-                  <div className="flex items-center gap-2 text-on-surface-variant">
-                    <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>upload_file</span>
-                    <span className="text-sm">Upload transcript</span>
-                  </div>
-                  <button className="px-3 py-1.5 bg-surface border border-outline-variant/50 text-on-surface rounded-md text-xs font-medium hover:bg-surface-container transition-colors">
-                    Browse
-                  </button>
-                </div>
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-on-surface mb-1.5 block">3. Disbursement Method</label>
+                <label className="text-sm font-medium text-on-surface mb-1.5 block">2. Disbursement Method</label>
                 <div className="grid grid-cols-2 gap-3">
                   <button 
                     onClick={() => setDisbursementMethod('direct')}
