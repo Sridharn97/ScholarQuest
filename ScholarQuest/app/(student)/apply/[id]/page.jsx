@@ -317,6 +317,21 @@ export default function ApplyPage({ params }) {
                           className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all resize-none"
                           required
                         />
+                      ) : q.type === 'multiple_choice' ? (
+                        <div className="relative">
+                          <select
+                            value={customResponses[q.id]?.answer || ''}
+                            onChange={(e) => setCustomResponses({ ...customResponses, [q.id]: { question: q.text, answer: e.target.value, type: q.type } })}
+                            className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md text-on-surface outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all appearance-none cursor-pointer"
+                            required
+                          >
+                            <option value="" disabled>Select an option</option>
+                            {(q.options || '').split(',').map((opt, i) => (
+                              <option key={i} value={opt.trim()}>{opt.trim()}</option>
+                            ))}
+                          </select>
+                          <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none" style={{ fontSize: '20px' }}>expand_more</span>
+                        </div>
                       ) : (
                         <div className="mt-2 flex items-center justify-center w-full">
                           <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-outline-variant border-dashed rounded-10 cursor-pointer bg-surface-container-lowest hover:bg-surface-container-low transition-colors">

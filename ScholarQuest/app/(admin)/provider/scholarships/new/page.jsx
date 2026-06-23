@@ -272,47 +272,62 @@ export default function PostScholarshipPage() {
                 {/* Questions List */}
                 <div className="p-6 space-y-4">
                   {section.questions.map((q, qIdx) => (
-                    <div key={q.id} className="flex flex-col sm:flex-row gap-4 items-start sm:items-center group/question relative">
-                      {/* Drag handle placeholder - purely visual */}
-                      <div className="hidden sm:flex text-outline-variant group-hover/question:text-on-surface-variant transition-colors cursor-grab">
-                        <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>drag_indicator</span>
-                      </div>
-                      
-                      <div className="flex-1 w-full">
-                        <input
-                          type="text"
-                          value={q.text}
-                          onChange={(e) => updateQuestion(section.id, q.id, 'text', e.target.value)}
-                          placeholder="What do you want to ask?"
-                          className="w-full px-4 py-3 bg-white border border-outline-variant/50 rounded-xl font-body-md text-on-surface outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all hover:border-outline-variant"
-                          required
-                        />
-                      </div>
-                      
-                      <div className="w-full sm:w-auto flex items-center gap-3">
-                        <div className="relative flex-1 sm:w-48">
-                          <select
-                            value={q.type}
-                            onChange={(e) => updateQuestion(section.id, q.id, 'type', e.target.value)}
-                            className="w-full px-4 py-3 bg-white border border-outline-variant/50 rounded-xl font-body-md text-on-surface outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all appearance-none cursor-pointer hover:border-outline-variant"
-                          >
-                            <option value="text">Text Response</option>
-                            <option value=".pdf">PDF Document</option>
-                            <option value=".png">PNG Image</option>
-                            <option value=".jpg">JPG Image</option>
-                          </select>
-                          <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none" style={{ fontSize: '18px' }}>expand_more</span>
+                    <div key={q.id} className="flex flex-col gap-3 group/question relative">
+                      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                        {/* Drag handle placeholder - purely visual */}
+                        <div className="hidden sm:flex text-outline-variant group-hover/question:text-on-surface-variant transition-colors cursor-grab">
+                          <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>drag_indicator</span>
                         </div>
                         
-                        <button
-                          type="button"
-                          onClick={() => removeQuestion(section.id, q.id)}
-                          className="w-10 h-10 flex items-center justify-center text-on-surface-variant hover:text-error hover:bg-error/10 rounded-full transition-colors shrink-0"
-                          title="Remove Question"
-                        >
-                          <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>close</span>
-                        </button>
+                        <div className="flex-1 w-full">
+                          <input
+                            type="text"
+                            value={q.text}
+                            onChange={(e) => updateQuestion(section.id, q.id, 'text', e.target.value)}
+                            placeholder="What do you want to ask?"
+                            className="w-full px-4 py-3 bg-white border border-outline-variant/50 rounded-xl font-body-md text-on-surface outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all hover:border-outline-variant"
+                            required
+                          />
+                        </div>
+                        
+                        <div className="w-full sm:w-auto flex items-center gap-3">
+                          <div className="relative flex-1 sm:w-48">
+                            <select
+                              value={q.type}
+                              onChange={(e) => updateQuestion(section.id, q.id, 'type', e.target.value)}
+                              className="w-full px-4 py-3 bg-white border border-outline-variant/50 rounded-xl font-body-md text-on-surface outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all appearance-none cursor-pointer hover:border-outline-variant"
+                            >
+                              <option value="text">Text Response</option>
+                              <option value="multiple_choice">Multiple Choice</option>
+                              <option value=".pdf">PDF Document</option>
+                              <option value=".png">PNG Image</option>
+                              <option value=".jpg">JPG Image</option>
+                            </select>
+                            <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none" style={{ fontSize: '18px' }}>expand_more</span>
+                          </div>
+                          
+                          <button
+                            type="button"
+                            onClick={() => removeQuestion(section.id, q.id)}
+                            className="w-10 h-10 flex items-center justify-center text-on-surface-variant hover:text-error hover:bg-error/10 rounded-full transition-colors shrink-0"
+                            title="Remove Question"
+                          >
+                            <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>close</span>
+                          </button>
+                        </div>
                       </div>
+                      {q.type === 'multiple_choice' && (
+                        <div className="w-full sm:pl-9">
+                          <input
+                            type="text"
+                            value={q.options || ''}
+                            onChange={(e) => updateQuestion(section.id, q.id, 'options', e.target.value)}
+                            placeholder="Enter options separated by commas (e.g. Male, Female, Other)"
+                            className="w-full px-4 py-3 bg-white border border-outline-variant/50 rounded-xl font-body-md text-on-surface outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all hover:border-outline-variant"
+                            required
+                          />
+                        </div>
+                      )}
                     </div>
                   ))}
                   
