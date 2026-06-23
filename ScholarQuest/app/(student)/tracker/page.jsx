@@ -24,6 +24,14 @@ export default function TrackerPage() {
     return () => window.removeEventListener('sq_update', load);
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = () => {
+      if (showMoveMenu) setShowMoveMenu(null);
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [showMoveMenu]);
+
   const showToast = (msg) => {
     setToast(msg);
     setTimeout(() => setToast(''), 3000);
@@ -83,57 +91,266 @@ export default function TrackerPage() {
   };
 
   return (
-    <div className="flex h-[calc(100vh-64px)] overflow-hidden bg-surface-container-low">
+    <div className="flex flex-col h-[calc(100vh-64px)] overflow-hidden bg-background font-sans text-on-surface">
+      
       {/* Toast */}
       {toast && (
-        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-on-surface text-surface px-5 py-3 rounded-2xl shadow-xl font-label-md animate-subtle-float">
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-inverse-surface text-inverse-on-surface px-4 py-2 rounded-xl shadow-lg text-sm flex items-center gap-2 transition-all">
+          <span className="material-symbols-outlined text-primary" style={{ fontSize: '16px' }}>check_circle</span>
           {toast}
+        </div>
+      )}
+
+      {/* Header */}
+      <div className="px-8 py-5 bg-surface border-b border-outline-variant/30 z-10 shrink-0 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight text-on-surface">
+            Applications
+          </h1>
+        </div>
+        <div className="flex items-center gap-6">
+          <div className="hidden lg:flex items-center gap-6 text-sm">
+             <div className="flex flex-col">
+                <span className="text-on-surface-variant font-medium text-xs uppercase tracking-wider mb-0.5">Total</span>
+                <span className="font-semibold text-on-surface">{columns.reduce((a,c) => a + c.cards.length, 0)}</span>
+             </div>
+             <div className="w-px h-8 bg-outline-variant/30" />
+             <div className="flex flex-col">
+                <span className="text-on-surface-variant font-medium text-xs uppercase tracking-wider mb-0.5">Active</span>
+                <span className="font-semibold text-on-surface">{columns.find(c => c.id === 'col_preparing')?.cards.length || 0}</span>
+             </div>
+          </div>
+          <button
+            onClick={() => { setAddToCol('col_preparing'); setShowAddModal(true); }}
+            className="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded-xl text-sm font-medium hover:opacity-90 transition-opacity"
+          >
+            <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>add</span>
+            New Application
+          </button>
+        </div>
+      </div>
+
+      {/* Kanban Board */}
+      <div className="flex-1 overflow-x-auto overflow-y-hidden p-6 md:p-8 z-10">
+        <div className="flex gap-6 h-full pb-4" style={{ minWidth: `${columns.length * 340}px` }}>
+          {columns.map((col) => {
+            let dotColor = 'bg-outline-variant';
+            if (col.id === 'col_preparing') dotColor = 'bg-tertiary';
+            if (col.id === 'col_applied') dotColor = 'bg-blue-500';
+            if (col.id === 'col_interviews') dotColor = 'bg-primary';
+            if (col.id === 'col_offers') dotColor = 'bg-green-500';
+
+            return (
+            <div key={col.id} className="flex flex-col h-full overflow-hidden" style={{ width: '340px', flexShrink: 0 }}>
+              {/* Column Header */}
+              <div className="flex items-center justify-between pb-3 mb-2 sticky top-0 z-10">
+                <div className="flex items-center gap-2">
+                  <div className={`w-2 h-2 rounded-full ${dotColor}`} />
+                  <h3 className="text-sm font-medium text-on-surface">{col.label}</h3>
+                  <span className="ml-1 px-1.5 py-0.5 rounded-md bg-surface-container text-on-surface-variant text-xs font-medium border border-outline-variant/20">
+                    {col.cards.length}
+                  </span>
+                </div>
+                <button
+                  onClick={() => { setAddToCol(col.id); setShowAddModal(true); }}
+                  className="w-6 h-6 flex items-center justify-center rounded text-outline-variant hover:bg-surface-container hover:text-on-surface transition-colors"
+                >
+                  <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>add</span>
+                </button>
+              </div>
+
+              {/* Cards Container */}
+              <div className="flex-1 overflow-y-auto space-y-3 relative scroll-smooth pr-1 pb-4">
+                {col.cards.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center border border-dashed border-outline-variant/40 rounded-xl h-24 bg-surface-container-lowest mt-1">
+                    <p className="text-xs text-on-surface-variant">No applications</p>
+                  </div>
+                ) : (
+                  col.cards.map((card) => (
+                    <div
+                      key={card.id}
+                      className={`group relative bg-surface-container-lowest p-5 rounded-xl border border-outline-variant/40 shadow-sm hover:border-primary/50 transition-colors ${card.accepted ? 'border-green-200 bg-green-50/30' : ''}`}
+                    >
+                      {/* Move Button (Hover) */}
+                      <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); setShowMoveMenu({ cardId: card.id, fromColId: col.id }); }}
+                          className="w-6 h-6 flex items-center justify-center bg-surface border border-outline-variant/50 text-on-surface-variant hover:text-primary rounded shadow-sm hover:bg-surface-container-low transition-colors"
+                        >
+                          <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>more_horiz</span>
+                        </button>
+                      </div>
+
+                      {/* Type Badge */}
+                      {card.type && (
+                        <div className="mb-2">
+                          <span className="inline-flex px-2.5 py-1 rounded bg-surface-container text-on-surface-variant text-xs font-medium tracking-wide uppercase border border-outline-variant/20">
+                            {card.type}
+                          </span>
+                        </div>
+                      )}
+
+                      <h4 className="text-base font-bold text-on-surface leading-snug mb-2 pr-6">{card.title}</h4>
+                      
+                      {card.amount && !card.accepted && (
+                        <div className="text-base font-semibold text-primary mb-3">
+                          {card.amount}
+                        </div>
+                      )}
+
+                      {/* Progress Line */}
+                      {card.progress && (
+                        <div className="mt-3 mb-1">
+                          <div className="flex justify-between items-end mb-1.5">
+                            <span className="text-xs text-on-surface-variant font-medium">{card.progressLabel}</span>
+                            <span className="text-xs text-on-surface-variant">{card.progress}%</span>
+                          </div>
+                          <div className="w-full bg-surface-container-high h-1 rounded-full overflow-hidden">
+                            <div className="bg-primary h-full rounded-full" style={{ width: `${card.progress}%` }} />
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-outline-variant/20">
+                        {/* Urgent */}
+                        {card.urgentLabel && (
+                          <div className="flex items-center gap-1 text-error">
+                            <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>schedule</span>
+                            <span className="text-xs font-medium">{card.urgentLabel}</span>
+                          </div>
+                        )}
+
+                        {/* Date */}
+                        {card.date && (
+                          <div className="flex items-center gap-1 text-on-surface-variant">
+                            <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>event</span>
+                            <span className="text-xs">{card.date}</span>
+                          </div>
+                        )}
+
+                        {/* Submitted */}
+                        {card.submitted && (
+                          <div className="flex items-center gap-1 text-on-surface-variant bg-surface-container px-1.5 py-0.5 rounded">
+                            <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>check</span>
+                            <span className="text-xs font-medium">{card.submitted}</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Accepted */}
+                      {card.accepted && (
+                        <div className="mt-4 pt-3 border-t border-green-100">
+                          <p className="text-green-700 font-semibold text-sm mb-2">
+                            Offer: {card.amount}
+                          </p>
+                          <button
+                            onClick={() => handleAcceptOffer(card, col.id)}
+                            className="w-full py-1.5 bg-green-600 text-white text-xs font-medium rounded hover:bg-green-700 transition-colors"
+                          >
+                            Accept Offer
+                          </button>
+                        </div>
+                      )}
+
+                      {/* Funded / Disbursement Pending */}
+                      {card.funded && (
+                        <div className="mt-3 bg-green-50 border border-green-100 rounded p-2">
+                          <div className="flex items-center gap-1.5 mb-1">
+                             <span className="material-symbols-outlined text-green-600" style={{ fontSize: '16px' }}>check_circle</span>
+                            <span className="font-medium text-green-800 text-xs uppercase">Disbursement Pending</span>
+                          </div>
+                          <p className="text-green-600 text-xs leading-snug">Verification complete. Funds arriving soon.</p>
+                        </div>
+                      )}
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Move Card Modal (Clean List) */}
+      {showMoveMenu && (
+        <div className="fixed inset-0 z-50 bg-on-surface/30 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200" onClick={() => setShowMoveMenu(null)}>
+          <div className="bg-surface-container-lowest rounded-xl p-5 w-full max-w-xs shadow-xl border border-outline-variant/30 animate-in zoom-in-95" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-4">
+               <h3 className="text-sm font-semibold text-on-surface">Move to...</h3>
+               <button onClick={() => handleDeleteCard(showMoveMenu.cardId)} className="text-error hover:bg-error/10 p-1 rounded transition-colors" title="Delete Card">
+                  <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>delete</span>
+               </button>
+            </div>
+            
+            <div className="space-y-1">
+              {columns.filter(c => c.id !== showMoveMenu.fromColId).map(c => (
+                <button
+                  key={c.id}
+                  onClick={() => handleMoveCard(showMoveMenu.cardId, showMoveMenu.fromColId, c.id)}
+                  className="w-full text-left px-3 py-2 rounded-md text-sm text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors flex justify-between items-center"
+                >
+                  {c.label}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       )}
 
       {/* Add Card Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 z-40 bg-black/40 flex items-center justify-center p-4" onClick={() => setShowAddModal(false)}>
-          <div className="bg-white rounded-3xl p-8 w-full max-w-md shadow-2xl" onClick={e => e.stopPropagation()}>
-            <h3 className="font-headline-md text-headline-md mb-6">Add Scholarship</h3>
+        <div className="fixed inset-0 z-50 bg-on-surface/30 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200" onClick={() => setShowAddModal(false)}>
+          <div className="bg-surface-container-lowest rounded-2xl p-6 w-full max-w-md shadow-xl border border-outline-variant/30 animate-in zoom-in-95" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="text-lg font-semibold text-on-surface">New Application</h3>
+              <button onClick={() => setShowAddModal(false)} className="text-outline-variant hover:text-on-surface transition-colors">
+                <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>close</span>
+              </button>
+            </div>
+            
             <div className="space-y-4">
               <div>
-                <label className="font-label-md text-on-surface mb-1 block">Scholarship Title *</label>
+                <label className="text-xs font-medium text-on-surface-variant block mb-1">Scholarship Title</label>
                 <input
                   autoFocus
                   value={newCardTitle}
                   onChange={e => setNewCardTitle(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && handleAddCard()}
                   placeholder="e.g. Google Scholars Award"
-                  className="w-full px-4 py-3 border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25"
+                  className="w-full px-3 py-2 bg-surface border border-outline-variant/50 rounded-lg text-sm text-on-surface outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
                 />
               </div>
               <div>
-                <label className="font-label-md text-on-surface mb-1 block">Description</label>
+                <label className="text-xs font-medium text-on-surface-variant block mb-1">Description</label>
                 <textarea
                   value={newCardDesc}
                   onChange={e => setNewCardDesc(e.target.value)}
                   rows={2}
                   placeholder="Brief description..."
-                  className="w-full px-4 py-3 border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 resize-none"
+                  className="w-full px-3 py-2 bg-surface border border-outline-variant/50 rounded-lg text-sm text-on-surface outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all resize-none"
                 />
               </div>
               <div>
-                <label className="font-label-md text-on-surface mb-1 block">Award Amount</label>
-                <input
-                  value={newCardAmount}
-                  onChange={e => setNewCardAmount(e.target.value)}
-                  placeholder="e.g. $10,000"
-                  className="w-full px-4 py-3 border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25"
-                />
+                <label className="text-xs font-medium text-on-surface-variant block mb-1">Award Amount</label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">$</span>
+                  <input
+                    value={newCardAmount}
+                    onChange={e => setNewCardAmount(e.target.value)}
+                    placeholder="10,000"
+                    className="w-full pl-7 pr-3 py-2 bg-surface border border-outline-variant/50 rounded-lg text-sm text-on-surface outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                  />
+                </div>
               </div>
             </div>
-            <div className="flex gap-3 mt-6">
-              <button onClick={handleAddCard} className="flex-1 py-3 bg-primary text-white rounded-10 font-label-md hover:opacity-90 transition-all active:scale-95">
-                Add to Tracker
-              </button>
-              <button onClick={() => setShowAddModal(false)} className="px-6 py-3 border border-outline-variant rounded-10 font-label-md text-on-surface hover:bg-surface-container-low transition-all">
+            
+            <div className="flex justify-end gap-2 mt-6 pt-4 border-t border-outline-variant/20">
+              <button onClick={() => setShowAddModal(false)} className="px-4 py-2 border border-outline-variant/50 rounded-lg text-sm font-medium text-on-surface hover:bg-surface-container-low transition-colors">
                 Cancel
+              </button>
+              <button onClick={handleAddCard} className="px-4 py-2 bg-primary text-on-primary rounded-lg text-sm font-medium hover:opacity-90 transition-opacity">
+                Save
               </button>
             </div>
           </div>
@@ -142,242 +359,71 @@ export default function TrackerPage() {
 
       {/* Disbursement Setup Modal */}
       {showDisbursementModal && (
-        <div className="fixed inset-0 z-40 bg-black/40 flex items-center justify-center p-4" onClick={() => setShowDisbursementModal(false)}>
-          <div className="bg-white rounded-3xl p-8 w-full max-w-lg shadow-2xl overflow-y-auto max-h-[90vh]" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center gap-3 mb-6 text-green-600">
-              <span className="material-symbols-outlined text-4xl">celebration</span>
-              <h3 className="font-headline-md text-headline-md text-on-surface">Accept Offer</h3>
+        <div className="fixed inset-0 z-50 bg-on-surface/30 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200" onClick={() => setShowDisbursementModal(false)}>
+          <div className="bg-surface-container-lowest rounded-2xl p-6 md:p-8 w-full max-w-lg shadow-xl border border-outline-variant/30 overflow-y-auto max-h-[90vh] animate-in zoom-in-95" onClick={e => e.stopPropagation()}>
+            <div className="mb-6">
+              <h3 className="text-xl font-semibold text-on-surface mb-1">Accept Offer</h3>
+              <p className="text-sm text-on-surface-variant">
+                Setup disbursement for <strong className="text-on-surface">{activeDisbursementCard?.title}</strong>.
+              </p>
             </div>
-            <p className="text-on-surface-variant font-body-md mb-6">
-              Congratulations on your offer for <strong>{activeDisbursementCard?.title}</strong>! Complete these final steps to receive your funds.
-            </p>
 
-            <div className="space-y-6">
-              {/* Thank You Note */}
+            <div className="space-y-5">
               <div>
-                <label className="font-label-md text-on-surface mb-2 block">1. Thank the Sponsor</label>
+                <label className="text-sm font-medium text-on-surface mb-1.5 block">1. Thank the Sponsor</label>
                 <textarea
                   value={thankYouNote}
                   onChange={e => setThankYouNote(e.target.value)}
-                  rows={3}
+                  rows={2}
                   placeholder="Express your gratitude... (Optional)"
-                  className="w-full px-4 py-3 border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 resize-none"
+                  className="w-full px-3 py-2 bg-surface border border-outline-variant/50 rounded-lg text-sm text-on-surface outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all resize-none"
                 />
               </div>
 
-              {/* Enrollment Proof */}
               <div>
-                <label className="font-label-md text-on-surface mb-2 block">2. Verify Enrollment</label>
-                <div className="border-2 border-dashed border-outline-variant/40 rounded-xl p-4 flex items-center justify-between bg-surface-container-lowest">
-                  <div className="flex items-center gap-3 text-on-surface-variant">
-                    <span className="material-symbols-outlined">upload_file</span>
-                    <span className="font-body-sm text-sm">Upload unofficial transcript or schedule</span>
+                <label className="text-sm font-medium text-on-surface mb-1.5 block">2. Verify Enrollment</label>
+                <div className="border border-dashed border-outline-variant/50 rounded-lg p-4 flex flex-col sm:flex-row items-center justify-between gap-3 bg-surface-container-low">
+                  <div className="flex items-center gap-2 text-on-surface-variant">
+                    <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>upload_file</span>
+                    <span className="text-sm">Upload transcript</span>
                   </div>
-                  <button className="px-4 py-1.5 bg-surface-variant text-on-surface-variant rounded-lg font-label-sm text-xs hover:bg-outline-variant/30 transition-colors">
+                  <button className="px-3 py-1.5 bg-surface border border-outline-variant/50 text-on-surface rounded-md text-xs font-medium hover:bg-surface-container transition-colors">
                     Browse
                   </button>
                 </div>
               </div>
 
-              {/* Payment Method */}
               <div>
-                <label className="font-label-md text-on-surface mb-2 block">3. Disbursement Method</label>
+                <label className="text-sm font-medium text-on-surface mb-1.5 block">3. Disbursement Method</label>
                 <div className="grid grid-cols-2 gap-3">
                   <button 
                     onClick={() => setDisbursementMethod('direct')}
-                    className={`py-3 px-4 border rounded-xl font-label-md text-sm transition-all flex flex-col items-center gap-2 ${disbursementMethod === 'direct' ? 'border-primary bg-primary/10 text-primary' : 'border-outline-variant text-on-surface-variant'}`}
+                    className={`p-3 border rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${disbursementMethod === 'direct' ? 'border-primary bg-primary/5 text-primary' : 'border-outline-variant/50 text-on-surface-variant hover:border-outline-variant'}`}
                   >
-                    <span className="material-symbols-outlined">account_balance</span>
-                    Direct to School
+                    <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>account_balance</span>
+                    Direct Deposit
                   </button>
                   <button 
                     onClick={() => setDisbursementMethod('check')}
-                    className={`py-3 px-4 border rounded-xl font-label-md text-sm transition-all flex flex-col items-center gap-2 ${disbursementMethod === 'check' ? 'border-primary bg-primary/10 text-primary' : 'border-outline-variant text-on-surface-variant'}`}
+                    className={`p-3 border rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${disbursementMethod === 'check' ? 'border-primary bg-primary/5 text-primary' : 'border-outline-variant/50 text-on-surface-variant hover:border-outline-variant'}`}
                   >
-                    <span className="material-symbols-outlined">mail</span>
-                    Check by Mail
+                    <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>mail</span>
+                    Mail Check
                   </button>
                 </div>
               </div>
             </div>
 
-            <div className="flex gap-3 mt-8 pt-6 border-t border-outline-variant/20">
-              <button onClick={handleCompleteDisbursement} className="flex-1 py-3 bg-green-600 text-white rounded-10 font-label-md hover:bg-green-700 transition-all active:scale-95 shadow-sm">
-                Submit & Accept
-              </button>
-              <button onClick={() => setShowDisbursementModal(false)} className="px-6 py-3 border border-outline-variant rounded-10 font-label-md text-on-surface hover:bg-surface-container-low transition-all">
+            <div className="flex justify-end gap-2 mt-8 pt-5 border-t border-outline-variant/20">
+              <button onClick={() => setShowDisbursementModal(false)} className="px-4 py-2 border border-outline-variant/50 rounded-lg text-sm font-medium text-on-surface hover:bg-surface-container-low transition-colors">
                 Cancel
+              </button>
+              <button onClick={handleCompleteDisbursement} className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
+                Submit & Accept
               </button>
             </div>
           </div>
         </div>
-      )}
-
-      {/* Kanban Board */}
-      <div className="flex-1 overflow-x-auto p-gutter">
-        <div className="flex gap-6 h-full pb-4" style={{ minWidth: `${columns.length * 280}px` }}>
-          {columns.map((col) => (
-            <div key={col.id} className="kanban-column flex flex-col" style={{ width: '260px', flexShrink: 0 }}>
-              {/* Column Header */}
-              <div className="flex items-center justify-between mb-4 px-1">
-                <div className="flex items-center gap-2">
-                  <h3 className={`font-label-md text-label-md uppercase tracking-wider ${col.color}`}>{col.label}</h3>
-                  <span className={`${col.badgeBg} px-2 py-0.5 rounded-full text-[10px] font-bold`}>{col.cards.length}</span>
-                </div>
-                <button
-                  onClick={() => { setAddToCol(col.id); setShowAddModal(true); }}
-                  className="text-on-surface-variant hover:text-primary transition-colors"
-                >
-                  <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>add</span>
-                </button>
-              </div>
-
-              {/* Cards */}
-              <div className="flex-1 overflow-y-auto space-y-4 pr-1">
-                {col.cards.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center border-2 border-dashed border-outline-variant/30 rounded-2xl h-40 bg-surface/50">
-                    <span className="material-symbols-outlined text-outline-variant" style={{ fontSize: '48px' }}>folder_off</span>
-                    <p className="font-label-sm text-label-sm text-on-surface-variant mt-2">Empty for now</p>
-                    <button
-                      onClick={() => { setAddToCol(col.id); setShowAddModal(true); }}
-                      className="mt-2 text-primary font-label-sm hover:underline"
-                    >
-                      + Add one
-                    </button>
-                  </div>
-                ) : (
-                  col.cards.map((card) => (
-                    <div
-                      key={card.id}
-                      className={`glass-card p-4 rounded-10 shadow-sm border border-outline-variant/30 hover:shadow-md transition-all relative ${card.borderLeft || ''} ${card.accepted ? 'bg-green-50/50 border-green-200' : ''}`}
-                    >
-                      {/* Card Menu */}
-                      <div className="absolute top-2 right-2 flex gap-1">
-                        <div className="relative">
-                          <button
-                            onClick={() => setShowMoveMenu(showMoveMenu?.cardId === card.id ? null : { cardId: card.id, fromColId: col.id })}
-                            className="w-6 h-6 flex items-center justify-center text-on-surface-variant hover:text-primary rounded"
-                          >
-                            <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>swap_horiz</span>
-                          </button>
-                          {showMoveMenu?.cardId === card.id && (
-                            <div className="absolute right-0 top-7 z-20 bg-white border border-outline-variant/30 rounded-2xl shadow-xl p-2 w-44">
-                              <p className="font-label-sm text-on-surface-variant px-2 pb-1 uppercase tracking-wider" style={{ fontSize: '10px' }}>Move to</p>
-                              {columns.filter(c => c.id !== col.id).map(c => (
-                                <button
-                                  key={c.id}
-                                  onClick={() => handleMoveCard(card.id, col.id, c.id)}
-                                  className="block w-full text-left px-3 py-2 rounded-6 font-label-sm text-on-surface hover:bg-surface-container-low transition-colors"
-                                >
-                                  {c.label}
-                                </button>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                        <button
-                          onClick={() => handleDeleteCard(card.id)}
-                          className="w-6 h-6 flex items-center justify-center text-on-surface-variant hover:text-error rounded"
-                        >
-                          <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>delete</span>
-                        </button>
-                      </div>
-
-                      {/* Type Badge */}
-                      {card.type && (
-                        <div className="mb-2">
-                          <span className="bg-primary-container text-on-primary-container px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-tighter">
-                            {card.type}
-                          </span>
-                        </div>
-                      )}
-
-                      <h4 className="font-headline-md text-[15px] leading-tight text-on-surface mb-1 pr-12">{card.title}</h4>
-                      {card.desc && <p className="text-on-surface-variant font-body-sm text-body-sm mb-3">{card.desc}</p>}
-
-                      {/* Amount */}
-                      {card.amount && !card.accepted && (
-                        <p className="font-bold text-primary text-[14px] mb-2">{card.amount}</p>
-                      )}
-
-                      {/* Progress */}
-                      {card.progress && (
-                        <div>
-                          <div className="w-full bg-surface-container h-1.5 rounded-full mt-4 mb-1">
-                            <div className="bg-secondary h-full rounded-full" style={{ width: `${card.progress}%` }} />
-                          </div>
-                          <p className="text-[11px] text-on-surface-variant font-medium">{card.progressLabel}</p>
-                        </div>
-                      )}
-
-                      {/* Urgent */}
-                      {card.urgentLabel && (
-                        <div className="flex items-center gap-1 mt-2 text-tertiary">
-                          <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>timer</span>
-                          <span className="text-[11px] font-bold uppercase">{card.urgentLabel}</span>
-                        </div>
-                      )}
-
-                      {/* Date */}
-                      {card.date && (
-                        <div className="flex items-center gap-1 text-on-surface-variant mt-2">
-                          <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>calendar_today</span>
-                          <span className="text-[11px] font-semibold">{card.date}</span>
-                        </div>
-                      )}
-
-                      {/* Submitted */}
-                      {card.submitted && (
-                        <div className="flex items-center gap-1.5 mt-3">
-                          <span className="material-symbols-outlined text-primary" style={{ fontSize: '16px', fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                          <span className="text-[11px] font-bold text-primary uppercase">{card.submitted}</span>
-                        </div>
-                      )}
-
-                      {/* Reviewers */}
-                      {card.reviewers && (
-                        <div className="flex -space-x-2 mt-3">
-                          {card.reviewers.map((r) => (
-                            <div key={r} className="w-6 h-6 rounded-full border-2 border-white bg-surface-container-highest flex items-center justify-center text-[8px] font-bold">{r}</div>
-                          ))}
-                        </div>
-                      )}
-
-                      {/* Accepted */}
-                      {card.accepted && (
-                        <>
-                          <p className="text-green-800 font-bold text-[18px] mb-3">{card.amount}</p>
-                          <button
-                            onClick={() => handleAcceptOffer(card, col.id)}
-                            className="w-full py-2 bg-green-600 text-white font-label-md text-[12px] rounded-6 hover:bg-green-700 transition-colors uppercase tracking-widest"
-                          >
-                            🎉 Accept Offer
-                          </button>
-                        </>
-                      )}
-
-                      {/* Funded / Disbursement Pending */}
-                      {card.funded && (
-                        <div className="mt-2 bg-green-50 border border-green-200 rounded-lg p-3">
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className="material-symbols-outlined text-green-600" style={{ fontSize: '18px' }}>account_balance</span>
-                            <span className="font-bold text-green-800 text-[12px] uppercase">Disbursement Pending</span>
-                          </div>
-                          <p className="text-green-700 text-[11px] font-medium leading-tight">Your enrollment verification and payment details have been received. Funds typically arrive in 7-10 business days.</p>
-                        </div>
-                      )}
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Click outside to close move menu */}
-      {showMoveMenu && (
-        <div className="fixed inset-0 z-10" onClick={() => setShowMoveMenu(null)} />
       )}
     </div>
   );
