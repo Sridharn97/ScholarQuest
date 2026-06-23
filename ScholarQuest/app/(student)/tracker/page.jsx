@@ -173,14 +173,16 @@ export default function TrackerPage() {
                       className={`group relative bg-surface-container-lowest p-5 rounded-xl border border-outline-variant/40 shadow-sm hover:border-primary/50 transition-colors ${card.accepted ? 'border-green-200 bg-green-50/30' : ''}`}
                     >
                       {/* Move Button (Hover) */}
-                      <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button
-                          onClick={(e) => { e.stopPropagation(); setShowMoveMenu({ cardId: card.id, fromColId: col.id }); }}
-                          className="w-6 h-6 flex items-center justify-center bg-surface border border-outline-variant/50 text-on-surface-variant hover:text-primary rounded shadow-sm hover:bg-surface-container-low transition-colors"
-                        >
-                          <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>more_horiz</span>
-                        </button>
-                      </div>
+                      {col.id !== 'col_accepted' && col.id !== 'col_rejected' && (
+                        <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button
+                            onClick={(e) => { e.stopPropagation(); setShowMoveMenu({ cardId: card.id, fromColId: col.id }); }}
+                            className="w-6 h-6 flex items-center justify-center bg-surface border border-outline-variant/50 text-on-surface-variant hover:text-primary rounded shadow-sm hover:bg-surface-container-low transition-colors"
+                          >
+                            <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>more_horiz</span>
+                          </button>
+                        </div>
+                      )}
 
                       {/* Type Badge */}
                       {card.type && (
