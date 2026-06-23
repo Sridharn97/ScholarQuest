@@ -83,7 +83,7 @@ export default function ApplyPage({ params }) {
 
   const handleSaveForLater = () => {
     if (!scholarship) return;
-    addCardToColumn('col_preparing', {
+    addCardToColumn('col_interested', {
       title: scholarship.name,
       desc: scholarship.desc || 'Saved during application',
       type: scholarship.category || 'Scholarship',

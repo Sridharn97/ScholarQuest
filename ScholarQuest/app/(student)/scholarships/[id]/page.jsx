@@ -204,17 +204,19 @@ export default function ScholarshipDetailsPage({ params }) {
                 Start Application
               </Link>
             )}
-            <button
-              onClick={handleSaveToTracker}
-              disabled={saved}
-              className={`block w-full py-3 border rounded-10 font-label-md text-label-md transition-all ${
-                saved 
-                  ? 'bg-green-50 border-green-200 text-green-700 cursor-default font-semibold' 
-                  : 'border-outline-variant text-on-surface hover:bg-surface-container-low active:scale-95'
-              }`}
-            >
-              {saved ? 'Saved in Tracker ✓' : 'Save to Tracker'}
-            </button>
+            {!applicationStatus && (
+              <button
+                onClick={handleSaveToTracker}
+                disabled={saved}
+                className={`block w-full py-3 border rounded-10 font-label-md text-label-md transition-all ${
+                  saved 
+                    ? 'bg-green-50 border-green-200 text-green-700 cursor-default font-semibold' 
+                    : 'border-outline-variant text-on-surface hover:bg-surface-container-low active:scale-95'
+                }`}
+              >
+                {saved ? 'Saved in Tracker ✓' : 'Save to Tracker'}
+              </button>
+            )}
           </div>
 
           {/* Eligibility Snapshot */}

@@ -49,12 +49,6 @@ const DEFAULT_TRACKER = [
     cards: [
       { id: 'c1', type: 'Full-Ride', title: 'National Merit Scholar Program', desc: 'Academic excellence award for undergraduates.', urgent: true, urgentLabel: '5 Days Left', date: null },
       { id: 'c2', type: 'STEM', title: 'Boeing Future Leaders Grant', desc: 'Engineering and aviation focus.', date: 'Oct 24, 2026' },
-    ],
-  },
-  {
-    id: 'col_preparing', label: 'Preparing', color: 'text-on-surface',
-    badgeBg: 'bg-surface-container-highest text-on-surface-variant',
-    cards: [
       { id: 'c3', type: '98% Match', title: 'Rhodes Trust Global Fellowship', progress: 70, progressLabel: 'Personal Statement: 70% complete' },
     ],
   },
@@ -227,7 +221,20 @@ export function calcProfileCompletion(user) {
 // ─── Tracker ─────────────────────────────────────────────────
 
 export function getTracker() {
-  return get(KEYS.TRACKER) || DEFAULT_TRACKER;
+  let data = get(KEYS.TRACKER) || DEFAULT_TRACKER;
+  
+  // Migration: Merge 'col_preparing' into 'col_interested' if it exists in local storage
+  const preparingCol = data.find(c => c.id === 'col_preparing');
+  if (preparingCol) {
+    const interestedCol = data.find(c => c.id === 'col_interested');
+    if (interestedCol) {
+      interestedCol.cards = [...interestedCol.cards, ...preparingCol.cards];
+    }
+    data = data.filter(c => c.id !== 'col_preparing');
+    saveTracker(data);
+  }
+  
+  return data;
 }
 
 export function saveTracker(columns) {
@@ -405,7 +412,7 @@ export function getStats() {
   for (const col of tracker) {
     if (['col_applied', 'col_review', 'col_accepted'].includes(col.id)) applied += col.cards.length;
     if (col.id === 'col_interested') saved += col.cards.length;
-    if (['col_interested', 'col_preparing'].includes(col.id)) {
+    if (col.id === 'col_interested') {
       deadlines += col.cards.filter(c => c.urgentLabel).length;
     }
   }

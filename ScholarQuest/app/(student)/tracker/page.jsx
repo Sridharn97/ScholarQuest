@@ -117,11 +117,11 @@ export default function TrackerPage() {
              <div className="w-px h-8 bg-outline-variant/30" />
              <div className="flex flex-col">
                 <span className="text-on-surface-variant font-medium text-xs uppercase tracking-wider mb-0.5">Active</span>
-                <span className="font-semibold text-on-surface">{columns.find(c => c.id === 'col_preparing')?.cards.length || 0}</span>
+                <span className="font-semibold text-on-surface">{columns.find(c => c.id === 'col_interested')?.cards.length || 0}</span>
              </div>
           </div>
           <button
-            onClick={() => { setAddToCol('col_preparing'); setShowAddModal(true); }}
+            onClick={() => { setAddToCol('col_interested'); setShowAddModal(true); }}
             className="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded-xl text-sm font-medium hover:opacity-90 transition-opacity"
           >
             <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>add</span>
@@ -135,10 +135,11 @@ export default function TrackerPage() {
         <div className="flex gap-6 h-full pb-4" style={{ minWidth: `${columns.length * 340}px` }}>
           {columns.map((col) => {
             let dotColor = 'bg-outline-variant';
-            if (col.id === 'col_preparing') dotColor = 'bg-tertiary';
+            if (col.id === 'col_interested') dotColor = 'bg-tertiary';
             if (col.id === 'col_applied') dotColor = 'bg-blue-500';
-            if (col.id === 'col_interviews') dotColor = 'bg-primary';
-            if (col.id === 'col_offers') dotColor = 'bg-green-500';
+            if (col.id === 'col_review') dotColor = 'bg-primary';
+            if (col.id === 'col_accepted') dotColor = 'bg-green-500';
+            if (col.id === 'col_rejected') dotColor = 'bg-error';
 
             return (
             <div key={col.id} className="flex flex-col h-full overflow-hidden" style={{ width: '340px', flexShrink: 0 }}>
@@ -284,7 +285,17 @@ export default function TrackerPage() {
             </div>
             
             <div className="space-y-1">
-              {columns.filter(c => c.id !== showMoveMenu.fromColId).map(c => (
+              {columns.filter(c => {
+                if (c.id === showMoveMenu.fromColId) return false;
+                const from = showMoveMenu.fromColId;
+                const to = c.id;
+                
+                // Business Logic Restrictions
+                if (from === 'col_accepted' && to === 'col_rejected') return false;
+                if (from === 'col_rejected' && to === 'col_accepted') return false;
+                
+                return true;
+              }).map(c => (
                 <button
                   key={c.id}
                   onClick={() => handleMoveCard(showMoveMenu.cardId, showMoveMenu.fromColId, c.id)}
