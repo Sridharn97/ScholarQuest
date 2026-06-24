@@ -31,8 +31,8 @@ graph TD
     classDef store fill:#ecfdf5,stroke:#059669,stroke-width:2px;
     classDef storage fill:#fffbeb,stroke:#d97706,stroke-width:2px;
 
-    subgraph Client Browser [Client Browser Window]
-        subgraph NextJS Pages [Next.js Views & Layouts]
+    subgraph ClientBrowser [Client Browser Window]
+        subgraph NextJSPages [Next.js Views & Layouts]
             direction TB
             StudentDashboard["Student Dashboard<br/>(app/(student)/dashboard)"]:::client
             AIMatcher["AI Matcher<br/>(app/(student)/ai-matcher)"]:::client
@@ -40,7 +40,7 @@ graph TD
             ProviderPortal["Provider Admin Area<br/>(app/(admin)/provider)"]:::client
         end
 
-        subgraph Central Store [Central Store: lib/store.js]
+        subgraph CentralStore [Central Store: lib/store.js]
             direction TB
             StoreAPI["Mutation & Query APIs<br/>(saveUser, saveTracker, addApplication, sendMessage)"]:::store
             EventBus["Custom Event Bus<br/>('sq_update' Event Dispatcher)"]:::store
@@ -57,10 +57,10 @@ graph TD
     end
 
     %% Flow links
-    NextJS Pages -->|Invokes API| StoreAPI
+    NextJSPages -->|Invokes API| StoreAPI
     StoreAPI -->|Reads / Writes| LocalStorage
     StoreAPI -->|Dispatches Events| EventBus
-    EventBus -.->|Listens & Re-renders| NextJS Pages
+    EventBus -.->|Listens & Re-renders| NextJSPages
 ```
 
 ---
@@ -183,7 +183,7 @@ To test the application locally without creating new accounts, you can use these
 |---|---|---|---|
 | **Student** (Pre-populated) | Use registration or any mock details | `any` | Applicant |
 | **Provider / Sponsor** | `provider@scholarquest.io` | `provider123` | Sponsor Coordinator (Global Tech Foundation) |
-| **Super Admin / Program Mgr** | `admin@admin.com` | `admin123` | Program Manager (ScholarQuest Institute) |
+| **Provider (Program Manager)** | `admin@admin.com` | `admin123` | Program Manager (ScholarQuest Institute) |
 
 ---
 *ScholarQuest — Empowering academic journeys through smart search and automation.*
