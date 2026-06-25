@@ -1,55 +1,20 @@
 'use client';
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { getAdminApplications, getAdminScholarships, updateApplicationStatus, getProviderInfo } from '@/lib/store';
+import useProviderDashboard from '@/lib/hooks/useProviderDashboard';
+import ProviderStatusBreakdown from '@/components/dashboard/ProviderStatusBreakdown';
+import ProviderApplicationTrends from '@/components/dashboard/ProviderApplicationTrends';
 
 export default function ProviderDashboard() {
-  const [applications, setApplications] = useState([]);
-  const [scholarships, setScholarships] = useState([]);
-  const [toast, setToast] = useState('');
-  const [providerInfo, setProviderInfo] = useState({ name: 'Sponsor', organization: 'Company or Institute' });
-
-  const load = () => {
-    setApplications(getAdminApplications());
-    setScholarships(getAdminScholarships());
-    const info = getProviderInfo();
-    if (info) setProviderInfo(info);
-  };
-
-  useEffect(() => {
-    load();
-    window.addEventListener('sq_update', load);
-    return () => window.removeEventListener('sq_update', load);
-  }, []);
-
-  const showToast = (msg) => {
-    setToast(msg);
-    setTimeout(() => setToast(''), 3000);
-  };
-
-  const handleQuickAction = (id, status) => {
-    const updated = updateApplicationStatus(id, status);
-    setApplications(updated);
-    showToast(`Application ${status.toLowerCase()} successfully!`);
-  };
-
-  const kpis = [
-    { icon: 'payments', label: 'Allocated Funds', value: '$1.2M', badge: `${scholarships.filter(s => s.status === 'Active').length} active programs`, badgeCls: 'bg-primary/10 text-primary', iconCls: 'bg-primary/10 text-primary' },
-    { icon: 'school', label: 'Scholarships Posted', value: scholarships.length.toString(), badge: `${scholarships.filter(s => s.status === 'Active').length} active`, badgeCls: 'bg-green-100 text-green-700', iconCls: 'bg-secondary/10 text-secondary' },
-    { icon: 'history_edu', label: 'Active Submissions', value: applications.filter(a => a.status !== 'Approved' && a.status !== 'Rejected').length.toString(), badge: `${applications.filter(a => a.status === 'Pending').length} pending review`, badgeCls: 'bg-orange-100 text-orange-700', iconCls: 'bg-tertiary-container/10 text-tertiary' },
-    { icon: 'verified', label: 'Approval Rate', value: applications.length ? `${Math.round((applications.filter(a => a.status === 'Approved').length / applications.length) * 100)}%` : '0%', badge: 'Of total reviewed', badgeCls: 'bg-blue-100 text-blue-700', iconCls: 'bg-primary-container/10 text-primary-container' },
-  ];
-
-  const recentApplications = [...applications].slice(0, 5);
-  const barHeights = ['h-32', 'h-48', 'h-56', 'h-40', 'h-52', 'h-36', 'h-60'];
-  const barLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'];
-
-  const STATUS_CLS = {
-    'Approved': 'bg-green-100 text-green-700',
-    'Rejected': 'bg-red-100 text-red-700',
-    'Under Review': 'bg-blue-100 text-blue-700',
-    'Pending': 'bg-orange-100 text-orange-700',
-  };
+  const {
+    applications,
+    scholarships,
+    toast,
+    providerInfo,
+    kpis,
+    recentApplications,
+    STATUS_CLS,
+    handleQuickAction,
+  } = useProviderDashboard();
 
   return (
     <div>
@@ -63,7 +28,7 @@ export default function ProviderDashboard() {
       {/* Page Header */}
       <div className="mb-12">
         <h2 className="font-headline-lg text-4xl font-bold text-on-surface">Welcome back, {providerInfo.name.split(' ')[0]}</h2>
-        <p className="text-on-surface-variant text-lg mt-2">Here is what's happening with your programs today.</p>
+        <p className="text-on-surface-variant text-lg mt-2">{"Here is what's happening with your programs today."}</p>
       </div>
 
       {/* KPI Cards */}
@@ -88,90 +53,10 @@ export default function ProviderDashboard() {
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
         {/* Application Status Breakdown */}
-        <div className="clean-card p-8 rounded-2xl">
-          <h4 className="font-headline-md text-xl font-semibold mb-8">Application Status Breakdown</h4>
-          {(() => {
-            const approved = applications.filter(a => a.status === 'Approved').length;
-            const review = applications.filter(a => a.status === 'Under Review').length;
-            const pending = applications.filter(a => a.status === 'Pending').length;
-            const rejected = applications.filter(a => a.status === 'Rejected').length;
-            const total = applications.length || 1;
-            
-            const c = 219.9;
-            const appLen = (approved / total) * c;
-            const revLen = (review / total) * c;
-            const penLen = (pending / total) * c;
-            const rejLen = (rejected / total) * c;
-            
-            const appOff = 0;
-            const revOff = -appLen;
-            const penOff = -(appLen + revLen);
-            const rejOff = -(appLen + revLen + penLen);
-
-            return (
-              <div className="flex items-center justify-between mt-auto mb-6">
-                <div className="relative w-36 h-36 shrink-0">
-                  <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="35" fill="transparent" stroke="var(--color-surface-container-highest)" strokeWidth="16" />
-                    {approved > 0 && <circle cx="50" cy="50" r="35" fill="transparent" stroke="#22c55e" strokeWidth="16" strokeDasharray={`${appLen} ${c - appLen}`} strokeDashoffset={appOff} className="transition-all duration-1000" />}
-                    {review > 0 && <circle cx="50" cy="50" r="35" fill="transparent" stroke="#3b82f6" strokeWidth="16" strokeDasharray={`${revLen} ${c - revLen}`} strokeDashoffset={revOff} className="transition-all duration-1000 delay-100" />}
-                    {pending > 0 && <circle cx="50" cy="50" r="35" fill="transparent" stroke="#f97316" strokeWidth="16" strokeDasharray={`${penLen} ${c - penLen}`} strokeDashoffset={penOff} className="transition-all duration-1000 delay-200" />}
-                    {rejected > 0 && <circle cx="50" cy="50" r="35" fill="transparent" stroke="#ef4444" strokeWidth="16" strokeDasharray={`${rejLen} ${c - rejLen}`} strokeDashoffset={rejOff} className="transition-all duration-1000 delay-300" />}
-                  </svg>
-                </div>
-                
-                <div className="flex flex-col gap-4 pl-6 border-l border-outline-variant/20 flex-1 ml-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                      <span className="text-xs font-bold text-on-surface">Approved</span>
-                    </div>
-                    <span className="text-xs font-bold text-on-surface-variant">{approved}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                      <span className="text-xs font-bold text-on-surface">Under Review</span>
-                    </div>
-                    <span className="text-xs font-bold text-on-surface-variant">{review}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full bg-orange-500"></div>
-                      <span className="text-xs font-bold text-on-surface">Pending</span>
-                    </div>
-                    <span className="text-xs font-bold text-on-surface-variant">{pending}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                      <span className="text-xs font-bold text-on-surface">Rejected</span>
-                    </div>
-                    <span className="text-xs font-bold text-on-surface-variant">{rejected}</span>
-                  </div>
-                </div>
-              </div>
-            );
-          })()}
-          <Link href="/provider/applications" className="mt-6 block text-center text-primary font-label-md hover:underline">
-            Track All Applications →
-          </Link>
-        </div>
+        <ProviderStatusBreakdown applications={applications} />
 
         {/* Application Trends */}
-        <div className="clean-card p-8 rounded-2xl">
-          <div className="flex justify-between items-center mb-8">
-            <h4 className="font-headline-md text-xl font-semibold">Application Trends</h4>
-          </div>
-          <div className="h-64 w-full flex items-end justify-between px-2">
-            {barLabels.map((label, i) => (
-              <div key={label} className="flex flex-col items-center gap-2 group w-8">
-                <div className={`w-full bg-secondary/20 rounded-t-lg transition-all group-hover:bg-secondary ${barHeights[i]} ${label === 'Mar' ? 'bg-secondary' : ''}`} />
-                <span className={`text-label-sm ${label === 'Mar' ? 'font-bold text-secondary' : ''}`}>{label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+        <ProviderApplicationTrends />
       </div>
 
       {/* Recent Submissions Table */}

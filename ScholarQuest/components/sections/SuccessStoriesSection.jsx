@@ -87,7 +87,7 @@ export default function SuccessStoriesSection() {
             Empowering Future Leaders
           </h2>
           <p className="text-lg text-slate-500 font-medium">
-            Our scholars are winning life-changing funding and studying at the world's most prestigious institutions.
+            {"Our scholars are winning life-changing funding and studying at the world's most prestigious institutions."}
           </p>
         </div>
 

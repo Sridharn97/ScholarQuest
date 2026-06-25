@@ -20,7 +20,11 @@ export default function ProviderSidebar({ isOpen, setIsOpen, onLogout }) {
 
   useEffect(() => {
     const info = getProviderInfo();
-    if (info) setProviderInfo(info);
+    if (info) {
+      Promise.resolve().then(() => {
+        setProviderInfo(info);
+      });
+    }
   }, []);
 
   return (
@@ -43,7 +47,7 @@ export default function ProviderSidebar({ isOpen, setIsOpen, onLogout }) {
 
         {/* Brand */}
         <div className="px-6 mb-8 flex items-center gap-2.5">
-          <img src="/Logo.png.png" alt="Logo" className="w-8 h-8 rounded-full object-cover shadow-sm" />
+          <img src="/logo_provider.png" alt="Logo" className="w-8 h-8 rounded-full object-cover shadow-sm" />
           <div>
             <h1 className="font-extrabold text-gray-900 text-base tracking-tight leading-none">ScholarQuest</h1>
             <p className="text-on-surface-variant font-label-sm text-[10px] uppercase tracking-widest mt-0.5 font-bold">Sponsor Portal</p>

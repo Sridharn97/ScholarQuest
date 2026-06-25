@@ -3,33 +3,28 @@ import ProviderSidebar from '@/components/layout/ProviderSidebar';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { isProviderLoggedIn, getProviderInfo, clearProviderSession, ensureDefaults, isLoggedIn } from '@/lib/store';
+import { getProviderInfo, clearProviderSession } from '@/lib/store';
+import useRoleProtection from '@/lib/hooks/useRoleProtection';
 
 export default function ProviderLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [providerInfo, setProviderInfo] = useState(null);
-  const [authChecked, setAuthChecked] = useState(false);
   const router = useRouter();
+  const authChecked = useRoleProtection('provider');
 
   useEffect(() => {
-    ensureDefaults();
-    if (!isProviderLoggedIn()) {
-      if (isLoggedIn()) {
-        router.push('/dashboard');
-      } else {
-        router.push('/provider-login');
-      }
-      return;
-    }
-    setProviderInfo(getProviderInfo());
-    setAuthChecked(true);
+    if (!authChecked) return;
+
+    Promise.resolve().then(() => {
+      setProviderInfo(getProviderInfo());
+    });
 
     const handler = () => {
       setProviderInfo(getProviderInfo());
     };
     window.addEventListener('sq_update', handler);
     return () => window.removeEventListener('sq_update', handler);
-  }, []);
+  }, [authChecked]);
 
   const handleLogout = () => {
     clearProviderSession();

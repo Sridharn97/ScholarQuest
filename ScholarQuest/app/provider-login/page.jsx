@@ -1,46 +1,16 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { validateProviderLogin, setProviderSession, isProviderLoggedIn, ensureDefaults, isLoggedIn } from '@/lib/store';
+import useProviderLogin from '@/lib/hooks/useProviderLogin';
 
 export default function ProviderLoginPage() {
-  const router = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    ensureDefaults();
-    if (isProviderLoggedIn()) {
-      router.push('/provider');
-    } else if (isLoggedIn()) {
-      router.push('/dashboard');
-    }
-  }, [router]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setError('');
-    const email = e.target.provider_email.value.trim();
-    const password = e.target.provider_password.value;
-
-    if (!email || !password) {
-      setError('Please enter your email and password.');
-      return;
-    }
-
-    setLoading(true);
-    const provider = validateProviderLogin(email, password);
-    if (!provider) {
-      setLoading(false);
-      setError('Invalid email or password. Please try again.');
-      return;
-    }
-    setProviderSession(provider);
-    router.push('/provider');
-  };
+  const {
+    showPassword,
+    setShowPassword,
+    error,
+    loading,
+    handleSubmit,
+  } = useProviderLogin();
 
   return (
     <div className="h-screen overflow-hidden flex bg-slate-50">
@@ -55,7 +25,7 @@ export default function ProviderLoginPage() {
         <div className="relative z-10 flex flex-col h-full p-10 pb-16 justify-between">
           <div>
             <Link href="/" className="flex items-center gap-3 mb-8">
-              <img src="/Logo.png.png" alt="Logo" className="w-9 h-9 rounded-full object-cover shadow-sm" />
+              <img src="/logo_provider.png" alt="Logo" className="w-9 h-9 rounded-full object-cover shadow-sm" />
               <div>
                 <p className="font-extrabold text-slate-900 text-base tracking-tight leading-none">ScholarQuest</p>
                 <p className="text-slate-500 text-[9px] tracking-widest uppercase mt-0.5 font-bold">Sponsor Portal</p>
@@ -114,7 +84,7 @@ export default function ProviderLoginPage() {
       <div className="flex-1 bg-white h-full overflow-hidden flex flex-col justify-center items-center px-8">
         <div className="w-full max-w-[480px]">
           <div className="flex items-center gap-3 mb-10 lg:hidden">
-            <img src="/Logo.png.png" alt="Logo" className="w-9 h-9 rounded-full object-cover shadow-sm" />
+            <img src="/logo_provider.png" alt="Logo" className="w-9 h-9 rounded-full object-cover shadow-sm" />
             <p className="font-extrabold text-slate-900 text-lg tracking-tight">ScholarQuest Portal</p>
           </div>
 

@@ -4,7 +4,8 @@ import MobileBottomNav from '@/components/layout/MobileBottomNav';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { isLoggedIn, getUserName, getUserInitials, clearSession, ensureDefaults, isProviderLoggedIn } from '@/lib/store';
+import { getUserName, getUserInitials, clearSession } from '@/lib/store';
+import useRoleProtection from '@/lib/hooks/useRoleProtection';
 
 const mobileMenuLinks = [
   { href: '/messages', label: 'Messages', icon: 'chat' },
@@ -15,23 +16,17 @@ export default function StudentLayout({ children }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userName, setUserName] = useState('Alex');
   const [userInitials, setUserInitials] = useState('AJ');
-  const [authChecked, setAuthChecked] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+  const authChecked = useRoleProtection('student');
 
   useEffect(() => {
-    if (!isLoggedIn()) {
-      if (isProviderLoggedIn()) {
-        router.replace('/provider');
-      } else {
-        router.replace('/login');
-      }
-      return;
-    }
-    ensureDefaults();
-    setUserName(getUserName());
-    setUserInitials(getUserInitials());
-    setAuthChecked(true);
+    if (!authChecked) return;
+
+    Promise.resolve().then(() => {
+      setUserName(getUserName());
+      setUserInitials(getUserInitials());
+    });
 
     // Listen for store updates
     const handler = () => {
@@ -40,7 +35,7 @@ export default function StudentLayout({ children }) {
     };
     window.addEventListener('sq_update', handler);
     return () => window.removeEventListener('sq_update', handler);
-  }, [router]);
+  }, [authChecked]);
 
   const handleLogout = () => {
     clearSession();

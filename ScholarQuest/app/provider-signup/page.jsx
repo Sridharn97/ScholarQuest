@@ -1,68 +1,17 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { registerProvider, setProviderSession, isLoggedIn } from '@/lib/store';
+import useProviderSignup from '@/lib/hooks/useProviderSignup';
 
 export default function ProviderSignupPage() {
-  const router = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-
-  useEffect(() => {
-    if (isLoggedIn()) {
-      router.push('/dashboard');
-    }
-  }, [router]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-
-    const firstName = e.target.first_name.value.trim();
-    const lastName = e.target.last_name.value.trim();
-    const email = e.target.provider_email.value.trim();
-    const password = e.target.provider_password.value;
-    const organization = e.target.organization.value.trim();
-    const entityType = e.target.entity_type.value;
-
-    if (!firstName || !lastName || !email || !password || !organization) {
-      setError('Please fill in all fields.');
-      setLoading(false);
-      return;
-    }
-
-    if (password.length < 8) {
-      setError('Password must be at least 8 characters.');
-      setLoading(false);
-      return;
-    }
-
-    const provider = registerProvider({
-      firstName,
-      lastName,
-      email,
-      password,
-      organization,
-      role: entityType === 'Institute' ? 'Academic Representative' : 'Corporate Sponsor',
-    });
-
-    if (!provider) {
-      setError('An account with this email already exists.');
-      setLoading(false);
-      return;
-    }
-
-    setProviderSession(provider);
-    setSuccess(true);
-    setTimeout(() => {
-      router.push('/provider');
-    }, 1000);
-  };
+  const {
+    showPassword,
+    setShowPassword,
+    error,
+    loading,
+    success,
+    handleSubmit,
+  } = useProviderSignup();
 
   return (
     <div className="h-screen overflow-hidden flex bg-slate-50">
@@ -77,7 +26,7 @@ export default function ProviderSignupPage() {
         <div className="relative z-10 flex flex-col h-full p-10 pb-16 justify-between">
           <div>
             <Link href="/" className="flex items-center gap-3 mb-8">
-              <img src="/Logo.png.png" alt="Logo" className="w-9 h-9 rounded-full object-cover shadow-sm" />
+              <img src="/logo_provider.png" alt="Logo" className="w-9 h-9 rounded-full object-cover shadow-sm" />
               <div>
                 <p className="font-extrabold text-slate-900 text-base tracking-tight leading-none">ScholarQuest</p>
                 <p className="text-slate-500 text-[9px] tracking-widest uppercase mt-0.5 font-bold">Partner Onboarding</p>
@@ -127,7 +76,7 @@ export default function ProviderSignupPage() {
       <div className="flex-1 bg-white h-full overflow-hidden flex flex-col justify-center items-center px-8 lg:order-1">
         <div className="w-full max-w-[540px]">
           <div className="flex items-center gap-3 mb-10 lg:hidden">
-            <img src="/Logo.png.png" alt="Logo" className="w-9 h-9 rounded-full object-cover shadow-sm" />
+            <img src="/logo_provider.png" alt="Logo" className="w-9 h-9 rounded-full object-cover shadow-sm" />
             <p className="font-extrabold text-slate-900 text-lg tracking-tight">ScholarQuest Portal</p>
           </div>
 

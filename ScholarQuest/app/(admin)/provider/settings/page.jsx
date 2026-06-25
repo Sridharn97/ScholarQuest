@@ -1,14 +1,8 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { getProviderInfo } from '@/lib/store';
+import useProviderSettings from '@/lib/hooks/useProviderSettings';
 
 export default function ProviderSettingsPage() {
-  const [providerInfo, setProviderInfo] = useState({ name: 'Sponsor Coordinator', initials: 'SC', role: 'Coordinator', organization: 'Company or Institute' });
-
-  useEffect(() => {
-    const info = getProviderInfo();
-    if (info) setProviderInfo(info);
-  }, []);
+  const { providerInfo } = useProviderSettings();
 
   return (
     <div className="max-w-3xl mx-auto py-6 px-4 sm:px-6 lg:px-8">

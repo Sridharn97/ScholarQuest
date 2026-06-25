@@ -1,8 +1,6 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { getUser, saveUser, ensureDefaults } from '@/lib/store';
+import useOnboarding from '@/lib/hooks/useOnboarding';
 
 const steps = [
   { num: 1, label: 'Personal Info', icon: 'person' },
@@ -14,44 +12,13 @@ const steps = [
 const studyFields = ['Computer Science', 'Engineering', 'Biology', 'Arts & Humanities', 'Business', 'Social Sciences', 'Law', 'Medicine'];
 
 export default function OnboardingPage() {
-  const router = useRouter();
-  const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState({
-    firstName: '', lastName: '', dob: '', nationality: '', state: '',
-    institution: '', studyField: '', gpa: '', graduation: '',
-    careerGoals: '', extracurriculars: '', financialNeed: 'Low – Merit-based preferred',
-  });
-
-  useEffect(() => {
-    const user = getUser();
-    if (user) {
-      setFormData(prev => ({
-        ...prev,
-        firstName: user.firstName || '',
-        lastName: user.lastName || '',
-        institution: user.institution || '',
-      }));
-    }
-    ensureDefaults();
-  }, []);
-
-  const set = (key, val) => setFormData(prev => ({ ...prev, [key]: val }));
-  const toggleField = (key, val) => set(key, formData[key] === val ? '' : val);
-
-  const handleContinue = () => {
-    if (currentStep < 4) {
-      setCurrentStep(currentStep + 1);
-    } else {
-      // Save all onboarding data
-      saveUser({
-        ...formData,
-        name: `${formData.firstName} ${formData.lastName}`,
-        initials: `${(formData.firstName || 'A')[0]}${(formData.lastName || 'J')[0]}`.toUpperCase(),
-        onboardingComplete: true,
-      });
-      router.push('/dashboard');
-    }
-  };
+  const {
+    currentStep,
+    formData,
+    set,
+    toggleField,
+    handleContinue,
+  } = useOnboarding();
 
   return (
     <main className="min-h-screen bg-background flex flex-col items-center justify-center px-gutter py-10">

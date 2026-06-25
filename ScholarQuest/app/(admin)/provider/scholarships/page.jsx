@@ -1,7 +1,6 @@
 'use client';
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { getAdminScholarships, updateAdminScholarship, deleteAdminScholarship } from '@/lib/store';
+import useProviderScholarships from '@/lib/hooks/useProviderScholarships';
 
 const STATUS_CLS = {
   Active: 'bg-green-100 text-green-700',
@@ -10,44 +9,19 @@ const STATUS_CLS = {
 };
 
 export default function ProviderScholarshipsPage() {
-  const [scholarships, setScholarships] = useState([]);
-  const [search, setSearch] = useState('');
-  const [activeFilter, setActiveFilter] = useState('All');
-  const [toast, setToast] = useState('');
-  const [deleteConfirm, setDeleteConfirm] = useState(null);
-
-  const load = () => setScholarships(getAdminScholarships());
-
-  useEffect(() => {
-    load();
-    window.addEventListener('sq_update', load);
-    return () => window.removeEventListener('sq_update', load);
-  }, []);
-
-  const showToast = (msg) => {
-    setToast(msg);
-    setTimeout(() => setToast(''), 3000);
-  };
-
-  const handleToggleStatus = (id, currentStatus) => {
-    const nextStatus = currentStatus === 'Active' ? 'Closed' : 'Active';
-    const updated = updateAdminScholarship(id, { status: nextStatus });
-    setScholarships(updated);
-    showToast(`Program set to ${nextStatus}!`);
-  };
-
-  const handleDelete = (id) => {
-    const updated = deleteAdminScholarship(id);
-    setScholarships(updated);
-    setDeleteConfirm(null);
-    showToast('Scholarship deleted successfully.');
-  };
-
-  const filtered = scholarships.filter(s => {
-    const matchFilter = activeFilter === 'All' || s.status === activeFilter;
-    const matchSearch = !search || s.name.toLowerCase().includes(search.toLowerCase()) || s.org.toLowerCase().includes(search.toLowerCase());
-    return matchFilter && matchSearch;
-  });
+  const {
+    scholarships,
+    search,
+    setSearch,
+    activeFilter,
+    setActiveFilter,
+    toast,
+    deleteConfirm,
+    setDeleteConfirm,
+    handleToggleStatus,
+    handleDelete,
+    filtered,
+  } = useProviderScholarships();
 
   const getAvatars = (applicants) => {
     if (!applicants || applicants < 2) {
@@ -98,7 +72,7 @@ export default function ProviderScholarshipsPage() {
       <div className="flex items-center justify-between mb-12">
         <div>
           <h2 className="font-headline-lg text-3xl font-bold text-on-surface">Posted Scholarships</h2>
-          <p className="text-body-lg text-on-surface-variant mt-2">Manage, track, and optimize your organization's funding opportunities.</p>
+          <p className="text-body-lg text-on-surface-variant mt-2">{"Manage, track, and optimize your organization's funding opportunities."}</p>
         </div>
         <div className="flex items-center gap-4">
           <div className="relative">

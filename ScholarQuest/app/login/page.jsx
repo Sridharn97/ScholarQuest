@@ -1,47 +1,16 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { validateLogin, setSession, isLoggedIn, isProviderLoggedIn } from '@/lib/store';
+import useLogin from '@/lib/hooks/useLogin';
 
 export default function LoginPage() {
-  const router = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  // If already logged in, redirect immediately
-  useEffect(() => {
-    if (isLoggedIn()) {
-      router.replace('/dashboard');
-    } else if (isProviderLoggedIn()) {
-      router.replace('/provider');
-    }
-  }, [router]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setError('');
-    const email = e.target.login_email.value.trim();
-    const password = e.target.login_password.value;
-
-    if (!email || !password) {
-      setError('Please enter your email and password.');
-      return;
-    }
-
-    setLoading(true);
-    const user = validateLogin(email, password);
-    if (!user) {
-      setLoading(false);
-      setError('Invalid email or password. Please try again.');
-      return;
-    }
-    setSession(user);
-    // Use window.location for a hard navigation to guarantee the redirect works
-    router.push('/dashboard');
-  };
+  const {
+    showPassword,
+    setShowPassword,
+    error,
+    loading,
+    handleSubmit,
+  } = useLogin();
 
   return (
     <div className="h-screen overflow-hidden flex bg-white">

@@ -1,4 +1,7 @@
 'use client';
+import StudentAnalyticsOverview from '@/components/dashboard/StudentAnalyticsOverview';
+import StudentApplicationOutcomes from '@/components/dashboard/StudentApplicationOutcomes';
+import StudentFundingTrends from '@/components/dashboard/StudentFundingTrends';
 
 export default function DashboardPage() {
   return (
@@ -82,26 +85,7 @@ export default function DashboardPage() {
             </div>
           </div>
           <div className="w-full mt-auto">
-            <div className="h-44 relative mt-4">
-              <svg viewBox="0 0 500 150" className="w-full h-full overflow-visible">
-                <line x1="0" y1="30" x2="500" y2="30" stroke="currentColor" strokeWidth="1" className="text-outline-variant/20" />
-                <line x1="0" y1="70" x2="500" y2="70" stroke="currentColor" strokeWidth="1" className="text-outline-variant/20" />
-                <line x1="0" y1="110" x2="500" y2="110" stroke="currentColor" strokeWidth="1" className="text-outline-variant/20" />
-                <line x1="0" y1="150" x2="500" y2="150" stroke="currentColor" strokeWidth="1" className="text-outline-variant/20" />
-
-                <defs>
-                  <linearGradient id="blueArea" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="var(--color-primary)" stopOpacity="0.15" />
-                    <stop offset="100%" stopColor="var(--color-primary)" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-                <path d="M 0 130 C 100 110, 150 80, 250 70 C 350 60, 400 110, 500 40 L 500 150 L 0 150 Z" fill="url(#blueArea)" />
-                <path d="M 0 130 C 100 110, 150 80, 250 70 C 350 60, 400 110, 500 40" fill="none" stroke="var(--color-primary)" strokeWidth="3" strokeLinecap="round" />
-
-                <circle cx="250" cy="70" r="3" fill="var(--color-primary)" />
-                <circle cx="125" cy="100" r="3" fill="var(--color-primary)" />
-              </svg>
-            </div>
+            <StudentAnalyticsOverview />
             <div className="flex justify-between text-xs text-on-surface-variant font-bold mt-4 px-1">
               <span className="text-center w-8 -ml-4">Mon</span>
               <span className="text-center w-8">Tue</span>
@@ -123,40 +107,7 @@ export default function DashboardPage() {
             </div>
           </div>
           
-          <div className="flex items-center justify-between mt-auto">
-            <div className="relative w-36 h-36 shrink-0">
-              <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="35" fill="transparent" stroke="var(--color-surface-container-highest)" strokeWidth="16" />
-                <circle cx="50" cy="50" r="35" fill="transparent" stroke="var(--color-error)" strokeWidth="16" strokeDasharray="33 186.9" strokeDashoffset="0" className="transition-all duration-1000" />
-                <circle cx="50" cy="50" r="35" fill="transparent" stroke="var(--color-secondary)" strokeWidth="16" strokeDasharray="132 87.9" strokeDashoffset="-33" className="transition-all duration-1000 delay-300" />
-                <circle cx="50" cy="50" r="35" fill="transparent" stroke="var(--color-primary)" strokeWidth="16" strokeDasharray="55 164.9" strokeDashoffset="-165" className="transition-all duration-1000 delay-500" />
-              </svg>
-            </div>
-            
-            <div className="flex flex-col gap-4 pl-6 border-l border-outline-variant/20 flex-1 ml-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-primary"></div>
-                  <span className="text-xs font-bold text-on-surface">Accepted</span>
-                </div>
-                <span className="text-xs font-bold text-on-surface-variant">25%</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-secondary"></div>
-                  <span className="text-xs font-bold text-on-surface">In Review</span>
-                </div>
-                <span className="text-xs font-bold text-on-surface-variant">60%</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-error"></div>
-                  <span className="text-xs font-bold text-on-surface">Rejected</span>
-                </div>
-                <span className="text-xs font-bold text-on-surface-variant">15%</span>
-              </div>
-            </div>
-          </div>
+          <StudentApplicationOutcomes />
         </div>
       </div>
 
@@ -191,27 +142,7 @@ export default function DashboardPage() {
             <h3 className="text-lg font-bold text-on-surface">Monthly Funding Trends</h3>
             <span className="text-xs font-bold text-on-surface-variant">Last 6 Months</span>
           </div>
-          <div className="w-full mt-auto">
-            <div className="h-[120px] relative px-4 mt-6">
-              <svg viewBox="0 0 500 120" className="w-full h-full overflow-visible">
-                <path d="M 0 100 L 100 80 L 200 90 L 300 50 L 400 65 L 500 30" fill="none" stroke="var(--color-secondary)" strokeWidth="2.5" />
-                <circle cx="0" cy="100" r="4" fill="var(--color-secondary)" />
-                <circle cx="100" cy="80" r="4" fill="var(--color-secondary)" />
-                <circle cx="200" cy="90" r="4" fill="var(--color-secondary)" />
-                <circle cx="300" cy="50" r="4" fill="var(--color-secondary)" />
-                <circle cx="400" cy="65" r="4" fill="var(--color-secondary)" />
-                <circle cx="500" cy="30" r="4" fill="var(--color-secondary)" />
-              </svg>
-            </div>
-            <div className="flex justify-between text-xs text-on-surface-variant font-bold mt-4 px-4">
-              <span className="text-center w-8 -ml-4">Jan</span>
-              <span className="text-center w-8">Feb</span>
-              <span className="text-center w-8">Mar</span>
-              <span className="text-center w-8">Apr</span>
-              <span className="text-center w-8">May</span>
-              <span className="text-center w-8 -mr-4">Jun</span>
-            </div>
-          </div>
+          <StudentFundingTrends />
 
           <button className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-12 h-12 bg-primary rounded-full text-on-primary flex items-center justify-center shadow-lg border-4 border-surface-container-lowest hover:scale-105 transition-transform z-10">
             <span className="material-symbols-outlined text-[24px]">add</span>

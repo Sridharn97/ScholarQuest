@@ -51,7 +51,7 @@ const studentSections = [
         <div className="bg-surface-container-lowest border border-outline-variant/30 p-6 rounded-xl shadow-sm">
           <ul className="list-disc pl-5 space-y-3">
             <li><strong className="text-on-surface">Building a Profile:</strong> Navigate to your Profile tab to fill out your academic details. The AI Matcher uses this data!</li>
-            <li><strong className="text-on-surface">Tracking Applications:</strong> Use the "Applications" tab to see real-time updates on your submissions.</li>
+            <li><strong className="text-on-surface">Tracking Applications:</strong> Use the &quot;Applications&quot; tab to see real-time updates on your submissions.</li>
             <li><strong className="text-on-surface">AI Matcher:</strong> Check the AI Matcher tab to see a personalized ranked list of scholarships.</li>
           </ul>
         </div>
@@ -90,7 +90,7 @@ const sponsorSections = [
         </div>
         <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
           <h5 className="font-bold text-on-surface mb-2 text-base">How do I fund a grant?</h5>
-          <p>You can manage disbursements directly through your organization's finance portal. We do not handle the direct transfer of funds.</p>
+          <p>{"You can manage disbursements directly through your organization's finance portal. We do not handle the direct transfer of funds."}</p>
         </div>
         <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
           <h5 className="font-bold text-on-surface mb-2 text-base">How do I review applications?</h5>
@@ -101,7 +101,7 @@ const sponsorSections = [
           <p>Currently, each scholarship posting supports a single primary deadline. For rolling admissions, we recommend updating the deadline monthly.</p>
         </div>
         <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
-          <h5 className="font-bold text-on-surface mb-2 text-base">What happens if I don't find a suitable candidate?</h5>
+          <h5 className="font-bold text-on-surface mb-2 text-base">{"What happens if I don't find a suitable candidate?"}</h5>
           <p>You are under no obligation to award funds if no candidate meets your criteria. You can extend your deadline or adjust your requirements.</p>
         </div>
         <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
@@ -121,7 +121,7 @@ const sponsorSections = [
         <p className="text-base">Welcome to ScholarQuest Sponsor Portal! Here is how to get started:</p>
         <div className="bg-surface-container-lowest border border-outline-variant/30 p-6 rounded-xl shadow-sm">
           <ul className="list-disc pl-5 space-y-3">
-            <li><strong className="text-on-surface">Posting a Grant:</strong> Go to "Scholarships" in your portal to create a new listing. Be sure to specify matching criteria.</li>
+            <li><strong className="text-on-surface">Posting a Grant:</strong> Go to &quot;Scholarships&quot; in your portal to create a new listing. Be sure to specify matching criteria.</li>
             <li><strong className="text-on-surface">Reviewing Candidates:</strong> Your Applications tab automatically sorts candidates by their AI Match score.</li>
             <li><strong className="text-on-surface">Generating Reports:</strong> Use the Reports tab to download CSVs of applicant data and track your reach.</li>
           </ul>
@@ -192,7 +192,7 @@ const generalSections = [
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-surface-container-lowest border border-outline-variant/30 p-5 rounded-xl shadow-sm">
             <h5 className="font-bold text-on-surface text-base mb-2">How to Report an Issue</h5>
-            <p>You can flag any message, scholarship listing, or user profile by clicking the "Report" icon (flag). Provide a brief reason for the report.</p>
+            <p>{"You can flag any message, scholarship listing, or user profile by clicking the \"Report\" icon (flag). Provide a brief reason for the report."}</p>
           </div>
           <div className="bg-surface-container-lowest border border-outline-variant/30 p-5 rounded-xl shadow-sm">
             <h5 className="font-bold text-on-surface text-base mb-2">Automated Actions</h5>
@@ -210,12 +210,12 @@ const generalSections = [
     content: (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-on-surface-variant">
         <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
-          <h5 className="font-bold text-on-surface mb-2 text-base">Why isn't my file uploading?</h5>
+          <h5 className="font-bold text-on-surface mb-2 text-base">{"Why isn't my file uploading?"}</h5>
           <p>Ensure your document is in PDF format and is under the 5MB file size limit. Word documents (.doc, .docx) are not supported.</p>
         </div>
         <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
-          <h5 className="font-bold text-on-surface mb-2 text-base">I didn't receive my reset email</h5>
-          <p>Please check your spam or junk folder. If you still don't see it, ensure you entered the exact email address used during registration.</p>
+          <h5 className="font-bold text-on-surface mb-2 text-base">{"I didn't receive my reset email"}</h5>
+          <p>{"Please check your spam or junk folder. If you still don't see it, ensure you entered the exact email address used during registration."}</p>
         </div>
         <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
           <h5 className="font-bold text-on-surface mb-2 text-base">Browser Compatibility</h5>
@@ -347,7 +347,7 @@ export default function HelpCenterPage() {
                <span className="material-symbols-outlined" style={{ fontSize: '28px' }}>support_agent</span>
             </div>
             <h4 className="text-3xl font-extrabold text-on-background mb-4" style={{ fontFamily: 'Manrope, sans-serif' }}>Still need help?</h4>
-            <p className="text-lg text-on-surface-variant mb-8 max-w-xl mx-auto leading-relaxed">If you need to report a critical issue or can't find the answer you're looking for, our support team is available.</p>
+            <p className="text-lg text-on-surface-variant mb-8 max-w-xl mx-auto leading-relaxed">{"If you need to report a critical issue or can't find the answer you're looking for, our support team is available."}</p>
             <a href="mailto:support@scholarquest.com" className="inline-flex items-center gap-3 px-8 py-4 bg-primary text-white font-bold text-lg rounded-xl hover:bg-primary/90 transition-all shadow-md shadow-primary/25 active:scale-[0.98]">
               <span className="material-symbols-outlined" style={{ fontSize: '24px' }}>mail</span>
               Contact Support
