@@ -54,11 +54,11 @@ export default function ProfilePage() {
           <div className="absolute inset-0 hero-gradient opacity-50 mix-blend-overlay"></div>
           {editMode && (
             <button className="absolute top-4 right-4 p-2 bg-surface-bright/80 hover:bg-surface-bright rounded-full shadow-sm transition-colors text-primary">
-              <span className="material-symbols-outlined" style={{fontSize: '20px'}}>photo_camera</span>
+              <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>photo_camera</span>
             </button>
           )}
         </div>
-        
+
         <div className="px-6 sm:px-10 pb-10 relative -mt-20">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 mb-4">
             {/* Avatar */}
@@ -98,13 +98,13 @@ export default function ProfilePage() {
           <div className="max-w-2xl">
             {editMode ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                <input value={form.firstName || ''} onChange={e => setForm({...form, firstName: e.target.value})} placeholder="First Name" className="w-full px-4 py-2 bg-surface-container-lowest border border-outline-variant/50 rounded-lg text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary/20" />
-                <input value={form.lastName || ''} onChange={e => setForm({...form, lastName: e.target.value})} placeholder="Last Name" className="w-full px-4 py-2 bg-surface-container-lowest border border-outline-variant/50 rounded-lg text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary/20" />
+                <input value={form.firstName || ''} onChange={e => setForm({ ...form, firstName: e.target.value })} placeholder="First Name" className="w-full px-4 py-2 bg-surface-container-lowest border border-outline-variant/50 rounded-lg text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary/20" />
+                <input value={form.lastName || ''} onChange={e => setForm({ ...form, lastName: e.target.value })} placeholder="Last Name" className="w-full px-4 py-2 bg-surface-container-lowest border border-outline-variant/50 rounded-lg text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary/20" />
               </div>
             ) : (
               <h1 className="font-headline-lg text-3xl font-bold text-on-surface mb-1" style={{ fontFamily: 'Manrope, sans-serif' }}>{user?.name || 'Alex Johnson'}</h1>
             )}
-            
+
             <p className="font-body-lg text-on-surface font-medium mb-1">{user?.studyField || 'Computer Science'} at {user?.institution || 'Stanford University'}</p>
             <p className="font-body-sm text-on-surface-variant flex items-center gap-1 mb-2">
               <span className="material-symbols-outlined text-[16px]">location_on</span>
@@ -114,24 +114,24 @@ export default function ProfilePage() {
             {editMode ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30">
                 <div className="space-y-1">
-                   <label className="font-label-sm text-on-surface-variant">Phone</label>
-                   <div className="flex w-full px-3 py-1 border border-outline-variant/50 rounded-md overflow-hidden focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/20 bg-white shadow-sm">
-                     <PhoneInput
-                       international
-                       defaultCountry="US"
-                       value={form.phone || ''}
-                       onChange={val => setForm({...form, phone: val})}
-                       className="w-full text-sm outline-none bg-transparent sq-phone-input"
-                     />
-                   </div>
+                  <label className="font-label-sm text-on-surface-variant">Phone</label>
+                  <div className="flex w-full px-3 py-1 border border-outline-variant/50 rounded-md overflow-hidden focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/20 bg-white shadow-sm">
+                    <PhoneInput
+                      international
+                      defaultCountry="US"
+                      value={form.phone || ''}
+                      onChange={val => setForm({ ...form, phone: val })}
+                      className="w-full text-sm outline-none bg-transparent sq-phone-input"
+                    />
+                  </div>
                 </div>
                 <div className="space-y-1">
-                   <label className="font-label-sm text-on-surface-variant">Location</label>
-                   <input value={form.nationality || ''} onChange={e => setForm({...form, nationality: e.target.value})} placeholder="City, Country" className="w-full px-3 py-1.5 border border-outline-variant/50 rounded-md text-sm outline-none focus:border-primary bg-white shadow-sm h-[38px]" />
+                  <label className="font-label-sm text-on-surface-variant">Location</label>
+                  <input value={form.nationality || ''} onChange={e => setForm({ ...form, nationality: e.target.value })} placeholder="City, Country" className="w-full px-3 py-1.5 border border-outline-variant/50 rounded-md text-sm outline-none focus:border-primary bg-white shadow-sm h-[38px]" />
                 </div>
                 <div className="space-y-1 sm:col-span-2">
-                   <label className="font-label-sm text-on-surface-variant">LinkedIn URL</label>
-                   <input value={form.linkedin || ''} onChange={e => setForm({...form, linkedin: e.target.value})} placeholder="linkedin.com/in/..." className="w-full px-3 py-1.5 border border-outline-variant/50 rounded-md text-sm outline-none focus:border-primary bg-white shadow-sm h-[38px]" />
+                  <label className="font-label-sm text-on-surface-variant">LinkedIn URL</label>
+                  <input value={form.linkedin || ''} onChange={e => setForm({ ...form, linkedin: e.target.value })} placeholder="linkedin.com/in/..." className="w-full px-3 py-1.5 border border-outline-variant/50 rounded-md text-sm outline-none focus:border-primary bg-white shadow-sm h-[38px]" />
                 </div>
               </div>
             ) : (
@@ -147,7 +147,7 @@ export default function ProfilePage() {
         <p className="font-body-sm text-on-surface-variant mb-6 flex items-center gap-1.5">
           <span className="material-symbols-outlined text-[16px]">visibility</span> Private to you
         </p>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-4 divide-y md:divide-y-0 md:divide-x divide-outline-variant/20">
           <div className="flex items-start gap-4 pt-4 md:pt-0">
             <span className="material-symbols-outlined text-on-surface text-3xl">group</span>
@@ -157,7 +157,7 @@ export default function ProfilePage() {
               <p className="font-body-sm text-on-surface-variant text-[13px] mt-1">Track your active applications.</p>
             </div>
           </div>
-          
+
           <div className="flex items-start gap-4 pt-4 md:pt-0 md:pl-6">
             <span className="material-symbols-outlined text-on-surface text-3xl">school</span>
             <div>
@@ -166,7 +166,7 @@ export default function ProfilePage() {
               <p className="font-body-sm text-on-surface-variant text-[13px] mt-1">Verified academic standing.</p>
             </div>
           </div>
-          
+
           <div className="flex items-start gap-4 pt-4 md:pt-0 md:pl-6">
             <span className="material-symbols-outlined text-on-surface text-3xl">auto_awesome</span>
             <div className="w-full">
@@ -190,9 +190,9 @@ export default function ProfilePage() {
             </button>
           )}
         </div>
-        
+
         {editMode ? (
-          <textarea rows={5} value={form.bio} onChange={e => setForm({...form, bio: e.target.value})} placeholder="Write a compelling summary about your academic journey, goals, and what makes you a great scholarship candidate..." className="w-full px-4 py-3 bg-surface-container-lowest border border-outline-variant/50 rounded-xl font-body-md outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 transition-all resize-none shadow-inner" />
+          <textarea rows={5} value={form.bio} onChange={e => setForm({ ...form, bio: e.target.value })} placeholder="Write a compelling summary about your academic journey, goals, and what makes you a great scholarship candidate..." className="w-full px-4 py-3 bg-surface-container-lowest border border-outline-variant/50 rounded-xl font-body-md outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 transition-all resize-none shadow-inner" />
         ) : (
           <div className="relative">
             <p className="font-body-md text-on-surface leading-relaxed whitespace-pre-wrap">
@@ -229,20 +229,20 @@ export default function ProfilePage() {
                     <p className="font-body-md text-on-surface">{edu.degree}</p>
                     <p className="font-body-sm text-on-surface-variant mt-1">{edu.period}</p>
                     {edu.gpa !== '—' && (
-                       <p className="font-body-sm text-on-surface mt-2">Grade: {edu.gpa}</p>
+                      <p className="font-body-sm text-on-surface mt-2">Grade: {edu.gpa}</p>
                     )}
                   </div>
                 </div>
-                
+
                 {editMode && (
                   <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30">
                     <div className="space-y-1">
                       <label className="font-label-sm text-on-surface-variant">Institution</label>
-                      <input value={form.institution || ''} onChange={e => setForm({...form, institution: e.target.value})} placeholder="Institution" className="w-full px-3 py-2 border border-outline-variant/50 rounded-md text-sm outline-none focus:border-primary" />
+                      <input value={form.institution || ''} onChange={e => setForm({ ...form, institution: e.target.value })} placeholder="Institution" className="w-full px-3 py-2 border border-outline-variant/50 rounded-md text-sm outline-none focus:border-primary" />
                     </div>
                     <div className="space-y-1">
                       <label className="font-label-sm text-on-surface-variant">GPA</label>
-                      <input type="number" step="0.01" value={form.gpa || ''} onChange={e => setForm({...form, gpa: e.target.value})} placeholder="GPA" className="w-full px-3 py-2 border border-outline-variant/50 rounded-md text-sm outline-none focus:border-primary" />
+                      <input type="number" step="0.01" value={form.gpa || ''} onChange={e => setForm({ ...form, gpa: e.target.value })} placeholder="GPA" className="w-full px-3 py-2 border border-outline-variant/50 rounded-md text-sm outline-none focus:border-primary" />
                     </div>
                   </div>
                 )}
@@ -260,7 +260,7 @@ export default function ProfilePage() {
             {editMode ? (
               <button onClick={() => setShowSkillInput(!showSkillInput)} className="p-2 hover:bg-surface-container-low rounded-full transition-colors text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined">add</span></button>
             ) : (
-               <button onClick={() => setEditMode(true)} className="p-2 hover:bg-surface-container-low rounded-full transition-colors text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined">edit</span></button>
+              <button onClick={() => setEditMode(true)} className="p-2 hover:bg-surface-container-low rounded-full transition-colors text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined">edit</span></button>
             )}
           </div>
         </div>
@@ -317,7 +317,7 @@ export default function ProfilePage() {
                 <p className="font-body-md text-on-surface">{doc.name}</p>
                 <p className="font-body-sm text-on-surface-variant mt-1">Issued {doc.date}</p>
                 <button className="mt-3 px-4 py-1.5 border border-outline-variant rounded-full font-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-all flex items-center gap-2">
-                   Show document <span className="material-symbols-outlined text-[16px]">open_in_new</span>
+                  Show document <span className="material-symbols-outlined text-[16px]">open_in_new</span>
                 </button>
               </div>
             </div>
@@ -334,7 +334,7 @@ export default function ProfilePage() {
             {!editMode && <button onClick={() => setEditMode(true)} className="p-2 hover:bg-surface-container-low rounded-full transition-colors text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined">edit</span></button>}
           </div>
         </div>
-        
+
         <div className="space-y-6">
           {[
             { title: 'Dean\'s List', issuer: 'Stanford University', date: 'May 2023', description: 'Awarded for maintaining a GPA above 3.8 during the academic year.' },

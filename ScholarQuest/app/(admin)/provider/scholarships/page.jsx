@@ -128,43 +128,43 @@ export default function ProviderScholarshipsPage() {
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filtered.map((program) => (
-          <div key={program.id} className="clean-card p-6 rounded-2xl flex flex-col hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group relative">
-            <div className="flex justify-between items-start mb-4">
-              <span className={`px-2.5 py-1 rounded-full font-label-sm text-[10px] uppercase tracking-wider ${STATUS_CLS[program.status] || STATUS_CLS.Draft}`}>
+          <div key={program.id} className="clean-card p-5 rounded-2xl flex flex-col hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group relative">
+            <div className="flex justify-between items-start mb-3">
+              <span className={`px-2 py-0.5 rounded-full font-label-sm text-[10px] uppercase tracking-wider ${STATUS_CLS[program.status] || STATUS_CLS.Draft}`}>
                 {program.status}
               </span>
               <div className="flex items-center gap-1">
                 <button 
                   onClick={() => handleToggleStatus(program.id, program.status)}
-                  className="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-primary/10 rounded-full transition-colors"
+                  className="w-7 h-7 flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-primary/10 rounded-full transition-colors"
                   title="Toggle Status"
                 >
-                  <span className="material-symbols-outlined text-[18px]">sync_alt</span>
+                  <span className="material-symbols-outlined text-[16px]">sync_alt</span>
                 </button>
                 <button 
                   onClick={() => setDeleteConfirm(program.id)}
-                  className="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:text-error hover:bg-error/10 rounded-full transition-colors"
+                  className="w-7 h-7 flex items-center justify-center text-on-surface-variant hover:text-error hover:bg-error/10 rounded-full transition-colors"
                   title="Delete"
                 >
-                  <span className="material-symbols-outlined text-[18px]">delete</span>
+                  <span className="material-symbols-outlined text-[16px]">delete</span>
                 </button>
               </div>
             </div>
             
-            <h3 className="font-headline-md text-xl text-on-surface mb-1 line-clamp-2 pr-4">{program.name}</h3>
-            <p className="font-body-sm text-on-surface-variant mb-4">{program.category || 'STEM'}</p>
+            <h3 className="font-headline-md text-lg text-on-surface mb-0.5 line-clamp-2 pr-4">{program.name}</h3>
+            <p className="font-body-sm text-[13px] text-on-surface-variant mb-3">{program.category || 'STEM'}</p>
             
-            <div className="flex items-baseline gap-1.5 mb-6">
-              <span className="font-headline-md text-2xl text-primary font-bold">{program.amount}</span>
-              <span className="font-label-sm text-on-surface-variant">Total Grant</span>
+            <div className="flex items-baseline gap-1.5 mb-4">
+              <span className="font-headline-md text-xl text-primary font-bold">{program.amount}</span>
+              <span className="font-label-sm text-[11px] text-on-surface-variant">Total Grant</span>
             </div>
 
-            <div className="bg-surface-container-lowest rounded-xl p-4 flex justify-between items-center mb-6 border border-outline-variant/30">
+            <div className="bg-surface-container-lowest rounded-xl p-3.5 flex justify-between items-center mb-5 border border-outline-variant/30">
               <div>
-                <div className="font-label-sm text-[10px] text-on-surface-variant uppercase tracking-widest mb-1">Applicants</div>
+                <div className="font-label-sm text-[9px] text-on-surface-variant uppercase tracking-widest mb-0.5">Applicants</div>
                 <div className="flex items-baseline gap-2">
-                  <span className="font-headline-md text-xl text-on-surface">{program.applicants || 0}</span>
-                  <span className={`font-label-sm text-[11px] ${program.status === 'Closed' ? 'text-on-surface-variant' : 'text-green-600'}`}>
+                  <span className="font-headline-md text-lg text-on-surface">{program.applicants || 0}</span>
+                  <span className={`font-label-sm text-[10px] ${program.status === 'Closed' ? 'text-on-surface-variant' : 'text-green-600'}`}>
                     {program.status === 'Closed' ? 'Final Count' : '+0 today'}
                   </span>
                 </div>
@@ -176,11 +176,11 @@ export default function ProviderScholarshipsPage() {
 
             <div className="mt-auto">
               {program.status === 'Closed' ? (
-                <Link href="/provider/reports" className="w-full block text-center bg-surface-container text-on-surface font-label-md py-3 px-5 rounded-xl hover:bg-surface-container-high transition-colors">
+                <Link href="/provider/reports" className="w-full block text-center bg-surface-container text-on-surface font-label-md py-2.5 px-4 rounded-xl hover:bg-surface-container-high transition-colors text-sm">
                   View Report
                 </Link>
               ) : (
-                <Link href="/provider/applications" className="w-full block text-center bg-primary text-white font-label-md py-3 px-5 rounded-xl hover:opacity-90 transition-opacity">
+                <Link href="/provider/applications" className="w-full block text-center bg-primary text-white font-label-md py-2.5 px-4 rounded-xl hover:opacity-90 transition-opacity text-sm">
                   Manage Applicants
                 </Link>
               )}
@@ -189,12 +189,12 @@ export default function ProviderScholarshipsPage() {
         ))}
 
         {/* Post New Scholarship Card */}
-        <Link href="/provider/scholarships/new" className="clean-card rounded-2xl border-2 border-dashed border-outline-variant/50 flex flex-col items-center justify-center h-full min-h-[350px] hover:bg-surface-container-lowest hover:border-primary/50 transition-all group p-6 text-center shadow-none hover:shadow-md">
-          <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-4 group-hover:scale-110 transition-transform">
-            <span className="material-symbols-outlined text-[32px]">add</span>
+        <Link href="/provider/scholarships/new" className="clean-card rounded-2xl border-2 border-dashed border-outline-variant/50 flex flex-col items-center justify-center h-full min-h-[300px] hover:bg-surface-container-lowest hover:border-primary/50 transition-all group p-5 text-center shadow-none hover:shadow-md">
+          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-3 group-hover:scale-110 transition-transform">
+            <span className="material-symbols-outlined text-[28px]">add</span>
           </div>
-          <h3 className="font-headline-md text-xl text-on-surface mb-2 group-hover:text-primary transition-colors">Post New Scholarship</h3>
-          <p className="font-body-md text-on-surface-variant max-w-[200px]">Reach thousands of eligible students today.</p>
+          <h3 className="font-headline-md text-lg text-on-surface mb-1 group-hover:text-primary transition-colors">Post New Scholarship</h3>
+          <p className="font-body-md text-sm text-on-surface-variant max-w-[200px]">Reach thousands of eligible students today.</p>
         </Link>
       </div>
     </div>
