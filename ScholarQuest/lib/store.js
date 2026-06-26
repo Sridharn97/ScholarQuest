@@ -323,7 +323,7 @@ export function getMessages() {
         lastMessage: `Welcome to ${org} support.`,
         time: 'Just now', unread: 0, online: true,
         thread: [
-          { id: 1, content: `Hello! If you have any questions about our scholarships, feel free to ask here.`, isMe: false, time: 'Just now' }
+          { id: 1, content: `Hello! If you have any questions about our scholarships, feel free to ask here.`, isMe: false, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), timestamp: Date.now() }
         ]
       });
       changed = true;
@@ -343,10 +343,10 @@ export function sendMessage(convId, text) {
   if (!conv) return;
   const now = new Date();
   const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  const msg = { id: Date.now(), content: text, isMe: true, time: timeStr };
+  const msg = { id: Date.now(), content: text, isMe: true, time: timeStr, timestamp: Date.now() };
   conv.thread.push(msg);
   conv.lastMessage = text;
-  conv.time = 'Just now';
+  conv.time = timeStr;
   set(KEYS.MESSAGES, convs);
 }
 
@@ -362,11 +362,10 @@ export function providerSendMessage(convId, text) {
   if (!conv) return;
   const now = new Date();
   const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  // Provider sending a message looks like `isMe: false` from the student's perspective
-  const msg = { id: Date.now(), content: text, isMe: false, time: timeStr };
+  const msg = { id: Date.now(), content: text, isMe: false, time: timeStr, timestamp: Date.now() };
   conv.thread.push(msg);
   conv.lastMessage = text;
-  conv.time = 'Just now';
+  conv.time = timeStr;
   conv.unread = (conv.unread || 0) + 1; // Increment unread counter for student
   conv.hiddenForStudent = false;
   set(KEYS.MESSAGES, convs);

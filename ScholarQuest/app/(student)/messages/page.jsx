@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 import useMessages from '@/lib/hooks/useMessages';
 
 export default function MessagesPage() {
@@ -21,6 +22,23 @@ export default function MessagesPage() {
 
   const activeConvData = convs.find(c => c.id === activeConv);
   const totalUnread = convs.reduce((sum, c) => sum + (c.unread || 0), 0);
+
+  const formatDateLabel = (timestamp) => {
+    if (!timestamp) return 'TODAY';
+    const date = new Date(timestamp);
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    
+    if (date.toDateString() === today.toDateString()) return 'TODAY';
+    if (date.toDateString() === yesterday.toDateString()) return 'YESTERDAY';
+    
+    const diffDays = Math.floor((today - date) / (1000 * 60 * 60 * 24));
+    if (diffDays < 7 && diffDays > 0) {
+      return date.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+    }
+    return date.toLocaleDateString('en-US', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  };
 
   return (
     <div className="flex h-[calc(100vh-130px)] bg-[#f8fafc] overflow-hidden relative shadow-sm border border-outline-variant/20 m-4 rounded-xl">
@@ -123,50 +141,64 @@ export default function MessagesPage() {
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-1 bg-[#f8fafc]">
-          <div className="text-center mb-4 mt-2">
-            <span className="font-label-sm text-[10px] uppercase font-bold tracking-wider text-on-surface-variant bg-surface-container-low px-3 py-1 rounded-full shadow-sm">Today</span>
-          </div>
+        <div className="flex-1 overflow-y-auto p-4 bg-[#f8fafc]">
           {activeConvData?.thread?.map((msg, index, arr) => {
             const isMe = msg.isMe;
             const prevMsg = arr[index - 1];
             const nextMsg = arr[index + 1];
-            const isFirstInGroup = !prevMsg || prevMsg.isMe !== isMe;
-            const isLastInGroup = !nextMsg || nextMsg.isMe !== isMe;
+            
+            const currentDayLabel = formatDateLabel(msg.timestamp);
+            const prevDayLabel = prevMsg ? formatDateLabel(prevMsg.timestamp) : null;
+            const showDateDivider = currentDayLabel !== prevDayLabel;
+
+            const isFirstInGroup = !prevMsg || prevMsg.isMe !== isMe || showDateDivider;
+            const isLastInGroup = !nextMsg || nextMsg.isMe !== isMe || (nextMsg && formatDateLabel(nextMsg.timestamp) !== currentDayLabel);
 
             return (
-              <div key={msg.id} className={`flex gap-2 w-full ${isMe ? 'justify-end' : 'justify-start'} ${isFirstInGroup ? 'mt-4' : ''}`}>
-                {!isMe && (
-                  <div className="w-6 shrink-0 flex items-end">
-                    {isLastInGroup && activeConvData && (
-                      <div className={`w-6 h-6 rounded-full flex items-center justify-center font-bold text-[10px] shadow-sm ${activeConvData.avatarBg}`}>
-                        {activeConvData.avatar}
-                      </div>
-                    )}
+              <React.Fragment key={msg.id}>
+                {showDateDivider && (
+                  <div className="text-center mb-3 mt-4 flex justify-center">
+                    <span className="font-label-sm text-[10px] uppercase font-bold tracking-wider text-on-surface-variant bg-surface-container-low px-3 py-1 rounded-full shadow-sm">
+                      {currentDayLabel}
+                    </span>
                   </div>
                 )}
+                <div className={`flex gap-2 w-full ${isMe ? 'justify-end' : 'justify-start'} ${isFirstInGroup ? (index === 0 && !showDateDivider ? 'mt-2' : 'mt-3') : 'mt-[3px]'}`}>
+                  {!isMe && (
+                    <div className="w-6 shrink-0 flex items-end">
+                      {isLastInGroup && activeConvData && (
+                        <div className={`w-6 h-6 rounded-full flex items-center justify-center font-bold text-[10px] shadow-sm ${activeConvData.avatarBg}`}>
+                          {activeConvData.avatar}
+                        </div>
+                      )}
+                    </div>
+                  )}
 
-                <div className={`max-w-[75%] sm:max-w-[65%] flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
-                  <div
-                    className={`px-3.5 py-2 shadow-sm relative group
-                      ${isMe ? 'bg-primary text-white' : 'bg-white border border-slate-100 text-slate-800'}
-                      ${isFirstInGroup && isLastInGroup ? 'rounded-2xl' : ''}
-                      ${isFirstInGroup && !isLastInGroup ? (isMe ? 'rounded-t-2xl rounded-bl-2xl rounded-br-sm' : 'rounded-t-2xl rounded-br-2xl rounded-bl-sm') : ''}
-                      ${!isFirstInGroup && isLastInGroup ? (isMe ? 'rounded-b-2xl rounded-tl-2xl rounded-tr-sm' : 'rounded-b-2xl rounded-tr-2xl rounded-tl-sm') : ''}
-                      ${!isFirstInGroup && !isLastInGroup ? (isMe ? 'rounded-l-2xl rounded-r-sm' : 'rounded-r-2xl rounded-l-sm') : ''}
-                    `}
-                  >
-                    <p className="font-body-md text-[13.5px] leading-relaxed">{msg.content}</p>
-                    <div className={`text-[9px] mt-0.5 opacity-60 ${isMe ? 'text-right' : 'text-left'}`}>
-                      {msg.time}
+                  <div className={`max-w-[80%] sm:max-w-[70%] flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
+                    <div
+                      className={`px-3 pt-2 pb-1.5 shadow-sm relative group min-w-[75px]
+                        ${isMe ? 'bg-primary text-white' : 'bg-white border border-slate-100 text-slate-800'}
+                        ${isFirstInGroup && isLastInGroup ? 'rounded-2xl' : ''}
+                        ${isFirstInGroup && !isLastInGroup ? (isMe ? 'rounded-t-2xl rounded-bl-2xl rounded-br-sm' : 'rounded-t-2xl rounded-br-2xl rounded-bl-sm') : ''}
+                        ${!isFirstInGroup && isLastInGroup ? (isMe ? 'rounded-b-2xl rounded-tl-2xl rounded-tr-sm' : 'rounded-b-2xl rounded-tr-2xl rounded-tl-sm') : ''}
+                        ${!isFirstInGroup && !isLastInGroup ? (isMe ? 'rounded-l-2xl rounded-r-sm' : 'rounded-r-2xl rounded-l-sm') : ''}
+                      `}
+                    >
+                      <div className="flex flex-wrap items-end gap-x-3 justify-between">
+                        <p className="font-body-md text-[14px] leading-relaxed break-words pb-0.5">{msg.content}</p>
+                        <div className={`text-[10px] opacity-60 shrink-0 ml-auto flex items-center gap-1 mt-1 font-medium`}>
+                          {msg.time}
+                          {isMe && <span className="material-symbols-outlined text-white" style={{ fontSize: '14px' }}>done_all</span>}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {isMe && (
-                  <div className="w-6 shrink-0" />
-                )}
-              </div>
+                  {isMe && (
+                    <div className="w-6 shrink-0" />
+                  )}
+                </div>
+              </React.Fragment>
             );
           })}
           <div ref={messagesEndRef} className="h-2" />
