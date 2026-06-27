@@ -1,5 +1,6 @@
 'use client';
 import useProviderApplications from '@/lib/hooks/useProviderApplications';
+import { formatGpa } from '@/lib/gpaConverter';
 
 const STATUS_CONFIG = {
   'Approved': { cls: 'bg-green-100 text-green-700', icon: 'check_circle' },
@@ -149,7 +150,9 @@ export default function ProviderApplicationsPage() {
                           <span className="material-symbols-outlined text-on-surface-variant" style={{ fontSize: '16px' }}>grade</span>
                           <span className="font-label-sm text-on-surface-variant">GPA</span>
                         </div>
-                        <span className="font-label-md text-on-surface ml-6">{viewApp.gpa}</span>
+                        <span className="font-label-md text-on-surface ml-6">
+                          {formatGpa(viewApp.gpa, viewApp.gradingSystem, viewApp.gpaScale, viewApp.gpaPercentage)}
+                        </span>
                       </div>
                     )}
 
@@ -184,7 +187,7 @@ export default function ProviderApplicationsPage() {
                     {viewApp.customResponses.map((resp, idx) => (
                       <div key={idx} className="flex flex-col p-4 bg-white rounded-xl border border-outline-variant/20 shadow-sm hover:border-primary/30 transition-colors">
                         <span className="font-label-sm text-on-surface-variant mb-1">{resp.question}</span>
-                        {resp.type === 'text' ? (
+                        {['text', 'multiple_choice', 'date'].includes(resp.type) ? (
                           <span className="font-label-md text-on-surface">{resp.answer}</span>
                         ) : (
                           <a href="#" className="font-label-md text-primary hover:underline flex items-center gap-1">

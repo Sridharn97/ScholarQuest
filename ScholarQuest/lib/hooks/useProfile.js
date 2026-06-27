@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { auth, db } from '@/lib/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { convertToPercentage } from '@/lib/gpaConverter';
 
 function calcProfileCompletion(u) {
   if (!u) return 40;
@@ -54,6 +55,9 @@ export default function useProfile() {
             lastName: data.lastName || '',
             bio: data.bio || 'Tell us about yourself...',
             gpa: data.gpa || '',
+            gradingSystem: data.gradingSystem || 'CGPA',
+            gpaScale: data.gpaScale || '10',
+            gpaPercentage: data.gpaPercentage || '',
             institution: data.institution || '',
             phone: initialPhone,
             linkedin: data.linkedin || '',
@@ -73,8 +77,10 @@ export default function useProfile() {
 
   const handleSave = async () => {
     if (!userUid) return;
+    const pct = convertToPercentage(form.gpa, form.gradingSystem, form.gpaScale);
     const updated = {
       ...form,
+      gpaPercentage: pct,
       name: `${form.firstName} ${form.lastName}`,
       initials: `${(form.firstName || 'A')[0]}${(form.lastName || 'J')[0]}`.toUpperCase(),
       skills,

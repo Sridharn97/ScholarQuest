@@ -9,7 +9,7 @@ const testimonials = [
     university: "UC Berkeley",
     uniColor: "bg-blue-50 text-blue-800 border-blue-100",
     avatarGrad: "from-[#004ac6] to-[#1d4ed8]",
-    award: "$120,000 Full-Ride",
+    award: "₹1,20,00,000 Full-Ride",
     matchDetails: "Match Score: 98% • GPA & Extracurriculars"
   },
   {
@@ -20,7 +20,7 @@ const testimonials = [
     university: "MIT",
     uniColor: "bg-rose-50 text-rose-800 border-rose-100",
     avatarGrad: "from-[#712ae2] to-[#8a4cfc]",
-    award: "$45,000 / Year",
+    award: "₹45,00,000 / Year",
     matchDetails: "Match Score: 96% • STEM Major & Projects"
   },
   {
@@ -53,7 +53,7 @@ const testimonials = [
     university: "Harvard University",
     uniColor: "bg-red-50 text-red-800 border-red-100",
     avatarGrad: "from-[#c71585] to-[#db7093]",
-    award: "$30,000 Award",
+    award: "₹30,00,000 Award",
     matchDetails: "Match Score: 94% • Academic Excellence"
   },
   {

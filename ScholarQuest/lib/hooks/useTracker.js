@@ -5,10 +5,10 @@ import { collection, query, where, onSnapshot, addDoc, doc, updateDoc, deleteDoc
 import { onAuthStateChanged } from 'firebase/auth';
 
 const COLUMN_DEF = [
-  { id: 'col_interested', title: 'Interested' },
-  { id: 'col_applied', title: 'Applied' },
-  { id: 'col_offers', title: 'Offers' },
-  { id: 'col_rejected', title: 'Rejected' },
+  { id: 'col_interested', label: 'Interested' },
+  { id: 'col_applied', label: 'Applied' },
+  { id: 'col_accepted', label: 'Offers' },
+  { id: 'col_rejected', label: 'Rejected' },
 ];
 
 export default function useTracker() {
@@ -41,8 +41,51 @@ export default function useTracker() {
       unsubscribeSnapshot = onSnapshot(q, (snapshot) => {
         const docs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
         
+        // Group cards by scholarshipId to check for duplicates
+        const scholarshipGroups = {};
+        docs.forEach(doc => {
+          if (doc.scholarshipId) {
+            if (!scholarshipGroups[doc.scholarshipId]) {
+              scholarshipGroups[doc.scholarshipId] = [];
+            }
+            scholarshipGroups[doc.scholarshipId].push(doc);
+          }
+        });
+
+        const cardsToDelete = [];
+        
+        Object.keys(scholarshipGroups).forEach(schId => {
+          const group = scholarshipGroups[schId];
+          if (group.length > 1) {
+            // Priority: col_accepted (4) > col_rejected (3) > col_applied (2) > col_interested (1)
+            const colPriority = {
+              'col_accepted': 4,
+              'col_rejected': 3,
+              'col_applied': 2,
+              'col_interested': 1
+            };
+            group.sort((a, b) => {
+              const priorityA = colPriority[a.columnId] || 0;
+              const priorityB = colPriority[b.columnId] || 0;
+              return priorityB - priorityA; // Descending
+            });
+            // Keep the first (highest priority), delete the rest
+            for (let i = 1; i < group.length; i++) {
+              cardsToDelete.push(group[i]);
+            }
+          }
+        });
+
+        // Delete duplicate records from Firestore
+        cardsToDelete.forEach(c => {
+          deleteDoc(doc(db, 'tracker', c.id)).catch(err => console.error("Deduplication error: ", err));
+        });
+
+        // Filter out the deleted cards from local state list
+        const filteredDocs = docs.filter(d => !cardsToDelete.some(c => c.id === d.id));
+        
         const newCols = COLUMN_DEF.map(c => {
-           const colCards = docs.filter(d => d.columnId === c.id);
+           const colCards = filteredDocs.filter(d => d.columnId === c.id);
            colCards.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
            return { ...c, cards: colCards };
         });

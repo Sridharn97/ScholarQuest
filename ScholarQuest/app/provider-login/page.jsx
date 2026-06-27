@@ -64,7 +64,7 @@ export default function ProviderLoginPage() {
           <div className="grid grid-cols-2 gap-4 mt-6">
             {[
               { value: '5,000+', label: 'Active Applications', icon: 'description', color: 'text-primary', bg: 'bg-primary/10' },
-              { value: '$1.2M', label: 'Allocated Funds', icon: 'payments', color: 'text-green-600', bg: 'bg-green-100' },
+              { value: '₹10 Cr', label: 'Allocated Funds', icon: 'payments', color: 'text-green-600', bg: 'bg-green-100' },
             ].map((stat) => (
               <div key={stat.label} className="flex items-center gap-3 p-3 rounded-2xl border border-white/80 bg-white/70 backdrop-blur-md shadow-sm">
                 <div className={`w-8 h-8 rounded-lg ${stat.bg} flex items-center justify-center flex-shrink-0`}>

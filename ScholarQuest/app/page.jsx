@@ -7,7 +7,7 @@ import SuccessStoriesSection from '@/components/sections/SuccessStoriesSection';
 import useUserRole from '@/lib/hooks/useUserRole';
 
 const stats = [
-  { value: '$250M+', label: 'Scholarship Funds' },
+  { value: '₹2,500 Cr+', label: 'Scholarship Funds' },
   { value: '50,000+', label: 'Opportunities' },
   { value: '12,000+', label: 'Scholars Funded' },
   { value: '88%', label: 'Success Rate' },
@@ -152,7 +152,7 @@ export default function LandingPage() {
                 </div>
                 <div>
                   <p className="text-xs text-on-surface-variant">Scholarship Found</p>
-                  <p className="text-sm font-bold text-on-surface">$45,000 Award 🎉</p>
+                  <p className="text-sm font-bold text-on-surface">₹45,00,000 Award 🎉</p>
                 </div>
               </div>
 

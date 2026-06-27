@@ -110,10 +110,10 @@ export function registerUser({ firstName, lastName, email, password, institution
     initials,
     bio: 'Senior student looking to make an impact in the academic world.',
     gpa: '3.92',
-    nationality: 'United States',
-    state: 'California',
+    nationality: 'Indian',
+    state: 'Maharashtra',
     dob: '2003-05-15',
-    phone: '+1 (555) 019-2834',
+    phone: '+91 98765 43210',
     linkedin: 'linkedin.com/in/alex-johnson',
     skills: ['Machine Learning', 'Python', 'Data Analysis', 'Research'],
     interests: ['Artificial Intelligence', 'Climate Tech', 'Biotech'],
@@ -427,11 +427,11 @@ const DEFAULT_ADMIN_APPLICATIONS = [
 ];
 
 const DEFAULT_ADMIN_SCHOLARSHIPS = [
-  { id: 1, name: 'Global Tech Innovators Fund', category: 'STEM', amount: '$25,000', deadline: '2026-10-15', applicants: 142, status: 'Active', icon: 'school', org: 'Global Tech Foundation', match: '98%', desc: 'Awarded to students demonstrating exceptional leadership in computer science and AI ethics.' },
-  { id: 2, name: 'Future Leaders Foundation', category: 'Leadership', amount: '$10,000', deadline: '2026-11-02', applicants: 87, status: 'Active', icon: 'star', org: 'Meridian Academic Foundation', match: '92%', desc: 'Supporting visionary students who are driving change in their local communities.' },
-  { id: 3, name: 'Women in Tech Grant', category: 'STEM', amount: '$12,000', deadline: '2026-10-30', applicants: 203, status: 'Active', icon: 'school', org: 'Ada Lovelace Institute', match: '92%', desc: 'Supporting female students pursuing undergraduate or graduate degrees in STEM fields.' },
-  { id: 4, name: 'Green Future Fund', category: 'International', amount: '$8,500', deadline: '2026-12-01', applicants: 56, status: 'Active', icon: 'public', org: 'EcoRoots Global', match: '85%', desc: 'Funding projects and studies dedicated to climate change research and sustainability initiatives.' },
-  { id: 5, name: 'Visual Arts Merit Award', category: 'Creative', amount: '$20,000', deadline: '2026-01-15', applicants: 31, status: 'Active', icon: 'draw', org: 'National Endowment for Arts', match: '79%', desc: 'For outstanding portfolios in visual arts, design, and digital media.' },
+  { id: 1, name: 'Global Tech Innovators Fund', category: 'STEM', amount: '₹25,00,000', deadline: '2026-10-15', applicants: 142, status: 'Active', icon: 'school', org: 'Global Tech Foundation', match: '98%', desc: 'Awarded to students demonstrating exceptional leadership in computer science and AI ethics.' },
+  { id: 2, name: 'Future Leaders Foundation', category: 'Leadership', amount: '₹10,00,000', deadline: '2026-11-02', applicants: 87, status: 'Active', icon: 'star', org: 'Meridian Academic Foundation', match: '92%', desc: 'Supporting visionary students who are driving change in their local communities.' },
+  { id: 3, name: 'Women in Tech Grant', category: 'STEM', amount: '₹12,00,000', deadline: '2026-10-30', applicants: 203, status: 'Active', icon: 'school', org: 'Ada Lovelace Institute', match: '92%', desc: 'Supporting female students pursuing undergraduate or graduate degrees in STEM fields.' },
+  { id: 4, name: 'Green Future Fund', category: 'International', amount: '₹8,50,000', deadline: '2026-12-01', applicants: 56, status: 'Active', icon: 'public', org: 'EcoRoots Global', match: '85%', desc: 'Funding projects and studies dedicated to climate change research and sustainability initiatives.' },
+  { id: 5, name: 'Visual Arts Merit Award', category: 'Creative', amount: '₹20,00,000', deadline: '2026-01-15', applicants: 31, status: 'Active', icon: 'draw', org: 'National Endowment for Arts', match: '79%', desc: 'For outstanding portfolios in visual arts, design, and digital media.' },
 ];
 
 const DEFAULT_ADMIN_STUDENTS = [
@@ -547,7 +547,7 @@ export function updateApplicationStatus(id, status) {
       if (targetCol) {
         if (status === 'Approved') {
           cardToMove.accepted = true;
-          cardToMove.amount = '$25,000 /yr';
+          cardToMove.amount = '₹25,00,000 /yr';
         } else {
           delete cardToMove.accepted;
         }
@@ -601,7 +601,7 @@ export function addAdminScholarship(scholarship) {
     id: Date.now(), 
     name: scholarship.name,
     category: scholarship.category || 'STEM',
-    amount: scholarship.amount || '$10,000',
+    amount: scholarship.amount || '₹10,00,000',
     deadline: scholarship.deadline || '2026-12-31',
     applicants: 0, 
     status: scholarship.status || 'Active',
@@ -665,10 +665,10 @@ export function ensureDefaults() {
       initials: 'AJ',
       bio: 'Computer Science senior interested in Machine Learning and Artificial Intelligence.',
       gpa: '3.92',
-      nationality: 'United States',
-      state: 'California',
+      nationality: 'Indian',
+      state: 'Maharashtra',
       dob: '2003-05-15',
-      phone: '+1 (555) 019-2834',
+      phone: '+91 98765 43210',
       linkedin: 'linkedin.com/in/alex-johnson',
       skills: ['Machine Learning', 'Python', 'Data Analysis', 'Research'],
       interests: ['Artificial Intelligence', 'Climate Tech', 'Biotech'],

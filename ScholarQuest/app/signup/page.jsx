@@ -160,7 +160,7 @@ export default function SignupPage() {
           <div className="grid grid-cols-3 gap-3">
             {[
               { value: '50K+', label: 'Scholarships' },
-              { value: '$250M', label: 'Total Funding' },
+              { value: '₹2,500 Cr', label: 'Total Funding' },
               { value: 'Free', label: 'Always' },
             ].map((s) => (
               <div key={s.label} className="text-center bg-white/70 backdrop-blur-md rounded-xl py-2.5 border border-white/80 shadow-sm hover:bg-white/90 transition-colors">

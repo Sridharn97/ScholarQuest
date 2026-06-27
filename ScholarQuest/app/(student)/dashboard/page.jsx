@@ -243,7 +243,7 @@ export default function DashboardPage() {
           <div className="grid grid-cols-2 gap-4 flex-1">
             <div className="bg-surface-container-low rounded-xl p-5 border border-outline-variant/20 flex flex-col">
               <div className="flex justify-between items-start mb-6">
-                <span className="text-xs font-extrabold text-primary bg-surface-container-lowest px-2.5 py-1 rounded-md shadow-sm border border-outline-variant/30">$15,000</span>
+                <span className="text-xs font-extrabold text-primary bg-surface-container-lowest px-2.5 py-1 rounded-md shadow-sm border border-outline-variant/30">₹15,00,000</span>
                 <div className="w-7 h-7 rounded-full bg-surface-container-lowest flex items-center justify-center shadow-sm border border-outline-variant/30 text-primary">
                   <span className="material-symbols-outlined text-[16px]">stars</span>
                 </div>
@@ -257,7 +257,7 @@ export default function DashboardPage() {
 
             <div className="bg-surface-container-low rounded-xl p-5 border border-outline-variant/20 flex flex-col">
               <div className="flex justify-between items-start mb-6">
-                <span className="text-xs font-extrabold text-secondary bg-surface-container-lowest px-2.5 py-1 rounded-md shadow-sm border border-outline-variant/30">$5,000</span>
+                <span className="text-xs font-extrabold text-secondary bg-surface-container-lowest px-2.5 py-1 rounded-md shadow-sm border border-outline-variant/30">₹5,00,000</span>
                 <div className="w-7 h-7 rounded-full bg-surface-container-lowest flex items-center justify-center shadow-sm border border-outline-variant/30 text-secondary">
                   <span className="material-symbols-outlined text-[16px]">bolt</span>
                 </div>

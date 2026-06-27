@@ -72,8 +72,8 @@ export default function DiscoveryPage() {
                     className="w-full accent-primary h-1.5 bg-surface-variant rounded-lg appearance-none cursor-pointer"
                   />
                   <div className="flex justify-between text-[10px] text-on-surface-variant font-medium px-1">
-                    <span>$0</span>
-                    <span>$50k+</span>
+                    <span>₹0</span>
+                    <span>₹50L+</span>
                   </div>
                 </div>
               </div>

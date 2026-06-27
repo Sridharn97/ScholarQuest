@@ -1,6 +1,7 @@
 'use client';
 import Link from 'next/link';
 import useApply from '@/lib/hooks/useApply';
+import { convertToPercentage } from '@/lib/gpaConverter';
 
 const initialSteps = [
   { num: '01', label: 'Personal Info', sub: 'Completed', done: true },
@@ -16,6 +17,12 @@ export default function ApplyPage({ params }) {
     loading,
     gpa,
     setGpa,
+    gradingSystem,
+    setGradingSystem,
+    gpaScale,
+    setGpaScale,
+    gpaPercentage,
+    setGpaPercentage,
     institution,
     setInstitution,
     studyField,
@@ -204,15 +211,68 @@ export default function ApplyPage({ params }) {
                     className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all"
                   />
                 </div>
-                <div className="space-y-2">
-                  <label className="font-label-md text-label-md text-on-surface">Current Cumulative GPA</label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    value={gpa}
-                    onChange={(e) => setGpa(e.target.value)}
-                    className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all"
-                  />
+                <div className="space-y-4 p-4 border border-outline-variant/30 rounded-10 bg-surface-container-lowest col-span-1 md:col-span-2">
+                  <div className="space-y-2">
+                    <label className="font-label-md text-label-md text-on-surface">Grading System</label>
+                    <div className="flex gap-4">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" name="applyGradingSystem" value="CGPA" checked={gradingSystem === 'CGPA'} onChange={e => setGradingSystem(e.target.value)} className="accent-primary" />
+                        <span className="font-body-md text-on-surface">CGPA</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" name="applyGradingSystem" value="Percentage" checked={gradingSystem === 'Percentage'} onChange={e => setGradingSystem(e.target.value)} className="accent-primary" />
+                        <span className="font-body-md text-on-surface">Percentage</span>
+                      </label>
+                    </div>
+                  </div>
+                  
+                  {gradingSystem === 'CGPA' ? (
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="font-label-md text-label-md text-on-surface">Current CGPA</label>
+                        <input
+                          type="number"
+                          step="0.01"
+                          value={gpa}
+                          onChange={(e) => setGpa(e.target.value)}
+                          className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="font-label-md text-label-md text-on-surface">Out Of</label>
+                        <select
+                          value={gpaScale}
+                          onChange={(e) => setGpaScale(e.target.value)}
+                          className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all appearance-none bg-white"
+                        >
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                          <option value="10">10</option>
+                        </select>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <label className="font-label-md text-label-md text-on-surface">Current Percentage (%)</label>
+                      <input
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        max="100"
+                        value={gpa}
+                        onChange={(e) => setGpa(e.target.value)}
+                        className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all"
+                      />
+                    </div>
+                  )}
+                  {gpa && (
+                    <p className="text-xs text-on-surface-variant font-medium mt-1">
+                      Converted Percentage Equivalent:{' '}
+                      <span className="font-bold text-primary">
+                        {convertToPercentage(gpa, gradingSystem, gpaScale) || '—'}%
+                      </span>
+                    </p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <label className="font-label-md text-label-md text-on-surface">Expected Graduation Date</label>
@@ -269,6 +329,14 @@ export default function ApplyPage({ params }) {
                           </select>
                           <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none" style={{ fontSize: '20px' }}>expand_more</span>
                         </div>
+                      ) : q.type === 'date' ? (
+                        <input
+                          type="date"
+                          value={customResponses[q.id]?.answer || ''}
+                          onChange={(e) => setCustomResponses({ ...customResponses, [q.id]: { question: q.text, answer: e.target.value, type: q.type } })}
+                          className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md text-on-surface outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all"
+                          required
+                        />
                       ) : (
                         <div className="mt-2 flex items-center justify-center w-full">
                           <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-outline-variant border-dashed rounded-10 cursor-pointer bg-surface-container-lowest hover:bg-surface-container-low transition-colors">

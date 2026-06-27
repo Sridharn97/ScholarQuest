@@ -139,12 +139,12 @@ export default function ScholarshipDetailsPage({ params }) {
             {applicationStatus ? (
               <div
                 className={`block w-full py-3 rounded-10 font-label-md text-label-md text-center shadow-sm mb-3 font-bold cursor-default ${
-                  applicationStatus === 'Accepted' ? 'bg-green-100 text-green-700 border border-green-200' :
+                  applicationStatus === 'Accepted' || applicationStatus === 'Approved' ? 'bg-green-100 text-green-700 border border-green-200' :
                   applicationStatus === 'Rejected' ? 'bg-red-50 text-red-600 border border-red-200' :
                   'bg-blue-50 text-blue-700 border border-blue-200'
                 }`}
               >
-                {applicationStatus === 'Accepted' ? 'Status: Accepted 🎉' : 
+                {applicationStatus === 'Accepted' || applicationStatus === 'Approved' ? 'Status: Approved 🎉' : 
                  applicationStatus === 'Rejected' ? 'Status: Rejected' : 
                  'Already Applied'}
               </div>

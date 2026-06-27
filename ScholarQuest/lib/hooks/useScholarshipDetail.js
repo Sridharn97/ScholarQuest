@@ -88,6 +88,7 @@ export default function useScholarshipDetail(params) {
         desc: scholarship.desc || 'Saved from Discovery',
         type: scholarship.category || 'Scholarship',
         date: scholarship.deadline,
+        amount: scholarship.amount || null,
         createdAt: Date.now()
       });
       setSaved(true);

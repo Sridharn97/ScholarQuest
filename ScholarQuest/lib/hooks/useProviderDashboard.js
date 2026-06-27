@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { auth, db } from '@/lib/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
-import { collection, query, where, onSnapshot, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, doc, getDoc, updateDoc, getDocs, deleteDoc } from 'firebase/firestore';
 
 export default function useProviderDashboard() {
   const [applications, setApplications] = useState([]);
@@ -51,8 +51,44 @@ export default function useProviderDashboard() {
 
   const handleQuickAction = async (id, status) => {
     try {
-      await updateDoc(doc(db, 'applications', id), { status });
-      showToast(`Application ${status.toLowerCase()} successfully!`);
+      const appDoc = await getDoc(doc(db, 'applications', id));
+      if (appDoc.exists()) {
+        const appData = appDoc.data();
+        const { studentId, scholarshipId } = appData;
+
+        await updateDoc(doc(db, 'applications', id), { status });
+        showToast(`Application ${status.toLowerCase()} successfully!`);
+
+        if (studentId && scholarshipId) {
+          const trackerQ = query(
+            collection(db, 'tracker'),
+            where('userId', '==', studentId),
+            where('scholarshipId', '==', scholarshipId)
+          );
+          const trackerSnap = await getDocs(trackerQ);
+          if (!trackerSnap.empty) {
+            let targetCol = 'col_applied';
+            let acceptedVal = false;
+            if (status === 'Approved') {
+              targetCol = 'col_accepted';
+              acceptedVal = true;
+            } else if (status === 'Rejected') {
+              targetCol = 'col_rejected';
+            }
+
+            await updateDoc(doc(db, 'tracker', trackerSnap.docs[0].id), {
+              columnId: targetCol,
+              accepted: acceptedVal,
+              amount: appData.amount || null
+            });
+
+            // Clean up any remaining duplicates immediately
+            for (let i = 1; i < trackerSnap.docs.length; i++) {
+              await deleteDoc(doc(db, 'tracker', trackerSnap.docs[i].id));
+            }
+          }
+        }
+      }
     } catch (e) {
       console.error(e);
       showToast('Error updating application');

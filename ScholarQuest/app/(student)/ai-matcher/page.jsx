@@ -2,6 +2,7 @@
 import useAiMatcher from '@/lib/hooks/useAiMatcher';
 import { auth, db } from '@/lib/firebase';
 import { collection, addDoc } from 'firebase/firestore';
+import { formatGpa } from '@/lib/gpaConverter';
 
 const suggestions = [
   'Find STEM full-ride scholarships',
@@ -42,7 +43,7 @@ export default function AiMatcherPage() {
                     <p className="font-body-lg text-body-lg text-on-surface">
                       Hello {firstName}! I&apos;ve analyzed your profile as a{' '}
                       <span className="text-primary font-semibold">{user?.studyField || 'Computer Science'} Student</span>{' '}
-                      {user?.gpa && <span>with a <span className="text-secondary font-semibold">{user.gpa} GPA</span>. </span>}
+                      {user?.gpa && <span>with a <span className="text-secondary font-semibold">{formatGpa(user.gpa, user.gradingSystem, user.gpaScale, user.gpaPercentage)}</span>. </span>}
                       I&apos;m ready to help you find your perfect academic funding match.
                     </p>
                     <p className="font-body-md text-body-md text-on-surface-variant mt-2">

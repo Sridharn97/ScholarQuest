@@ -2,8 +2,9 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { db, auth } from '@/lib/firebase';
-import { collection, query, where, getDocs, doc, getDoc, addDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, getDoc, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
+import { convertToPercentage } from '@/lib/gpaConverter';
 
 export default function useApply(params) {
   const router = useRouter();
@@ -12,6 +13,9 @@ export default function useApply(params) {
   const [userUid, setUserUid] = useState(null);
   const [loading, setLoading] = useState(true);
   const [gpa, setGpa] = useState('');
+  const [gradingSystem, setGradingSystem] = useState('CGPA');
+  const [gpaScale, setGpaScale] = useState('10');
+  const [gpaPercentage, setGpaPercentage] = useState('');
   const [institution, setInstitution] = useState('');
   const [studyField, setStudyField] = useState('');
   const [gradDate, setGradDate] = useState('2026-06-15');
@@ -61,6 +65,9 @@ export default function useApply(params) {
               const uData = userDoc.data();
               setUser(uData);
               setGpa(uData.gpa || '');
+              setGradingSystem(uData.gradingSystem || 'CGPA');
+              setGpaScale(uData.gpaScale || '10');
+              setGpaPercentage(uData.gpaPercentage || '');
               setInstitution(uData.institution || '');
               setStudyField(uData.studyField || '');
             }
@@ -101,7 +108,11 @@ export default function useApply(params) {
         scholarshipId: scholarship.id,
         scholarshipName: scholarship.name,
         providerId: scholarship.providerId || 'legacy',
+        amount: scholarship.amount || '',
         gpa: gpa,
+        gradingSystem: gradingSystem,
+        gpaScale: gpaScale,
+        gpaPercentage: convertToPercentage(gpa, gradingSystem, gpaScale),
         institution: institution,
         studyField: studyField,
         gradDate: gradDate,
@@ -111,16 +122,40 @@ export default function useApply(params) {
         appliedAt: Date.now()
       });
 
-      await addDoc(collection(db, 'tracker'), {
-        userId: userUid,
-        scholarshipId: scholarship.id,
-        columnId: 'col_applied',
-        title: scholarship.name,
-        desc: scholarship.desc || 'Application submitted',
-        type: scholarship.category || 'Scholarship',
-        date: scholarship.deadline,
-        createdAt: Date.now()
-      });
+      const trackerQ = query(
+        collection(db, 'tracker'),
+        where('userId', '==', userUid),
+        where('scholarshipId', '==', scholarship.id)
+      );
+      const trackerSnap = await getDocs(trackerQ);
+
+      if (!trackerSnap.empty) {
+        // Update the existing tracker card to 'col_applied'
+        const docId = trackerSnap.docs[0].id;
+        await updateDoc(doc(db, 'tracker', docId), {
+          columnId: 'col_applied',
+          desc: scholarship.desc || 'Application submitted',
+          amount: scholarship.amount || null,
+          createdAt: Date.now()
+        });
+        // Just in case there are other duplicate cards, delete them
+        for (let i = 1; i < trackerSnap.docs.length; i++) {
+          await deleteDoc(doc(db, 'tracker', trackerSnap.docs[i].id));
+        }
+      } else {
+        // Create a new tracker card
+        await addDoc(collection(db, 'tracker'), {
+          userId: userUid,
+          scholarshipId: scholarship.id,
+          columnId: 'col_applied',
+          title: scholarship.name,
+          desc: scholarship.desc || 'Application submitted',
+          type: scholarship.category || 'Scholarship',
+          date: scholarship.deadline,
+          amount: scholarship.amount || null,
+          createdAt: Date.now()
+        });
+      }
 
       showToast('Application Submitted Successfully!');
       setTimeout(() => {
@@ -142,6 +177,7 @@ export default function useApply(params) {
         desc: scholarship.desc || 'Saved during application',
         type: scholarship.category || 'Scholarship',
         date: scholarship.deadline,
+        amount: scholarship.amount || null,
         createdAt: Date.now()
       });
       showToast('Application Saved to Tracker!');
@@ -159,6 +195,12 @@ export default function useApply(params) {
     loading,
     gpa,
     setGpa,
+    gradingSystem,
+    setGradingSystem,
+    gpaScale,
+    setGpaScale,
+    gpaPercentage,
+    setGpaPercentage,
     institution,
     setInstitution,
     studyField,

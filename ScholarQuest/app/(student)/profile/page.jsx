@@ -4,6 +4,7 @@ import { useState } from 'react';
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import useProfile from '@/lib/hooks/useProfile';
+import { formatGpa } from '@/lib/gpaConverter';
 
 export default function ProfilePage() {
   const {
@@ -299,7 +300,7 @@ export default function ProfilePage() {
                   <div className="flex-1">
                     <h3 className="font-bold text-lg text-on-surface">{user?.institution || 'Your Institution'}</h3>
                     <p className="text-on-surface-variant font-medium">{user?.studyField || 'Your Field of Study'}</p>
-                    <p className="text-sm text-on-surface-variant mt-1">GPA: <span className="font-bold text-on-surface">{user?.gpa || '—'}</span></p>
+                    <p className="text-sm text-on-surface-variant mt-1">GPA: <span className="font-bold text-on-surface">{formatGpa(user?.gpa, user?.gradingSystem, user?.gpaScale, user?.gpaPercentage)}</span></p>
                     
                     {editMode && (
                       <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant/30">
@@ -307,9 +308,43 @@ export default function ProfilePage() {
                           <label className="font-bold text-xs text-on-surface-variant uppercase">Institution</label>
                           <input value={form.institution || ''} onChange={e => setForm({ ...form, institution: e.target.value })} className="w-full px-3 py-2 border border-outline-variant/50 rounded-md text-sm outline-none focus:border-primary" />
                         </div>
-                        <div className="space-y-1">
-                          <label className="font-bold text-xs text-on-surface-variant uppercase">GPA</label>
-                          <input type="number" step="0.01" value={form.gpa || ''} onChange={e => setForm({ ...form, gpa: e.target.value })} className="w-full px-3 py-2 border border-outline-variant/50 rounded-md text-sm outline-none focus:border-primary" />
+                        
+                        <div className="space-y-3 bg-surface-container-low p-4 rounded-xl border border-outline-variant/20 col-span-1 sm:col-span-2">
+                          <div className="space-y-1">
+                            <label className="font-bold text-xs text-on-surface-variant uppercase">Grading System</label>
+                            <div className="flex gap-4">
+                              <label className="flex items-center gap-2 cursor-pointer text-sm">
+                                <input type="radio" name="profileGradingSystem" value="CGPA" checked={form.gradingSystem === 'CGPA'} onChange={e => setForm({ ...form, gradingSystem: e.target.value })} className="accent-primary" />
+                                <span>CGPA</span>
+                              </label>
+                              <label className="flex items-center gap-2 cursor-pointer text-sm">
+                                <input type="radio" name="profileGradingSystem" value="Percentage" checked={form.gradingSystem === 'Percentage'} onChange={e => setForm({ ...form, gradingSystem: e.target.value })} className="accent-primary" />
+                                <span>Percentage</span>
+                              </label>
+                            </div>
+                          </div>
+                          
+                          {form.gradingSystem === 'CGPA' ? (
+                            <div className="grid grid-cols-2 gap-4">
+                              <div className="space-y-1">
+                                <label className="font-bold text-xs text-on-surface-variant uppercase">Current CGPA</label>
+                                <input type="number" step="0.01" value={form.gpa || ''} onChange={e => setForm({ ...form, gpa: e.target.value })} className="w-full px-3 py-2 border border-outline-variant/50 rounded-md text-sm outline-none focus:border-primary bg-white" />
+                              </div>
+                              <div className="space-y-1">
+                                <label className="font-bold text-xs text-on-surface-variant uppercase">Out Of</label>
+                                <select value={form.gpaScale || '10'} onChange={e => setForm({ ...form, gpaScale: e.target.value })} className="w-full px-3 py-2 border border-outline-variant/50 rounded-md text-sm outline-none focus:border-primary bg-white">
+                                  <option value="4">4</option>
+                                  <option value="5">5</option>
+                                  <option value="10">10</option>
+                                </select>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="space-y-1">
+                              <label className="font-bold text-xs text-on-surface-variant uppercase">Current Percentage (%)</label>
+                              <input type="number" step="0.1" min="0" max="100" value={form.gpa || ''} onChange={e => setForm({ ...form, gpa: e.target.value })} className="w-full px-3 py-2 border border-outline-variant/50 rounded-md text-sm outline-none focus:border-primary bg-white" />
+                            </div>
+                          )}
                         </div>
                       </div>
                     )}

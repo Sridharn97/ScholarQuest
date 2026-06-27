@@ -220,6 +220,7 @@ export default function PostScholarshipPage() {
                             >
                               <option value="text">Text Response</option>
                               <option value="multiple_choice">Multiple Choice</option>
+                              <option value="date">Date Picker</option>
                               <option value=".pdf">PDF Document</option>
                               <option value=".png">PNG Image</option>
                               <option value=".jpg">JPG Image</option>

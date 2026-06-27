@@ -81,11 +81,11 @@ export default function OnboardingPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="font-label-md text-label-md">Nationality</label>
-                  <input value={formData.nationality} onChange={e => set('nationality', e.target.value)} type="text" placeholder="American" className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all" />
+                  <input value={formData.nationality} onChange={e => set('nationality', e.target.value)} type="text" placeholder="Indian" className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all" />
                 </div>
                 <div className="space-y-2">
                   <label className="font-label-md text-label-md">State / Province</label>
-                  <input value={formData.state} onChange={e => set('state', e.target.value)} type="text" placeholder="California" className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all" />
+                  <input value={formData.state} onChange={e => set('state', e.target.value)} type="text" placeholder="Maharashtra" className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all" />
                 </div>
               </div>
             </div>
@@ -100,7 +100,7 @@ export default function OnboardingPage() {
             <div className="space-y-6">
               <div className="space-y-2">
                 <label className="font-label-md text-label-md">Current Institution</label>
-                <input value={formData.institution} onChange={e => set('institution', e.target.value)} type="text" placeholder="Stanford University" className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all" />
+                <input value={formData.institution} onChange={e => set('institution', e.target.value)} type="text" placeholder="IIT Bombay" className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all" />
               </div>
               <div className="space-y-2">
                 <label className="font-label-md text-label-md">Degree Level</label>

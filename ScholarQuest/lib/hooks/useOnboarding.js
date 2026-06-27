@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { auth, db } from '@/lib/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { convertToPercentage } from '@/lib/gpaConverter';
 
 export default function useOnboarding() {
   const router = useRouter();
@@ -42,8 +43,10 @@ export default function useOnboarding() {
       setCurrentStep(currentStep + 1);
     } else {
       if (userUid) {
+        const pct = convertToPercentage(formData.gpa, formData.gradingSystem, formData.gpaScale);
         await updateDoc(doc(db, 'users', userUid), {
           ...formData,
+          gpaPercentage: pct,
           name: `${formData.firstName} ${formData.lastName}`,
           initials: `${(formData.firstName || 'A')[0]}${(formData.lastName || 'J')[0]}`.toUpperCase(),
           onboardingComplete: true,
