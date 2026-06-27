@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { getAdminScholarships, ensureDefaults } from '@/lib/store';
+import { db } from '@/lib/firebase';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 
 export default function useDiscovery() {
   const [scholarships, setScholarships] = useState([]);
@@ -13,11 +14,13 @@ export default function useDiscovery() {
   const itemsPerPage = 6;
 
   useEffect(() => {
-    ensureDefaults();
-    const list = getAdminScholarships().filter(s => s.status === 'Active');
-    Promise.resolve().then(() => {
+    const fetchScholarships = async () => {
+      const q = query(collection(db, 'scholarships'), where('status', '==', 'Active'));
+      const snapshot = await getDocs(q);
+      const list = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setScholarships(list);
-    });
+    };
+    fetchScholarships();
   }, []);
 
   // Reset page when filters change
@@ -34,21 +37,12 @@ export default function useDiscovery() {
   };
 
   const filteredScholarships = scholarships.filter(s => 
-    s.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    s.org.toLowerCase().includes(searchQuery.toLowerCase())
+    s.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    s.org?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const featured = filteredScholarships[0] || { 
-    id: 1, 
-    name: 'Global Tech Innovators Fund', 
-    category: 'STEM', 
-    amount: '$25,000', 
-    deadline: '2026-10-15', 
-    org: 'Global Tech Foundation', 
-    match: '98%' 
-  };
-  
-  const allScholarships = [featured, ...(filteredScholarships.length > 1 ? filteredScholarships.slice(1) : [])];
+  const featured = filteredScholarships.length > 0 ? filteredScholarships[0] : null;
+  const allScholarships = filteredScholarships;
 
   // Pagination Logic
   const totalPages = Math.ceil(allScholarships.length / itemsPerPage);

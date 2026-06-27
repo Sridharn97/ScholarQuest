@@ -1,37 +1,62 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { getAdminApplications, getAdminScholarships, updateApplicationStatus, getProviderInfo } from '@/lib/store';
+import { auth, db } from '@/lib/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { collection, query, where, onSnapshot, doc, getDoc, updateDoc } from 'firebase/firestore';
 
 export default function useProviderDashboard() {
   const [applications, setApplications] = useState([]);
   const [scholarships, setScholarships] = useState([]);
   const [toast, setToast] = useState('');
   const [providerInfo, setProviderInfo] = useState({ name: 'Sponsor', organization: 'Company or Institute' });
-
-  const load = () => {
-    setApplications(getAdminApplications());
-    setScholarships(getAdminScholarships());
-    const info = getProviderInfo();
-    if (info) setProviderInfo(info);
-  };
+  const [userUid, setUserUid] = useState(null);
 
   useEffect(() => {
-    Promise.resolve().then(() => {
-      load();
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        setUserUid(user.uid);
+        const uDoc = await getDoc(doc(db, 'users', user.uid));
+        if (uDoc.exists()) {
+          const data = uDoc.data();
+          setProviderInfo({ name: data.name || 'Sponsor', organization: data.organization || 'Company or Institute' });
+        }
+      } else {
+        setUserUid(null);
+      }
     });
-    window.addEventListener('sq_update', load);
-    return () => window.removeEventListener('sq_update', load);
+    return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    if (!userUid) return;
+
+    const unsubApps = onSnapshot(query(collection(db, 'applications'), where('providerId', '==', userUid)), (snap) => {
+      setApplications(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    });
+
+    const unsubSchols = onSnapshot(query(collection(db, 'scholarships'), where('providerId', '==', userUid)), (snap) => {
+      setScholarships(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    });
+
+    return () => {
+      unsubApps();
+      unsubSchols();
+    };
+  }, [userUid]);
 
   const showToast = (msg) => {
     setToast(msg);
     setTimeout(() => setToast(''), 3000);
   };
 
-  const handleQuickAction = (id, status) => {
-    const updated = updateApplicationStatus(id, status);
-    setApplications(updated);
-    showToast(`Application ${status.toLowerCase()} successfully!`);
+  const handleQuickAction = async (id, status) => {
+    try {
+      await updateDoc(doc(db, 'applications', id), { status });
+      showToast(`Application ${status.toLowerCase()} successfully!`);
+    } catch (e) {
+      console.error(e);
+      showToast('Error updating application');
+    }
   };
 
   const kpis = [

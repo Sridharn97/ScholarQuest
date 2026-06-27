@@ -1,7 +1,9 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { validateLogin, setSession, isLoggedIn, isProviderLoggedIn } from '@/lib/store';
+import { auth, db } from '@/lib/firebase';
+import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 
 export default function useLogin() {
   const router = useRouter();
@@ -10,14 +12,23 @@ export default function useLogin() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (isLoggedIn()) {
-      router.replace('/dashboard');
-    } else if (isProviderLoggedIn()) {
-      router.replace('/provider');
-    }
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // Fetch role to redirect correctly
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        if (userDoc.exists()) {
+          if (userDoc.data().role === 'provider') {
+            router.replace('/provider');
+          } else {
+            router.replace('/dashboard');
+          }
+        }
+      }
+    });
+    return () => unsubscribe();
   }, [router]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     const email = e.target.login_email.value.trim();
@@ -29,14 +40,14 @@ export default function useLogin() {
     }
 
     setLoading(true);
-    const user = validateLogin(email, password);
-    if (!user) {
-      setLoading(false);
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      // Note: onAuthStateChanged will handle the redirect
+    } catch (err) {
+      console.error(err);
       setError('Invalid email or password. Please try again.');
-      return;
+      setLoading(false);
     }
-    setSession(user);
-    router.push('/dashboard');
   };
 
   return {

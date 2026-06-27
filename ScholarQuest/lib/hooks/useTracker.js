@@ -1,9 +1,19 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { getTracker, addCardToColumn, moveCard, deleteCard, addActivity, updateCard } from '@/lib/store';
+import { db, auth } from '@/lib/firebase';
+import { collection, query, where, onSnapshot, addDoc, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { onAuthStateChanged } from 'firebase/auth';
+
+const COLUMN_DEF = [
+  { id: 'col_interested', title: 'Interested' },
+  { id: 'col_applied', title: 'Applied' },
+  { id: 'col_offers', title: 'Offers' },
+  { id: 'col_rejected', title: 'Rejected' },
+];
 
 export default function useTracker() {
-  const [columns, setColumns] = useState([]);
+  const [columns, setColumns] = useState(COLUMN_DEF.map(c => ({ ...c, cards: [] })));
+  const [userUid, setUserUid] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [addToCol, setAddToCol] = useState(null);
   const [newCardTitle, setNewCardTitle] = useState('');
@@ -16,15 +26,34 @@ export default function useTracker() {
   const [thankYouNote, setThankYouNote] = useState('');
   const [disbursementMethod, setDisbursementMethod] = useState('direct');
 
-  const load = () => setColumns(getTracker());
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUserUid(user ? user.uid : null);
+    });
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
-    Promise.resolve().then(() => {
-      load();
-    });
-    window.addEventListener('sq_update', load);
-    return () => window.removeEventListener('sq_update', load);
-  }, []);
+    let unsubscribeSnapshot = () => {};
+    
+    if (userUid) {
+      const q = query(collection(db, 'tracker'), where('userId', '==', userUid));
+      unsubscribeSnapshot = onSnapshot(q, (snapshot) => {
+        const docs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        
+        const newCols = COLUMN_DEF.map(c => {
+           const colCards = docs.filter(d => d.columnId === c.id);
+           colCards.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+           return { ...c, cards: colCards };
+        });
+        setColumns(newCols);
+      });
+    } else {
+      setColumns(COLUMN_DEF.map(c => ({ ...c, cards: [] })));
+    }
+    
+    return () => unsubscribeSnapshot();
+  }, [userUid]);
 
   useEffect(() => {
     const handleClickOutside = () => {
@@ -43,29 +72,44 @@ export default function useTracker() {
     setTimeout(() => setToast(''), 3000);
   };
 
-  const handleAddCard = () => {
-    if (!newCardTitle.trim()) return;
-    addCardToColumn(addToCol, {
-      title: newCardTitle.trim(),
-      desc: newCardDesc.trim(),
-      amount: newCardAmount.trim() || null,
-    });
-    setNewCardTitle('');
-    setNewCardDesc('');
-    setNewCardAmount('');
-    setShowAddModal(false);
-    showToast('Scholarship added to tracker!');
+  const handleAddCard = async () => {
+    if (!newCardTitle.trim() || !userUid) return;
+    try {
+      await addDoc(collection(db, 'tracker'), {
+        userId: userUid,
+        columnId: addToCol,
+        title: newCardTitle.trim(),
+        desc: newCardDesc.trim(),
+        amount: newCardAmount.trim() || null,
+        createdAt: Date.now()
+      });
+      setNewCardTitle('');
+      setNewCardDesc('');
+      setNewCardAmount('');
+      setShowAddModal(false);
+      showToast('Scholarship added to tracker!');
+    } catch (e) {
+      console.error(e);
+    }
   };
 
-  const handleMoveCard = (cardId, fromColId, toColId) => {
-    moveCard(cardId, fromColId, toColId);
+  const handleMoveCard = async (cardId, fromColId, toColId) => {
     setShowMoveMenu(null);
-    showToast('Card moved!');
+    try {
+      await updateDoc(doc(db, 'tracker', cardId), { columnId: toColId });
+      showToast('Card moved!');
+    } catch (e) {
+      console.error(e);
+    }
   };
 
-  const handleDeleteCard = (cardId) => {
-    deleteCard(cardId);
-    showToast('Card removed.');
+  const handleDeleteCard = async (cardId) => {
+    try {
+      await deleteDoc(doc(db, 'tracker', cardId));
+      showToast('Card removed.');
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const handleAcceptOffer = (card) => {
@@ -73,26 +117,22 @@ export default function useTracker() {
     setShowDisbursementModal(true);
   };
 
-  const handleCompleteDisbursement = () => {
+  const handleCompleteDisbursement = async () => {
     if (!activeDisbursementCard) return;
     
-    updateCard(activeDisbursementCard.id, { 
-      accepted: false,
-      funded: true 
-    });
-    
-    addActivity({ 
-      icon: 'account_balance', 
-      iconColor: 'text-green-600', 
-      title: 'Disbursement Setup Complete', 
-      sub: `${activeDisbursementCard.title}`, 
-      time: 'Just now' 
-    });
-    
-    setShowDisbursementModal(false);
-    setActiveDisbursementCard(null);
-    setThankYouNote('');
-    showToast('🎉 Setup complete! Funds are on the way.');
+    try {
+      await updateDoc(doc(db, 'tracker', activeDisbursementCard.id), { 
+        accepted: false,
+        funded: true 
+      });
+      
+      setShowDisbursementModal(false);
+      setActiveDisbursementCard(null);
+      setThankYouNote('');
+      showToast('🎉 Setup complete! Funds are on the way.');
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return {

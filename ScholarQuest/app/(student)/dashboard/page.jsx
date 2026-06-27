@@ -1,16 +1,51 @@
 'use client';
+import { useEffect, useState } from 'react';
 import StudentAnalyticsOverview from '@/components/dashboard/StudentAnalyticsOverview';
 import StudentApplicationOutcomes from '@/components/dashboard/StudentApplicationOutcomes';
 import StudentFundingTrends from '@/components/dashboard/StudentFundingTrends';
+import { auth, db } from '@/lib/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
 
 export default function DashboardPage() {
+  const [stats, setStats] = useState({ matched: 0, applied: 0, saved: 0, deadlines: 0 });
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const q = query(collection(db, 'tracker'), where('userId', '==', user.uid));
+        const unsubTracker = onSnapshot(q, (snap) => {
+          let applied = 0;
+          let saved = 0;
+          snap.docs.forEach(doc => {
+            const data = doc.data();
+            if (data.columnId === 'col_applied') applied++;
+            else if (data.columnId === 'col_interested') saved++;
+          });
+          setStats(prev => ({ ...prev, applied, saved }));
+        });
+        
+        const qSchol = query(collection(db, 'scholarships'), where('status', '==', 'Active'));
+        const unsubSchol = onSnapshot(qSchol, (snap) => {
+          setStats(prev => ({ ...prev, matched: snap.docs.length }));
+        });
+        
+        return () => {
+          unsubTracker();
+          unsubSchol();
+        };
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
   return (
     <div className="p-8 max-w-[1200px] mx-auto font-sans">
       {/* Header Area */}
       <div className="flex items-end justify-between mb-8">
         <div>
           <h2 className="text-[28px] font-bold text-on-surface mb-1 leading-tight tracking-tight">Scholarship Overview</h2>
-          <p className="text-on-surface-variant text-sm font-medium">You have 12 applications in progress. Keep up the momentum!</p>
+          <p className="text-on-surface-variant text-sm font-medium">You have {stats.applied} applications in progress. Keep up the momentum!</p>
         </div>
         <div className="flex items-center gap-6">
           <button className="text-on-surface font-bold text-sm hover:underline tracking-wide">Generate Report</button>
@@ -32,7 +67,7 @@ export default function DashboardPage() {
             </div>
           </div>
           <p className="text-on-surface-variant text-xs font-bold tracking-wide mb-1 uppercase">Matched</p>
-          <h3 className="text-3xl font-extrabold text-on-surface">156</h3>
+          <h3 className="text-3xl font-extrabold text-on-surface">{stats.matched}</h3>
         </div>
 
         {/* Card 2 */}
@@ -44,7 +79,7 @@ export default function DashboardPage() {
             <div className="text-on-surface font-bold text-[10px] tracking-wider uppercase bg-surface-container px-2 py-1 rounded">Last 30 days</div>
           </div>
           <p className="text-on-surface-variant text-xs font-bold tracking-wide mb-1 uppercase">Applied</p>
-          <h3 className="text-3xl font-extrabold text-on-surface">12</h3>
+          <h3 className="text-3xl font-extrabold text-on-surface">{stats.applied}</h3>
         </div>
 
         {/* Card 3 */}
@@ -55,7 +90,7 @@ export default function DashboardPage() {
             </div>
           </div>
           <p className="text-on-surface-variant text-xs font-bold tracking-wide mb-1 uppercase">Saved</p>
-          <h3 className="text-3xl font-extrabold text-on-surface">43</h3>
+          <h3 className="text-3xl font-extrabold text-on-surface">{stats.saved}</h3>
         </div>
 
         {/* Card 4 */}
@@ -66,7 +101,7 @@ export default function DashboardPage() {
             </div>
           </div>
           <p className="text-on-surface-variant text-xs font-bold tracking-wide mb-1 uppercase">Deadlines</p>
-          <h3 className="text-3xl font-extrabold text-on-surface">03</h3>
+          <h3 className="text-3xl font-extrabold text-on-surface">{stats.deadlines}</h3>
         </div>
       </div>
 

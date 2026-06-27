@@ -1,69 +1,93 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { getUser, saveUser, calcProfileCompletion, addActivity } from '@/lib/store';
+import { auth, db } from '@/lib/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+
+function calcProfileCompletion(u) {
+  if (!u) return 40;
+  let score = 0;
+  if (u.firstName && u.lastName) score += 20;
+  if (u.institution) score += 15;
+  if (u.gpa) score += 15;
+  if (u.bio && u.bio !== 'Tell us about yourself...') score += 10;
+  if (u.skills && u.skills.length > 0) score += 15;
+  if (u.interests && u.interests.length > 0) score += 15;
+  if (u.phone) score += 10;
+  return score;
+}
 
 export default function useProfile() {
   const [editMode, setEditMode] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
   const [user, setUser] = useState(null);
+  const [userUid, setUserUid] = useState(null);
   const [form, setForm] = useState({});
   const [skills, setSkills] = useState([]);
   const [interests, setInterests] = useState([]);
+  const [achievements, setAchievements] = useState([]);
+  const [careerGoals, setCareerGoals] = useState({ shortTerm: '', longTerm: '', higherStudies: '', researchArea: '' });
+  const [extracurriculars, setExtracurriculars] = useState([]);
+  const [academicExperience, setAcademicExperience] = useState([]);
   const [newSkill, setNewSkill] = useState('');
   const [newInterest, setNewInterest] = useState('');
   const [saved, setSaved] = useState(false);
   const [showSkillInput, setShowSkillInput] = useState(false);
   const [showInterestInput, setShowInterestInput] = useState(false);
 
-  const load = () => {
-    const u = getUser();
-    if (u) {
-      setUser(u);
-      let initialPhone = u.phone || '';
-      if (initialPhone && !initialPhone.startsWith('+')) {
-        initialPhone = (u.countryCode || '+1') + initialPhone;
-      }
-      initialPhone = initialPhone.replace(/[^\d+]/g, '');
-
-      setForm({
-        firstName: u.firstName || '',
-        lastName: u.lastName || '',
-        bio: u.bio || 'Tell us about yourself...',
-        gpa: u.gpa || '',
-        institution: u.institution || '',
-        phone: initialPhone,
-        linkedin: u.linkedin || '',
-        nationality: u.nationality || '',
-      });
-      setSkills(u.skills || ['Machine Learning', 'Python', 'Data Analysis']);
-      setInterests(u.interests || ['Artificial Intelligence', 'Climate Tech', 'Biotech']);
-    }
-  };
-
   useEffect(() => {
-    Promise.resolve().then(() => {
-      load();
+    const unsubscribe = onAuthStateChanged(auth, async (u) => {
+      if (u) {
+        setUserUid(u.uid);
+        const userDoc = await getDoc(doc(db, 'users', u.uid));
+        if (userDoc.exists()) {
+          const data = userDoc.data();
+          setUser(data);
+          let initialPhone = data.phone || '';
+          if (initialPhone && !initialPhone.startsWith('+')) {
+            initialPhone = (data.countryCode || '+1') + initialPhone;
+          }
+          initialPhone = initialPhone.replace(/[^\d+]/g, '');
+
+          setForm({
+            firstName: data.firstName || '',
+            lastName: data.lastName || '',
+            bio: data.bio || 'Tell us about yourself...',
+            gpa: data.gpa || '',
+            institution: data.institution || '',
+            phone: initialPhone,
+            linkedin: data.linkedin || '',
+            nationality: data.nationality || '',
+          });
+          setSkills(Array.isArray(data.skills) ? data.skills : (typeof data.skills === 'string' ? [data.skills] : ['Machine Learning', 'Python', 'Data Analysis']));
+          setInterests(Array.isArray(data.interests) ? data.interests : (typeof data.interests === 'string' ? [data.interests] : ['Artificial Intelligence', 'Climate Tech', 'Biotech']));
+          setAchievements(Array.isArray(data.achievements) ? data.achievements : []);
+          setCareerGoals(data.careerGoals || { shortTerm: '', longTerm: '', higherStudies: '', researchArea: '' });
+          setExtracurriculars(Array.isArray(data.extracurriculars) ? data.extracurriculars : []);
+          setAcademicExperience(Array.isArray(data.academicExperience) ? data.academicExperience : []);
+        }
+      }
     });
-    window.addEventListener('sq_update', load);
-    return () => window.removeEventListener('sq_update', load);
+    return () => unsubscribe();
   }, []);
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    if (!userUid) return;
     const updated = {
       ...form,
       name: `${form.firstName} ${form.lastName}`,
       initials: `${(form.firstName || 'A')[0]}${(form.lastName || 'J')[0]}`.toUpperCase(),
       skills,
       interests,
+      achievements,
+      careerGoals,
+      extracurriculars,
+      academicExperience,
     };
-    saveUser(updated);
-    addActivity({ 
-      icon: 'task_alt', 
-      iconColor: 'text-primary', 
-      title: 'Profile Updated', 
-      sub: 'Your profile information was saved', 
-      time: 'Just now' 
-    });
+    
+    await updateDoc(doc(db, 'users', userUid), updated);
+    setUser(prev => ({ ...prev, ...updated }));
+    
     setSaved(true);
     setEditMode(false);
     setTimeout(() => setSaved(false), 3000);
@@ -124,6 +148,14 @@ export default function useProfile() {
     addSkill,
     removeInterest,
     addInterest,
+    achievements,
+    setAchievements,
+    careerGoals,
+    setCareerGoals,
+    extracurriculars,
+    setExtracurriculars,
+    academicExperience,
+    setAcademicExperience,
     completion,
     circumference,
     offset,

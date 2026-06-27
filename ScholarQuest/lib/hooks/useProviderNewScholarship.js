@@ -1,7 +1,8 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { addAdminScholarship, getProviderInfo } from '@/lib/store';
+import { auth, db } from '@/lib/firebase';
+import { collection, addDoc, getDoc, doc } from 'firebase/firestore';
 
 export default function useProviderNewScholarship() {
   const router = useRouter();
@@ -58,7 +59,7 @@ export default function useProviderNewScholarship() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
@@ -75,22 +76,35 @@ export default function useProviderNewScholarship() {
       return;
     }
 
-    const providerInfo = getProviderInfo() || { organization: 'Sponsor Organization' };
+    try {
+      const user = auth.currentUser;
+      if (!user) throw new Error("Not authenticated");
+      
+      const userDoc = await getDoc(doc(db, 'users', user.uid));
+      const providerInfo = userDoc.exists() ? userDoc.data() : { organization: 'Sponsor Organization' };
 
-    addAdminScholarship({
-      name,
-      category,
-      amount,
-      deadline,
-      desc,
-      org: providerInfo.organization,
-      status: 'Active',
-      icon: category === 'STEM' ? 'science' : category === 'Creative' ? 'draw' : category === 'International' ? 'public' : 'school',
-      formSections: sections
-    });
+      await addDoc(collection(db, 'scholarships'), {
+        providerId: user.uid,
+        name,
+        category,
+        amount,
+        deadline,
+        desc,
+        org: providerInfo.organization,
+        status: 'Active',
+        icon: category === 'STEM' ? 'science' : category === 'Creative' ? 'draw' : category === 'International' ? 'public' : 'school',
+        formSections: sections,
+        applicants: 0,
+        createdAt: Date.now()
+      });
 
-    setLoading(false);
-    router.push('/provider/scholarships');
+      setLoading(false);
+      router.push('/provider/scholarships');
+    } catch (err) {
+      console.error(err);
+      setError(err.message || 'Failed to create scholarship.');
+      setLoading(false);
+    }
   };
 
   return {

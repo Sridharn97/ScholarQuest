@@ -1,6 +1,8 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
-import { getUser, addActivity } from '@/lib/store';
+import { auth, db } from '@/lib/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc, collection, addDoc } from 'firebase/firestore';
 
 const AI_RESPONSES = {
   'stem': { title: 'STEM Excellence Matches', scholarships: [
@@ -36,19 +38,16 @@ export default function useAiMatcher() {
   const [user, setUser] = useState(null);
   const messagesEndRef = useRef(null);
 
-  const loadUser = () => {
-    setUser(getUser());
-  };
-
   useEffect(() => {
-    Promise.resolve().then(() => {
-      loadUser();
+    const unsubscribe = onAuthStateChanged(auth, async (u) => {
+      if (u) {
+        const d = await getDoc(doc(db, 'users', u.uid));
+        if (d.exists()) {
+          setUser({ ...d.data(), uid: u.uid });
+        }
+      }
     });
-    const handler = () => {
-      loadUser();
-    };
-    window.addEventListener('sq_update', handler);
-    return () => window.removeEventListener('sq_update', handler);
+    return () => unsubscribe();
   }, []);
 
   useEffect(() => {
@@ -69,13 +68,7 @@ export default function useAiMatcher() {
       const aiMsg = { id: Date.now() + 1, type: 'ai-results', content: text, response };
       setMessages(prev => [...prev, aiMsg]);
       setLoading(false);
-      addActivity({ 
-        icon: 'auto_awesome', 
-        iconColor: 'text-secondary', 
-        title: 'AI Search', 
-        sub: text.slice(0, 50), 
-        time: 'Just now' 
-      });
+      // Removed addActivity call since we migrated from lib/store
     }, 1200);
   };
 

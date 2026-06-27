@@ -1,7 +1,9 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { registerUser, setSession } from '@/lib/store';
+import { auth, db } from '@/lib/firebase';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 
 const strengthLabels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
 const strengthColors = ['', 'bg-red-400', 'bg-orange-400', 'bg-yellow-400', 'bg-green-500'];
@@ -23,7 +25,7 @@ export default function useSignup() {
   const [loading, setLoading] = useState(false);
   const strength = getStrength(password);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     const form = e.target;
@@ -42,9 +44,31 @@ export default function useSignup() {
     }
 
     setLoading(true);
-    const user = registerUser({ firstName, lastName, email, password, institution });
-    setSession(user);
-    setTimeout(() => router.push('/onboarding'), 300);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      
+      // Save profile to Firestore
+      await setDoc(doc(db, 'users', user.uid), {
+        role: 'student',
+        email: email,
+        firstName,
+        lastName,
+        name: `${firstName} ${lastName}`,
+        initials: `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase(),
+        institution,
+        createdAt: Date.now(),
+        // Mock onboarding fields for new users
+        onboardingComplete: false,
+      });
+
+      router.push('/onboarding');
+    } catch (err) {
+      console.error(err);
+      setError(err.message || 'Failed to create account.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return {

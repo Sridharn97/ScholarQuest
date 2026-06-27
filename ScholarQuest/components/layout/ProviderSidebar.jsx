@@ -1,7 +1,9 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { getProviderInfo } from '@/lib/store';
+import { auth, db } from '@/lib/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 
 const navItems = [
@@ -19,12 +21,21 @@ export default function ProviderSidebar({ isOpen, setIsOpen, onLogout }) {
   const [providerInfo, setProviderInfo] = useState({ name: 'Provider', initials: 'GC', role: 'Coordinator', organization: 'Company or Institute' });
 
   useEffect(() => {
-    const info = getProviderInfo();
-    if (info) {
-      Promise.resolve().then(() => {
-        setProviderInfo(info);
-      });
-    }
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const d = await getDoc(doc(db, 'users', user.uid));
+        if (d.exists()) {
+          const data = d.data();
+          setProviderInfo({
+            name: data.name || 'Provider',
+            initials: data.initials || 'P',
+            role: data.role || 'Coordinator',
+            organization: data.organization || 'Company or Institute'
+          });
+        }
+      }
+    });
+    return () => unsubscribe();
   }, []);
 
   return (

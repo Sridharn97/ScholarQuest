@@ -1,7 +1,9 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { registerProvider, setProviderSession, isLoggedIn } from '@/lib/store';
+import { auth, db } from '@/lib/firebase';
+import { createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 
 export default function useProviderSignup() {
   const router = useRouter();
@@ -11,12 +13,13 @@ export default function useProviderSignup() {
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
-    if (isLoggedIn()) {
-      router.push('/dashboard');
-    }
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      // Basic redirect if already logged in (redirect logic handled better in login)
+    });
+    return () => unsubscribe();
   }, [router]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
@@ -40,26 +43,34 @@ export default function useProviderSignup() {
       return;
     }
 
-    const provider = registerProvider({
-      firstName,
-      lastName,
-      email,
-      password,
-      organization,
-      role: entityType === 'Institute' ? 'Academic Representative' : 'Corporate Sponsor',
-    });
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      
+      const roleName = entityType === 'Institute' ? 'Academic Representative' : 'Corporate Sponsor';
 
-    if (!provider) {
-      setError('An account with this email already exists.');
+      await setDoc(doc(db, 'users', user.uid), {
+        role: 'provider',
+        email: email,
+        firstName,
+        lastName,
+        name: `${firstName} ${lastName}`,
+        organization,
+        entityType,
+        providerRole: roleName,
+        createdAt: Date.now(),
+      });
+
+      setSuccess(true);
+      setTimeout(() => {
+        router.push('/provider');
+      }, 1000);
+    } catch (err) {
+      console.error(err);
+      setError(err.message || 'Failed to create provider account.');
+    } finally {
       setLoading(false);
-      return;
     }
-
-    setProviderSession(provider);
-    setSuccess(true);
-    setTimeout(() => {
-      router.push('/provider');
-    }, 1000);
   };
 
   return {

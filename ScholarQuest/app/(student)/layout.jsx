@@ -4,7 +4,9 @@ import MobileBottomNav from '@/components/layout/MobileBottomNav';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { getUserName, getUserInitials, clearSession } from '@/lib/store';
+import { auth, db } from '@/lib/firebase';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 import useRoleProtection from '@/lib/hooks/useRoleProtection';
 
 const mobileMenuLinks = [
@@ -23,22 +25,21 @@ export default function StudentLayout({ children }) {
   useEffect(() => {
     if (!authChecked) return;
 
-    Promise.resolve().then(() => {
-      setUserName(getUserName());
-      setUserInitials(getUserInitials());
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const d = await getDoc(doc(db, 'users', user.uid));
+        if (d.exists()) {
+          setUserName(d.data().name || d.data().firstName || 'Alex');
+          setUserInitials(d.data().initials || 'AJ');
+        }
+      }
     });
 
-    // Listen for store updates
-    const handler = () => {
-      setUserName(getUserName());
-      setUserInitials(getUserInitials());
-    };
-    window.addEventListener('sq_update', handler);
-    return () => window.removeEventListener('sq_update', handler);
+    return () => unsubscribe();
   }, [authChecked]);
 
-  const handleLogout = () => {
-    clearSession();
+  const handleLogout = async () => {
+    await signOut(auth);
     router.push('/login');
   };
 

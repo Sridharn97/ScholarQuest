@@ -6,14 +6,14 @@ const steps = [
   { num: 1, label: 'Personal Info', icon: 'person' },
   { num: 2, label: 'Academic Background', icon: 'school' },
   { num: 3, label: 'Goals & Interests', icon: 'psychology' },
-  { num: 4, label: 'Documents', icon: 'upload_file' },
 ];
 
-const studyFields = ['Computer Science', 'Engineering', 'Biology', 'Arts & Humanities', 'Business', 'Social Sciences', 'Law', 'Medicine'];
+const degreeLevels = ['B.Tech', 'M.Tech', 'BCA', 'MCA', 'BBA', 'MBA', 'B.Sc', 'M.Sc', 'Other'];
 
 export default function OnboardingPage() {
   const {
     currentStep,
+    setCurrentStep,
     formData,
     set,
     toggleField,
@@ -103,29 +103,62 @@ export default function OnboardingPage() {
                 <input value={formData.institution} onChange={e => set('institution', e.target.value)} type="text" placeholder="Stanford University" className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all" />
               </div>
               <div className="space-y-2">
-                <label className="font-label-md text-label-md">Field of Study</label>
-                <div className="flex flex-wrap gap-2">
-                  {studyFields.map((field) => (
-                    <button
-                      key={field}
-                      type="button"
-                      onClick={() => toggleField('studyField', field)}
-                      className={`px-4 py-2 border rounded-full text-label-sm transition-all ${formData.studyField === field ? 'border-primary text-primary bg-primary/5 font-bold' : 'border-outline-variant hover:border-primary hover:text-primary'}`}
-                    >
-                      {field}
-                    </button>
+                <label className="font-label-md text-label-md">Degree Level</label>
+                <select 
+                  value={formData.degreeLevel} 
+                  onChange={e => set('degreeLevel', e.target.value)} 
+                  className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all appearance-none"
+                >
+                  <option value="" disabled>Select Degree Level</option>
+                  {degreeLevels.map((field) => (
+                    <option key={field} value={field}>{field}</option>
                   ))}
-                </div>
+                </select>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="font-label-md text-label-md">Major Area</label>
+                <input value={formData.majorArea} onChange={e => set('majorArea', e.target.value)} type="text" placeholder="e.g. Computer Science, Marketing" className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all" />
+              </div>
+              <div className="space-y-4 p-4 border border-outline-variant/30 rounded-10 bg-surface-container-lowest">
                 <div className="space-y-2">
-                  <label className="font-label-md text-label-md">Current GPA</label>
-                  <input value={formData.gpa} onChange={e => set('gpa', e.target.value)} type="number" step="0.01" min="0" max="4" placeholder="3.92" className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all" />
+                  <label className="font-label-md text-label-md">Grading System</label>
+                  <div className="flex gap-4">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input type="radio" name="gradingSystem" value="CGPA" checked={formData.gradingSystem === 'CGPA'} onChange={e => set('gradingSystem', e.target.value)} className="accent-primary" />
+                      <span className="font-body-md">CGPA</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input type="radio" name="gradingSystem" value="Percentage" checked={formData.gradingSystem === 'Percentage'} onChange={e => set('gradingSystem', e.target.value)} className="accent-primary" />
+                      <span className="font-body-md">Percentage</span>
+                    </label>
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <label className="font-label-md text-label-md">Expected Graduation</label>
-                  <input value={formData.graduation} onChange={e => set('graduation', e.target.value)} type="date" className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all" />
-                </div>
+                
+                {formData.gradingSystem === 'CGPA' ? (
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="font-label-md text-label-md">Current CGPA</label>
+                      <input value={formData.gpa} onChange={e => set('gpa', e.target.value)} type="number" step="0.01" placeholder="e.g. 8.5" className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="font-label-md text-label-md">Out Of</label>
+                      <select value={formData.gpaScale} onChange={e => set('gpaScale', e.target.value)} className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all appearance-none">
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                      </select>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <label className="font-label-md text-label-md">Current Percentage (%)</label>
+                    <input value={formData.gpa} onChange={e => set('gpa', e.target.value)} type="number" step="0.1" min="0" max="100" placeholder="e.g. 85.5" className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all" />
+                  </div>
+                )}
+              </div>
+              <div className="space-y-2">
+                <label className="font-label-md text-label-md">Expected Graduation</label>
+                <input value={formData.graduation} onChange={e => set('graduation', e.target.value)} type="date" className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all" />
               </div>
             </div>
           </div>
@@ -157,36 +190,6 @@ export default function OnboardingPage() {
           </div>
         )}
 
-        {/* ── STEP 4: Documents ── */}
-        {currentStep === 4 && (
-          <div>
-            <h2 className="font-headline-lg text-headline-lg mb-2">Upload Documents</h2>
-            <p className="font-body-md text-body-md text-on-surface-variant mb-10">Optional — you can upload these later from your profile.</p>
-            <div className="space-y-4">
-              {['Official Transcripts', 'Letters of Recommendation', 'Resume / CV'].map((doc) => (
-                <div key={doc} className="flex items-center justify-between p-4 bg-surface-container-low border border-outline-variant/30 rounded-10 hover:border-primary/40 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-primary">description</span>
-                    <div>
-                      <p className="font-label-md text-label-md">{doc}</p>
-                      <p className="font-body-sm text-body-sm text-on-surface-variant">PDF or DOC, max 5MB</p>
-                    </div>
-                  </div>
-                  <label className="px-4 py-2 text-primary border border-primary/30 rounded-6 font-label-sm hover:bg-primary/5 transition-colors cursor-pointer">
-                    Upload
-                    <input type="file" className="hidden" onChange={() => {}} />
-                  </label>
-                </div>
-              ))}
-            </div>
-            <div className="mt-6 p-4 bg-primary/5 rounded-2xl border border-primary/10">
-              <p className="font-body-sm text-body-sm text-primary">
-                <span className="material-symbols-outlined align-text-bottom mr-1" style={{ fontSize: '16px' }}>info</span>
-                You&apos;re all set! Click &quot;Go to Dashboard&quot; to start exploring scholarships. You can upload documents anytime from your Profile.
-              </p>
-            </div>
-          </div>
-        )}
 
         {/* Navigation */}
         <div className="flex justify-between items-center mt-10 pt-10 border-t border-outline-variant/20">
@@ -198,13 +201,10 @@ export default function OnboardingPage() {
           </button>
           <button
             onClick={handleContinue}
-            className="px-8 py-3 bg-primary text-on-primary rounded-10 font-label-md hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-primary/20 flex items-center gap-2"
+            className="flex items-center gap-2 px-8 py-3 bg-primary text-on-primary rounded-full font-label-md transition-all hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] shadow-md shadow-primary/20"
           >
-            {currentStep < 4 ? (
-              <>Continue <span className="material-symbols-outlined">arrow_forward</span></>
-            ) : (
-              <>Go to Dashboard <span className="material-symbols-outlined">dashboard</span></>
-            )}
+            {currentStep === 3 ? 'Go to Dashboard' : 'Continue'}
+            {currentStep < 3 && <span className="material-symbols-outlined">arrow_forward</span>}
           </button>
         </div>
       </div>

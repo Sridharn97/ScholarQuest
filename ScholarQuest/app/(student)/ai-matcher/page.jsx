@@ -1,5 +1,7 @@
 'use client';
 import useAiMatcher from '@/lib/hooks/useAiMatcher';
+import { auth, db } from '@/lib/firebase';
+import { collection, addDoc } from 'firebase/firestore';
 
 const suggestions = [
   'Find STEM full-ride scholarships',
@@ -123,10 +125,25 @@ export default function AiMatcherPage() {
                             {card.urgency}
                           </span>
                           <button
-                            onClick={() => {
-                              const { addCardToColumn } = require('@/lib/store');
-                              addCardToColumn('col_interested', { title: card.title, desc: `Award: ${card.award}`, type: `${card.match}% Match` });
-                              alert(`"${card.title}" added to your tracker!`);
+                            onClick={async () => {
+                              if (auth.currentUser) {
+                                try {
+                                  await addDoc(collection(db, 'tracker'), {
+                                    userId: auth.currentUser.uid,
+                                    columnId: 'col_interested',
+                                    title: card.title,
+                                    desc: `Award: ${card.award}`,
+                                    amount: card.award,
+                                    createdAt: Date.now()
+                                  });
+                                  alert(`"${card.title}" added to your tracker!`);
+                                } catch (e) {
+                                  console.error(e);
+                                  alert('Error adding to tracker');
+                                }
+                              } else {
+                                alert('Please sign in to track scholarships.');
+                              }
                             }}
                             className="text-primary font-bold font-label-md flex items-center gap-1 hover:underline"
                           >

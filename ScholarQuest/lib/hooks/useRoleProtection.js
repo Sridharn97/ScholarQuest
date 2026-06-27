@@ -1,39 +1,40 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { isLoggedIn, isProviderLoggedIn, ensureDefaults } from '@/lib/store';
+import { auth, db } from '@/lib/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 
 export default function useRoleProtection(allowedRole) {
   const router = useRouter();
   const [authChecked, setAuthChecked] = useState(false);
 
   useEffect(() => {
-    ensureDefaults();
-    if (allowedRole === 'student') {
-      if (!isLoggedIn()) {
-        if (isProviderLoggedIn()) {
-          router.replace('/provider');
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        if (allowedRole === 'provider') {
+          router.replace('/provider-login');
         } else {
           router.replace('/login');
         }
       } else {
-        Promise.resolve().then(() => {
-          setAuthChecked(true);
-        });
-      }
-    } else if (allowedRole === 'provider') {
-      if (!isProviderLoggedIn()) {
-        if (isLoggedIn()) {
-          router.replace('/dashboard');
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        if (userDoc.exists()) {
+          const role = userDoc.data().role;
+          if (allowedRole === 'student' && role === 'provider') {
+            router.replace('/provider');
+          } else if (allowedRole === 'provider' && role === 'student') {
+            router.replace('/dashboard');
+          } else {
+            setAuthChecked(true);
+          }
         } else {
-          router.replace('/provider-login');
+          setAuthChecked(true); // default fallback
         }
-      } else {
-        Promise.resolve().then(() => {
-          setAuthChecked(true);
-        });
       }
-    }
+    });
+
+    return () => unsubscribe();
   }, [router, allowedRole]);
 
   return authChecked;

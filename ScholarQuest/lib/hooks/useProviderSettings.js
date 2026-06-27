@@ -1,6 +1,8 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { getProviderInfo } from '@/lib/store';
+import { auth, db } from '@/lib/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 
 export default function useProviderSettings() {
   const [providerInfo, setProviderInfo] = useState({
@@ -11,12 +13,15 @@ export default function useProviderSettings() {
   });
 
   useEffect(() => {
-    const info = getProviderInfo();
-    if (info) {
-      Promise.resolve().then(() => {
-        setProviderInfo(info);
-      });
-    }
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const d = await getDoc(doc(db, 'users', user.uid));
+        if (d.exists()) {
+          setProviderInfo(d.data());
+        }
+      }
+    });
+    return () => unsubscribe();
   }, []);
 
   return {

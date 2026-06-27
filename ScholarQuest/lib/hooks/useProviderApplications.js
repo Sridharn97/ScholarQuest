@@ -1,6 +1,8 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { getAdminApplications, updateApplicationStatus, deleteApplication } from '@/lib/store';
+import { db, auth } from '@/lib/firebase';
+import { collection, query, where, onSnapshot, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { onAuthStateChanged } from 'firebase/auth';
 
 export default function useProviderApplications() {
   const [applications, setApplications] = useState([]);
@@ -9,45 +11,76 @@ export default function useProviderApplications() {
   const [toast, setToast] = useState({ msg: '', type: '' });
   const [viewApp, setViewApp] = useState(null);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const [userUid, setUserUid] = useState(null);
 
   const filters = ['All', 'Pending', 'Under Review', 'Approved', 'Rejected'];
 
-  const load = () => {
-    const data = getAdminApplications();
-    setApplications(data);
-  };
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUserUid(user ? user.uid : null);
+    });
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
-    Promise.resolve().then(() => {
-      load();
-    });
-    window.addEventListener('sq_update', load);
-    return () => window.removeEventListener('sq_update', load);
-  }, []);
+    let unsubscribeSnapshot = () => {};
+    
+    if (userUid) {
+      const q = query(collection(db, 'applications'), where('providerId', '==', userUid));
+      unsubscribeSnapshot = onSnapshot(q, (snapshot) => {
+        const data = snapshot.docs.map(doc => {
+          const d = doc.data();
+          return { 
+            id: doc.id,
+            student: d.studentName || 'Student',
+            email: d.studentEmail || '',
+            scholarship: d.scholarshipName || 'Scholarship',
+            submitted: d.appliedAt ? new Date(d.appliedAt).toISOString().split('T')[0] : '2026-06-25',
+            score: 85,
+            status: d.status || 'Pending',
+            ...d
+          };
+        });
+        setApplications(data);
+      });
+    } else {
+      setApplications([]);
+    }
+    
+    return () => unsubscribeSnapshot();
+  }, [userUid]);
 
   const showToast = (msg, type = 'success') => {
     setToast({ msg, type });
     setTimeout(() => setToast({ msg: '', type: '' }), 3000);
   };
 
-  const handleUpdateStatus = (id, status) => {
-    const updated = updateApplicationStatus(id, status);
-    setApplications(updated);
-    showToast(`Application ${status.toLowerCase()} successfully!`, status === 'Rejected' ? 'error' : 'success');
-    if (viewApp?.id === id) setViewApp(prev => ({ ...prev, status }));
+  const handleUpdateStatus = async (id, status) => {
+    try {
+      await updateDoc(doc(db, 'applications', id), { status });
+      showToast(`Application ${status.toLowerCase()} successfully!`, status === 'Rejected' ? 'error' : 'success');
+      if (viewApp?.id === id) setViewApp(prev => ({ ...prev, status }));
+    } catch (e) {
+      console.error(e);
+      showToast('Error updating status', 'error');
+    }
   };
 
-  const handleDelete = (id) => {
-    const updated = deleteApplication(id);
-    setApplications(updated);
-    setDeleteConfirm(null);
-    setViewApp(null);
-    showToast('Application removed.', 'error');
+  const handleDelete = async (id) => {
+    try {
+      await deleteDoc(doc(db, 'applications', id));
+      setDeleteConfirm(null);
+      setViewApp(null);
+      showToast('Application removed.', 'error');
+    } catch (e) {
+      console.error(e);
+      showToast('Error deleting application', 'error');
+    }
   };
 
   const filtered = applications.filter(a => {
     const matchFilter = activeFilter === 'All' || a.status === activeFilter;
-    const matchSearch = !search || a.student.toLowerCase().includes(search.toLowerCase()) || a.scholarship.toLowerCase().includes(search.toLowerCase());
+    const matchSearch = !search || a.student?.toLowerCase().includes(search.toLowerCase()) || a.scholarship?.toLowerCase().includes(search.toLowerCase());
     return matchFilter && matchSearch;
   });
 

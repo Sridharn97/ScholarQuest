@@ -1,7 +1,8 @@
 'use client';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { clearSession } from '@/lib/store';
+import { auth } from '@/lib/firebase';
+import { signOut } from 'firebase/auth';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: 'grid_view' },
@@ -16,9 +17,9 @@ export default function StudentSidebar({ onLogout, userName, userInitials }) {
   const pathname = usePathname();
   const router = useRouter();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     if (onLogout) { onLogout(); } else {
-      clearSession();
+      await signOut(auth);
       router.push('/login');
     }
   };
