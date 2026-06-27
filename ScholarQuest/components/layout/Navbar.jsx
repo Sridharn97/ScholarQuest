@@ -16,6 +16,8 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { user, role, loading } = useUserRole();
+  const isHelpPage = pathname === '/help';
+  const isTransparentLight = !isScrolled && isHelpPage;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,8 +40,8 @@ export default function Navbar() {
               <div className="relative w-10 h-10 rounded-full shadow-sm bg-white overflow-hidden border border-slate-100 group-hover:shadow-md transition-all">
                  <img src="/Logo.png.png" alt="Logo" className="w-full h-full object-cover" />
               </div>
-              <span className={`font-extrabold text-xl tracking-tight transition-colors duration-300 ${isScrolled ? 'text-slate-800' : 'text-slate-900'}`}>
-                Scholar<span className="text-primary">Quest</span>
+              <span className={`font-extrabold text-xl tracking-tight transition-colors duration-300 ${isScrolled ? 'text-slate-800' : (isTransparentLight ? 'text-white' : 'text-slate-900')}`}>
+                Scholar<span className={isTransparentLight ? 'text-white' : 'text-primary'}>Quest</span>
               </span>
             </Link>
           </div>
@@ -52,8 +54,8 @@ export default function Navbar() {
                 href={link.href}
                 className={`px-4 py-2.5 rounded-full text-sm font-semibold transition-all ${
                   pathname === link.href
-                    ? 'text-primary bg-primary/10'
-                    : `hover:bg-black/5 ${isScrolled ? 'text-slate-600 hover:text-slate-900' : 'text-slate-700 hover:text-slate-900'}`
+                    ? (isTransparentLight ? 'text-white bg-white/20' : 'text-primary bg-primary/10')
+                    : `hover:bg-black/5 ${isScrolled ? 'text-slate-600 hover:text-slate-900' : (isTransparentLight ? 'text-white/80 hover:text-white hover:bg-white/10' : 'text-slate-700 hover:text-slate-900')}`
                 }`}
               >
                 {link.label}
@@ -78,18 +80,18 @@ export default function Navbar() {
                 <>
                   <Link
                     href="/provider-login"
-                    className={`flex items-center gap-1.5 px-3 py-2 text-xs font-bold transition-all rounded-full hover:bg-black/5 ${isScrolled ? 'text-slate-600 hover:text-slate-800' : 'text-slate-700 hover:text-slate-900'}`}
+                    className={`flex items-center gap-1.5 px-3 py-2 text-xs font-bold transition-all rounded-full ${isScrolled ? 'hover:bg-black/5 text-slate-600 hover:text-slate-800' : (isTransparentLight ? 'text-white/90 hover:text-white hover:bg-white/10' : 'hover:bg-black/5 text-slate-700 hover:text-slate-900')}`}
                   >
                     <span className="material-symbols-outlined text-[16px]">corporate_fare</span>
                     <span className="hidden xl:inline">Company / Institute</span>
                     <span className="inline xl:hidden">Institute</span>
                   </Link>
 
-                  <div className={`w-px h-5 mx-1.5 transition-colors duration-300 ${isScrolled ? 'bg-slate-200' : 'bg-slate-300/60'}`} />
+                  <div className={`w-px h-5 mx-1.5 transition-colors duration-300 ${isScrolled ? 'bg-slate-200' : (isTransparentLight ? 'bg-white/30' : 'bg-slate-300/60')}`} />
 
                   <Link
                     href="/login"
-                    className={`px-4 py-2.5 text-sm font-bold transition-all rounded-full hover:bg-black/5 ${isScrolled ? 'text-slate-600 hover:text-slate-900' : 'text-slate-700 hover:text-slate-900'}`}
+                    className={`px-4 py-2.5 text-sm font-bold transition-all rounded-full ${isScrolled ? 'hover:bg-black/5 text-slate-600 hover:text-slate-900' : (isTransparentLight ? 'text-white hover:bg-white/10' : 'hover:bg-black/5 text-slate-700 hover:text-slate-900')}`}
                   >
                     Sign In
                   </Link>
@@ -105,7 +107,7 @@ export default function Navbar() {
 
             {/* Mobile Menu Toggle */}
             <button 
-              className={`lg:hidden p-2 rounded-full transition-colors ml-2 hover:bg-black/5 ${isScrolled ? 'text-slate-600' : 'text-slate-800'}`}
+              className={`lg:hidden p-2 rounded-full transition-colors ml-2 ${isScrolled ? 'hover:bg-black/5 text-slate-600' : (isTransparentLight ? 'text-white hover:bg-white/10' : 'hover:bg-black/5 text-slate-800')}`}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               <span className="material-symbols-outlined">

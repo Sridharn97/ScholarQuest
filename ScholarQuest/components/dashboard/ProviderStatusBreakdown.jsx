@@ -7,13 +7,13 @@ export default function ProviderStatusBreakdown({ applications = [] }) {
   const pending = applications.filter(a => a.status === 'Pending').length;
   const rejected = applications.filter(a => a.status === 'Rejected').length;
   const total = applications.length || 1;
-  
+
   const c = 219.9;
   const appLen = (approved / total) * c;
   const revLen = (review / total) * c;
   const penLen = (pending / total) * c;
   const rejLen = (rejected / total) * c;
-  
+
   const appOff = 0;
   const revOff = -appLen;
   const penOff = -(appLen + revLen);
@@ -32,7 +32,7 @@ export default function ProviderStatusBreakdown({ applications = [] }) {
             {rejected > 0 && <circle cx="50" cy="50" r="35" fill="transparent" stroke="#ef4444" strokeWidth="16" strokeDasharray={`${rejLen} ${c - rejLen}`} strokeDashoffset={rejOff} className="transition-all duration-1000 delay-300" />}
           </svg>
         </div>
-        
+
         <div className="flex flex-col gap-4 pl-6 border-l border-outline-variant/20 flex-1 ml-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">

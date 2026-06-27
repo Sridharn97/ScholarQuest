@@ -20,11 +20,11 @@ export default function ProviderApplicationTrends({ applications = [] }) {
   const now = new Date();
   const months = [];
   const counts = [];
-  
+
   for (let i = 5; i >= 0; i--) {
     const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
     months.push(d.toLocaleString('default', { month: 'short' }));
-    
+
     // Count applications in this month
     const count = applications.filter(app => {
       const appDate = new Date(app.appliedAt || app.createdAt || new Date());
@@ -54,8 +54,8 @@ export default function ProviderApplicationTrends({ applications = [] }) {
       <div className="h-64 w-full flex items-end justify-between px-2">
         {months.map((label, i) => (
           <div key={label + i} className="flex flex-col items-center gap-2 group w-8">
-            <div 
-              className={`w-full bg-secondary/20 rounded-t-lg transition-all group-hover:bg-secondary ${getHeights(counts[i])} ${counts[i] === maxCount && maxCount > 0 ? 'bg-secondary' : ''}`} 
+            <div
+              className={`w-full bg-secondary/20 rounded-t-lg transition-all group-hover:bg-secondary ${getHeights(counts[i])} ${counts[i] === maxCount && maxCount > 0 ? 'bg-secondary' : ''}`}
               title={`${counts[i]} applications`}
             />
             <span className={`text-label-sm ${counts[i] === maxCount && maxCount > 0 ? 'font-bold text-secondary' : ''}`}>{label}</span>
