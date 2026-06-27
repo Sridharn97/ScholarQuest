@@ -1,13 +1,10 @@
+'use client';
 import Link from 'next/link';
 import Image from 'next/image';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import SuccessStoriesSection from '@/components/sections/SuccessStoriesSection';
-
-export const metadata = {
-  title: 'ScholarQuest | Find Your Academic Future',
-  description: 'AI-powered scholarship discovery and application management platform.',
-};
+import useUserRole from '@/lib/hooks/useUserRole';
 
 const stats = [
   { value: '$250M+', label: 'Scholarship Funds' },
@@ -50,6 +47,8 @@ const steps = [
 ];
 
 export default function LandingPage() {
+  const { user, role, loading } = useUserRole();
+
   return (
     <div className="bg-background text-on-background">
       <Navbar />
@@ -89,12 +88,23 @@ export default function LandingPage() {
                     className="flex-1 bg-transparent border-none outline-none text-base text-on-surface placeholder:text-outline py-2"
                   />
                 </div>
-                <Link
-                  href="/signup"
-                  className="bg-primary text-white px-8 py-3 rounded-full text-sm font-bold hover:bg-primary/90 active:scale-[0.97] transition-all shadow-md shadow-primary/25 text-center whitespace-nowrap flex items-center justify-center"
-                >
-                  Get Started Free
-                </Link>
+                {loading ? (
+                  <div className="w-40 h-12 bg-slate-200/60 animate-pulse rounded-full mx-auto sm:mx-0" />
+                ) : user ? (
+                  <Link
+                    href={role === 'provider' ? '/provider' : '/dashboard'}
+                    className="bg-primary text-white px-8 py-3 rounded-full text-sm font-bold hover:bg-primary/90 active:scale-[0.97] transition-all shadow-md shadow-primary/25 text-center whitespace-nowrap flex items-center justify-center"
+                  >
+                    Go to Dashboard
+                  </Link>
+                ) : (
+                  <Link
+                    href="/signup"
+                    className="bg-primary text-white px-8 py-3 rounded-full text-sm font-bold hover:bg-primary/90 active:scale-[0.97] transition-all shadow-md shadow-primary/25 text-center whitespace-nowrap flex items-center justify-center"
+                  >
+                    Get Started Free
+                  </Link>
+                )}
               </div>
 
               {/* Social proof */}
@@ -323,12 +333,22 @@ export default function LandingPage() {
             Join 12,000+ students who have already found their perfect academic funding match. It&apos;s free to get started.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/signup" className="bg-white text-primary px-10 py-4 rounded-2xl text-base font-bold hover:bg-white/90 active:scale-[0.97] transition-all shadow-xl">
-              Create Free Account
-            </Link>
-            <Link href="/login" className="bg-white/10 text-white border border-white/30 px-10 py-4 rounded-2xl text-base font-bold hover:bg-white/20 active:scale-[0.97] transition-all backdrop-blur-sm">
-              Sign In
-            </Link>
+            {loading ? (
+              <div className="w-48 h-14 bg-white/20 animate-pulse rounded-2xl mx-auto" />
+            ) : user ? (
+              <Link href={role === 'provider' ? '/provider' : '/dashboard'} className="bg-white text-primary px-10 py-4 rounded-2xl text-base font-bold hover:bg-white/90 active:scale-[0.97] transition-all shadow-xl">
+                Go to Dashboard
+              </Link>
+            ) : (
+              <>
+                <Link href="/signup" className="bg-white text-primary px-10 py-4 rounded-2xl text-base font-bold hover:bg-white/90 active:scale-[0.97] transition-all shadow-xl">
+                  Create Free Account
+                </Link>
+                <Link href="/login" className="bg-white/10 text-white border border-white/30 px-10 py-4 rounded-2xl text-base font-bold hover:bg-white/20 active:scale-[0.97] transition-all backdrop-blur-sm">
+                  Sign In
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </section>

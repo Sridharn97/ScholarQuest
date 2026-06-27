@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import useUserRole from '@/lib/hooks/useUserRole';
 
 const navLinks = [
   { href: '/discovery', label: 'Discover' },
@@ -14,6 +15,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const { user, role, loading } = useUserRole();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -63,31 +65,43 @@ export default function Navbar() {
           <div className="flex justify-end items-center gap-1 flex-shrink-0">
             {/* Desktop specific buttons */}
             <div className="hidden md:flex items-center gap-1">
-              <Link
-                href="/provider-login"
-                className={`flex items-center gap-1.5 px-3 py-2 text-xs font-bold transition-all rounded-full hover:bg-black/5 ${isScrolled ? 'text-slate-600 hover:text-slate-800' : 'text-slate-700 hover:text-slate-900'}`}
-              >
-                <span className="material-symbols-outlined text-[16px]">corporate_fare</span>
-                <span className="hidden xl:inline">Company / Institute</span>
-                <span className="inline xl:hidden">Institute</span>
-              </Link>
+              {loading ? (
+                <div className="w-24 h-10 bg-slate-200/50 animate-pulse rounded-full ml-4" />
+              ) : user ? (
+                <Link
+                  href={role === 'provider' ? '/provider' : '/dashboard'}
+                  className="px-6 py-2.5 bg-primary text-white text-sm font-bold rounded-full hover:bg-primary/90 hover:shadow-lg hover:-translate-y-0.5 active:scale-95 transition-all shadow-sm shadow-primary/25 ml-4"
+                >
+                  Go to Dashboard
+                </Link>
+              ) : (
+                <>
+                  <Link
+                    href="/provider-login"
+                    className={`flex items-center gap-1.5 px-3 py-2 text-xs font-bold transition-all rounded-full hover:bg-black/5 ${isScrolled ? 'text-slate-600 hover:text-slate-800' : 'text-slate-700 hover:text-slate-900'}`}
+                  >
+                    <span className="material-symbols-outlined text-[16px]">corporate_fare</span>
+                    <span className="hidden xl:inline">Company / Institute</span>
+                    <span className="inline xl:hidden">Institute</span>
+                  </Link>
 
-              <div className={`w-px h-5 mx-1.5 transition-colors duration-300 ${isScrolled ? 'bg-slate-200' : 'bg-slate-300/60'}`} />
+                  <div className={`w-px h-5 mx-1.5 transition-colors duration-300 ${isScrolled ? 'bg-slate-200' : 'bg-slate-300/60'}`} />
 
-              <Link
-                href="/login"
-                className={`px-4 py-2.5 text-sm font-bold transition-all rounded-full hover:bg-black/5 ${isScrolled ? 'text-slate-600 hover:text-slate-900' : 'text-slate-700 hover:text-slate-900'}`}
-              >
-                Sign In
-              </Link>
+                  <Link
+                    href="/login"
+                    className={`px-4 py-2.5 text-sm font-bold transition-all rounded-full hover:bg-black/5 ${isScrolled ? 'text-slate-600 hover:text-slate-900' : 'text-slate-700 hover:text-slate-900'}`}
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    href="/signup"
+                    className="hidden md:inline-flex px-6 py-2.5 bg-primary text-white text-sm font-bold rounded-full hover:bg-primary/90 hover:shadow-lg hover:-translate-y-0.5 active:scale-95 transition-all shadow-sm shadow-primary/25 ml-1 lg:ml-2"
+                  >
+                    Get Started
+                  </Link>
+                </>
+              )}
             </div>
-            
-            <Link
-              href="/signup"
-              className="hidden md:inline-flex px-6 py-2.5 bg-primary text-white text-sm font-bold rounded-full hover:bg-primary/90 hover:shadow-lg hover:-translate-y-0.5 active:scale-95 transition-all shadow-sm shadow-primary/25 ml-1 lg:ml-2"
-            >
-              Get Started
-            </Link>
 
             {/* Mobile Menu Toggle */}
             <button 
@@ -122,28 +136,42 @@ export default function Navbar() {
             </div>
             <div className="h-px bg-slate-100 my-3" />
             <div className="flex flex-col gap-3">
-              <Link
-                href="/login"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="w-full text-center px-4 py-3 text-sm font-bold text-slate-700 bg-slate-50 rounded-2xl hover:bg-slate-100 transition-all"
-              >
-                Sign In
-              </Link>
-              <Link
-                href="/signup"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="w-full text-center px-4 py-3 bg-primary text-white text-sm font-bold rounded-2xl shadow-sm shadow-primary/25 active:scale-[0.98] transition-transform"
-              >
-                Get Started Free
-              </Link>
-              <Link
-                href="/provider-login"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center justify-center gap-1.5 px-4 py-3 mt-2 text-xs font-bold text-slate-500 border border-slate-200 rounded-2xl bg-white hover:bg-slate-50"
-              >
-                <span className="material-symbols-outlined text-[16px]">corporate_fare</span>
-                Company / Institute Portal
-              </Link>
+              {loading ? (
+                <div className="w-full h-12 bg-slate-100 animate-pulse rounded-2xl" />
+              ) : user ? (
+                <Link
+                  href={role === 'provider' ? '/provider' : '/dashboard'}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="w-full text-center px-4 py-3 bg-primary text-white text-sm font-bold rounded-2xl shadow-sm shadow-primary/25 active:scale-[0.98] transition-transform"
+                >
+                  Go to Dashboard
+                </Link>
+              ) : (
+                <>
+                  <Link
+                    href="/login"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="w-full text-center px-4 py-3 text-sm font-bold text-slate-700 bg-slate-50 rounded-2xl hover:bg-slate-100 transition-all"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    href="/signup"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="w-full text-center px-4 py-3 bg-primary text-white text-sm font-bold rounded-2xl shadow-sm shadow-primary/25 active:scale-[0.98] transition-transform"
+                  >
+                    Get Started Free
+                  </Link>
+                  <Link
+                    href="/provider-login"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center justify-center gap-1.5 px-4 py-3 mt-2 text-xs font-bold text-slate-500 border border-slate-200 rounded-2xl bg-white hover:bg-slate-50"
+                  >
+                    <span className="material-symbols-outlined text-[16px]">corporate_fare</span>
+                    Company / Institute Portal
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         )}

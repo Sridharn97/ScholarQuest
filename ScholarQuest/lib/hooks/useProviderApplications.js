@@ -32,11 +32,11 @@ export default function useProviderApplications() {
           const d = doc.data();
           return { 
             id: doc.id,
-            student: d.studentName || 'Student',
-            email: d.studentEmail || '',
-            scholarship: d.scholarshipName || 'Scholarship',
-            submitted: d.appliedAt ? new Date(d.appliedAt).toISOString().split('T')[0] : '2026-06-25',
-            score: 85,
+            student: d.studentName || d.student || 'Unknown Applicant',
+            email: d.studentEmail || d.email || '',
+            scholarship: d.scholarshipName || d.scholarship || 'Unknown Program',
+            submitted: d.appliedAt ? new Date(d.appliedAt).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+            score: d.score || 0,
             status: d.status || 'Pending',
             ...d
           };

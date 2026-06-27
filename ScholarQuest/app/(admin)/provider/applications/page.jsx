@@ -274,20 +274,22 @@ export default function ProviderApplicationsPage() {
       {/* Stats Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
         {[
-          { label: 'Total Applications', value: counts.total, icon: 'description', cls: 'bg-primary/10 text-primary', trend: '+12% this week', trendUp: true },
-          { label: 'Under Review', value: counts.review, icon: 'pending', cls: 'bg-blue-100 text-blue-700', trend: 'Steady', trendUp: true },
-          { label: 'Approved / Funded', value: counts.approved, icon: 'check_circle', cls: 'bg-green-100 text-green-700', trend: '+2 this month', trendUp: true },
-          { label: 'Pending Review', value: counts.pending, icon: 'hourglass_empty', cls: 'bg-orange-100 text-orange-700', trend: 'Needs action', trendUp: false },
+          { label: 'Total Applications', value: counts.total, icon: 'description', cls: 'bg-primary/10 text-primary', trend: '', trendUp: true },
+          { label: 'Under Review', value: counts.review, icon: 'pending', cls: 'bg-blue-100 text-blue-700', trend: '', trendUp: true },
+          { label: 'Approved / Funded', value: counts.approved, icon: 'check_circle', cls: 'bg-green-100 text-green-700', trend: '', trendUp: true },
+          { label: 'Pending Review', value: counts.pending, icon: 'hourglass_empty', cls: 'bg-orange-100 text-orange-700', trend: '', trendUp: false },
         ].map((stat) => (
           <div key={stat.label} className="relative overflow-hidden clean-card p-6 rounded-2xl hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
             <div className="flex justify-between items-start mb-3">
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${stat.cls} shadow-inner`}>
                 <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1", fontSize: '20px' }}>{stat.icon}</span>
               </div>
-              <div className={`flex items-center gap-1 font-label-sm text-[11px] px-2 py-0.5 rounded-full ${stat.trendUp ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
-                <span className="material-symbols-outlined" style={{ fontSize: '12px' }}>{stat.trendUp ? 'trending_up' : 'priority_high'}</span>
-                {stat.trend}
-              </div>
+              {stat.trend && (
+                <div className={`flex items-center gap-1 font-label-sm text-[11px] px-2 py-0.5 rounded-full ${stat.trendUp ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+                  <span className="material-symbols-outlined" style={{ fontSize: '12px' }}>{stat.trendUp ? 'trending_up' : 'priority_high'}</span>
+                  {stat.trend}
+                </div>
+              )}
             </div>
             <p className="font-label-sm text-on-surface-variant mb-0.5">{stat.label}</p>
             <h4 className="font-headline-md text-2xl text-on-surface">{stat.value}</h4>

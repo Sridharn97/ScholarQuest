@@ -1,25 +1,67 @@
+'use client';
 import ProviderMonthlyActivity from '@/components/dashboard/ProviderMonthlyActivity';
 import ProviderCategoryBreakdown from '@/components/dashboard/ProviderCategoryBreakdown';
-
-export const metadata = { title: 'Sponsor Portal | Reports & Analytics' };
-
-const topScholarships = [
-  { name: 'Global Tech Innovators Fund', applicants: 142, awarded: 12, rate: '8.4%' },
-  { name: 'Future Leaders Foundation', applicants: 87, awarded: 8, rate: '9.2%' },
-  { name: 'Women in Tech Grant', applicants: 203, awarded: 15, rate: '7.4%' },
-  { name: 'Green Future Fund', applicants: 56, awarded: 5, rate: '8.9%' },
-];
-
-const monthlyData = [
-  { month: 'Jan', applications: 320, awarded: 28 },
-  { month: 'Feb', applications: 480, awarded: 42 },
-  { month: 'Mar', applications: 620, awarded: 56 },
-  { month: 'Apr', applications: 410, awarded: 35 },
-  { month: 'May', applications: 540, awarded: 48 },
-  { month: 'Jun', applications: 390, awarded: 31 },
-];
+import useProviderDashboard from '@/lib/hooks/useProviderDashboard';
 
 export default function ProviderReportsPage() {
+  const { applications, scholarships } = useProviderDashboard();
+
+  const totalApps = applications.length;
+  const funded = applications.filter(a => a.status === 'Approved').length;
+  const totalFunds = scholarships.reduce((acc, curr) => acc + (Number(curr.amount?.toString().replace(/[^0-9.-]+/g,"")) || 0), 0);
+  const avgScore = applications.length ? Math.round(applications.reduce((acc, curr) => acc + (curr.score || 0), 0) / applications.length) : 0;
+
+  // Monthly Data calculation
+  const now = new Date();
+  const monthlyData = [];
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const month = d.toLocaleString('default', { month: 'short' });
+    const appsThisMonth = applications.filter(a => {
+      const ad = new Date(a.appliedAt || a.createdAt || new Date());
+      return ad.getMonth() === d.getMonth() && ad.getFullYear() === d.getFullYear();
+    });
+    monthlyData.push({
+      month,
+      applications: appsThisMonth.length,
+      awarded: appsThisMonth.filter(a => a.status === 'Approved').length
+    });
+  }
+
+  // Top Scholarships
+  const topScholarships = scholarships.map(s => {
+    const sApps = applications.filter(a => a.scholarshipId === s.id || a.scholarship === s.name);
+    const sFunded = sApps.filter(a => a.status === 'Approved').length;
+    return {
+      name: s.name || 'Unnamed',
+      applicants: sApps.length,
+      awarded: sFunded,
+      rate: sApps.length ? `${Math.round((sFunded / sApps.length) * 100)}%` : '0%'
+    };
+  }).sort((a, b) => b.applicants - a.applicants).slice(0, 4);
+
+  // Category Breakdown calculation
+  const categoryCounts = {};
+  scholarships.forEach(s => {
+    const cat = s.category || 'Other';
+    categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
+  });
+  
+  const totalSchols = scholarships.length || 1;
+  const colors = ['bg-[#004ac6]', 'bg-[#712ae2]', 'bg-[#c3c6d7]', 'bg-green-500', 'bg-orange-500'];
+  const hexColors = ['#004ac6', '#712ae2', '#c3c6d7', '#22c55e', '#f97316'];
+
+  const categories = Object.keys(categoryCounts).map((cat, i) => {
+    const count = categoryCounts[cat];
+    return {
+      label: cat,
+      count,
+      pctString: `${Math.round((count / totalSchols) * 100)}%`,
+      colorClass: colors[i % colors.length],
+      hex: hexColors[i % hexColors.length]
+    };
+  });
+
   return (
     <div>
       <div className="mb-12">
@@ -30,20 +72,22 @@ export default function ProviderReportsPage() {
       {/* Summary KPIs */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
         {[
-          { label: 'Total Submissions', value: '528', trend: '+14% MoM', trendUp: true, icon: 'description', cls: 'bg-primary/10 text-primary' },
-          { label: 'Grants Funded', value: '40', trend: '+10% MoM', trendUp: true, icon: 'check_circle', cls: 'bg-green-100 text-green-700' },
-          { label: 'Total Funds Disbursed', value: '$850,000', trend: '+15% YoY', trendUp: true, icon: 'payments', cls: 'bg-secondary/10 text-secondary' },
-          { label: 'Avg. Match score', value: '92%', trend: '+2pts', trendUp: true, icon: 'psychiatry', cls: 'bg-blue-100 text-blue-700' },
+          { label: 'Total Submissions', value: totalApps.toString(), trend: '', trendUp: true, icon: 'description', cls: 'bg-primary/10 text-primary' },
+          { label: 'Grants Funded', value: funded.toString(), trend: '', trendUp: true, icon: 'check_circle', cls: 'bg-green-100 text-green-700' },
+          { label: 'Total Funds Disbursed', value: `$${totalFunds.toLocaleString()}`, trend: '', trendUp: true, icon: 'payments', cls: 'bg-secondary/10 text-secondary' },
+          { label: 'Avg. Match score', value: `${avgScore}%`, trend: '', trendUp: true, icon: 'psychiatry', cls: 'bg-blue-100 text-blue-700' },
         ].map((stat) => (
           <div key={stat.label} className="relative overflow-hidden clean-card p-6 rounded-2xl hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
             <div className="flex justify-between items-start mb-3">
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${stat.cls} shadow-inner`}>
                 <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1", fontSize: '20px' }}>{stat.icon}</span>
               </div>
-              <div className={`flex items-center gap-1 font-label-sm text-[11px] px-2 py-0.5 rounded-full ${stat.trendUp ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
-                <span className="material-symbols-outlined" style={{ fontSize: '12px' }}>{stat.trendUp ? 'trending_up' : 'priority_high'}</span>
-                {stat.trend}
-              </div>
+              {stat.trend && (
+                <div className={`flex items-center gap-1 font-label-sm text-[11px] px-2 py-0.5 rounded-full ${stat.trendUp ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+                  <span className="material-symbols-outlined" style={{ fontSize: '12px' }}>{stat.trendUp ? 'trending_up' : 'priority_high'}</span>
+                  {stat.trend}
+                </div>
+              )}
             </div>
             <p className="font-label-sm text-on-surface-variant mb-0.5">{stat.label}</p>
             <h4 className="font-headline-md text-2xl text-on-surface">{stat.value}</h4>
@@ -56,7 +100,7 @@ export default function ProviderReportsPage() {
         <ProviderMonthlyActivity monthlyData={monthlyData} />
 
         {/* Category Breakdown Donut */}
-        <ProviderCategoryBreakdown />
+        <ProviderCategoryBreakdown categories={categories} totalCount={scholarships.length} />
       </div>
 
       {/* Top Scholarships Table */}
@@ -72,8 +116,14 @@ export default function ProviderReportsPage() {
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-outline-variant/30">
-            {topScholarships.map((s) => (
+          <tbody className="divide-y divide-outline-variant/30 text-sm">
+            {topScholarships.length === 0 ? (
+              <tr>
+                <td colSpan={4} className="px-6 py-12 text-center text-on-surface-variant">
+                  No programs posted yet.
+                </td>
+              </tr>
+            ) : topScholarships.map((s) => (
               <tr key={s.name} className="hover:bg-surface-container-low transition-colors">
                 <td className="px-6 py-4 font-semibold">{s.name}</td>
                 <td className="px-6 py-4">{s.applicants}</td>

@@ -56,7 +56,7 @@ export default function ProviderDashboard() {
         <ProviderStatusBreakdown applications={applications} />
 
         {/* Application Trends */}
-        <ProviderApplicationTrends />
+        <ProviderApplicationTrends applications={applications} />
       </div>
 
       {/* Recent Submissions Table */}

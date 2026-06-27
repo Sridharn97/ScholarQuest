@@ -59,11 +59,13 @@ export default function useProviderDashboard() {
     }
   };
 
+  const totalFunds = scholarships.reduce((acc, curr) => acc + (Number(curr.amount?.toString().replace(/[^0-9.-]+/g,"")) || 0), 0);
+
   const kpis = [
     { 
       icon: 'payments', 
       label: 'Allocated Funds', 
-      value: '$1.2M', 
+      value: `$${totalFunds.toLocaleString()}`, 
       badge: `${scholarships.filter(s => s.status === 'Active').length} active programs`, 
       badgeCls: 'bg-primary/10 text-primary', 
       iconCls: 'bg-primary/10 text-primary' 
