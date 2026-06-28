@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { auth, db } from '@/lib/firebase';
-import { collection, addDoc, getDoc, doc } from 'firebase/firestore';
+import { collection, addDoc, getDoc, doc, query, where, getDocs } from 'firebase/firestore';
 
 export default function useProviderNewScholarship() {
   const router = useRouter();
@@ -97,6 +97,42 @@ export default function useProviderNewScholarship() {
         applicants: 0,
         createdAt: Date.now()
       });
+
+      // Send a direct message to every student about the new scholarship
+      const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const welcomeMsg = `Hello! We have just posted a new scholarship: "${name}". Check it out and let us know if you have any questions!`;
+      
+      const studentsQuery = query(collection(db, 'users'), where('role', '==', 'student'));
+      const studentsSnapshot = await getDocs(studentsQuery);
+      
+      const convPromises = studentsSnapshot.docs.map((studentDoc) => {
+        const studentData = studentDoc.data();
+        return addDoc(collection(db, 'conversations'), {
+          studentId: studentDoc.id,
+          studentName: studentData.name || `${studentData.firstName} ${studentData.lastName}`,
+          providerId: user.uid,
+          providerName: providerInfo.name || 'Provider',
+          org: providerInfo.organization || 'Sponsor Organization',
+          scholarshipName: name,
+          lastMessage: welcomeMsg,
+          time: timeStr,
+          unread: 1,
+          providerUnread: 0,
+          online: true,
+          hiddenForStudent: false,
+          hiddenForProvider: false,
+          messages: [
+            {
+              sender: 'provider',
+              text: welcomeMsg,
+              time: timeStr,
+              timestamp: Date.now()
+            }
+          ],
+          createdAt: Date.now()
+        });
+      });
+      await Promise.all(convPromises);
 
       setLoading(false);
       router.push('/provider/scholarships');

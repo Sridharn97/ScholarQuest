@@ -130,16 +130,18 @@ export default function ProviderMessagesPage() {
 
         {/* Messages */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-surface">
-          {activeConvData?.thread?.map((msg, index, arr) => {
-            const providerIsMe = !msg.isMe; // Reverse isMe since student is true
+          {activeConvData?.thread?.length === 0 || !activeConvData?.thread ? (
+            <div className="flex flex-col items-center justify-center h-full text-on-surface-variant gap-3">
+              <span className="material-symbols-outlined text-[48px] opacity-40" style={{ fontVariationSettings: "'FILL' 1" }}>chat_bubble</span>
+              <p className="font-label-md text-sm opacity-60">Waiting for the student to reply...</p>
+            </div>
+          ) : activeConvData.thread.map((msg, index, arr) => {
             const prevMsg = arr[index - 1];
-            
             const currentDayLabel = formatDateLabel(msg.timestamp);
             const prevDayLabel = prevMsg ? formatDateLabel(prevMsg.timestamp) : null;
             const showDateDivider = currentDayLabel !== prevDayLabel;
+            const isFirstInGroup = !prevMsg || showDateDivider;
 
-            const isFirstInGroup = !prevMsg || prevMsg.isMe !== msg.isMe || showDateDivider;
-            
             return (
               <React.Fragment key={msg.id}>
                 {showDateDivider && (
@@ -149,28 +151,22 @@ export default function ProviderMessagesPage() {
                     </span>
                   </div>
                 )}
-                <div className={`flex gap-2 sm:gap-3 ${providerIsMe ? 'justify-end' : 'justify-start'} ${isFirstInGroup ? (index === 0 && !showDateDivider ? 'mt-2' : 'mt-4') : 'mt-1.5'}`}>
-                  {!providerIsMe && activeConvData && (
+                <div className={`flex gap-2 sm:gap-3 justify-start ${isFirstInGroup ? (index === 0 && !showDateDivider ? 'mt-2' : 'mt-4') : 'mt-1.5'}`}>
+                  {activeConvData && (
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 self-end ${activeConvData.avatarBg}`}>
                       {activeConvData.avatar}
                     </div>
                   )}
-                  <div className={`max-w-[85%] sm:max-w-[70%] ${providerIsMe ? 'items-end' : 'items-start'} flex flex-col gap-1.5`}>
-                    <div className={`px-3 pt-2 pb-1.5 rounded-2xl shadow-sm min-w-[75px] ${providerIsMe ? 'bg-gradient-to-r from-primary to-purple-500 text-white rounded-br-sm' : 'bg-white border border-slate-100 text-slate-800 rounded-bl-sm'}`}>
+                  <div className="max-w-[85%] sm:max-w-[70%] items-start flex flex-col gap-1.5">
+                    <div className="px-3 pt-2 pb-1.5 rounded-2xl shadow-sm min-w-[75px] bg-white border border-slate-100 text-slate-800 rounded-bl-sm">
                       <div className="flex flex-wrap items-end gap-x-3 justify-between">
                         <p className="font-body-md text-[14px] leading-relaxed break-words pb-0.5">{msg.content}</p>
-                        <div className={`text-[10px] opacity-60 shrink-0 ml-auto flex items-center gap-1 mt-1 font-medium ${providerIsMe ? 'text-white/80' : 'text-slate-500'}`}>
+                        <div className="text-[10px] opacity-60 shrink-0 ml-auto flex items-center gap-1 mt-1 font-medium text-slate-500">
                           {msg.time}
-                          {providerIsMe && <span className="material-symbols-outlined text-white" style={{ fontSize: '14px' }}>done_all</span>}
                         </div>
                       </div>
                     </div>
                   </div>
-                  {providerIsMe && (
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs shrink-0 self-end">
-                      Me
-                    </div>
-                  )}
                 </div>
               </React.Fragment>
             );

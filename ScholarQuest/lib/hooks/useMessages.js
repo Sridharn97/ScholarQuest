@@ -26,22 +26,34 @@ export default function useMessages() {
     if (userUid) {
       const q = query(collection(db, 'conversations'), where('studentId', '==', userUid));
       unsubscribeSnapshot = onSnapshot(q, (snapshot) => {
-        const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const data = snapshot.docs.map(doc => {
+          const docData = doc.data();
+          const avatarStr = docData.org ? docData.org.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase() : 'SP';
+          const colors = ['bg-primary/10 text-primary', 'bg-secondary/10 text-secondary', 'bg-tertiary-container/10 text-tertiary', 'bg-blue-500/10 text-blue-600'];
+          const randomColor = colors[Math.floor(Math.random() * colors.length)];
+          
+          return {
+            id: doc.id,
+            ...docData,
+            name: docData.org || docData.providerName || 'Sponsor',
+            avatar: avatarStr,
+            avatarBg: docData.avatarBg || randomColor,
+            thread: (docData.messages || []).map((m, idx) => ({
+              id: m.timestamp || idx,
+              content: m.text,
+              isMe: m.sender === 'student',
+              time: m.time,
+              timestamp: m.timestamp
+            }))
+          };
+        });
         
         setConvs(data);
         
-        setConvs(current => {
-           if (current.length === 0) return current;
-           // If no active conv, select the first visible one
-           setActiveConv(prev => {
-             if (!prev) {
-               const remaining = data.filter(c => !c.hiddenForStudent);
-               return remaining.length > 0 ? remaining[0].id : null;
-             }
-             return prev;
-           });
-           return current;
-        });
+        const remaining = data.filter(c => !c.hiddenForStudent);
+        if (remaining.length > 0) {
+          setActiveConv(prev => prev || remaining[0].id);
+        }
       });
     } else {
       setConvs([]);
@@ -68,10 +80,11 @@ export default function useMessages() {
     const text = newMessage.trim();
     if (!text || !activeConv) return;
     
+    const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const msgObj = {
       text,
       sender: 'student',
-      time: 'Just now',
+      time: timeStr,
       timestamp: Date.now()
     };
     

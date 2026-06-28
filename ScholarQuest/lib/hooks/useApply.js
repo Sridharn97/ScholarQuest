@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { db, auth } from '@/lib/firebase';
-import { collection, query, where, getDocs, doc, getDoc, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, getDoc, addDoc, updateDoc, deleteDoc, increment } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import { convertToPercentage } from '@/lib/gpaConverter';
 
@@ -155,6 +155,15 @@ export default function useApply(params) {
           amount: scholarship.amount || null,
           createdAt: Date.now()
         });
+      }
+
+      // Increment the applicants counter on the scholarship document
+      try {
+        await updateDoc(doc(db, 'scholarships', scholarship.id), {
+          applicants: increment(1)
+        });
+      } catch (incErr) {
+        console.warn('Could not increment applicants count:', incErr);
       }
 
       showToast('Application Submitted Successfully!');
