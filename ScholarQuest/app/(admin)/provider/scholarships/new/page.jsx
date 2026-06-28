@@ -128,13 +128,86 @@ export default function PostScholarshipPage() {
               />
             </div>
 
+          </div>
+        </div>
+
+        {/* Eligibility Requirements Section */}
+        <div className="clean-card p-8 rounded-[2rem] border border-outline-variant/30 shadow-sm relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-64 h-64 bg-tertiary/5 rounded-full blur-3xl -z-10 pointer-events-none -translate-x-1/2 -translate-y-1/2" />
+
+          <div className="flex items-center gap-3 mb-8 pb-6 border-b border-outline-variant/20">
+            <div className="w-12 h-12 rounded-2xl bg-tertiary/10 flex items-center justify-center text-tertiary">
+              <span className="material-symbols-outlined" style={{ fontSize: '24px' }}>checklist</span>
+            </div>
+            <div>
+              <h3 className="font-headline-md text-2xl font-bold text-on-surface">Eligibility Requirements</h3>
+              <p className="text-body-sm text-on-surface-variant mt-0.5">Define who qualifies to apply for this scholarship</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+            <div className="space-y-2 group">
+              <label htmlFor="gpa" className="font-label-md text-sm font-bold text-on-surface-variant group-focus-within:text-primary transition-colors">Minimum GPA</label>
+              <input
+                id="gpa"
+                name="gpa"
+                type="text"
+                placeholder="e.g. 3.5 minimum"
+                className="w-full px-5 py-4 bg-surface-container-lowest border border-outline-variant/50 rounded-xl font-body-md text-on-surface outline-none focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all shadow-sm hover:border-outline-variant"
+              />
+            </div>
+
+            <div className="space-y-2 group">
+              <label htmlFor="nationality" className="font-label-md text-sm font-bold text-on-surface-variant group-focus-within:text-primary transition-colors">Nationality / Citizenship</label>
+              <input
+                id="nationality"
+                name="nationality"
+                type="text"
+                placeholder="e.g. US Citizens & PR, Open to all"
+                className="w-full px-5 py-4 bg-surface-container-lowest border border-outline-variant/50 rounded-xl font-body-md text-on-surface outline-none focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all shadow-sm hover:border-outline-variant"
+              />
+            </div>
+
+            <div className="space-y-2 group">
+              <label htmlFor="target_year" className="font-label-md text-sm font-bold text-on-surface-variant group-focus-within:text-primary transition-colors">Target Year of Study</label>
+              <div className="relative">
+                <select
+                  id="target_year"
+                  name="target_year"
+                  className="w-full px-5 py-4 bg-surface-container-lowest border border-outline-variant/50 rounded-xl font-body-md text-on-surface outline-none focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all shadow-sm appearance-none hover:border-outline-variant cursor-pointer"
+                >
+                  <option value="">Any Year</option>
+                  <option value="Freshman">Freshman</option>
+                  <option value="Sophomore">Sophomore</option>
+                  <option value="Junior">Junior</option>
+                  <option value="Senior">Senior</option>
+                  <option value="Undergrad / Graduate">Undergrad / Graduate</option>
+                  <option value="Graduate">Graduate Only</option>
+                  <option value="PhD">PhD</option>
+                </select>
+                <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+              </div>
+            </div>
+
+            <div className="space-y-2 group">
+              <label htmlFor="field_of_study" className="font-label-md text-sm font-bold text-on-surface-variant group-focus-within:text-primary transition-colors">Field of Study</label>
+              <input
+                id="field_of_study"
+                name="field_of_study"
+                type="text"
+                placeholder="e.g. STEM, Business, Any field"
+                className="w-full px-5 py-4 bg-surface-container-lowest border border-outline-variant/50 rounded-xl font-body-md text-on-surface outline-none focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all shadow-sm hover:border-outline-variant"
+              />
+            </div>
+
             <div className="md:col-span-2 space-y-2 group">
-              <label htmlFor="eligibility" className="font-label-md text-sm font-bold text-on-surface-variant group-focus-within:text-primary transition-colors">Eligibility Summary</label>
+              <label htmlFor="required_docs" className="font-label-md text-sm font-bold text-on-surface-variant group-focus-within:text-primary transition-colors">Required Documents</label>
+              <p className="text-xs text-on-surface-variant">Enter each document on a new line</p>
               <textarea
-                id="eligibility"
-                name="eligibility"
-                rows={2}
-                placeholder="e.g. GPA 3.5 minimum, senior year, CS or Engineering major"
+                id="required_docs"
+                name="required_docs"
+                rows={4}
+                placeholder={`Official academic transcript\nPersonal statement & essay\nLetters of recommendation (optional)`}
                 className="w-full px-5 py-4 bg-surface-container-lowest border border-outline-variant/50 rounded-xl font-body-md text-on-surface outline-none focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all shadow-sm hover:border-outline-variant resize-none"
               />
             </div>

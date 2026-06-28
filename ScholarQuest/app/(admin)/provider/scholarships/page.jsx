@@ -69,12 +69,12 @@ export default function ProviderScholarshipsPage() {
       )}
 
       {/* Header */}
-      <div className="flex items-center justify-between mb-12">
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-12">
         <div>
           <h2 className="font-headline-lg text-3xl font-bold text-on-surface">Posted Scholarships</h2>
           <p className="text-body-lg text-on-surface-variant mt-2">{"Manage, track, and optimize your organization's funding opportunities."}</p>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 flex-wrap">
           <div className="relative">
             <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant" style={{ fontSize: '20px' }}>search</span>
             <input
@@ -82,7 +82,7 @@ export default function ProviderScholarshipsPage() {
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search programs..."
-              className="w-64 bg-surface-container-lowest border border-outline-variant/30 rounded-xl py-2.5 pl-11 pr-4 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+              className="w-56 bg-surface-container-lowest border border-outline-variant/30 rounded-xl py-2.5 pl-11 pr-4 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
             />
           </div>
           <div className="relative">
@@ -98,6 +98,13 @@ export default function ProviderScholarshipsPage() {
             </select>
             <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-[18px]">expand_more</span>
           </div>
+          <Link
+            href="/provider/scholarships/new"
+            className="flex items-center gap-2 bg-primary text-white font-label-md px-5 py-2.5 rounded-xl hover:opacity-90 hover:-translate-y-0.5 active:scale-95 transition-all shadow-sm shadow-primary/25 text-sm whitespace-nowrap"
+          >
+            <span className="material-symbols-outlined text-[18px]">add</span>
+            Post New Scholarship
+          </Link>
         </div>
       </div>
 

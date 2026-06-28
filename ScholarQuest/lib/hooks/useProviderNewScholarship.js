@@ -69,6 +69,14 @@ export default function useProviderNewScholarship() {
     const amount = e.target.amount.value.trim();
     const deadline = e.target.deadline.value;
     const desc = e.target.description.value.trim();
+    const gpa = e.target.gpa.value.trim();
+    const nationality = e.target.nationality.value.trim();
+    const targetYear = e.target.target_year.value;
+    const fieldOfStudy = e.target.field_of_study.value.trim();
+    const requiredDocs = e.target.required_docs.value
+      .split('\n')
+      .map(d => d.trim())
+      .filter(Boolean);
 
     if (!name || !amount || !deadline || !desc) {
       setError('Please fill in all required fields.');
@@ -90,6 +98,11 @@ export default function useProviderNewScholarship() {
         amount,
         deadline,
         desc,
+        gpa: gpa || null,
+        nationality: nationality || null,
+        targetYear: targetYear || null,
+        fieldOfStudy: fieldOfStudy || null,
+        requiredDocs: requiredDocs.length > 0 ? requiredDocs : null,
         org: providerInfo.organization,
         status: 'Active',
         icon: category === 'STEM' ? 'science' : category === 'Creative' ? 'draw' : category === 'International' ? 'public' : 'school',

@@ -20,17 +20,13 @@ export default function ScholarshipDetailsPage({ params }) {
   }
 
   const requirements = [
-    { icon: 'school', label: 'GPA Requirement', value: '3.5 minimum' },
-    { icon: 'public', label: 'Nationality', value: 'US Citizens & PR' },
-    { icon: 'event', label: 'Target Year', value: 'Undergrad / Graduate' },
-    { icon: 'category', label: 'Field of Study', value: scholarship.category || 'General' },
-  ];
+    scholarship.gpa && { icon: 'school', label: 'GPA Requirement', value: scholarship.gpa },
+    scholarship.nationality && { icon: 'public', label: 'Nationality', value: scholarship.nationality },
+    scholarship.targetYear && { icon: 'event', label: 'Target Year', value: scholarship.targetYear },
+    (scholarship.fieldOfStudy || scholarship.category) && { icon: 'category', label: 'Field of Study', value: scholarship.fieldOfStudy || scholarship.category },
+  ].filter(Boolean);
 
-  const documents = [
-    'Official academic transcript',
-    'Personal statement & essay',
-    'Letters of recommendation (optional)',
-  ];
+  const documents = scholarship.requiredDocs || [];
 
   return (
     <div className="max-w-container-max mx-auto px-gutter py-10">
@@ -101,29 +97,37 @@ export default function ScholarshipDetailsPage({ params }) {
           {/* Eligibility */}
           <div className="glass-card rounded-2xl p-10">
             <h2 className="font-headline-md text-headline-md mb-6">Eligibility Requirements</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              {requirements.map((req) => (
-                <div key={req.label} className="flex items-center gap-4 p-4 bg-surface-container-low rounded-10 border border-outline-variant/10">
-                  <div className="w-10 h-10 rounded-6 bg-primary/10 flex items-center justify-center text-primary">
-                    <span className="material-symbols-outlined">{req.icon}</span>
+            {requirements.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                {requirements.map((req) => (
+                  <div key={req.label} className="flex items-center gap-4 p-4 bg-surface-container-low rounded-10 border border-outline-variant/10">
+                    <div className="w-10 h-10 rounded-6 bg-primary/10 flex items-center justify-center text-primary">
+                      <span className="material-symbols-outlined">{req.icon}</span>
+                    </div>
+                    <div>
+                      <p className="font-label-sm text-label-sm text-on-surface-variant">{req.label}</p>
+                      <p className="font-label-md text-label-md text-on-surface font-semibold">{req.value}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-label-sm text-label-sm text-on-surface-variant">{req.label}</p>
-                    <p className="font-label-md text-label-md text-on-surface font-semibold">{req.value}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-on-surface-variant font-body-md mb-6">No specific eligibility criteria listed.</p>
+            )}
 
-            <h3 className="font-headline-md text-headline-md mb-4">Required Documents</h3>
-            <ul className="space-y-3">
-              {documents.map((doc) => (
-                <li key={doc} className="flex items-start gap-3">
-                  <span className="material-symbols-outlined text-primary mt-0.5" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                  <span className="font-body-md text-body-md text-on-surface-variant">{doc}</span>
-                </li>
-              ))}
-            </ul>
+            {documents.length > 0 && (
+              <>
+                <h3 className="font-headline-md text-headline-md mb-4">Required Documents</h3>
+                <ul className="space-y-3">
+                  {documents.map((doc) => (
+                    <li key={doc} className="flex items-start gap-3">
+                      <span className="material-symbols-outlined text-primary mt-0.5" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                      <span className="font-body-md text-body-md text-on-surface-variant">{doc}</span>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
           </div>
         </div>
 
