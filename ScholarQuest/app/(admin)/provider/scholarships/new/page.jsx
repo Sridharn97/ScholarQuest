@@ -218,24 +218,14 @@ export default function PostScholarshipPage() {
         <div className="clean-card p-8 rounded-[2rem] border border-outline-variant/30 shadow-sm relative overflow-hidden">
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-secondary/5 rounded-full blur-3xl -z-10 pointer-events-none -translate-x-1/2 translate-y-1/2" />
           
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 pb-6 border-b border-outline-variant/20">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-secondary/10 flex items-center justify-center text-secondary">
-                <span className="material-symbols-outlined" style={{ fontSize: '24px' }}>view_list</span>
-              </div>
-              <div>
-                <h3 className="font-headline-md text-2xl font-bold text-on-surface">Application Form Builder</h3>
-                <p className="text-body-sm text-on-surface-variant mt-0.5">Design the custom application requirements for students</p>
-              </div>
+          <div className="flex items-center gap-3 mb-8 pb-6 border-b border-outline-variant/20">
+            <div className="w-12 h-12 rounded-2xl bg-secondary/10 flex items-center justify-center text-secondary">
+              <span className="material-symbols-outlined" style={{ fontSize: '24px' }}>view_list</span>
             </div>
-            <button
-              type="button"
-              onClick={addSection}
-              className="px-5 py-2.5 bg-surface-container hover:bg-surface-container-high text-on-surface rounded-xl font-label-md transition-all flex items-center gap-2 shadow-sm border border-outline-variant/30 active:scale-95"
-            >
-              <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>add_circle</span>
-              Add New Section
-            </button>
+            <div>
+              <h3 className="font-headline-md text-2xl font-bold text-on-surface">Application Form Builder</h3>
+              <p className="text-body-sm text-on-surface-variant mt-0.5">Design the custom application requirements for students</p>
+            </div>
           </div>
 
           <div className="space-y-8">
@@ -353,6 +343,18 @@ export default function PostScholarshipPage() {
                   Add Your First Section
                 </button>
               </div>
+            )}
+
+            {/* Bottom Add Section button — visible when sections exist */}
+            {sections.length > 0 && (
+              <button
+                type="button"
+                onClick={addSection}
+                className="w-full py-4 mt-2 flex items-center justify-center gap-2 border-2 border-dashed border-outline-variant/40 rounded-2xl text-on-surface-variant hover:text-primary hover:border-primary/40 hover:bg-primary/5 font-label-md transition-all group active:scale-[0.99]"
+              >
+                <span className="material-symbols-outlined text-[20px] group-hover:rotate-90 transition-transform duration-200">add_circle</span>
+                Add New Section
+              </button>
             )}
           </div>
         </div>
