@@ -35,32 +35,29 @@ export default function ProviderApplicationTrends({ applications = [] }) {
 
   const maxCount = Math.max(...counts, 1); // Avoid division by zero
 
-  // Map counts to height classes (h-0 to h-64 relative scale)
-  const getHeights = (count) => {
-    const percent = count / maxCount;
-    if (percent === 0) return 'h-2'; // min height
-    if (percent < 0.2) return 'h-12';
-    if (percent < 0.4) return 'h-24';
-    if (percent < 0.6) return 'h-36';
-    if (percent < 0.8) return 'h-48';
-    return 'h-64';
-  };
-
   return (
-    <div className="clean-card p-8 rounded-2xl">
-      <div className="flex justify-between items-center mb-8">
-        <h4 className="font-headline-md text-xl font-semibold">Application Trends</h4>
-      </div>
-      <div className="h-64 w-full flex items-end justify-between px-2">
-        {months.map((label, i) => (
-          <div key={label + i} className="flex flex-col items-center gap-2 group w-8">
-            <div
-              className={`w-full bg-secondary/20 rounded-t-lg transition-all group-hover:bg-secondary ${getHeights(counts[i])} ${counts[i] === maxCount && maxCount > 0 ? 'bg-secondary' : ''}`}
-              title={`${counts[i]} applications`}
-            />
-            <span className={`text-label-sm ${counts[i] === maxCount && maxCount > 0 ? 'font-bold text-secondary' : ''}`}>{label}</span>
-          </div>
-        ))}
+    <div className="clean-card p-8 rounded-2xl flex flex-col h-full">
+      <h4 className="font-headline-md text-xl font-semibold mb-8">Application Trends</h4>
+      <div className="flex-1 w-full flex items-end justify-between px-2 pb-2 pt-6 min-h-[220px]">
+        {months.map((label, i) => {
+          const heightPct = counts[i] === 0 ? '4px' : `${(counts[i] / maxCount) * 100}%`;
+          const isMax = counts[i] === maxCount && maxCount > 0;
+          
+          return (
+            <div key={label + i} className="flex flex-col items-center gap-4 group flex-1">
+              <div className="relative w-8 h-48 bg-surface-container-highest/20 rounded-full flex items-end overflow-hidden group-hover:bg-surface-container-highest/30 transition-colors">
+                <div
+                  className={`w-full rounded-full transition-all duration-700 ease-out ${isMax ? 'bg-primary' : 'bg-outline-variant/50 group-hover:bg-primary/70'}`}
+                  style={{ height: heightPct }}
+                  title={`${counts[i]} applications`}
+                />
+              </div>
+              <span className={`text-label-sm ${isMax ? 'font-bold text-primary' : 'text-on-surface-variant font-medium'}`}>
+                {label}
+              </span>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

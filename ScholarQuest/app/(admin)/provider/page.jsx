@@ -3,6 +3,8 @@ import Link from 'next/link';
 import useProviderDashboard from '@/lib/hooks/useProviderDashboard';
 import ProviderStatusBreakdown from '@/components/dashboard/ProviderStatusBreakdown';
 import ProviderApplicationTrends from '@/components/dashboard/ProviderApplicationTrends';
+import ProviderEducationLevelChart from '@/components/dashboard/ProviderEducationLevelChart';
+import ProviderMonthlyOverviewChart from '@/components/dashboard/ProviderMonthlyOverviewChart';
 
 export default function ProviderDashboard() {
   const {
@@ -59,82 +61,13 @@ export default function ProviderDashboard() {
         <ProviderApplicationTrends applications={applications} />
       </div>
 
-      {/* Recent Submissions Table */}
-      <div className="clean-card rounded-2xl overflow-hidden mb-8">
-        <div className="p-6 flex justify-between items-center border-b border-outline-variant/30">
-          <h4 className="font-headline-md text-xl font-semibold">Recent Submissions</h4>
-          <Link href="/provider/applications" className="text-primary font-label-md text-label-md hover:underline">View All</Link>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left">
-            <thead className="bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">
-              <tr>
-                <th className="px-4 py-3 text-xs whitespace-nowrap align-middle">Student</th>
-                <th className="px-4 py-3 text-xs whitespace-nowrap align-middle">Scholarship Program</th>
-                <th className="px-4 py-3 text-xs whitespace-nowrap align-middle">Submission Date</th>
-                <th className="px-4 py-3 text-xs whitespace-nowrap align-middle">Match Score</th>
-                <th className="px-4 py-3 text-xs whitespace-nowrap align-middle">Status</th>
-                <th className="px-4 py-3 text-xs whitespace-nowrap align-middle">Quick Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-outline-variant/30 text-body-md">
-              {recentApplications.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-on-surface-variant">
-                    No submissions yet. Post a scholarship to get started!
-                  </td>
-                </tr>
-              ) : recentApplications.map((row) => (
-                <tr key={row.id} className="hover:bg-surface-container-low transition-colors">
-                  <td className="px-4 py-4 whitespace-nowrap align-middle">
-                    <div className="flex items-center gap-3 w-full">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${row.color}`}>{row.initials}</div>
-                      <span className="whitespace-nowrap text-sm">{row.student}</span>
-                    </div>
-                  </td>
-                  <td className="px-4 py-4 whitespace-nowrap align-middle text-sm">{row.scholarship}</td>
-                  <td className="px-4 py-4 whitespace-nowrap align-middle text-xs">{row.submitted}</td>
-                  <td className="px-4 py-4 whitespace-nowrap align-middle">
-                    <div className="flex items-center gap-2">
-                      <div className="w-20 h-1.5 bg-outline-variant/20 rounded-full overflow-hidden shrink-0">
-                        <div className="bg-secondary h-full" style={{ width: `${row.score}%` }} />
-                      </div>
-                      <span className="text-xs font-bold whitespace-nowrap text-secondary">{row.score}%</span>
-                    </div>
-                  </td>
-                  <td className="px-4 py-4 whitespace-nowrap align-middle">
-                    <span className={`inline-block px-2.5 py-1 rounded-full text-[11px] font-bold ${STATUS_CLS[row.status]}`}>{row.status}</span>
-                  </td>
-                  <td className="px-4 py-4 whitespace-nowrap align-middle">
-                    <div className="flex gap-0.5">
-                      {row.status !== 'Approved' && (
-                        <button
-                          onClick={() => handleQuickAction(row.id, 'Approved')}
-                          className="w-7 h-7 flex items-center justify-center text-green-600 hover:bg-green-50 rounded-6 transition-colors shrink-0"
-                          title="Approve"
-                        >
-                          <span className="material-symbols-outlined" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                        </button>
-                      )}
-                      {row.status !== 'Rejected' && (
-                        <button
-                          onClick={() => handleQuickAction(row.id, 'Rejected')}
-                          className="w-7 h-7 flex items-center justify-center text-error hover:bg-error/10 rounded-6 transition-colors shrink-0"
-                          title="Reject"
-                        >
-                          <span className="material-symbols-outlined" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>cancel</span>
-                        </button>
-                      )}
-                      <Link href="/provider/applications" className="w-7 h-7 flex items-center justify-center text-primary hover:bg-primary/10 rounded-6 transition-colors shrink-0" title="View All">
-                        <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>open_in_new</span>
-                      </Link>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      {/* Additional Charts Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        {/* Education Level Donut */}
+        <ProviderEducationLevelChart applications={applications} />
+
+        {/* Monthly Applications Overview */}
+        <ProviderMonthlyOverviewChart applications={applications} />
       </div>
     </div>
   );

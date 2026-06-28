@@ -7,7 +7,6 @@ export default function ProviderStatusBreakdown({ applications = [] }) {
   const pending = applications.filter(a => a.status === 'Pending').length;
   const rejected = applications.filter(a => a.status === 'Rejected').length;
   const total = applications.length || 1;
-
   const c = 219.9;
   const appLen = (approved / total) * c;
   const revLen = (review / total) * c;
@@ -20,47 +19,52 @@ export default function ProviderStatusBreakdown({ applications = [] }) {
   const rejOff = -(appLen + revLen + penLen);
 
   return (
-    <div className="clean-card p-8 rounded-2xl">
+    <div className="clean-card p-8 rounded-2xl flex flex-col h-full">
       <h4 className="font-headline-md text-xl font-semibold mb-8">Application Status Breakdown</h4>
-      <div className="flex items-center justify-between mt-auto mb-6">
-        <div className="relative w-36 h-36 shrink-0">
-          <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="35" fill="transparent" stroke="var(--color-surface-container-highest)" strokeWidth="16" />
-            {approved > 0 && <circle cx="50" cy="50" r="35" fill="transparent" stroke="#22c55e" strokeWidth="16" strokeDasharray={`${appLen} ${c - appLen}`} strokeDashoffset={appOff} className="transition-all duration-1000" />}
-            {review > 0 && <circle cx="50" cy="50" r="35" fill="transparent" stroke="#3b82f6" strokeWidth="16" strokeDasharray={`${revLen} ${c - revLen}`} strokeDashoffset={revOff} className="transition-all duration-1000 delay-100" />}
-            {pending > 0 && <circle cx="50" cy="50" r="35" fill="transparent" stroke="#f97316" strokeWidth="16" strokeDasharray={`${penLen} ${c - penLen}`} strokeDashoffset={penOff} className="transition-all duration-1000 delay-200" />}
-            {rejected > 0 && <circle cx="50" cy="50" r="35" fill="transparent" stroke="#ef4444" strokeWidth="16" strokeDasharray={`${rejLen} ${c - rejLen}`} strokeDashoffset={rejOff} className="transition-all duration-1000 delay-300" />}
+      <div className="flex flex-col sm:flex-row items-center gap-10 mt-auto mb-8 flex-1 justify-center">
+        {/* Donut Chart */}
+        <div className="relative w-40 h-40 shrink-0">
+          <svg className="w-full h-full transform -rotate-90 drop-shadow-sm" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="38" fill="transparent" stroke="var(--color-surface-container-highest)" strokeWidth="12" className="opacity-20" />
+            {approved > 0 && <circle cx="50" cy="50" r="38" fill="transparent" stroke="#22c55e" strokeWidth="12" strokeLinecap="round" strokeDasharray={`${appLen} ${c - appLen}`} strokeDashoffset={appOff} className="transition-all duration-1000" />}
+            {review > 0 && <circle cx="50" cy="50" r="38" fill="transparent" stroke="#3b82f6" strokeWidth="12" strokeLinecap="round" strokeDasharray={`${revLen} ${c - revLen}`} strokeDashoffset={revOff} className="transition-all duration-1000 delay-100" />}
+            {pending > 0 && <circle cx="50" cy="50" r="38" fill="transparent" stroke="#f97316" strokeWidth="12" strokeLinecap="round" strokeDasharray={`${penLen} ${c - penLen}`} strokeDashoffset={penOff} className="transition-all duration-1000 delay-200" />}
+            {rejected > 0 && <circle cx="50" cy="50" r="38" fill="transparent" stroke="#ef4444" strokeWidth="12" strokeLinecap="round" strokeDasharray={`${rejLen} ${c - rejLen}`} strokeDashoffset={rejOff} className="transition-all duration-1000 delay-300" />}
           </svg>
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <span className="font-headline-md text-3xl font-bold text-on-surface">{total === 1 && applications.length === 0 ? 0 : total}</span>
+          </div>
         </div>
 
-        <div className="flex flex-col gap-4 pl-6 border-l border-outline-variant/20 flex-1 ml-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-green-500"></div>
-              <span className="text-xs font-bold text-on-surface">Approved</span>
+        {/* Legend */}
+        <div className="flex flex-col gap-5 flex-1 w-full max-w-[200px]">
+          <div className="flex items-center justify-between group">
+            <div className="flex items-center gap-3">
+              <div className="w-3 h-3 rounded-full bg-green-500 shadow-sm" />
+              <span className="font-label-md text-sm font-medium text-on-surface group-hover:text-green-600 transition-colors">Approved</span>
             </div>
-            <span className="text-xs font-bold text-on-surface-variant">{approved}</span>
+            <span className="font-label-md text-sm font-bold text-on-surface">{approved}</span>
           </div>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-              <span className="text-xs font-bold text-on-surface">Under Review</span>
+          <div className="flex items-center justify-between group">
+            <div className="flex items-center gap-3">
+              <div className="w-3 h-3 rounded-full bg-blue-500 shadow-sm" />
+              <span className="font-label-md text-sm font-medium text-on-surface group-hover:text-blue-600 transition-colors">Under Review</span>
             </div>
-            <span className="text-xs font-bold text-on-surface-variant">{review}</span>
+            <span className="font-label-md text-sm font-bold text-on-surface">{review}</span>
           </div>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-orange-500"></div>
-              <span className="text-xs font-bold text-on-surface">Pending</span>
+          <div className="flex items-center justify-between group">
+            <div className="flex items-center gap-3">
+              <div className="w-3 h-3 rounded-full bg-orange-500 shadow-sm" />
+              <span className="font-label-md text-sm font-medium text-on-surface group-hover:text-orange-600 transition-colors">Pending</span>
             </div>
-            <span className="text-xs font-bold text-on-surface-variant">{pending}</span>
+            <span className="font-label-md text-sm font-bold text-on-surface">{pending}</span>
           </div>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-red-500"></div>
-              <span className="text-xs font-bold text-on-surface">Rejected</span>
+          <div className="flex items-center justify-between group">
+            <div className="flex items-center gap-3">
+              <div className="w-3 h-3 rounded-full bg-red-500 shadow-sm" />
+              <span className="font-label-md text-sm font-medium text-on-surface group-hover:text-red-600 transition-colors">Rejected</span>
             </div>
-            <span className="text-xs font-bold text-on-surface-variant">{rejected}</span>
+            <span className="font-label-md text-sm font-bold text-on-surface">{rejected}</span>
           </div>
         </div>
       </div>
