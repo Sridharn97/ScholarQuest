@@ -8,7 +8,7 @@ export default function ProviderReportsPage() {
 
   const totalApps = applications.length;
   const funded = applications.filter(a => a.status === 'Approved').length;
-  const totalFunds = scholarships.reduce((acc, curr) => acc + (Number(curr.amount?.toString().replace(/[^0-9.-]+/g,"")) || 0), 0);
+  const totalFunds = scholarships.reduce((acc, curr) => acc + (Number(curr.amount?.toString().replace(/[^0-9.-]+/g, "")) || 0), 0);
   const avgScore = applications.length ? Math.round(applications.reduce((acc, curr) => acc + (curr.score || 0), 0) / applications.length) : 0;
 
   // Monthly Data calculation
@@ -46,7 +46,7 @@ export default function ProviderReportsPage() {
     const cat = s.category || 'Other';
     categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
   });
-  
+
   const totalSchols = scholarships.length || 1;
   const colors = ['bg-[#004ac6]', 'bg-[#712ae2]', 'bg-[#c3c6d7]', 'bg-green-500', 'bg-orange-500'];
   const hexColors = ['#004ac6', '#712ae2', '#c3c6d7', '#22c55e', '#f97316'];

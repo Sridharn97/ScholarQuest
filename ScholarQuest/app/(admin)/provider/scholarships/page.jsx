@@ -69,10 +69,10 @@ export default function ProviderScholarshipsPage() {
       )}
 
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-12">
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
         <div>
-          <h2 className="font-headline-lg text-3xl font-bold text-on-surface">Posted Scholarships</h2>
-          <p className="text-body-lg text-on-surface-variant mt-2">{"Manage, track, and optimize your organization's funding opportunities."}</p>
+          <h2 className="font-headline-lg text-3xl font-bold text-on-surface tracking-tight">Posted Scholarships</h2>
+          <p className="text-sm text-on-surface-variant mt-1.5">Manage, track, and optimize your organization's funding opportunities.</p>
         </div>
         <div className="flex items-center gap-3 flex-wrap">
           <div className="relative">
@@ -109,14 +109,14 @@ export default function ProviderScholarshipsPage() {
       </div>
 
       {/* Stats Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
         {[
           { label: 'Active Programs', value: scholarships.filter(s => s.status === 'Active').length, icon: 'verified_user', cls: 'bg-primary/10 text-primary', trend: '', trendUp: true },
           { label: 'Total Applicants', value: scholarships.reduce((acc, curr) => acc + (curr.applicants || 0), 0).toLocaleString(), icon: 'group', cls: 'bg-blue-100 text-blue-700', trend: '', trendUp: true },
           { label: 'Total Awarded', value: `$${scholarships.reduce((acc, curr) => acc + (Number(curr.amount?.toString().replace(/[^0-9.-]+/g,"")) || 0), 0).toLocaleString()}`, icon: 'payments', cls: 'bg-green-100 text-green-700', trend: '', trendUp: true },
           { label: 'Pending Review', value: '0', icon: 'schedule', cls: 'bg-orange-100 text-orange-700', trend: '', trendUp: false },
         ].map((stat) => (
-          <div key={stat.label} className="relative overflow-hidden clean-card p-6 rounded-2xl hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
+          <div key={stat.label} className="relative overflow-hidden clean-card p-4 rounded-2xl hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
             <div className="flex justify-between items-start mb-3">
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${stat.cls} shadow-inner`}>
                 <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1", fontSize: '20px' }}>{stat.icon}</span>
@@ -135,10 +135,10 @@ export default function ProviderScholarshipsPage() {
       </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
         {filtered.map((program) => (
-          <div key={program.id} className="clean-card p-5 rounded-2xl flex flex-col hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group relative">
-            <div className="flex justify-between items-start mb-3">
+          <div key={program.id} className="clean-card p-4 rounded-2xl flex flex-col hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group relative">
+            <div className="flex justify-between items-start mb-2.5">
               <span className={`px-2 py-0.5 rounded-full font-label-sm text-[10px] uppercase tracking-wider ${STATUS_CLS[program.status] || STATUS_CLS.Draft}`}>
                 {program.status}
               </span>
@@ -160,20 +160,20 @@ export default function ProviderScholarshipsPage() {
               </div>
             </div>
             
-            <h3 className="font-headline-md text-lg text-on-surface mb-0.5 line-clamp-2 pr-4">{program.name}</h3>
-            <p className="font-body-sm text-[13px] text-on-surface-variant mb-3">{program.category || 'STEM'}</p>
+            <h3 className="font-headline-md text-base font-bold text-on-surface mb-0.5 line-clamp-2 pr-4 leading-snug">{program.name}</h3>
+            <p className="font-body-sm text-[12px] text-on-surface-variant mb-2.5">{program.category || 'STEM'}</p>
             
-            <div className="flex items-baseline gap-1.5 mb-4">
-              <span className="font-headline-md text-xl text-primary font-bold">{program.amount}</span>
-              <span className="font-label-sm text-[11px] text-on-surface-variant">Total Grant</span>
+            <div className="flex items-baseline gap-1.5 mb-3">
+              <span className="font-headline-md text-lg text-primary font-bold">{program.amount}</span>
+              <span className="font-label-sm text-[10px] text-on-surface-variant uppercase tracking-wider">Total Grant</span>
             </div>
 
-            <div className="bg-surface-container-lowest rounded-xl p-3.5 flex justify-between items-center mb-5 border border-outline-variant/30">
+            <div className="bg-surface-container-lowest rounded-xl p-3 flex justify-between items-center mb-4 border border-outline-variant/30">
               <div>
                 <div className="font-label-sm text-[9px] text-on-surface-variant uppercase tracking-widest mb-0.5">Applicants</div>
                 <div className="flex items-baseline gap-2">
                   <span className="font-headline-md text-lg text-on-surface">{program.applicants || 0}</span>
-                  <span className={`font-label-sm text-[10px] ${program.status === 'Closed' ? 'text-on-surface-variant' : 'text-green-600'}`}>
+                  <span className={`font-label-sm text-[9px] font-semibold ${program.status === 'Closed' ? 'text-on-surface-variant' : 'text-green-600'}`}>
                     {program.status === 'Closed' ? 'Final Count' : '+0 today'}
                   </span>
                 </div>
@@ -198,12 +198,12 @@ export default function ProviderScholarshipsPage() {
         ))}
 
         {/* Post New Scholarship Card */}
-        <Link href="/provider/scholarships/new" className="clean-card rounded-2xl border-2 border-dashed border-outline-variant/50 flex flex-col items-center justify-center h-full min-h-[300px] hover:bg-surface-container-lowest hover:border-primary/50 transition-all group p-5 text-center shadow-none hover:shadow-md">
-          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-3 group-hover:scale-110 transition-transform">
-            <span className="material-symbols-outlined text-[28px]">add</span>
+        <Link href="/provider/scholarships/new" className="clean-card rounded-2xl border-2 border-dashed border-outline-variant/50 flex flex-col items-center justify-center h-full min-h-[220px] hover:bg-surface-container-lowest hover:border-primary/50 transition-all group p-5 text-center shadow-none hover:shadow-sm">
+          <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-2.5 group-hover:scale-110 transition-transform">
+            <span className="material-symbols-outlined text-[24px]">add</span>
           </div>
-          <h3 className="font-headline-md text-lg text-on-surface mb-1 group-hover:text-primary transition-colors">Post New Scholarship</h3>
-          <p className="font-body-md text-sm text-on-surface-variant max-w-[200px]">Reach thousands of eligible students today.</p>
+          <h3 className="font-headline-md text-base font-bold text-on-surface mb-1 group-hover:text-primary transition-colors">Post New Scholarship</h3>
+          <p className="font-body-md text-xs text-on-surface-variant max-w-[180px]">Reach thousands of eligible students today.</p>
         </Link>
       </div>
     </div>

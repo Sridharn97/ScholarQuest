@@ -42,11 +42,11 @@ export default function PostScholarshipPage() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-8">
-        
+
         {/* Basic Details Section */}
         <div className="clean-card p-8 rounded-[2rem] border border-outline-variant/30 shadow-sm relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -z-10 pointer-events-none translate-x-1/2 -translate-y-1/2" />
-          
+
           <div className="flex items-center gap-3 mb-8 pb-6 border-b border-outline-variant/20">
             <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
               <span className="material-symbols-outlined" style={{ fontSize: '24px' }}>edit_document</span>
@@ -217,7 +217,7 @@ export default function PostScholarshipPage() {
         {/* Application Form Builder Section */}
         <div className="clean-card p-8 rounded-[2rem] border border-outline-variant/30 shadow-sm relative overflow-hidden">
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-secondary/5 rounded-full blur-3xl -z-10 pointer-events-none -translate-x-1/2 translate-y-1/2" />
-          
+
           <div className="flex items-center gap-3 mb-8 pb-6 border-b border-outline-variant/20">
             <div className="w-12 h-12 rounded-2xl bg-secondary/10 flex items-center justify-center text-secondary">
               <span className="material-symbols-outlined" style={{ fontSize: '24px' }}>view_list</span>
@@ -262,7 +262,7 @@ export default function PostScholarshipPage() {
                         <div className="hidden sm:flex text-outline-variant group-hover/question:text-on-surface-variant transition-colors cursor-grab">
                           <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>drag_indicator</span>
                         </div>
-                        
+
                         <div className="flex-1 w-full">
                           <input
                             type="text"
@@ -273,7 +273,7 @@ export default function PostScholarshipPage() {
                             required
                           />
                         </div>
-                        
+
                         <div className="w-full sm:w-auto flex items-center gap-3">
                           <div className="relative flex-1 sm:w-48">
                             <select
@@ -290,7 +290,7 @@ export default function PostScholarshipPage() {
                             </select>
                             <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none" style={{ fontSize: '18px' }}>expand_more</span>
                           </div>
-                          
+
                           <button
                             type="button"
                             onClick={() => removeQuestion(section.id, q.id)}
@@ -315,7 +315,7 @@ export default function PostScholarshipPage() {
                       )}
                     </div>
                   ))}
-                  
+
                   {/* Add Question Button */}
                   <div className="pt-2 pl-0 sm:pl-8">
                     <button
@@ -330,7 +330,7 @@ export default function PostScholarshipPage() {
                 </div>
               </div>
             ))}
-            
+
             {sections.length === 0 && (
               <div className="py-12 flex flex-col items-center justify-center text-center border-2 border-dashed border-outline-variant/30 rounded-2xl bg-surface-container-lowest/50">
                 <span className="material-symbols-outlined text-outline mb-3" style={{ fontSize: '48px' }}>post_add</span>
@@ -379,7 +379,7 @@ export default function PostScholarshipPage() {
             )}
           </button>
         </div>
-        
+
       </form>
     </div>
   );
