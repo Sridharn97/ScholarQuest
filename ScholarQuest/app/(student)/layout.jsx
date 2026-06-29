@@ -16,8 +16,9 @@ const mobileMenuLinks = [
 
 export default function StudentLayout({ children }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [userName, setUserName] = useState('Alex');
-  const [userInitials, setUserInitials] = useState('AJ');
+  const [userName, setUserName] = useState('Student');
+  const [userInitials, setUserInitials] = useState('ST');
+  const [userPhoto, setUserPhoto] = useState(null);
   const pathname = usePathname();
   const router = useRouter();
   const authChecked = useRoleProtection('student');
@@ -27,10 +28,22 @@ export default function StudentLayout({ children }) {
 
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
+        setUserPhoto(user.photoURL || null);
         const d = await getDoc(doc(db, 'users', user.uid));
         if (d.exists()) {
-          setUserName(d.data().name || d.data().firstName || 'Alex');
-          setUserInitials(d.data().initials || 'AJ');
+          const data = d.data();
+          const name = data.name || `${data.firstName || ''} ${data.lastName || ''}`.trim() || user.displayName || 'Student';
+          setUserName(name);
+          
+          let initials = data.initials;
+          if (!initials || !initials.trim()) {
+            initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'ST';
+          }
+          setUserInitials(initials);
+        } else {
+          const name = user.displayName || 'Student';
+          setUserName(name);
+          setUserInitials(name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'ST');
         }
       }
     });
@@ -56,7 +69,7 @@ export default function StudentLayout({ children }) {
 
   return (
     <div className="flex min-h-screen bg-background">
-      <StudentSidebar onLogout={handleLogout} userName={userName} userInitials={userInitials} />
+      <StudentSidebar onLogout={handleLogout} userName={userName} userInitials={userInitials} userPhoto={userPhoto} />
 
       <main className="flex-1 min-w-0 overflow-y-auto relative bg-[#F8F9FB]">
         {/* Top Header */}

@@ -49,9 +49,13 @@ export default function ProviderApplicationsPage() {
             {/* Header */}
             <div className="px-6 py-6 border-b border-outline-variant/20 flex items-start justify-between bg-surface-container-lowest">
               <div className="flex items-center gap-4">
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center font-bold text-xl shadow-inner ${viewApp.color}`}>
-                  {viewApp.initials}
-                </div>
+                {viewApp.photoURL ? (
+                  <img src={viewApp.photoURL} alt="Logo" className="w-14 h-14 rounded-2xl object-cover shadow-inner bg-white border border-outline-variant/20" />
+                ) : (
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center font-bold text-xl shadow-inner ${viewApp.color}`}>
+                    {viewApp.initials}
+                  </div>
+                )}
                 <div>
                   <h3 className="font-headline-md text-headline-md text-on-surface">{viewApp.student}</h3>
                   <p className="font-body-md text-on-surface-variant flex items-center gap-1">
@@ -356,9 +360,13 @@ export default function ProviderApplicationsPage() {
                 <tr key={row.id} className="hover:bg-surface-container-low hover:shadow-sm transition-all group">
                   <td className="px-4 py-4 whitespace-nowrap align-middle">
                     <div className="flex items-center gap-3 w-full">
-                      <div className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm shrink-0 shadow-sm group-hover:scale-105 transition-transform ${row.color}`}>
-                        {row.initials}
-                      </div>
+                      {row.photoURL ? (
+                        <img src={row.photoURL} alt="Logo" className="w-9 h-9 rounded-xl object-cover shrink-0 shadow-sm group-hover:scale-105 transition-transform bg-white border border-outline-variant/20" />
+                      ) : (
+                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm shrink-0 shadow-sm group-hover:scale-105 transition-transform ${row.color}`}>
+                          {row.initials}
+                        </div>
+                      )}
                       <div className="min-w-0 flex-1">
                         <p className="font-label-md text-sm text-on-surface whitespace-nowrap group-hover:text-primary transition-colors">{row.student}</p>
                         <p className="font-body-sm text-[11px] text-on-surface-variant whitespace-nowrap">{row.email}</p>

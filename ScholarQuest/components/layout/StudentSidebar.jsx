@@ -13,7 +13,7 @@ const navItems = [
   { href: '/messages', label: 'Messages', icon: 'mail' },
 ];
 
-export default function StudentSidebar({ onLogout, userName, userInitials }) {
+export default function StudentSidebar({ onLogout, userName, userInitials, userPhoto }) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -67,9 +67,13 @@ export default function StudentSidebar({ onLogout, userName, userInitials }) {
 
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-3 overflow-hidden">
-            <div className="w-10 h-10 rounded-full bg-[#0A2540] flex items-center justify-center text-white font-bold shrink-0">
-              {userInitials || 'ST'}
-            </div>
+            {userPhoto ? (
+              <img src={userPhoto} alt="User Logo" className="w-10 h-10 rounded-full object-cover shrink-0 border border-outline-variant/20 bg-white shadow-sm" />
+            ) : (
+              <div className="w-10 h-10 rounded-full bg-[#0A2540] flex items-center justify-center text-white font-bold shrink-0">
+                {userInitials || 'ST'}
+              </div>
+            )}
             <div className="flex flex-col overflow-hidden">
               <span className="text-sm font-bold text-gray-900 leading-tight truncate">{userName || 'Student'}</span>
               <span className="text-xs text-gray-500 truncate">Student</span>

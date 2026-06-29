@@ -18,7 +18,7 @@ const navItems = [
 
 export default function ProviderSidebar({ isOpen, setIsOpen, onLogout }) {
   const pathname = usePathname();
-  const [providerInfo, setProviderInfo] = useState({ name: 'Provider', initials: 'GC', role: 'Coordinator', organization: 'Company or Institute' });
+  const [providerInfo, setProviderInfo] = useState({ name: 'Provider', initials: 'P', role: 'Coordinator', organization: 'Company or Institute', photoURL: null });
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -26,11 +26,27 @@ export default function ProviderSidebar({ isOpen, setIsOpen, onLogout }) {
         const d = await getDoc(doc(db, 'users', user.uid));
         if (d.exists()) {
           const data = d.data();
+          const name = data.name || `${data.firstName || ''} ${data.lastName || ''}`.trim() || 'Provider';
+          let initials = data.initials;
+          if (!initials || !initials.trim()) {
+            initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'P';
+          }
           setProviderInfo({
-            name: data.name || 'Provider',
-            initials: data.initials || 'P',
+            name: name,
+            initials: initials,
             role: data.role || 'Coordinator',
-            organization: data.organization || 'Company or Institute'
+            organization: data.organization || user.email || 'Company or Institute',
+            photoURL: user.photoURL || data.photoURL || null
+          });
+        } else {
+          // Fallback if user document doesn't exist yet but user is authenticated
+          const name = user.displayName || 'Provider';
+          setProviderInfo({
+            name: name,
+            initials: name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'P',
+            role: 'Coordinator',
+            organization: user.email || 'Company or Institute',
+            photoURL: user.photoURL || null
           });
         }
       }
@@ -90,9 +106,13 @@ export default function ProviderSidebar({ isOpen, setIsOpen, onLogout }) {
         {/* Provider User Card */}
         <div className="px-6 mt-auto pt-4 space-y-3">
           <div className="flex items-center gap-3 p-3 bg-surface-container-low rounded-10 border border-outline-variant/20">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold text-sm">
-              {providerInfo.initials}
-            </div>
+            {providerInfo.photoURL ? (
+              <img src={providerInfo.photoURL} alt="User Logo" className="w-10 h-10 rounded-full object-cover shrink-0 border border-outline-variant/20 shadow-sm bg-white" />
+            ) : (
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold text-sm shrink-0">
+                {providerInfo.initials}
+              </div>
+            )}
             <div className="overflow-hidden flex-1">
               <p className="font-label-md text-label-md truncate text-on-surface">{providerInfo.name}</p>
               <p className="text-label-sm text-on-surface-variant text-xs truncate">{providerInfo.organization}</p>

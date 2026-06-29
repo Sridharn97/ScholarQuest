@@ -30,9 +30,17 @@ export default function useProviderApplications() {
       unsubscribeSnapshot = onSnapshot(q, (snapshot) => {
         const data = snapshot.docs.map(doc => {
           const d = doc.data();
+          const student = d.studentName || d.student || 'Unknown Applicant';
+          const initials = d.studentInitials || student.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'ST';
+          const colorClasses = ['bg-pink-100 text-pink-700', 'bg-blue-100 text-blue-700', 'bg-purple-100 text-purple-700', 'bg-emerald-100 text-emerald-700', 'bg-amber-100 text-amber-700'];
+          const color = d.color || colorClasses[student.length % colorClasses.length];
+
           return { 
             id: doc.id,
-            student: d.studentName || d.student || 'Unknown Applicant',
+            student: student,
+            initials: initials,
+            color: color,
+            photoURL: d.photoURL || null,
             email: d.studentEmail || d.email || '',
             scholarship: d.scholarshipName || d.scholarship || 'Unknown Program',
             submitted: d.appliedAt ? new Date(d.appliedAt).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],

@@ -101,10 +101,49 @@ export default function useApply(params) {
     if (!scholarship || !userUid || hasApplied) return;
 
     try {
+      // --- MATCHING ALGORITHM ---
+      let score = 0;
+      let maxScore = 0;
+
+      // 1. GPA Match
+      if (scholarship.gpa) {
+        maxScore += 40;
+        const reqGpa = parseFloat(scholarship.gpa);
+        const stuGpa = parseFloat(gpa);
+        if (!isNaN(reqGpa) && !isNaN(stuGpa)) {
+          if (stuGpa >= reqGpa) score += 40;
+          else if (stuGpa >= reqGpa - 0.5) score += 20; // Partial match
+        }
+      }
+
+      // 2. Field of Study Match
+      if (scholarship.fieldOfStudy) {
+        maxScore += 40;
+        const reqField = scholarship.fieldOfStudy.toLowerCase();
+        const stuField = (studyField || '').toLowerCase();
+        if (stuField && reqField) {
+          if (stuField.includes(reqField) || reqField.includes(stuField)) {
+            score += 40;
+          }
+        }
+      }
+
+      // 3. Completeness of Profile
+      maxScore += 20;
+      let completeness = 0;
+      if (gpa) completeness += 5;
+      if (institution) completeness += 5;
+      if (studyField) completeness += 5;
+      if (gradDate) completeness += 5;
+      score += completeness;
+
+      let finalScore = maxScore > 0 ? Math.round((score / maxScore) * 100) : 85;
+
       await addDoc(collection(db, 'applications'), {
         studentId: userUid,
         studentName: user?.name || '',
         studentEmail: user?.email || '',
+        photoURL: user?.photoURL || null,
         scholarshipId: scholarship.id,
         scholarshipName: scholarship.name,
         providerId: scholarship.providerId || 'legacy',
@@ -118,6 +157,7 @@ export default function useApply(params) {
         gradDate: gradDate,
         honors: honors,
         customResponses: Object.values(customResponses),
+        score: finalScore,
         status: 'Pending',
         appliedAt: Date.now()
       });
