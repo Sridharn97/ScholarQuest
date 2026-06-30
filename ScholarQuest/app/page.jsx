@@ -110,7 +110,7 @@ export default function LandingPage() {
               {/* Social proof */}
               <div className="flex items-center gap-4 pt-2">
                 <div className="flex -space-x-3">
-                  {['AK','BL','CM','DR'].map((init) => (
+                  {['AK', 'BL', 'CM', 'DR'].map((init) => (
                     <div key={init} className="w-9 h-9 rounded-full border-2 border-white bg-gradient-to-br from-primary/80 to-secondary/80 flex items-center justify-center text-white text-xs font-bold shadow-sm">
                       {init}
                     </div>
@@ -118,7 +118,7 @@ export default function LandingPage() {
                 </div>
                 <div>
                   <div className="flex items-center gap-1 mb-0.5">
-                    {[1,2,3,4,5].map(i => (
+                    {[1, 2, 3, 4, 5].map(i => (
                       <span key={i} className="material-symbols-outlined text-amber-400" style={{ fontSize: '14px', fontVariationSettings: "'FILL' 1" }}>star</span>
                     ))}
                   </div>

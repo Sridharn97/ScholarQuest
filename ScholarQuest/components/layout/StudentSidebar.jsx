@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { auth } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
+import useNotifications from '@/lib/hooks/useNotifications';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: 'grid_view' },
@@ -11,11 +12,13 @@ const navItems = [
   { href: '/ai-matcher', label: 'AI Matcher', icon: 'lightbulb' },
   { href: '/profile', label: 'Profile', icon: 'person_outline' },
   { href: '/messages', label: 'Messages', icon: 'mail' },
+  { href: '/application-status', label: 'Application Status', icon: 'rule_folder' },
 ];
 
 export default function StudentSidebar({ onLogout, userName, userInitials, userPhoto }) {
   const pathname = usePathname();
   const router = useRouter();
+  const { unreadCount } = useNotifications();
 
   const handleLogout = async () => {
     if (onLogout) { onLogout(); } else {
@@ -45,15 +48,22 @@ export default function StudentSidebar({ onLogout, userName, userInitials, userP
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-4 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200 ${isActive
+              className={`flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200 ${isActive
                   ? 'bg-[#EAE4FF] text-[#4F39F6]'
                   : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
                 }`}
             >
-              <span className="material-symbols-outlined text-[20px]" style={isActive ? { fontVariationSettings: "'FILL' 1" } : {}}>
-                {item.icon}
-              </span>
-              <span>{item.label}</span>
+              <div className="flex items-center gap-4">
+                <span className="material-symbols-outlined text-[20px]" style={isActive ? { fontVariationSettings: "'FILL' 1" } : {}}>
+                  {item.icon}
+                </span>
+                <span>{item.label}</span>
+              </div>
+              {item.href === '/application-status' && unreadCount > 0 && (
+                <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                  {unreadCount}
+                </span>
+              )}
             </Link>
           );
         })}

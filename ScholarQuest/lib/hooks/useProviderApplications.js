@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { db, auth } from '@/lib/firebase';
-import { collection, query, where, onSnapshot, doc, updateDoc, deleteDoc, getDoc, getDocs } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, doc, updateDoc, deleteDoc, getDoc, getDocs, addDoc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 
 export default function useProviderApplications() {
@@ -71,6 +71,38 @@ export default function useProviderApplications() {
         const { studentId, scholarshipId } = appData;
 
         await updateDoc(doc(db, 'applications', id), { status });
+        
+        // --- 1. In-App Notification (Firestore) ---
+        if (studentId) {
+          try {
+            await addDoc(collection(db, 'notifications'), {
+              userId: studentId,
+              scholarshipId: scholarshipId || null,
+              scholarshipName: appData.scholarshipName || appData.scholarship || 'a scholarship',
+              type: 'status_update',
+              status: status,
+              message: `Your application for ${appData.scholarshipName || appData.scholarship || 'a scholarship'} was ${status}!`,
+              createdAt: new Date().toISOString(),
+              read: false
+            });
+            
+            // --- 2. Email Notification (Next.js API) ---
+            fetch('/api/notify-email', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                to: appData.studentEmail || appData.email || 'student@example.com',
+                subject: `ScholarQuest Update: Application ${status}`,
+                message: `We wanted to let you know that your application status has been updated to ${status}.`,
+                scholarshipName: appData.scholarshipName || appData.scholarship || 'a scholarship',
+                status: status
+              })
+            }).catch(err => console.error("Email API Error:", err));
+          } catch(err) {
+            console.error("Error creating notification:", err);
+          }
+        }
+
         showToast(`Application ${status.toLowerCase()} successfully!`, status === 'Rejected' ? 'error' : 'success');
         if (viewApp?.id === id) setViewApp(prev => ({ ...prev, status }));
 
