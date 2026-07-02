@@ -14,58 +14,92 @@ export default function ProviderSignupPage() {
   } = useProviderSignup();
 
   return (
-    <div className="h-screen overflow-hidden flex bg-slate-50">
+    <div className="theme-admin h-screen overflow-hidden flex bg-slate-50">
 
-      {/* ===== RIGHT: LIGHT STATS & PREVIEW PANEL ===== */}
-      <div className="hidden lg:flex w-1/2 flex-col relative overflow-hidden border-l border-purple-100/50 h-full bg-gradient-to-br from-[#faf5ff] via-[#fdf2f8] to-[#fffbeb] lg:order-2">
-        {/* Colorful floating orbs to match illustrations */}
-        <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full opacity-40 filter blur-[80px]" style={{ background: 'radial-gradient(circle, rgba(216,180,254,0.5) 0%, rgba(216,180,254,0) 70%)' }} />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] rounded-full opacity-40 filter blur-[80px]" style={{ background: 'radial-gradient(circle, rgba(249,168,212,0.5) 0%, rgba(249,168,212,0) 70%)' }} />
-        <div className="absolute top-[40%] left-[20%] w-[300px] h-[300px] rounded-full opacity-30 filter blur-[60px]" style={{ background: 'radial-gradient(circle, rgba(253,186,116,0.3) 0%, rgba(253,186,116,0) 70%)' }} />
+      {/* ===== RIGHT: PREMIUM CORPORATE PANEL ===== */}
+      <div className="hidden lg:flex w-1/2 flex-col relative overflow-hidden border-l border-white/10 h-full bg-[#0B132B] text-white lg:order-2">
+        {/* Deep, rich background gradients and orbs for a premium tech feel */}
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5" />
+        <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full opacity-30 filter blur-[100px]" style={{ background: 'radial-gradient(circle, rgba(56,189,248,0.5) 0%, rgba(56,189,248,0) 70%)' }} />
+        <div className="absolute bottom-[-10%] right-[-20%] w-[500px] h-[500px] rounded-full opacity-30 filter blur-[100px]" style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.5) 0%, rgba(139,92,246,0) 70%)' }} />
 
-        <div className="relative z-10 flex flex-col h-full p-10 pb-16 justify-between">
+        <div className="relative z-10 flex flex-col h-full p-10 pb-12 justify-between">
           <div>
-            <Link href="/" className="flex items-center gap-3 mb-8">
-              <img src="/logo_provider.png" alt="Logo" className="w-9 h-9 rounded-full object-cover shadow-sm" />
+            <Link href="/" className="flex items-center gap-3 mb-8 group w-fit">
+              <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
+                <img src="/logo_provider.png" alt="Logo" className="w-8 h-8 rounded-lg object-cover" />
+              </div>
               <div>
-                <p className="font-extrabold text-slate-900 text-base tracking-tight leading-none">ScholarQuest</p>
-                <p className="text-slate-500 text-[9px] tracking-widest uppercase mt-0.5 font-bold">Partner Onboarding</p>
+                <p className="font-extrabold text-white text-lg tracking-tight leading-none">ScholarQuest</p>
+                <p className="text-blue-300 text-[10px] tracking-widest uppercase mt-1 font-bold">Partner Onboarding</p>
               </div>
             </Link>
 
-            <div className="mb-4">
-              <h1 className="text-4xl font-extrabold text-slate-900 leading-[1.2] mb-3" style={{ fontFamily: 'Manrope, sans-serif' }}>
-                Empower Students.<br />
-                <span className="text-primary">Create Grants.</span>
+            <div className="mb-4 max-w-md">
+              <h1 className="text-4xl font-extrabold text-white leading-[1.2] mb-3" style={{ fontFamily: 'Manrope, sans-serif' }}>
+                Build the future.<br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">One grant at a time.</span>
               </h1>
-
             </div>
           </div>
 
-          <div className="relative w-[520px] h-[520px] mx-auto my-4 rounded-3xl overflow-hidden border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.06)] bg-white/40 backdrop-blur-md flex items-center justify-center">
-            <Image
-              src="/provider_signup_hero_v3.png"
-              alt="Partner Onboarding Illustration"
-              width={520}
-              height={520}
-              className="w-full h-full object-cover drop-shadow-md"
-              unoptimized
-              priority
-              loading="eager"
-            />
+          <div className="relative w-full max-w-[380px] mx-auto my-auto shrink-0">
+            {/* The Hero Image Container */}
+            <div className="relative rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-white/5 backdrop-blur-xl flex items-center justify-center z-10">
+              <Image
+                src="/sponsor_signup_hero.png"
+                alt="Partner Onboarding Illustration"
+                width={1000}
+                height={1000}
+                className="w-full h-auto drop-shadow-2xl hover:scale-105 transition-transform duration-700 ease-out"
+                unoptimized
+                priority
+                loading="eager"
+              />
+            </div>
+
+            {/* Floating Glassmorphism Elements */}
+            <div className="absolute -left-6 top-[30%] z-20 animate-[float_4s_ease-in-out_infinite]">
+              <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-3 flex items-center gap-3 shadow-xl">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-inner">
+                  <span className="material-symbols-outlined text-white" style={{ fontSize: '20px' }}>school</span>
+                </div>
+                <div>
+                  <p className="text-white font-bold text-xs">Global Reach</p>
+                  <p className="text-blue-300 text-[9px] uppercase font-bold tracking-wider">Top Institutions</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="absolute -right-8 bottom-[20%] z-20 animate-[float_5s_ease-in-out_infinite]" style={{ animationDelay: '1.5s' }}>
+              <div className="bg-[#0B132B]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-2xl max-w-[200px]">
+                <div className="flex gap-1 mb-2">
+                  {[1, 2, 3, 4, 5].map(i => (
+                    <span key={i} className="material-symbols-outlined text-emerald-400" style={{ fontSize: '12px', fontVariationSettings: "'FILL' 1" }}>star</span>
+                  ))}
+                </div>
+                <p className="text-slate-300 text-xs italic leading-snug mb-3">
+                  "Our company's educational outreach has never been more impactful and streamlined."
+                </p>
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-full bg-emerald-600 flex items-center justify-center text-[9px] font-bold text-white">DR</div>
+                  <p className="text-white font-bold text-[10px]">David R., <span className="font-normal text-slate-400">Innovate Inc.</span></p>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4">
             {[
               { text: 'Custom scholarships', icon: 'add_circle' },
               { text: 'Review applications', icon: 'description' },
               { text: 'Impact reports', icon: 'analytics' },
             ].map((item, idx) => (
-              <div key={idx} className="flex items-center gap-2 p-2.5 rounded-2xl border border-white/80 bg-white/70 backdrop-blur-md shadow-sm">
-                <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <span className="material-symbols-outlined text-primary" style={{ fontSize: '15px', fontVariationSettings: "'FILL' 1" }}>{item.icon}</span>
+              <div key={idx} className="flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-lg hover:bg-white/10 transition-colors text-center">
+                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
+                  <span className="material-symbols-outlined text-emerald-400" style={{ fontSize: '22px', fontVariationSettings: "'FILL' 1" }}>{item.icon}</span>
                 </div>
-                <span className="text-slate-700 text-[10px] font-bold leading-tight uppercase tracking-wider">{item.text}</span>
+                <span className="text-slate-300 text-[10px] font-bold leading-tight uppercase tracking-wider">{item.text}</span>
               </div>
             ))}
           </div>
