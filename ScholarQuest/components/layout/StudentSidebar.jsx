@@ -49,8 +49,8 @@ export default function StudentSidebar({ onLogout, userName, userInitials, userP
               key={item.href}
               href={item.href}
               className={`flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200 ${isActive
-                  ? 'bg-[#EAE4FF] text-[#4F39F6]'
-                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                ? 'bg-[#EAE4FF] text-[#4F39F6]'
+                : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
                 }`}
             >
               <div className="flex items-center gap-4">
@@ -70,28 +70,31 @@ export default function StudentSidebar({ onLogout, userName, userInitials, userP
       </nav>
 
       {/* Bottom CTA */}
-      <div className="mt-auto p-6 space-y-6 bg-white border-t border-gray-100 shadow-[0_-4px_20px_rgba(0,0,0,0.02)]">
-        <button className="w-full py-3 bg-[#0A2540] text-white rounded-xl font-medium text-sm hover:bg-[#0A2540]/90 transition-colors">
+      <div className="mt-auto p-5 space-y-5 bg-white border-t border-slate-100 z-10 relative">
+        {/* Subtle top glow */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+        
+        <button className="w-full py-3 bg-[#0A2540] text-white rounded-xl font-bold text-sm hover:bg-[#0A2540]/90 transition-all shadow-md flex items-center justify-center gap-2">
           Apply Now
         </button>
 
-        <div className="flex items-center justify-between w-full">
+        <div className="flex items-center justify-between w-full bg-slate-50 p-2.5 rounded-2xl border border-slate-200/60 shadow-sm transition-colors hover:border-slate-300">
           <div className="flex items-center gap-3 overflow-hidden">
             {userPhoto ? (
-              <img src={userPhoto} alt="User Logo" className="w-10 h-10 rounded-full object-cover shrink-0 border border-outline-variant/20 bg-white shadow-sm" />
+              <img src={userPhoto} alt="User Logo" className="w-10 h-10 rounded-full object-cover shrink-0 border-2 border-white shadow-sm" />
             ) : (
-              <div className="w-10 h-10 rounded-full bg-[#0A2540] flex items-center justify-center text-white font-bold shrink-0">
+              <div className="w-10 h-10 rounded-full bg-[#0A2540] text-white flex items-center justify-center font-bold shrink-0 shadow-sm">
                 {userInitials || 'ST'}
               </div>
             )}
             <div className="flex flex-col overflow-hidden">
-              <span className="text-sm font-bold text-gray-900 leading-tight truncate">{userName || 'Student'}</span>
-              <span className="text-xs text-gray-500 truncate">Student</span>
+              <span className="text-sm font-bold text-slate-900 leading-tight truncate">{userName || 'Student'}</span>
+              <span className="text-[11px] font-semibold text-slate-500 truncate">Student Account</span>
             </div>
           </div>
           <button
             onClick={handleLogout}
-            className="text-gray-400 hover:text-red-500 transition-colors p-2 rounded-full hover:bg-red-50 shrink-0 ml-2"
+            className="text-slate-400 hover:text-red-500 transition-colors p-2 rounded-xl hover:bg-red-50 shrink-0 ml-1"
             title="Logout"
           >
             <span className="material-symbols-outlined text-[20px]">logout</span>
@@ -101,4 +104,3 @@ export default function StudentSidebar({ onLogout, userName, userInitials, userP
     </aside>
   );
 }
-
