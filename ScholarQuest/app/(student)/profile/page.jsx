@@ -4,6 +4,7 @@ import { useState } from 'react';
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import useProfile from '@/lib/hooks/useProfile';
+import useTracker from '@/lib/hooks/useTracker';
 import { formatGpa } from '@/lib/gpaConverter';
 
 export default function ProfilePage() {
@@ -16,6 +17,15 @@ export default function ProfilePage() {
     extracurriculars, setExtracurriculars, academicExperience, setAcademicExperience,
     completion, tabs,
   } = useProfile();
+
+  const { columns } = useTracker();
+  const savedCount = columns?.find(c => c.id === 'col_interested')?.cards?.length || 0;
+  const appliedCount = columns?.reduce((acc, col) => {
+    if (['col_applied', 'col_accepted', 'col_rejected'].includes(col.id)) {
+      return acc + (col.cards?.length || 0);
+    }
+    return acc;
+  }, 0) || 0;
 
   const [showAddAchieve, setShowAddAchieve] = useState(false);
   const [newAchieve, setNewAchieve] = useState({ title: '', type: 'Academic', org: '', date: '', desc: '', position: '', award: '', link: '' });
@@ -206,7 +216,7 @@ export default function ProfilePage() {
                       <span className="material-symbols-outlined text-3xl">task_alt</span>
                     </div>
                     <div>
-                      <p className="font-bold text-2xl">18</p>
+                      <p className="font-bold text-2xl">{appliedCount}</p>
                       <p className="text-sm font-medium text-on-surface-variant">Applied Scholarships</p>
                     </div>
                   </div>
@@ -215,7 +225,7 @@ export default function ProfilePage() {
                       <span className="material-symbols-outlined text-3xl">bookmark</span>
                     </div>
                     <div>
-                      <p className="font-bold text-2xl">5</p>
+                      <p className="font-bold text-2xl">{savedCount}</p>
                       <p className="text-sm font-medium text-on-surface-variant">Saved Opportunities</p>
                     </div>
                   </div>

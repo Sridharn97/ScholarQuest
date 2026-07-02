@@ -299,19 +299,19 @@ export default function ApplyPage({ params }) {
               {/* Dynamic Application Sections */}
               {scholarship.formSections && scholarship.formSections.map((section) => (
                 <div key={section.id} className="pt-8 space-y-6">
-                  <div className="border-t border-outline-variant/30 pt-6">
-                    <h3 className="font-title-lg text-title-lg text-on-surface">{section.title}</h3>
+                  <div className="border-t border-outline-variant/30 pt-6 pb-2">
+                    <h3 className="text-xl font-bold text-on-surface tracking-tight">{section.title}</h3>
                   </div>
                   {section.questions.map((q) => (
                     <div key={q.id} className="space-y-2">
                       <label className="font-label-md text-label-md text-on-surface">{q.text} *</label>
                       {q.type === 'text' ? (
-                        <textarea
-                          rows={3}
+                        <input
+                          type="text"
                           value={customResponses[q.id]?.answer || ''}
                           onChange={(e) => setCustomResponses({ ...customResponses, [q.id]: { question: q.text, answer: e.target.value, type: q.type } })}
                           placeholder="Enter your response here..."
-                          className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all resize-none"
+                          className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all"
                           required
                         />
                       ) : q.type === 'multiple_choice' ? (

@@ -40,11 +40,11 @@ export default function useProviderMessages() {
             name: docData.studentName || 'Student',
             avatar: avatarStr,
             avatarBg: docData.avatarBg || randomColor,
-            // Only show student messages on provider side
-            thread: studentMessages.map((m, idx) => ({
+            // Show all messages, mark provider ones as 'me'
+            thread: (docData.messages || []).map((m, idx) => ({
               id: m.timestamp || idx,
               content: m.text,
-              isMe: false, // on provider side, student messages are never 'me'
+              isMe: m.sender === 'provider',
               time: m.time,
               timestamp: m.timestamp
             })),

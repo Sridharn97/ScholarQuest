@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { auth, db } from '@/lib/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
-import { collection, query, where, onSnapshot, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, doc, updateDoc, deleteDoc, getDocs } from 'firebase/firestore';
 
 export default function useProviderScholarships() {
   const [scholarships, setScholarships] = useState([]);
@@ -52,6 +52,17 @@ export default function useProviderScholarships() {
   const handleDelete = async (id) => {
     try {
       await deleteDoc(doc(db, 'scholarships', id));
+      
+      const trackerQ = query(collection(db, 'tracker'), where('scholarshipId', '==', id));
+      const trackerSnap = await getDocs(trackerQ);
+      const trackerDeletions = trackerSnap.docs.map(d => deleteDoc(doc(db, 'tracker', d.id)));
+      
+      const appsQ = query(collection(db, 'applications'), where('scholarshipId', '==', id));
+      const appsSnap = await getDocs(appsQ);
+      const appsDeletions = appsSnap.docs.map(d => deleteDoc(doc(db, 'applications', d.id)));
+      
+      await Promise.all([...trackerDeletions, ...appsDeletions]);
+      
       setDeleteConfirm(null);
       showToast('Scholarship deleted successfully.');
     } catch (e) {

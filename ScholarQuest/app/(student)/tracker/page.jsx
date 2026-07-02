@@ -62,13 +62,6 @@ export default function TrackerPage() {
                 <span className="font-semibold text-on-surface">{columns.find(c => c.id === 'col_interested')?.cards.length || 0}</span>
              </div>
           </div>
-          <button
-            onClick={() => { setAddToCol('col_interested'); setShowAddModal(true); }}
-            className="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded-xl text-sm font-medium hover:opacity-90 transition-opacity"
-          >
-            <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>add</span>
-            New Application
-          </button>
         </div>
       </div>
 

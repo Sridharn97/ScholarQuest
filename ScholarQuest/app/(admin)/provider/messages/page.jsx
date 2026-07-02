@@ -136,37 +136,60 @@ export default function ProviderMessagesPage() {
               <p className="font-label-md text-sm opacity-60">Waiting for the student to reply...</p>
             </div>
           ) : activeConvData.thread.map((msg, index, arr) => {
+            const isMe = msg.isMe;
             const prevMsg = arr[index - 1];
+            const nextMsg = arr[index + 1];
+            
             const currentDayLabel = formatDateLabel(msg.timestamp);
             const prevDayLabel = prevMsg ? formatDateLabel(prevMsg.timestamp) : null;
             const showDateDivider = currentDayLabel !== prevDayLabel;
-            const isFirstInGroup = !prevMsg || showDateDivider;
+
+            const isFirstInGroup = !prevMsg || prevMsg.isMe !== isMe || showDateDivider;
+            const isLastInGroup = !nextMsg || nextMsg.isMe !== isMe || (nextMsg && formatDateLabel(nextMsg.timestamp) !== currentDayLabel);
 
             return (
               <React.Fragment key={msg.id}>
                 {showDateDivider && (
-                  <div className="text-center mb-4 mt-4 flex justify-center">
-                    <span className="font-label-sm text-[11px] uppercase font-bold tracking-wider text-on-surface-variant bg-surface-container-low px-3 py-1 rounded-full shadow-sm">
+                  <div className="text-center mb-3 mt-4 flex justify-center">
+                    <span className="font-label-sm text-[10px] uppercase font-bold tracking-wider text-on-surface-variant bg-surface-container-low px-3 py-1 rounded-full shadow-sm">
                       {currentDayLabel}
                     </span>
                   </div>
                 )}
-                <div className={`flex gap-2 sm:gap-3 justify-start ${isFirstInGroup ? (index === 0 && !showDateDivider ? 'mt-2' : 'mt-4') : 'mt-1.5'}`}>
-                  {activeConvData && (
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 self-end ${activeConvData.avatarBg}`}>
-                      {activeConvData.avatar}
+                <div className={`flex gap-2 w-full ${isMe ? 'justify-end' : 'justify-start'} ${isFirstInGroup ? (index === 0 && !showDateDivider ? 'mt-2' : 'mt-3') : 'mt-[3px]'}`}>
+                  {!isMe && (
+                    <div className="w-6 shrink-0 flex items-end">
+                      {isLastInGroup && activeConvData && (
+                        <div className={`w-6 h-6 rounded-full flex items-center justify-center font-bold text-[10px] shadow-sm ${activeConvData.avatarBg}`}>
+                          {activeConvData.avatar}
+                        </div>
+                      )}
                     </div>
                   )}
-                  <div className="max-w-[85%] sm:max-w-[70%] items-start flex flex-col gap-1.5">
-                    <div className="px-3 pt-2 pb-1.5 rounded-2xl shadow-sm min-w-[75px] bg-white border border-slate-100 text-slate-800 rounded-bl-sm">
+
+                  <div className={`max-w-[80%] sm:max-w-[70%] flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
+                    <div
+                      className={`px-3 pt-2 pb-1.5 shadow-sm relative group min-w-[75px]
+                        ${isMe ? 'bg-primary text-white' : 'bg-white border border-slate-100 text-slate-800'}
+                        ${isFirstInGroup && isLastInGroup ? 'rounded-2xl' : ''}
+                        ${isFirstInGroup && !isLastInGroup ? (isMe ? 'rounded-t-2xl rounded-bl-2xl rounded-br-sm' : 'rounded-t-2xl rounded-br-2xl rounded-bl-sm') : ''}
+                        ${!isFirstInGroup && isLastInGroup ? (isMe ? 'rounded-b-2xl rounded-tl-2xl rounded-tr-sm' : 'rounded-b-2xl rounded-tr-2xl rounded-tl-sm') : ''}
+                        ${!isFirstInGroup && !isLastInGroup ? (isMe ? 'rounded-l-2xl rounded-r-sm' : 'rounded-r-2xl rounded-l-sm') : ''}
+                      `}
+                    >
                       <div className="flex flex-wrap items-end gap-x-3 justify-between">
                         <p className="font-body-md text-[14px] leading-relaxed break-words pb-0.5">{msg.content}</p>
-                        <div className="text-[10px] opacity-60 shrink-0 ml-auto flex items-center gap-1 mt-1 font-medium text-slate-500">
+                        <div className={`text-[10px] opacity-60 shrink-0 ml-auto flex items-center gap-1 mt-1 font-medium ${isMe ? 'text-white' : 'text-slate-500'}`}>
                           {msg.time}
+                          {isMe && <span className="material-symbols-outlined text-white" style={{ fontSize: '14px' }}>done_all</span>}
                         </div>
                       </div>
                     </div>
                   </div>
+
+                  {isMe && (
+                    <div className="w-6 shrink-0" />
+                  )}
                 </div>
               </React.Fragment>
             );

@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { db, auth } from '@/lib/firebase';
-import { collection, query, where, onSnapshot, addDoc, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, addDoc, doc, updateDoc, deleteDoc, getDoc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 
 const COLUMN_DEF = [
@@ -25,6 +25,7 @@ export default function useTracker() {
   const [activeDisbursementCard, setActiveDisbursementCard] = useState(null);
   const [thankYouNote, setThankYouNote] = useState('');
   const [disbursementMethod, setDisbursementMethod] = useState('direct');
+  const [validatedSchols, setValidatedSchols] = useState(new Set());
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -109,6 +110,44 @@ export default function useTracker() {
     document.addEventListener('click', handleClickOutside);
     return () => document.removeEventListener('click', handleClickOutside);
   }, [showMoveMenu]);
+
+  useEffect(() => {
+    const checkOrphans = async () => {
+      const allCards = columns.flatMap(c => c.cards);
+      const newValidated = new Set(validatedSchols);
+      const toDelete = [];
+      let updated = false;
+
+      for (const card of allCards) {
+        if (card.scholarshipId && !newValidated.has(card.scholarshipId)) {
+          try {
+            const schDoc = await getDoc(doc(db, 'scholarships', card.scholarshipId));
+            if (!schDoc.exists()) {
+              toDelete.push(card.id);
+            } else {
+              newValidated.add(card.scholarshipId);
+              updated = true;
+            }
+          } catch(e) {}
+        }
+      }
+      
+      if (toDelete.length > 0) {
+        for (const id of toDelete) {
+          try {
+            await deleteDoc(doc(db, 'tracker', id));
+          } catch(e) {}
+        }
+      }
+      if (updated) {
+        setValidatedSchols(newValidated);
+      }
+    };
+    
+    if (columns.some(c => c.cards.length > 0)) {
+       checkOrphans();
+    }
+  }, [columns, validatedSchols]);
 
   const showToast = (msg) => {
     setToast(msg);

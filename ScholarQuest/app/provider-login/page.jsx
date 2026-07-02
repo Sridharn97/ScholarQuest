@@ -41,13 +41,13 @@ export default function ProviderLoginPage() {
             </div>
           </div>
 
-          <div className="relative w-[520px] h-[520px] mx-auto my-4 rounded-3xl overflow-hidden border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.06)] bg-white/40 backdrop-blur-md flex items-center justify-center">
+          <div className="relative w-full max-w-[520px] mx-auto my-4 rounded-3xl overflow-hidden border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.06)] bg-white/40 backdrop-blur-md flex items-center justify-center">
             <Image
               src="/provider_login_hero_new.png"
               alt="Sponsor Portal Illustration"
-              width={520}
-              height={520}
-              className="w-full h-full object-cover drop-shadow-md"
+              width={1000}
+              height={1000}
+              className="w-full h-auto drop-shadow-md"
               unoptimized
               priority
               loading="eager"
