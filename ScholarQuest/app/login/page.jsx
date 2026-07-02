@@ -124,13 +124,13 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <div className="relative w-[340px] h-[340px] mx-auto my-4 rounded-3xl overflow-hidden border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.06)] bg-white/40 backdrop-blur-md flex items-center justify-center p-4">
-            <Image 
-              src="/student_login_hero_new_2.png" 
-              alt="Student Success Illustration" 
-              width={340}
-              height={340}
-              className="w-full h-full object-contain drop-shadow-md" 
+          <div className="relative w-[380px] h-[380px] mx-auto my-4 rounded-3xl overflow-hidden border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.06)] bg-white/40 backdrop-blur-md flex items-center justify-center">
+            <Image
+              src="/student_login_hero_new_2.png"
+              alt="Student Success Illustration"
+              width={380}
+              height={380}
+              className="w-full h-full object-cover drop-shadow-md"
               unoptimized
               priority
             />
