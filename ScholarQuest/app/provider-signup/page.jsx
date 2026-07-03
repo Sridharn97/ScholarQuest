@@ -229,19 +229,6 @@ export default function ProviderSignupPage() {
 
           {/* ── Trust indicators + links — pinned to bottom ── */}
           <div className="flex-shrink-0 pt-4 text-center space-y-2">
-            {/* Trust row */}
-            <div className="flex items-center justify-center gap-5 mb-1">
-              {[
-                { icon: 'lock', text: 'Encrypted' },
-                { icon: 'verified_user', text: 'Verified' },
-                { icon: 'support_agent', text: '24/7 Support' },
-              ].map((item) => (
-                <div key={item.text} className="flex items-center gap-1 text-slate-400">
-                  <span className="material-symbols-outlined" style={{ fontSize: '12px', fontVariationSettings: "'FILL' 1" }}>{item.icon}</span>
-                  <span className="text-[0.63rem] font-semibold">{item.text}</span>
-                </div>
-              ))}
-            </div>
             <p className="text-slate-500 text-[0.83rem]">
               Already registered?{' '}
               <Link href="/provider-login" className="font-bold hover:underline" style={{ color: '#6366f1' }}>Sign In</Link>
