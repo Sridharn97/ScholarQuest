@@ -13,13 +13,120 @@ export default function LoginPage() {
   } = useLogin();
 
   return (
-    <div className="h-screen overflow-hidden flex">
+    <div className="h-screen overflow-hidden flex w-full">
 
       {/* ================================================================
-          LEFT — CENTERED FORM PANEL
+          LEFT — FULL-COVER BRANDING PANEL
+      ================================================================ */}
+      <div className="hidden lg:block w-[52%] relative overflow-hidden h-full">
+        <Image src="/student_login_hero.png" alt="Students celebrating scholarships" fill className="object-cover object-center" unoptimized priority />
+
+        {/* Gradient overlays */}
+        <div className="absolute inset-x-0 top-0 h-[45%] pointer-events-none z-10"
+          style={{ background: 'linear-gradient(to bottom, rgba(9,5,30,0.95) 0%, rgba(9,5,30,0.78) 40%, transparent 100%)' }} />
+        <div className="absolute inset-x-0 bottom-0 h-[35%] pointer-events-none z-10"
+          style={{ background: 'linear-gradient(to top, rgba(9,5,30,0.97) 0%, rgba(9,5,30,0.7) 55%, transparent 100%)' }} />
+        <div className="absolute inset-0 pointer-events-none z-10"
+          style={{ background: 'radial-gradient(ellipse at center, transparent 30%, rgba(9,5,30,0.35) 100%)' }} />
+        <div className="absolute top-[-10%] right-[-10%] w-[420px] h-[420px] rounded-full pointer-events-none z-10"
+          style={{ background: 'radial-gradient(circle, rgba(168,85,247,0.22) 0%, transparent 70%)', filter: 'blur(50px)' }} />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[380px] h-[380px] rounded-full pointer-events-none z-10"
+          style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.2) 0%, transparent 70%)', filter: 'blur(50px)' }} />
+
+        {/* Content layer */}
+        <div className="absolute inset-0 z-20 flex flex-col h-full p-10 pb-9 text-white">
+          {/* Brand header */}
+          <Link href="/" className="flex items-center gap-3 mb-5 group w-fit">
+            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300">
+              <img src="/Logo.png.png" alt="ScholarQuest Logo" className="w-8 h-8 rounded-lg object-cover" />
+            </div>
+            <div>
+              <p className="font-extrabold text-white text-[1.05rem] tracking-tight leading-none" style={{ fontFamily: 'Manrope, sans-serif' }}>ScholarQuest</p>
+              <p className="text-purple-300 text-[0.62rem] tracking-[0.18em] uppercase mt-1 font-bold">Student Platform</p>
+            </div>
+          </Link>
+
+          {/* Hero headline */}
+          <h2 className="text-[2.4rem] font-extrabold text-white leading-[1.18] max-w-sm" style={{ fontFamily: 'Manrope, sans-serif' }}>
+            Your dream.<br />
+            <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(90deg, #c084fc 0%, #60a5fa 100%)' }}>
+              Fully funded.
+            </span>
+          </h2>
+
+          {/* Floating badge: Match Score */}
+          <div className="absolute left-7 top-[40%] z-30" style={{ animation: 'studentFloat 4s ease-in-out infinite' }}>
+            <div className="flex items-center gap-2.5 px-3.5 py-3 rounded-2xl shadow-2xl"
+              style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.25)' }}>
+              <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0"
+                style={{ background: 'linear-gradient(135deg, #9333ea 0%, #3b82f6 100%)' }}>
+                <span className="material-symbols-outlined text-white" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>psychology</span>
+              </div>
+              <div>
+                <p className="text-white font-bold text-[0.75rem] leading-none">98% Match</p>
+                <p className="text-purple-300 text-[0.58rem] uppercase font-bold tracking-wider mt-0.5">AI Powered</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Floating badge: Scholarships */}
+          <div className="absolute right-7 top-[35%] z-30" style={{ animation: 'studentFloat 5s ease-in-out infinite', animationDelay: '0.8s' }}>
+            <div className="px-4 py-3 rounded-2xl shadow-2xl"
+              style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+              <p className="text-emerald-400 font-extrabold text-xl leading-none" style={{ fontFamily: 'Manrope, sans-serif' }}>50K+</p>
+              <p className="text-slate-300 text-[0.58rem] uppercase font-bold tracking-wider mt-1">Scholarships</p>
+            </div>
+          </div>
+
+          {/* Testimonial card */}
+          <div className="absolute right-5 bottom-[22%] z-30" style={{ animation: 'studentFloat 6s ease-in-out infinite', animationDelay: '1.5s' }}>
+            <div className="p-4 rounded-2xl shadow-2xl max-w-[210px]"
+              style={{ background: 'rgba(9,5,30,0.82)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.12)' }}>
+              <div className="flex gap-0.5 mb-2">
+                {[1,2,3,4,5].map(i => <span key={i} className="material-symbols-outlined text-amber-400" style={{ fontSize: '11px', fontVariationSettings: "'FILL' 1" }}>star</span>)}
+              </div>
+              <p className="text-slate-300 text-[0.7rem] italic leading-snug mb-3">"ScholarQuest matched me with 34 scholarships in 2 weeks. I won 3 of them!"</p>
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold text-white flex-shrink-0"
+                  style={{ background: 'linear-gradient(135deg, #9333ea, #3b82f6)' }}>PR</div>
+                <p className="text-white font-bold text-[0.65rem]">Priya R., <span className="font-normal text-slate-400">UC Berkeley</span></p>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex-1" />
+
+          {/* Feature pills */}
+          <div className="grid grid-cols-3 gap-3">
+            {[
+              { label: 'AI\nMatching', icon: 'psychology', gradient: 'linear-gradient(135deg,#9333ea,#7c3aed)' },
+              { label: 'Track\nDeadlines', icon: 'event_available', gradient: 'linear-gradient(135deg,#3b82f6,#0ea5e9)' },
+              { label: '1-Click\nApply', icon: 'send', gradient: 'linear-gradient(135deg,#10b981,#059669)' },
+            ].map((item, idx) => (
+              <div key={idx} className="flex flex-col items-center justify-center gap-2.5 py-4 rounded-2xl text-center transition-all duration-200 hover:scale-[1.04] cursor-default"
+                style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}>
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-md" style={{ background: item.gradient }}>
+                  <span className="material-symbols-outlined text-white" style={{ fontSize: '20px', fontVariationSettings: "'FILL' 1" }}>{item.icon}</span>
+                </div>
+                <span className="text-slate-200 text-[0.62rem] font-bold uppercase tracking-wider leading-tight whitespace-pre-line">{item.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <style>{`
+          @keyframes studentFloat {
+            0%, 100% { transform: translateY(0px); }
+            50%       { transform: translateY(-10px); }
+          }
+        `}</style>
+      </div>
+
+      {/* ================================================================
+          RIGHT — CENTERED FORM PANEL
       ================================================================ */}
       <div
-        className="flex-1 h-full flex flex-col items-center justify-center relative px-10 overflow-hidden"
+        className="flex-1 min-w-0 h-full flex flex-col items-center justify-center relative px-10 overflow-y-auto overflow-x-hidden"
         style={{ background: 'linear-gradient(160deg, #fdf4ff 0%, #eff6ff 55%, #f0fdf4 100%)' }}
       >
         {/* Decorative blobs */}
@@ -170,115 +277,6 @@ export default function LoginPage() {
             </Link>
           </div>
         </div>
-      </div>
-
-      {/* ================================================================
-          RIGHT — FULL-COVER BRANDING PANEL
-      ================================================================ */}
-      <div className="hidden lg:block w-[52%] relative overflow-hidden h-full">
-        <Image src="/student_login_hero.png" alt="Students celebrating scholarships" fill className="object-cover object-center" unoptimized priority />
-
-        {/* Gradient overlays */}
-        <div className="absolute inset-x-0 top-0 h-[45%] pointer-events-none z-10"
-          style={{ background: 'linear-gradient(to bottom, rgba(9,5,30,0.95) 0%, rgba(9,5,30,0.78) 40%, transparent 100%)' }} />
-        <div className="absolute inset-x-0 bottom-0 h-[35%] pointer-events-none z-10"
-          style={{ background: 'linear-gradient(to top, rgba(9,5,30,0.97) 0%, rgba(9,5,30,0.7) 55%, transparent 100%)' }} />
-        <div className="absolute inset-0 pointer-events-none z-10"
-          style={{ background: 'radial-gradient(ellipse at center, transparent 30%, rgba(9,5,30,0.35) 100%)' }} />
-        {/* Purple glow top-right */}
-        <div className="absolute top-[-10%] right-[-10%] w-[420px] h-[420px] rounded-full pointer-events-none z-10"
-          style={{ background: 'radial-gradient(circle, rgba(168,85,247,0.22) 0%, transparent 70%)', filter: 'blur(50px)' }} />
-        {/* Blue glow bottom-left */}
-        <div className="absolute bottom-[-10%] left-[-10%] w-[380px] h-[380px] rounded-full pointer-events-none z-10"
-          style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.2) 0%, transparent 70%)', filter: 'blur(50px)' }} />
-
-        {/* Content layer */}
-        <div className="absolute inset-0 z-20 flex flex-col h-full p-10 pb-9 text-white">
-          {/* Brand header */}
-          <Link href="/" className="flex items-center gap-3 mb-5 group w-fit">
-            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300">
-              <img src="/Logo.png.png" alt="ScholarQuest Logo" className="w-8 h-8 rounded-lg object-cover" />
-            </div>
-            <div>
-              <p className="font-extrabold text-white text-[1.05rem] tracking-tight leading-none" style={{ fontFamily: 'Manrope, sans-serif' }}>ScholarQuest</p>
-              <p className="text-purple-300 text-[0.62rem] tracking-[0.18em] uppercase mt-1 font-bold">Student Platform</p>
-            </div>
-          </Link>
-
-          {/* Hero headline */}
-          <h2 className="text-[2.4rem] font-extrabold text-white leading-[1.18] max-w-sm" style={{ fontFamily: 'Manrope, sans-serif' }}>
-            Your dream.<br />
-            <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(90deg, #c084fc 0%, #60a5fa 100%)' }}>
-              Fully funded.
-            </span>
-          </h2>
-
-          {/* Floating badge: Match Score */}
-          <div className="absolute left-7 top-[40%] z-30" style={{ animation: 'studentFloat 4s ease-in-out infinite' }}>
-            <div className="flex items-center gap-2.5 px-3.5 py-3 rounded-2xl shadow-2xl"
-              style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.25)' }}>
-              <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0"
-                style={{ background: 'linear-gradient(135deg, #9333ea 0%, #3b82f6 100%)' }}>
-                <span className="material-symbols-outlined text-white" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>psychology</span>
-              </div>
-              <div>
-                <p className="text-white font-bold text-[0.75rem] leading-none">98% Match</p>
-                <p className="text-purple-300 text-[0.58rem] uppercase font-bold tracking-wider mt-0.5">AI Powered</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Floating badge: Scholarships */}
-          <div className="absolute right-7 top-[35%] z-30" style={{ animation: 'studentFloat 5s ease-in-out infinite', animationDelay: '0.8s' }}>
-            <div className="px-4 py-3 rounded-2xl shadow-2xl"
-              style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
-              <p className="text-emerald-400 font-extrabold text-xl leading-none" style={{ fontFamily: 'Manrope, sans-serif' }}>50K+</p>
-              <p className="text-slate-300 text-[0.58rem] uppercase font-bold tracking-wider mt-1">Scholarships</p>
-            </div>
-          </div>
-
-          {/* Testimonial card */}
-          <div className="absolute right-5 bottom-[22%] z-30" style={{ animation: 'studentFloat 6s ease-in-out infinite', animationDelay: '1.5s' }}>
-            <div className="p-4 rounded-2xl shadow-2xl max-w-[210px]"
-              style={{ background: 'rgba(9,5,30,0.82)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.12)' }}>
-              <div className="flex gap-0.5 mb-2">
-                {[1,2,3,4,5].map(i => <span key={i} className="material-symbols-outlined text-amber-400" style={{ fontSize: '11px', fontVariationSettings: "'FILL' 1" }}>star</span>)}
-              </div>
-              <p className="text-slate-300 text-[0.7rem] italic leading-snug mb-3">"ScholarQuest matched me with 34 scholarships in 2 weeks. I won 3 of them!"</p>
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold text-white flex-shrink-0"
-                  style={{ background: 'linear-gradient(135deg, #9333ea, #3b82f6)' }}>PR</div>
-                <p className="text-white font-bold text-[0.65rem]">Priya R., <span className="font-normal text-slate-400">UC Berkeley</span></p>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex-1" />
-
-          {/* Feature pills */}
-          <div className="grid grid-cols-3 gap-3">
-            {[
-              { label: 'AI\nMatching', icon: 'psychology', gradient: 'linear-gradient(135deg,#9333ea,#7c3aed)' },
-              { label: 'Track\nDeadlines', icon: 'event_available', gradient: 'linear-gradient(135deg,#3b82f6,#0ea5e9)' },
-              { label: '1-Click\nApply', icon: 'send', gradient: 'linear-gradient(135deg,#10b981,#059669)' },
-            ].map((item, idx) => (
-              <div key={idx} className="flex flex-col items-center justify-center gap-2.5 py-4 rounded-2xl text-center transition-all duration-200 hover:scale-[1.04] cursor-default"
-                style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}>
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-md" style={{ background: item.gradient }}>
-                  <span className="material-symbols-outlined text-white" style={{ fontSize: '20px', fontVariationSettings: "'FILL' 1" }}>{item.icon}</span>
-                </div>
-                <span className="text-slate-200 text-[0.62rem] font-bold uppercase tracking-wider leading-tight whitespace-pre-line">{item.label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <style>{`
-          @keyframes studentFloat {
-            0%, 100% { transform: translateY(0px); }
-            50%       { transform: translateY(-10px); }
-          }
-        `}</style>
       </div>
     </div>
   );

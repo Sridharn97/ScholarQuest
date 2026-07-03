@@ -17,10 +17,116 @@ export default function ProviderSignupPage() {
     <div className="theme-admin h-screen overflow-hidden flex">
 
       {/* ================================================================
-          LEFT — FULL-HEIGHT FORM PANEL (no centering, fills all space)
+          LEFT — FULL-COVER BRANDING PANEL
+      ================================================================ */}
+      <div className="hidden lg:block w-[52%] relative overflow-hidden h-full">
+        <Image src="/sponsor_signup_hero.png" alt="ScholarQuest Partner Platform" fill className="object-cover object-center" unoptimized priority />
+
+        {/* Gradient overlays */}
+        <div className="absolute inset-x-0 top-0 h-[45%] pointer-events-none z-10"
+          style={{ background: 'linear-gradient(to bottom, rgba(9,14,40,0.96) 0%, rgba(9,14,40,0.82) 40%, transparent 100%)' }} />
+        <div className="absolute inset-x-0 bottom-0 h-[32%] pointer-events-none z-10"
+          style={{ background: 'linear-gradient(to top, rgba(9,14,40,0.97) 0%, rgba(9,14,40,0.75) 55%, transparent 100%)' }} />
+        <div className="absolute inset-0 pointer-events-none z-10"
+          style={{ background: 'radial-gradient(ellipse at center, transparent 35%, rgba(9,14,40,0.4) 100%)' }} />
+        <div className="absolute top-[-10%] right-[-10%] w-[400px] h-[400px] rounded-full pointer-events-none z-10"
+          style={{ background: 'radial-gradient(circle, rgba(56,189,248,0.18) 0%, transparent 70%)', filter: 'blur(50px)' }} />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[380px] h-[380px] rounded-full pointer-events-none z-10"
+          style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.2) 0%, transparent 70%)', filter: 'blur(50px)' }} />
+
+        {/* Content layer */}
+        <div className="absolute inset-0 z-20 flex flex-col h-full p-10 pb-9 text-white">
+          {/* Brand header */}
+          <Link href="/" className="flex items-center gap-3 mb-5 group w-fit">
+            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300">
+              <img src="/logo_provider.png" alt="ScholarQuest Logo" className="w-8 h-8 rounded-lg object-cover" />
+            </div>
+            <div>
+              <p className="font-extrabold text-white text-[1.05rem] tracking-tight leading-none" style={{ fontFamily: 'Manrope, sans-serif' }}>ScholarQuest</p>
+              <p className="text-sky-400 text-[0.62rem] tracking-[0.18em] uppercase mt-1 font-bold">Partner Onboarding</p>
+            </div>
+          </Link>
+
+          {/* Hero headline */}
+          <h2 className="text-[2.4rem] font-extrabold text-white leading-[1.18] max-w-sm" style={{ fontFamily: 'Manrope, sans-serif' }}>
+            Build the future.<br />
+            <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(90deg, #38bdf8 0%, #34d399 100%)' }}>
+              One grant at a time.
+            </span>
+          </h2>
+
+          {/* Floating badge: Global Reach */}
+          <div className="absolute left-7 top-[42%] z-30" style={{ animation: 'providerFloat 4s ease-in-out infinite' }}>
+            <div className="flex items-center gap-2.5 px-3.5 py-3 rounded-2xl shadow-2xl"
+              style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.25)' }}>
+              <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0"
+                style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #4f46e5 100%)' }}>
+                <span className="material-symbols-outlined text-white" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>school</span>
+              </div>
+              <div>
+                <p className="text-white font-bold text-[0.75rem] leading-none">Global Reach</p>
+                <p className="text-sky-300 text-[0.58rem] uppercase font-bold tracking-wider mt-0.5">Top Institutions</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Floating badge: $50M+ */}
+          <div className="absolute right-7 top-[36%] z-30" style={{ animation: 'providerFloat 5s ease-in-out infinite', animationDelay: '0.8s' }}>
+            <div className="px-4 py-3 rounded-2xl shadow-2xl"
+              style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+              <p className="text-emerald-400 font-extrabold text-xl leading-none" style={{ fontFamily: 'Manrope, sans-serif' }}>$50M+</p>
+              <p className="text-slate-300 text-[0.58rem] uppercase font-bold tracking-wider mt-1">Funds Distributed</p>
+            </div>
+          </div>
+
+          {/* Testimonial card */}
+          <div className="absolute right-5 bottom-[22%] z-30" style={{ animation: 'providerFloat 6s ease-in-out infinite', animationDelay: '1.5s' }}>
+            <div className="p-4 rounded-2xl shadow-2xl max-w-[200px]"
+              style={{ background: 'rgba(9,14,40,0.82)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.12)' }}>
+              <div className="flex gap-0.5 mb-2">
+                {[1,2,3,4,5].map(i => <span key={i} className="material-symbols-outlined text-amber-400" style={{ fontSize: '11px', fontVariationSettings: "'FILL' 1" }}>star</span>)}
+              </div>
+              <p className="text-slate-300 text-[0.7rem] italic leading-snug mb-3">"Our company's outreach has never been more impactful and streamlined."</p>
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 rounded-full bg-emerald-600 flex items-center justify-center text-[9px] font-bold text-white flex-shrink-0">DR</div>
+                <p className="text-white font-bold text-[0.65rem]">David R., <span className="font-normal text-slate-400">Innovate Inc.</span></p>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex-1" />
+
+          {/* Feature pills */}
+          <div className="grid grid-cols-3 gap-3">
+            {[
+              { label: 'Custom\nScholarships', icon: 'add_circle', gradient: 'linear-gradient(135deg,#3b82f6,#4f46e5)' },
+              { label: 'Review\nApplications', icon: 'description', gradient: 'linear-gradient(135deg,#8b5cf6,#7c3aed)' },
+              { label: 'Impact\nReports', icon: 'analytics', gradient: 'linear-gradient(135deg,#10b981,#0d9488)' },
+            ].map((item, idx) => (
+              <div key={idx} className="flex flex-col items-center justify-center gap-2.5 py-4 rounded-2xl text-center transition-all duration-200 hover:scale-[1.04] cursor-default"
+                style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}>
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-md" style={{ background: item.gradient }}>
+                  <span className="material-symbols-outlined text-white" style={{ fontSize: '20px', fontVariationSettings: "'FILL' 1" }}>{item.icon}</span>
+                </div>
+                <span className="text-slate-200 text-[0.62rem] font-bold uppercase tracking-wider leading-tight whitespace-pre-line">{item.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <style>{`
+          @keyframes providerFloat {
+            0%, 100% { transform: translateY(0px); }
+            50%       { transform: translateY(-10px); }
+          }
+        `}</style>
+      </div>
+
+      {/* ================================================================
+          RIGHT — FULL-HEIGHT FORM PANEL
       ================================================================ */}
       <div
-        className="flex-1 h-full overflow-hidden flex flex-col lg:order-1 relative px-10 py-7"
+        className="flex-1 h-full overflow-hidden flex flex-col relative px-10 py-7"
         style={{ background: 'linear-gradient(160deg, #f5f3ff 0%, #eef2ff 55%, #f0f9ff 100%)' }}
       >
         {/* Decorative blobs */}
@@ -241,111 +347,6 @@ export default function ProviderSignupPage() {
         </div>
       </div>
 
-      {/* ================================================================
-          RIGHT — FULL-COVER BRANDING PANEL
-      ================================================================ */}
-      <div className="hidden lg:block w-[52%] relative overflow-hidden h-full lg:order-2">
-        <Image src="/sponsor_signup_hero.png" alt="ScholarQuest Partner Platform" fill className="object-cover object-center" unoptimized priority />
-
-        {/* Gradient overlays */}
-        <div className="absolute inset-x-0 top-0 h-[45%] pointer-events-none z-10"
-          style={{ background: 'linear-gradient(to bottom, rgba(9,14,40,0.96) 0%, rgba(9,14,40,0.82) 40%, transparent 100%)' }} />
-        <div className="absolute inset-x-0 bottom-0 h-[32%] pointer-events-none z-10"
-          style={{ background: 'linear-gradient(to top, rgba(9,14,40,0.97) 0%, rgba(9,14,40,0.75) 55%, transparent 100%)' }} />
-        <div className="absolute inset-0 pointer-events-none z-10"
-          style={{ background: 'radial-gradient(ellipse at center, transparent 35%, rgba(9,14,40,0.4) 100%)' }} />
-        <div className="absolute top-[-10%] right-[-10%] w-[400px] h-[400px] rounded-full pointer-events-none z-10"
-          style={{ background: 'radial-gradient(circle, rgba(56,189,248,0.18) 0%, transparent 70%)', filter: 'blur(50px)' }} />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[380px] h-[380px] rounded-full pointer-events-none z-10"
-          style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.2) 0%, transparent 70%)', filter: 'blur(50px)' }} />
-
-        {/* Content layer */}
-        <div className="absolute inset-0 z-20 flex flex-col h-full p-10 pb-9 text-white">
-          {/* Brand header */}
-          <Link href="/" className="flex items-center gap-3 mb-5 group w-fit">
-            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300">
-              <img src="/logo_provider.png" alt="ScholarQuest Logo" className="w-8 h-8 rounded-lg object-cover" />
-            </div>
-            <div>
-              <p className="font-extrabold text-white text-[1.05rem] tracking-tight leading-none" style={{ fontFamily: 'Manrope, sans-serif' }}>ScholarQuest</p>
-              <p className="text-sky-400 text-[0.62rem] tracking-[0.18em] uppercase mt-1 font-bold">Partner Onboarding</p>
-            </div>
-          </Link>
-
-          {/* Hero headline */}
-          <h2 className="text-[2.4rem] font-extrabold text-white leading-[1.18] max-w-sm" style={{ fontFamily: 'Manrope, sans-serif' }}>
-            Build the future.<br />
-            <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(90deg, #38bdf8 0%, #34d399 100%)' }}>
-              One grant at a time.
-            </span>
-          </h2>
-
-          {/* Floating badge: Global Reach */}
-          <div className="absolute left-7 top-[42%] z-30" style={{ animation: 'providerFloat 4s ease-in-out infinite' }}>
-            <div className="flex items-center gap-2.5 px-3.5 py-3 rounded-2xl shadow-2xl"
-              style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.25)' }}>
-              <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0"
-                style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #4f46e5 100%)' }}>
-                <span className="material-symbols-outlined text-white" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>school</span>
-              </div>
-              <div>
-                <p className="text-white font-bold text-[0.75rem] leading-none">Global Reach</p>
-                <p className="text-sky-300 text-[0.58rem] uppercase font-bold tracking-wider mt-0.5">Top Institutions</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Floating badge: $50M+ */}
-          <div className="absolute right-7 top-[36%] z-30" style={{ animation: 'providerFloat 5s ease-in-out infinite', animationDelay: '0.8s' }}>
-            <div className="px-4 py-3 rounded-2xl shadow-2xl"
-              style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
-              <p className="text-emerald-400 font-extrabold text-xl leading-none" style={{ fontFamily: 'Manrope, sans-serif' }}>$50M+</p>
-              <p className="text-slate-300 text-[0.58rem] uppercase font-bold tracking-wider mt-1">Funds Distributed</p>
-            </div>
-          </div>
-
-          {/* Testimonial card */}
-          <div className="absolute right-5 bottom-[22%] z-30" style={{ animation: 'providerFloat 6s ease-in-out infinite', animationDelay: '1.5s' }}>
-            <div className="p-4 rounded-2xl shadow-2xl max-w-[200px]"
-              style={{ background: 'rgba(9,14,40,0.82)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.12)' }}>
-              <div className="flex gap-0.5 mb-2">
-                {[1,2,3,4,5].map(i => <span key={i} className="material-symbols-outlined text-amber-400" style={{ fontSize: '11px', fontVariationSettings: "'FILL' 1" }}>star</span>)}
-              </div>
-              <p className="text-slate-300 text-[0.7rem] italic leading-snug mb-3">"Our company's outreach has never been more impactful and streamlined."</p>
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-full bg-emerald-600 flex items-center justify-center text-[9px] font-bold text-white flex-shrink-0">DR</div>
-                <p className="text-white font-bold text-[0.65rem]">David R., <span className="font-normal text-slate-400">Innovate Inc.</span></p>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex-1" />
-
-          {/* Feature pills */}
-          <div className="grid grid-cols-3 gap-3">
-            {[
-              { label: 'Custom\nScholarships', icon: 'add_circle', gradient: 'linear-gradient(135deg,#3b82f6,#4f46e5)' },
-              { label: 'Review\nApplications', icon: 'description', gradient: 'linear-gradient(135deg,#8b5cf6,#7c3aed)' },
-              { label: 'Impact\nReports', icon: 'analytics', gradient: 'linear-gradient(135deg,#10b981,#0d9488)' },
-            ].map((item, idx) => (
-              <div key={idx} className="flex flex-col items-center justify-center gap-2.5 py-4 rounded-2xl text-center transition-all duration-200 hover:scale-[1.04] cursor-default"
-                style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}>
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-md" style={{ background: item.gradient }}>
-                  <span className="material-symbols-outlined text-white" style={{ fontSize: '20px', fontVariationSettings: "'FILL' 1" }}>{item.icon}</span>
-                </div>
-                <span className="text-slate-200 text-[0.62rem] font-bold uppercase tracking-wider leading-tight whitespace-pre-line">{item.label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <style>{`
-          @keyframes providerFloat {
-            0%, 100% { transform: translateY(0px); }
-            50%       { transform: translateY(-10px); }
-          }
-        `}</style>
-      </div>
     </div>
   );
 }
