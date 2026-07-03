@@ -13,193 +13,266 @@ export default function ProviderLoginPage() {
   } = useProviderLogin();
 
   return (
-    <div className="theme-admin h-screen overflow-hidden flex bg-slate-50">
+    <div className="theme-admin h-screen overflow-hidden flex">
 
-      {/* ===== LEFT: PREMIUM CORPORATE PANEL ===== */}
-      <div className="hidden lg:flex w-1/2 flex-col relative overflow-hidden h-full bg-[#0B132B] text-white">
-        {/* Deep, rich background gradients and orbs for a premium tech feel */}
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5" />
-        <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] rounded-full opacity-30 filter blur-[100px]" style={{ background: 'radial-gradient(circle, rgba(56,189,248,0.5) 0%, rgba(56,189,248,0) 70%)' }} />
-        <div className="absolute bottom-[-10%] left-[-20%] w-[500px] h-[500px] rounded-full opacity-30 filter blur-[100px]" style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.5) 0%, rgba(139,92,246,0) 70%)' }} />
+      {/* ================================================================
+          LEFT — FULL-HEIGHT FORM PANEL
+      ================================================================ */}
+      <div
+        className="flex-1 h-full overflow-hidden flex items-center justify-center lg:order-1 relative px-8"
+        style={{ background: 'linear-gradient(160deg, #f5f3ff 0%, #eef2ff 55%, #f0f9ff 100%)' }}
+      >
+        {/* Decorative blobs */}
+        <div className="absolute top-[-60px] left-[-60px] w-80 h-80 rounded-full pointer-events-none"
+          style={{ background: 'radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%)' }} />
+        <div className="absolute bottom-[-40px] right-[-40px] w-72 h-72 rounded-full pointer-events-none"
+          style={{ background: 'radial-gradient(circle, rgba(168,85,247,0.1) 0%, transparent 70%)' }} />
 
-        <div className="relative z-10 flex flex-col h-full p-10 pb-12 justify-between">
+        {/* Centered content column */}
+        <div className="relative z-10 w-full max-w-[420px] flex flex-col gap-6">
+
+          {/* Mobile logo */}
+          <div className="flex items-center gap-3 lg:hidden">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center shadow-md">
+              <img src="/logo_provider.png" alt="Logo" className="w-6 h-6 rounded-lg object-cover" />
+            </div>
+            <p className="font-extrabold text-slate-900 text-base tracking-tight" style={{ fontFamily: 'Manrope, sans-serif' }}>ScholarQuest</p>
+          </div>
+
+          {/* Header block */}
           <div>
-            <Link href="/" className="flex items-center gap-3 mb-8 group w-fit">
-              <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-                <img src="/logo_provider.png" alt="Logo" className="w-8 h-8 rounded-lg object-cover" />
-              </div>
-              <div>
-                <p className="font-extrabold text-white text-lg tracking-tight leading-none">ScholarQuest</p>
-                <p className="text-blue-300 text-[10px] tracking-widest uppercase mt-1 font-bold">Partner Portal</p>
-              </div>
-            </Link>
-
-            <div className="mb-4 max-w-md">
-              <h1 className="text-4xl font-extrabold text-white leading-[1.2] mb-3" style={{ fontFamily: 'Manrope, sans-serif' }}>
-                Invest in brilliance.<br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Scale your impact.</span>
-              </h1>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[0.68rem] font-bold tracking-widest uppercase mb-4"
+              style={{ background: 'linear-gradient(135deg, rgba(99,102,241,0.12) 0%, rgba(168,85,247,0.12) 100%)', color: '#6366f1', border: '1px solid rgba(99,102,241,0.2)' }}>
+              <span className="material-symbols-outlined" style={{ fontSize: '13px', fontVariationSettings: "'FILL' 1" }}>verified</span>
+              Partner Program
             </div>
+            <h1 className="text-[2rem] font-extrabold leading-tight mb-2" style={{ fontFamily: 'Manrope, sans-serif', color: '#0f172a' }}>
+              Welcome back,{' '}
+              <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)' }}>
+                Partner
+              </span>
+            </h1>
+            <p className="text-slate-500 text-sm leading-relaxed">
+              Sign in to access your scholarship management portal.
+            </p>
           </div>
 
-          <div className="relative w-full max-w-[380px] mx-auto my-auto shrink-0">
-            {/* The Hero Image Container */}
-            <div className="relative rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-white/5 backdrop-blur-xl flex items-center justify-center z-10">
-              <Image
-                src="/sponsor_login_hero.png"
-                alt="Sponsor Portal Illustration"
-                width={1000}
-                height={1000}
-                className="w-full h-auto drop-shadow-2xl hover:scale-105 transition-transform duration-700 ease-out"
-                unoptimized
-                priority
-                loading="eager"
-              />
-            </div>
-
-            {/* Floating Glassmorphism Elements */}
-            <div className="absolute -right-6 top-[20%] z-20 animate-[float_4s_ease-in-out_infinite]">
-              <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-3 flex items-center gap-3 shadow-xl">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center shadow-inner">
-                  <span className="material-symbols-outlined text-white" style={{ fontSize: '20px' }}>check_circle</span>
-                </div>
-                <div>
-                  <p className="text-white font-bold text-xs">99% Placement</p>
-                  <p className="text-green-300 text-[9px] uppercase font-bold tracking-wider">Verified Match</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="absolute -left-8 bottom-[15%] z-20 animate-[float_5s_ease-in-out_infinite]" style={{ animationDelay: '1s' }}>
-              <div className="bg-[#0B132B]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-2xl max-w-[200px]">
-                <div className="flex gap-1 mb-2">
-                  {[1, 2, 3, 4, 5].map(i => (
-                    <span key={i} className="material-symbols-outlined text-yellow-400" style={{ fontSize: '12px', fontVariationSettings: "'FILL' 1" }}>star</span>
-                  ))}
-                </div>
-                <p className="text-slate-300 text-xs italic leading-snug mb-3">
-                  "ScholarQuest allowed us to effortlessly deploy our CSR funds to the most deserving candidates globally."
-                </p>
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-[9px] font-bold text-white">MK</div>
-                  <p className="text-white font-bold text-[10px]">Maria K., <span className="font-normal text-slate-400">Global Tech</span></p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            {[
-              { value: '500+', label: 'Corporate Partners', icon: 'handshake', color: 'text-blue-400', border: 'border-blue-400/30' },
-              { value: '$50M+', label: 'Funds Distributed', icon: 'account_balance', color: 'text-purple-400', border: 'border-purple-400/30' },
-            ].map((stat) => (
-              <div key={stat.label} className={`flex items-center gap-3 p-4 rounded-2xl border ${stat.border} bg-white/5 backdrop-blur-md shadow-lg hover:bg-white/10 transition-colors`}>
-                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
-                  <span className={`material-symbols-outlined ${stat.color}`} style={{ fontSize: '22px', fontVariationSettings: "'FILL' 1" }}>{stat.icon}</span>
-                </div>
-                <div>
-                  <p className="text-white font-extrabold text-lg leading-none" style={{ fontFamily: 'Manrope, sans-serif' }}>{stat.value}</p>
-                  <p className="text-slate-400 text-[10px] mt-1 font-bold uppercase tracking-wider">{stat.label}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ===== RIGHT: FORM PANEL ===== */}
-      <div className="flex-1 bg-white h-full overflow-hidden flex flex-col justify-center items-center px-8">
-        <div className="w-full max-w-[480px]">
-          <div className="flex items-center gap-3 mb-10 lg:hidden">
-            <img src="/logo_provider.png" alt="Logo" className="w-9 h-9 rounded-full object-cover shadow-sm" />
-            <p className="font-extrabold text-slate-900 text-lg tracking-tight">ScholarQuest Portal</p>
-          </div>
-
-          <div className="mb-8">
-            <h2 className="text-3xl font-extrabold text-slate-900 mb-1.5" style={{ fontFamily: 'Manrope, sans-serif' }}>Sponsor Sign In</h2>
-            <p className="text-slate-500 text-base">Access your Company or Institute scholarship portal.</p>
-          </div>
-
+          {/* Error alert */}
           {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-10 text-red-600 text-sm flex items-center gap-2">
-              <span className="material-symbols-outlined shrink-0" style={{ fontSize: '18px' }}>error</span>
+            <div className="p-3 rounded-xl text-red-700 text-xs flex items-start gap-2"
+              style={{ background: '#fff1f2', border: '1px solid #fecdd3' }}>
+              <span className="material-symbols-outlined shrink-0" style={{ fontSize: '16px' }}>error</span>
               {error}
             </div>
           )}
 
-          <form className="space-y-5" onSubmit={handleSubmit}>
-            <div className="space-y-2">
-              <label htmlFor="provider_email" className="block text-sm font-bold text-slate-700">Institutional Email</label>
-              <div className="relative">
-                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" style={{ fontSize: '20px' }}>mail</span>
-                <input
-                  id="provider_email"
-                  name="provider_email"
-                  type="email"
-                  placeholder="name@company.com"
-                  autoComplete="email"
-                  className="w-full h-12 pl-10 pr-4 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 border border-slate-200 bg-slate-50 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all shadow-sm hover:border-slate-300"
-                  required
-                />
-              </div>
-            </div>
+          {/* FORM CARD */}
+          <div
+            className="rounded-3xl p-6"
+            style={{
+              background: 'rgba(255,255,255,0.92)',
+              backdropFilter: 'blur(16px)',
+              border: '1px solid rgba(99,102,241,0.14)',
+              boxShadow: '0 8px 40px rgba(99,102,241,0.1), 0 2px 8px rgba(0,0,0,0.04)',
+            }}
+          >
+            <form id="provider-login-form" onSubmit={handleSubmit} className="flex flex-col gap-5">
+              {/* Email */}
+                <div>
+                  <label htmlFor="provider_email" className="block text-[0.72rem] font-bold text-slate-500 mb-1.5 uppercase tracking-widest">Institutional Email</label>
+                  <div className="relative">
+                    <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" style={{ fontSize: '17px' }}>mail</span>
+                    <input
+                      id="provider_email"
+                      name="provider_email"
+                      type="email"
+                      placeholder="name@company.com"
+                      autoComplete="email"
+                      required
+                      className="w-full h-11 pl-10 pr-4 rounded-xl text-sm text-slate-800 placeholder:text-slate-400 outline-none transition-all"
+                      style={{ background: '#f1f5f9', border: '1.5px solid #e2e8f0' }}
+                      onFocus={e => { e.currentTarget.style.border = '1.5px solid #6366f1'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)'; e.currentTarget.style.background = '#fff'; }}
+                      onBlur={e => { e.currentTarget.style.border = '1.5px solid #e2e8f0'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.background = '#f1f5f9'; }}
+                    />
+                  </div>
+                </div>
 
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <label htmlFor="provider_password" className="block text-sm font-bold text-slate-700">Password</label>
-                <Link href="#" className="text-sm text-primary font-bold hover:underline">Forgot password?</Link>
-              </div>
-              <div className="relative">
-                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" style={{ fontSize: '20px' }}>lock</span>
-                <input
-                  id="provider_password"
-                  name="provider_password"
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="Enter password"
-                  autoComplete="current-password"
-                  className="w-full h-12 pl-10 pr-12 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 border border-slate-200 bg-slate-50 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all shadow-sm hover:border-slate-300"
-                  required
-                />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 transition-colors">
-                  <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>{showPassword ? 'visibility_off' : 'visibility'}</span>
-                </button>
-              </div>
-            </div>
+                {/* Password */}
+                <div>
+                  <div className="flex justify-between items-center mb-1.5">
+                    <label htmlFor="provider_password" className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-widest">Password</label>
+                    <Link href="#" className="text-[0.72rem] font-semibold hover:underline transition-colors" style={{ color: '#6366f1' }}>Forgot password?</Link>
+                  </div>
+                  <div className="relative">
+                    <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" style={{ fontSize: '17px' }}>lock</span>
+                    <input
+                      id="provider_password"
+                      name="provider_password"
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="Enter your password"
+                      autoComplete="current-password"
+                      required
+                      className="w-full h-11 pl-10 pr-11 rounded-xl text-sm text-slate-800 placeholder:text-slate-400 outline-none transition-all"
+                      style={{ background: '#f1f5f9', border: '1.5px solid #e2e8f0' }}
+                      onFocus={e => { e.currentTarget.style.border = '1.5px solid #6366f1'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)'; e.currentTarget.style.background = '#fff'; }}
+                      onBlur={e => { e.currentTarget.style.border = '1.5px solid #e2e8f0'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.background = '#f1f5f9'; }}
+                    />
+                    <button type="button" onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-indigo-600 transition-colors"
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}>
+                      <span className="material-symbols-outlined" style={{ fontSize: '19px' }}>
+                        {showPassword ? 'visibility_off' : 'visibility'}
+                      </span>
+                    </button>
+                  </div>
+                </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex items-center justify-center gap-2 w-full h-12 bg-primary text-white rounded-xl text-sm font-bold hover:bg-primary/90 active:scale-[0.98] transition-all shadow-md shadow-primary/25 disabled:opacity-60 mt-2"
-            >
-              {loading ? (
-                <span className="material-symbols-outlined animate-spin" style={{ fontSize: '20px' }}>progress_activity</span>
-              ) : (
-                <>
-                  <span className="material-symbols-outlined" style={{ fontSize: '20px', fontVariationSettings: "'FILL' 1" }}>corporate_fare</span>
-                  Sign In to Partner Portal
-                </>
-              )}
-            </button>
-          </form>
+              {/* Remember me */}
+              <div className="flex items-center gap-2">
+                <input type="checkbox" id="remember_me" className="w-4 h-4 rounded cursor-pointer accent-indigo-600" />
+                <label htmlFor="remember_me" className="text-[0.8rem] text-slate-500 cursor-pointer select-none">Keep me signed in</label>
+              </div>
 
-          <div className="flex items-center gap-4 my-6">
-            <div className="flex-1 h-px bg-slate-200/80" />
-            <span className="text-xs text-slate-400 uppercase tracking-wider">or</span>
-            <div className="flex-1 h-px bg-slate-200/80" />
+              {/* Submit */}
+              <button
+                id="provider-signin-btn"
+                type="submit"
+                disabled={loading}
+                className="w-full h-12 rounded-xl font-bold text-sm text-white flex items-center justify-center gap-2 transition-all duration-200 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed relative overflow-hidden group"
+                style={{
+                  background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
+                  boxShadow: '0 6px 24px rgba(99,102,241,0.4)',
+                }}
+              >
+                <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  style={{ background: 'linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.15) 50%, transparent 60%)' }} />
+                {loading ? (
+                  <><span className="material-symbols-outlined animate-spin" style={{ fontSize: '19px' }}>progress_activity</span> Signing in…</>
+                ) : (
+                  <><span className="material-symbols-outlined" style={{ fontSize: '19px', fontVariationSettings: "'FILL' 1" }}>corporate_fare</span> Sign In to Partner Portal</>
+                )}
+              </button>
+            </form>
           </div>
 
-          <p className="text-center text-slate-500 text-sm mb-2">
-            No partner account?{' '}
-            <Link href="/provider-signup" className="text-primary font-semibold hover:underline">Create account</Link>
-          </p>
-
-          <div className="mt-8 pt-6 border-t border-slate-100 text-center">
-            <Link href="/login" className="inline-flex items-center gap-2 text-slate-500 text-sm hover:text-primary transition-colors">
-              <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>arrow_back</span>
-              Back to Student Portal
+          {/* Bottom links */}
+          <div className="text-center space-y-2">
+            <p className="text-slate-500 text-sm">
+              No partner account?{' '}
+              <Link href="/provider-signup" className="font-bold hover:underline" style={{ color: '#6366f1' }}>Create account</Link>
+            </p>
+            <Link href="/" className="inline-flex items-center gap-1 text-slate-400 text-xs hover:text-indigo-600 transition-colors font-medium group">
+              <span className="material-symbols-outlined group-hover:-translate-x-0.5 transition-transform" style={{ fontSize: '14px' }}>arrow_back</span>
+              Back to Home
             </Link>
           </div>
         </div>
+      </div>
+
+      {/* ================================================================
+          RIGHT — FULL-COVER BRANDING PANEL (identical to signup)
+      ================================================================ */}
+      <div className="hidden lg:block w-[52%] relative overflow-hidden h-full lg:order-2">
+        <Image src="/provider_login_hero.png" alt="ScholarQuest Partner Platform" fill className="object-cover object-center" unoptimized priority />
+
+        {/* Gradient overlays */}
+        <div className="absolute inset-x-0 top-0 h-[45%] pointer-events-none z-10"
+          style={{ background: 'linear-gradient(to bottom, rgba(9,14,40,0.96) 0%, rgba(9,14,40,0.82) 40%, transparent 100%)' }} />
+        <div className="absolute inset-x-0 bottom-0 h-[32%] pointer-events-none z-10"
+          style={{ background: 'linear-gradient(to top, rgba(9,14,40,0.97) 0%, rgba(9,14,40,0.75) 55%, transparent 100%)' }} />
+        <div className="absolute inset-0 pointer-events-none z-10"
+          style={{ background: 'radial-gradient(ellipse at center, transparent 35%, rgba(9,14,40,0.4) 100%)' }} />
+        <div className="absolute top-[-10%] right-[-10%] w-[400px] h-[400px] rounded-full pointer-events-none z-10"
+          style={{ background: 'radial-gradient(circle, rgba(56,189,248,0.18) 0%, transparent 70%)', filter: 'blur(50px)' }} />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[380px] h-[380px] rounded-full pointer-events-none z-10"
+          style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.2) 0%, transparent 70%)', filter: 'blur(50px)' }} />
+
+        {/* Content layer */}
+        <div className="absolute inset-0 z-20 flex flex-col h-full p-10 pb-9 text-white">
+          {/* Brand header */}
+          <Link href="/" className="flex items-center gap-3 mb-5 group w-fit">
+            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300">
+              <img src="/logo_provider.png" alt="ScholarQuest Logo" className="w-8 h-8 rounded-lg object-cover" />
+            </div>
+            <div>
+              <p className="font-extrabold text-white text-[1.05rem] tracking-tight leading-none" style={{ fontFamily: 'Manrope, sans-serif' }}>ScholarQuest</p>
+              <p className="text-sky-400 text-[0.62rem] tracking-[0.18em] uppercase mt-1 font-bold">Partner Portal</p>
+            </div>
+          </Link>
+
+          {/* Hero headline */}
+          <h2 className="text-[2.4rem] font-extrabold text-white leading-[1.18] max-w-sm" style={{ fontFamily: 'Manrope, sans-serif' }}>
+            Invest in brilliance.<br />
+            <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(90deg, #38bdf8 0%, #34d399 100%)' }}>
+              Scale your impact.
+            </span>
+          </h2>
+
+          {/* Floating badge: Global Reach */}
+          <div className="absolute left-7 top-[42%] z-30" style={{ animation: 'providerFloat 4s ease-in-out infinite' }}>
+            <div className="flex items-center gap-2.5 px-3.5 py-3 rounded-2xl shadow-2xl"
+              style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.25)' }}>
+              <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0"
+                style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #4f46e5 100%)' }}>
+                <span className="material-symbols-outlined text-white" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>school</span>
+              </div>
+              <div>
+                <p className="text-white font-bold text-[0.75rem] leading-none">Global Reach</p>
+                <p className="text-sky-300 text-[0.58rem] uppercase font-bold tracking-wider mt-0.5">Top Institutions</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Floating badge: $50M+ */}
+          <div className="absolute right-7 top-[36%] z-30" style={{ animation: 'providerFloat 5s ease-in-out infinite', animationDelay: '0.8s' }}>
+            <div className="px-4 py-3 rounded-2xl shadow-2xl"
+              style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+              <p className="text-emerald-400 font-extrabold text-xl leading-none" style={{ fontFamily: 'Manrope, sans-serif' }}>$50M+</p>
+              <p className="text-slate-300 text-[0.58rem] uppercase font-bold tracking-wider mt-1">Funds Distributed</p>
+            </div>
+          </div>
+
+          {/* Testimonial card */}
+          <div className="absolute right-5 bottom-[22%] z-30" style={{ animation: 'providerFloat 6s ease-in-out infinite', animationDelay: '1.5s' }}>
+            <div className="p-4 rounded-2xl shadow-2xl max-w-[200px]"
+              style={{ background: 'rgba(9,14,40,0.82)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.12)' }}>
+              <div className="flex gap-0.5 mb-2">
+                {[1,2,3,4,5].map(i => <span key={i} className="material-symbols-outlined text-amber-400" style={{ fontSize: '11px', fontVariationSettings: "'FILL' 1" }}>star</span>)}
+              </div>
+              <p className="text-slate-300 text-[0.7rem] italic leading-snug mb-3">"ScholarQuest allowed us to effortlessly deploy our CSR funds to the most deserving candidates globally."</p>
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-[9px] font-bold text-white flex-shrink-0">MK</div>
+                <p className="text-white font-bold text-[0.65rem]">Maria K., <span className="font-normal text-slate-400">Global Tech</span></p>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex-1" />
+
+          {/* Feature pills */}
+          <div className="grid grid-cols-3 gap-3">
+            {[
+              { label: 'Custom\nScholarships', icon: 'add_circle', gradient: 'linear-gradient(135deg,#3b82f6,#4f46e5)' },
+              { label: 'Review\nApplications', icon: 'description', gradient: 'linear-gradient(135deg,#8b5cf6,#7c3aed)' },
+              { label: 'Impact\nReports', icon: 'analytics', gradient: 'linear-gradient(135deg,#10b981,#0d9488)' },
+            ].map((item, idx) => (
+              <div key={idx} className="flex flex-col items-center justify-center gap-2.5 py-4 rounded-2xl text-center transition-all duration-200 hover:scale-[1.04] cursor-default"
+                style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}>
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-md" style={{ background: item.gradient }}>
+                  <span className="material-symbols-outlined text-white" style={{ fontSize: '20px', fontVariationSettings: "'FILL' 1" }}>{item.icon}</span>
+                </div>
+                <span className="text-slate-200 text-[0.62rem] font-bold uppercase tracking-wider leading-tight whitespace-pre-line">{item.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <style>{`
+          @keyframes providerFloat {
+            0%, 100% { transform: translateY(0px); }
+            50%       { transform: translateY(-10px); }
+          }
+        `}</style>
       </div>
     </div>
   );

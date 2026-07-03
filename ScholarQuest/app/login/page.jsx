@@ -13,142 +13,272 @@ export default function LoginPage() {
   } = useLogin();
 
   return (
-    <div className="h-screen overflow-hidden flex bg-white">
-      {/* ===== LEFT: FORM PANEL ===== */}
-      <div className="flex-1 flex flex-col justify-center items-center px-8 bg-white h-full overflow-hidden order-1 lg:order-2">
-        <div className="w-full max-w-[440px] py-4">
-          <Link href="/" className="flex items-center gap-2.5 mb-10">
-            <img src="/Logo.png.png" alt="Logo" className="w-9 h-9 rounded-full object-cover" />
-            <span className="font-extrabold text-2xl tracking-tight bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent" style={{ fontFamily: 'Manrope, sans-serif' }}>ScholarQuest</span>
+    <div className="h-screen overflow-hidden flex">
+
+      {/* ================================================================
+          LEFT — CENTERED FORM PANEL
+      ================================================================ */}
+      <div
+        className="flex-1 h-full flex flex-col items-center justify-center relative px-10 overflow-hidden"
+        style={{ background: 'linear-gradient(160deg, #fdf4ff 0%, #eff6ff 55%, #f0fdf4 100%)' }}
+      >
+        {/* Decorative blobs */}
+        <div className="absolute top-[-80px] left-[-80px] w-96 h-96 rounded-full pointer-events-none"
+          style={{ background: 'radial-gradient(circle, rgba(168,85,247,0.12) 0%, transparent 70%)' }} />
+        <div className="absolute bottom-[-60px] right-[-60px] w-80 h-80 rounded-full pointer-events-none"
+          style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.1) 0%, transparent 70%)' }} />
+        <div className="absolute top-1/2 left-[-100px] w-64 h-64 rounded-full pointer-events-none"
+          style={{ background: 'radial-gradient(circle, rgba(168,85,247,0.06) 0%, transparent 70%)' }} />
+
+        {/* Centered content column */}
+        <div className="relative z-10 w-full max-w-[420px] flex flex-col" style={{ gap: 'clamp(16px, 2.5vh, 28px)' }}>
+
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl shadow-md overflow-hidden flex-shrink-0"
+              style={{ background: 'linear-gradient(135deg, #9333ea, #3b82f6)' }}>
+              <img src="/Logo.png.png" alt="Logo" className="w-full h-full object-cover" />
+            </div>
+            <span className="font-extrabold text-xl tracking-tight bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent" style={{ fontFamily: 'Manrope, sans-serif' }}>ScholarQuest</span>
           </Link>
 
-          <div className="mb-8">
-            <h1 className="text-3xl font-extrabold text-gray-900 mb-2" style={{ fontFamily: 'Manrope, sans-serif' }}>Sign in</h1>
-            <p className="text-gray-500 text-base">New to ScholarQuest?{' '}
-              <Link href="/signup" className="text-primary font-semibold hover:underline">Create an account</Link>
+          {/* Header */}
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[0.66rem] font-bold tracking-widest uppercase mb-3"
+              style={{ background: 'linear-gradient(135deg, rgba(168,85,247,0.13) 0%, rgba(59,130,246,0.13) 100%)', color: '#9333ea', border: '1px solid rgba(168,85,247,0.25)' }}>
+              <span className="material-symbols-outlined" style={{ fontSize: '13px', fontVariationSettings: "'FILL' 1" }}>school</span>
+              Student Portal
+            </div>
+            <h1 className="font-extrabold leading-tight mb-2" style={{ fontFamily: 'Manrope, sans-serif', color: '#0f172a', fontSize: 'clamp(1.6rem, 2.5vw, 2rem)' }}>
+              Welcome back,{' '}
+              <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(135deg, #9333ea 0%, #3b82f6 100%)' }}>Scholar</span>
+            </h1>
+            <p className="text-slate-500 text-sm leading-relaxed">
+              Sign in to discover and track your scholarship opportunities.
             </p>
           </div>
 
+          {/* Error */}
           {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-10 text-red-600 text-sm flex items-center gap-2">
-              <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>error</span>
+            <div className="p-3 rounded-xl text-red-700 text-xs flex items-start gap-2"
+              style={{ background: '#fff1f2', border: '1px solid #fecdd3' }}>
+              <span className="material-symbols-outlined shrink-0" style={{ fontSize: '16px' }}>error</span>
               {error}
             </div>
           )}
 
-          <form className="space-y-5" onSubmit={handleSubmit}>
-            <div className="space-y-2">
-              <label htmlFor="login_email" className="block text-sm font-bold text-gray-700">Email address</label>
-              <input
-                id="login_email"
-                name="login_email"
-                type="email"
-                placeholder="alex@university.edu"
-                autoComplete="email"
-                className="w-full h-12 px-4 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 bg-gray-50 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all shadow-sm hover:border-gray-300"
-                required
-              />
-            </div>
+          {/* FORM CARD */}
+          <div
+            className="rounded-2xl"
+            style={{
+              background: 'rgba(255,255,255,0.94)',
+              backdropFilter: 'blur(20px)',
+              border: '1.5px solid rgba(168,85,247,0.15)',
+              boxShadow: '0 12px 48px rgba(147,51,234,0.1), 0 4px 12px rgba(0,0,0,0.04)',
+              padding: 'clamp(20px, 3vh, 32px)',
+            }}
+          >
+            <form id="student-login-form" onSubmit={handleSubmit} className="flex flex-col" style={{ gap: 'clamp(14px, 2vh, 22px)' }}>
 
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <label htmlFor="login_password" className="block text-sm font-bold text-gray-700">Password</label>
-                <Link href="#" className="text-sm text-primary font-bold hover:underline">Forgot?</Link>
+              {/* Email */}
+              <div>
+                <label htmlFor="login_email" className="block text-[0.7rem] font-bold text-slate-400 mb-1.5 uppercase tracking-widest">Email Address</label>
+                <div className="relative">
+                  <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none" style={{ fontSize: '17px' }}>mail</span>
+                  <input
+                    id="login_email"
+                    name="login_email"
+                    type="email"
+                    placeholder="alex@university.edu"
+                    autoComplete="email"
+                    required
+                    className="w-full h-11 pl-10 pr-4 rounded-xl text-sm text-slate-800 placeholder:text-slate-300 outline-none transition-all font-medium"
+                    style={{ background: '#faf8ff', border: '1.5px solid #e9d5ff' }}
+                    onFocus={e => { e.currentTarget.style.border = '1.5px solid #9333ea'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(168,85,247,0.12)'; e.currentTarget.style.background = '#fff'; }}
+                    onBlur={e => { e.currentTarget.style.border = '1.5px solid #e9d5ff'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.background = '#faf8ff'; }}
+                  />
+                </div>
               </div>
-              <div className="relative">
-                <input
-                  id="login_password"
-                  name="login_password"
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="Enter your password"
-                  autoComplete="current-password"
-                  className="w-full h-12 px-4 pr-12 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 bg-gray-50 focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all shadow-sm hover:border-gray-300"
-                  required
-                />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 transition-colors">
-                  <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>{showPassword ? 'visibility_off' : 'visibility'}</span>
-                </button>
+
+              {/* Password */}
+              <div>
+                <div className="flex justify-between items-center mb-1.5">
+                  <label htmlFor="login_password" className="block text-[0.7rem] font-bold text-slate-400 uppercase tracking-widest">Password</label>
+                  <Link href="#" className="text-[0.72rem] font-semibold hover:underline transition-colors" style={{ color: '#9333ea' }}>Forgot password?</Link>
+                </div>
+                <div className="relative">
+                  <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none" style={{ fontSize: '17px' }}>lock</span>
+                  <input
+                    id="login_password"
+                    name="login_password"
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="Enter your password"
+                    autoComplete="current-password"
+                    required
+                    className="w-full h-11 pl-10 pr-11 rounded-xl text-sm text-slate-800 placeholder:text-slate-300 outline-none transition-all font-medium"
+                    style={{ background: '#faf8ff', border: '1.5px solid #e9d5ff' }}
+                    onFocus={e => { e.currentTarget.style.border = '1.5px solid #9333ea'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(168,85,247,0.12)'; e.currentTarget.style.background = '#fff'; }}
+                    onBlur={e => { e.currentTarget.style.border = '1.5px solid #e9d5ff'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.background = '#faf8ff'; }}
+                  />
+                  <button type="button" onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-300 hover:text-purple-600 transition-colors"
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}>
+                    <span className="material-symbols-outlined" style={{ fontSize: '19px' }}>
+                      {showPassword ? 'visibility_off' : 'visibility'}
+                    </span>
+                  </button>
+                </div>
               </div>
-            </div>
 
-            <div className="flex items-center gap-2.5 pt-1">
-              <input type="checkbox" id="remember_me" className="w-4 h-4 rounded border-gray-300 text-primary accent-primary cursor-pointer shadow-sm" />
-              <label htmlFor="remember_me" className="text-sm text-gray-600 cursor-pointer font-medium">Remember me for 30 days</label>
-            </div>
+              {/* Remember me */}
+              <div className="flex items-center gap-2">
+                <input type="checkbox" id="remember_me" className="w-4 h-4 rounded cursor-pointer" style={{ accentColor: '#9333ea' }} />
+                <label htmlFor="remember_me" className="text-[0.8rem] text-slate-500 cursor-pointer select-none">Remember me for 30 days</label>
+              </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex items-center justify-center gap-2 w-full h-12 bg-primary text-white rounded-xl text-sm font-bold hover:bg-primary/90 active:scale-[0.98] transition-all shadow-md shadow-primary/25 disabled:opacity-60 mt-2"
-            >
-              {loading ? (
-                <span className="material-symbols-outlined animate-spin" style={{ fontSize: '20px' }}>progress_activity</span>
-              ) : (
-                <>Sign In to ScholarQuest <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>arrow_forward</span></>
-              )}
-            </button>
-          </form>
+              {/* Submit */}
+              <button
+                id="student-signin-btn"
+                type="submit"
+                disabled={loading}
+                className="w-full h-12 rounded-xl font-bold text-sm text-white flex items-center justify-center gap-2 transition-all duration-200 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed relative overflow-hidden group"
+                style={{
+                  background: 'linear-gradient(135deg, #9333ea 0%, #3b82f6 100%)',
+                  boxShadow: '0 6px 24px rgba(147,51,234,0.38)',
+                }}
+              >
+                <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  style={{ background: 'linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.15) 50%, transparent 60%)' }} />
+                {loading ? (
+                  <><span className="material-symbols-outlined animate-spin" style={{ fontSize: '19px' }}>progress_activity</span> Signing in…</>
+                ) : (
+                  <>Sign In to ScholarQuest <span className="material-symbols-outlined" style={{ fontSize: '19px' }}>arrow_forward</span></>
+                )}
+              </button>
+            </form>
+          </div>
 
-          <div className="mt-8 pt-6 border-t border-gray-100 text-center">
-            <Link href="/provider-login" className="inline-flex items-center justify-center gap-2 text-gray-600 text-sm hover:text-primary hover:bg-primary/5 px-4 py-2.5 rounded-xl transition-all font-semibold w-full">
-              <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>corporate_fare</span>
-              Company or Institute? Access Partner Portal
+          {/* Bottom links */}
+          <div className="text-center" style={{ paddingTop: 'clamp(4px, 1vh, 12px)' }}>
+            <p className="text-slate-500 text-sm mb-1.5">
+              New to ScholarQuest?{' '}
+              <Link href="/signup" className="font-bold hover:underline" style={{ color: '#9333ea' }}>Create free account</Link>
+            </p>
+            <Link href="/provider-login" className="inline-flex items-center gap-1.5 text-slate-400 text-xs hover:text-purple-600 transition-colors font-medium">
+              <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>corporate_fare</span>
+              Company or Institute? Partner Portal
             </Link>
           </div>
         </div>
       </div>
 
-      {/* ===== RIGHT: ILLUSTRATION PANEL ===== */}
-      <div className="hidden lg:flex w-[48%] relative flex-col overflow-hidden h-full bg-gradient-to-br from-[#faf5ff] via-[#fdf2f8] to-[#fffbeb] border-r border-purple-100/50 order-last lg:order-1">
-        {/* Colorful floating orbs to match illustrations */}
-        <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full opacity-40 filter blur-[80px]" style={{ background: 'radial-gradient(circle, rgba(216,180,254,0.5) 0%, rgba(216,180,254,0) 70%)' }} />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] rounded-full opacity-40 filter blur-[80px]" style={{ background: 'radial-gradient(circle, rgba(249,168,212,0.5) 0%, rgba(249,168,212,0) 70%)' }} />
-        <div className="absolute top-[40%] left-[20%] w-[300px] h-[300px] rounded-full opacity-30 filter blur-[60px]" style={{ background: 'radial-gradient(circle, rgba(253,186,116,0.3) 0%, rgba(253,186,116,0) 70%)' }} />
+      {/* ================================================================
+          RIGHT — FULL-COVER BRANDING PANEL
+      ================================================================ */}
+      <div className="hidden lg:block w-[52%] relative overflow-hidden h-full">
+        <Image src="/student_login_hero.png" alt="Students celebrating scholarships" fill className="object-cover object-center" unoptimized priority />
 
-        <div className="relative z-10 flex flex-col justify-between p-10 h-full">
-          <div className="bg-white/70 backdrop-blur-md rounded-2xl p-5 border border-white/80 shadow-sm">
-            <div className="flex gap-1 mb-2">
-              {[1, 2, 3, 4, 5].map(i => (
-                <span key={i} className="material-symbols-outlined text-amber-400" style={{ fontSize: '14px', fontVariationSettings: "'FILL' 1" }}>star</span>
-              ))}
+        {/* Gradient overlays */}
+        <div className="absolute inset-x-0 top-0 h-[45%] pointer-events-none z-10"
+          style={{ background: 'linear-gradient(to bottom, rgba(9,5,30,0.95) 0%, rgba(9,5,30,0.78) 40%, transparent 100%)' }} />
+        <div className="absolute inset-x-0 bottom-0 h-[35%] pointer-events-none z-10"
+          style={{ background: 'linear-gradient(to top, rgba(9,5,30,0.97) 0%, rgba(9,5,30,0.7) 55%, transparent 100%)' }} />
+        <div className="absolute inset-0 pointer-events-none z-10"
+          style={{ background: 'radial-gradient(ellipse at center, transparent 30%, rgba(9,5,30,0.35) 100%)' }} />
+        {/* Purple glow top-right */}
+        <div className="absolute top-[-10%] right-[-10%] w-[420px] h-[420px] rounded-full pointer-events-none z-10"
+          style={{ background: 'radial-gradient(circle, rgba(168,85,247,0.22) 0%, transparent 70%)', filter: 'blur(50px)' }} />
+        {/* Blue glow bottom-left */}
+        <div className="absolute bottom-[-10%] left-[-10%] w-[380px] h-[380px] rounded-full pointer-events-none z-10"
+          style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.2) 0%, transparent 70%)', filter: 'blur(50px)' }} />
+
+        {/* Content layer */}
+        <div className="absolute inset-0 z-20 flex flex-col h-full p-10 pb-9 text-white">
+          {/* Brand header */}
+          <Link href="/" className="flex items-center gap-3 mb-5 group w-fit">
+            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300">
+              <img src="/Logo.png.png" alt="ScholarQuest Logo" className="w-8 h-8 rounded-lg object-cover" />
             </div>
-            <p className="text-gray-700 text-base font-semibold leading-relaxed mb-4" style={{ fontFamily: 'Manrope, sans-serif' }}>
-              &ldquo;ScholarQuest has completely changed my life. I log in every day to find new opportunities, and the matches are spot on.&rdquo;
-            </p>
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center font-bold text-primary text-xs">AJ</div>
+            <div>
+              <p className="font-extrabold text-white text-[1.05rem] tracking-tight leading-none" style={{ fontFamily: 'Manrope, sans-serif' }}>ScholarQuest</p>
+              <p className="text-purple-300 text-[0.62rem] tracking-[0.18em] uppercase mt-1 font-bold">Student Platform</p>
+            </div>
+          </Link>
+
+          {/* Hero headline */}
+          <h2 className="text-[2.4rem] font-extrabold text-white leading-[1.18] max-w-sm" style={{ fontFamily: 'Manrope, sans-serif' }}>
+            Your dream.<br />
+            <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(90deg, #c084fc 0%, #60a5fa 100%)' }}>
+              Fully funded.
+            </span>
+          </h2>
+
+          {/* Floating badge: Match Score */}
+          <div className="absolute left-7 top-[40%] z-30" style={{ animation: 'studentFloat 4s ease-in-out infinite' }}>
+            <div className="flex items-center gap-2.5 px-3.5 py-3 rounded-2xl shadow-2xl"
+              style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.25)' }}>
+              <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0"
+                style={{ background: 'linear-gradient(135deg, #9333ea 0%, #3b82f6 100%)' }}>
+                <span className="material-symbols-outlined text-white" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>psychology</span>
+              </div>
               <div>
-                <p className="text-gray-900 font-semibold text-xs">Alex Johnson</p>
-                <p className="text-gray-500 text-[10px]">Computer Science, Stanford</p>
+                <p className="text-white font-bold text-[0.75rem] leading-none">98% Match</p>
+                <p className="text-purple-300 text-[0.58rem] uppercase font-bold tracking-wider mt-0.5">AI Powered</p>
               </div>
             </div>
           </div>
 
-          <div className="relative w-full max-w-[380px] mx-auto my-4 rounded-3xl overflow-hidden border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.06)] bg-white/40 backdrop-blur-md flex items-center justify-center">
-            <Image
-              src="/student_login_hero_new_2.png"
-              alt="Student Success Illustration"
-              width={1000}
-              height={1000}
-              className="w-full h-auto drop-shadow-md"
-              unoptimized
-              priority
-            />
+          {/* Floating badge: Scholarships */}
+          <div className="absolute right-7 top-[35%] z-30" style={{ animation: 'studentFloat 5s ease-in-out infinite', animationDelay: '0.8s' }}>
+            <div className="px-4 py-3 rounded-2xl shadow-2xl"
+              style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+              <p className="text-emerald-400 font-extrabold text-xl leading-none" style={{ fontFamily: 'Manrope, sans-serif' }}>50K+</p>
+              <p className="text-slate-300 text-[0.58rem] uppercase font-bold tracking-wider mt-1">Scholarships</p>
+            </div>
           </div>
 
+          {/* Testimonial card */}
+          <div className="absolute right-5 bottom-[22%] z-30" style={{ animation: 'studentFloat 6s ease-in-out infinite', animationDelay: '1.5s' }}>
+            <div className="p-4 rounded-2xl shadow-2xl max-w-[210px]"
+              style={{ background: 'rgba(9,5,30,0.82)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.12)' }}>
+              <div className="flex gap-0.5 mb-2">
+                {[1,2,3,4,5].map(i => <span key={i} className="material-symbols-outlined text-amber-400" style={{ fontSize: '11px', fontVariationSettings: "'FILL' 1" }}>star</span>)}
+              </div>
+              <p className="text-slate-300 text-[0.7rem] italic leading-snug mb-3">"ScholarQuest matched me with 34 scholarships in 2 weeks. I won 3 of them!"</p>
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold text-white flex-shrink-0"
+                  style={{ background: 'linear-gradient(135deg, #9333ea, #3b82f6)' }}>PR</div>
+                <p className="text-white font-bold text-[0.65rem]">Priya R., <span className="font-normal text-slate-400">UC Berkeley</span></p>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex-1" />
+
+          {/* Feature pills */}
           <div className="grid grid-cols-3 gap-3">
             {[
-              { value: '98%', label: 'Match Accuracy' },
-              { value: '24/7', label: 'Smart Reminders' },
-              { value: '1-Click', label: 'Applications' },
-            ].map((s) => (
-              <div key={s.label} className="text-center bg-white/70 backdrop-blur-md rounded-xl py-2.5 border border-white/80 shadow-sm hover:bg-white/90 transition-colors">
-                <p className="text-xl font-extrabold text-primary" style={{ fontFamily: 'Manrope, sans-serif' }}>{s.value}</p>
-                <p className="text-gray-500 text-[9px] mt-0.5 font-medium uppercase tracking-wider">{s.label}</p>
+              { label: 'AI\nMatching', icon: 'psychology', gradient: 'linear-gradient(135deg,#9333ea,#7c3aed)' },
+              { label: 'Track\nDeadlines', icon: 'event_available', gradient: 'linear-gradient(135deg,#3b82f6,#0ea5e9)' },
+              { label: '1-Click\nApply', icon: 'send', gradient: 'linear-gradient(135deg,#10b981,#059669)' },
+            ].map((item, idx) => (
+              <div key={idx} className="flex flex-col items-center justify-center gap-2.5 py-4 rounded-2xl text-center transition-all duration-200 hover:scale-[1.04] cursor-default"
+                style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}>
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-md" style={{ background: item.gradient }}>
+                  <span className="material-symbols-outlined text-white" style={{ fontSize: '20px', fontVariationSettings: "'FILL' 1" }}>{item.icon}</span>
+                </div>
+                <span className="text-slate-200 text-[0.62rem] font-bold uppercase tracking-wider leading-tight whitespace-pre-line">{item.label}</span>
               </div>
             ))}
           </div>
         </div>
+
+        <style>{`
+          @keyframes studentFloat {
+            0%, 100% { transform: translateY(0px); }
+            50%       { transform: translateY(-10px); }
+          }
+        `}</style>
       </div>
     </div>
   );
