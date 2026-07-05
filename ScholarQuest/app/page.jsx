@@ -135,11 +135,11 @@ export default function LandingPage() {
 
               <div className="relative w-full aspect-square max-w-[520px] rounded-3xl overflow-hidden border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.06)] bg-white/40 backdrop-blur-md flex items-center justify-center p-4">
                 <Image
-                  src="/hero_students_new.png"
+                  src="/hero_students_new_realistic.png"
                   alt="Students finding scholarships with ScholarQuest"
                   fill
                   sizes="(max-width: 1024px) 100vw, 52vw"
-                  className="object-contain p-6 drop-shadow-md"
+                  className="object-cover rounded-2xl"
                   priority
                   unoptimized
                 />
@@ -240,7 +240,7 @@ export default function LandingPage() {
             </div>
             <div className="relative h-72 lg:h-full min-h-[360px] flex items-center justify-center p-8 bg-gradient-to-br from-[#faf5ff] via-[#fdf2f8] to-[#fffbeb]">
               <div className="absolute top-[-10%] right-[-10%] w-[300px] h-[300px] rounded-full opacity-40 filter blur-[60px]" style={{ background: 'radial-gradient(circle, rgba(216,180,254,0.5) 0%, rgba(216,180,254,0) 70%)' }} />
-              <Image src="/ai_matcher_new.png" alt="AI Scholarship Matching" fill sizes="(max-width: 1024px) 100vw, 48vw" className="object-contain z-10 p-12 drop-shadow-md" unoptimized />
+              <Image src="/ai_matcher_new_realistic.png" alt="AI Scholarship Matching" fill sizes="(max-width: 1024px) 100vw, 48vw" className="object-cover rounded-3xl p-4 z-10" unoptimized />
             </div>
           </div>
         </div>
@@ -285,7 +285,7 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="relative rounded-3xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.06)] aspect-square bg-white/40 backdrop-blur-md border border-white/60 flex items-center justify-center p-8">
               <div className="absolute inset-0 bg-gradient-to-br from-[#faf5ff] via-[#fdf2f8] to-[#fffbeb] -z-10" />
-              <Image src="/scholarship_discovery_new.png" alt="Scholarship discovery" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-contain drop-shadow-md p-10 z-10" unoptimized />
+              <Image src="/scholarship_discovery_new_realistic.png" alt="Scholarship discovery" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover rounded-3xl p-4 z-10" unoptimized />
             </div>
             <div className="flex flex-col gap-6">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/8 rounded-full w-fit">

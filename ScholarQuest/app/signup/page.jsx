@@ -259,7 +259,7 @@ export default function SignupPage() {
           RIGHT — FULL-COVER BRANDING PANEL
       ================================================================ */}
       <div className="hidden lg:block w-[52%] relative overflow-hidden h-full">
-        <Image src="/student_signup_hero.png" alt="Students studying together" fill className="object-cover object-center" unoptimized priority />
+        <Image src="/student_signup_realistic.png" alt="Students studying together" fill className="object-cover object-center" unoptimized priority />
 
         {/* Gradient overlays */}
         <div className="absolute inset-x-0 top-0 h-[45%] pointer-events-none z-10"

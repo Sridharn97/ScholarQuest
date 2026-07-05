@@ -173,7 +173,7 @@ export default function ProviderLoginPage() {
           RIGHT — FULL-COVER BRANDING PANEL (identical to signup)
       ================================================================ */}
       <div className="hidden lg:block w-[52%] relative overflow-hidden h-full lg:order-2">
-        <Image src="/provider_login_hero.png" alt="ScholarQuest Partner Platform" fill className="object-cover object-center" unoptimized priority />
+        <Image src="/provider_login_hero_realistic.png" alt="ScholarQuest Partner Platform" fill className="object-cover object-center" unoptimized priority />
 
         {/* Gradient overlays */}
         <div className="absolute inset-x-0 top-0 h-[45%] pointer-events-none z-10"
