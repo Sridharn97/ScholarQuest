@@ -45,7 +45,7 @@ export default function useLogin() {
       // Note: onAuthStateChanged will handle the redirect
     } catch (err) {
       console.error(err);
-      setError('Invalid email or password. Please try again.');
+      setError("Incorrect email or password. If you originally registered using Google, please click 'Continue with Google' below.");
       setLoading(false);
     }
   };

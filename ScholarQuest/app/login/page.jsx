@@ -1,8 +1,11 @@
 'use client';
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import useLogin from '@/lib/hooks/useLogin';
 import useGoogleLogin from '@/lib/hooks/useGoogleLogin';
+import { sendPasswordResetEmail } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
 
 export default function LoginPage() {
   const {
@@ -18,6 +21,32 @@ export default function LoginPage() {
     googleLoading,
     googleError,
   } = useGoogleLogin();
+
+  const [showForgotModal, setShowForgotModal] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState('');
+  const [forgotLoading, setForgotLoading] = useState(false);
+  const [forgotMessage, setForgotMessage] = useState('');
+  const [forgotError, setForgotError] = useState('');
+
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    setForgotLoading(true);
+    setForgotMessage('');
+    setForgotError('');
+    try {
+      await sendPasswordResetEmail(auth, forgotEmail.trim());
+      setForgotMessage('Password reset link sent to your email address! Open the email to set/reset your password.');
+    } catch (err) {
+      console.error(err);
+      if (err.code === 'auth/user-not-found') {
+        setForgotError('No account found with this email address.');
+      } else {
+        setForgotError(err.message || 'Failed to send password reset email.');
+      }
+    } finally {
+      setForgotLoading(false);
+    }
+  };
 
   return (
     <div className="h-screen overflow-hidden flex w-full">
@@ -167,10 +196,35 @@ export default function LoginPage() {
 
           {/* Error */}
           {(error || googleError) && (
-            <div className="p-3 rounded-xl text-red-700 text-xs flex items-start gap-2"
+            <div className="p-3 rounded-xl text-red-700 text-xs flex flex-col gap-1.5"
               style={{ background: '#fff1f2', border: '1px solid #fecdd3' }}>
-              <span className="material-symbols-outlined shrink-0" style={{ fontSize: '16px' }}>error</span>
-              {error || googleError}
+              <div className="flex items-start gap-2">
+                <span className="material-symbols-outlined shrink-0" style={{ fontSize: '16px' }}>error</span>
+                <span>{error || googleError}</span>
+              </div>
+              {error && error.includes("originally registered using Google") && (
+                <button
+                  type="button"
+                  onClick={async () => {
+                    const emailInput = document.getElementById('login_email');
+                    const email = emailInput ? emailInput.value.trim() : '';
+                    if (!email) {
+                      alert('Please enter your email address in the Email field first.');
+                      return;
+                    }
+                    try {
+                      await sendPasswordResetEmail(auth, email);
+                      alert('Password reset link sent to ' + email + '! Open the email to set/reset your password.');
+                    } catch (err) {
+                      console.error(err);
+                      alert(err.message || 'Failed to send password reset email.');
+                    }
+                  }}
+                  className="text-left font-bold underline text-purple-700 hover:text-purple-900 ml-6 cursor-pointer"
+                >
+                  Send Password Reset Email now
+                </button>
+              )}
             </div>
           )}
 
@@ -211,7 +265,7 @@ export default function LoginPage() {
               <div>
                 <div className="flex justify-between items-center mb-1.5">
                   <label htmlFor="login_password" className="block text-[0.7rem] font-bold text-slate-400 uppercase tracking-widest">Password</label>
-                  <Link href="#" className="text-[0.72rem] font-semibold hover:underline transition-colors" style={{ color: '#9333ea' }}>Forgot password?</Link>
+                  <button type="button" onClick={() => setShowForgotModal(true)} className="text-[0.72rem] font-semibold hover:underline transition-colors" style={{ color: '#9333ea' }}>Forgot password?</button>
                 </div>
                 <div className="relative">
                   <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none" style={{ fontSize: '17px' }}>lock</span>
@@ -305,6 +359,57 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
+
+      {/* Forgot Password Modal */}
+      {showForgotModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+          <div className="w-full max-w-md bg-white rounded-3xl p-6 shadow-2xl border border-purple-100 flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex justify-between items-center">
+              <h3 className="font-extrabold text-lg text-slate-800" style={{ fontFamily: 'Manrope, sans-serif' }}>Reset Password</h3>
+              <button type="button" onClick={() => { setShowForgotModal(false); setForgotMessage(''); setForgotError(''); }} className="text-slate-400 hover:text-slate-600 flex items-center justify-center">
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            <p className="text-slate-500 text-xs leading-relaxed">
+              Enter your email address below, and we will send you a link to reset/set a password for your account.
+            </p>
+            {forgotMessage && (
+              <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs flex gap-2">
+                <span className="material-symbols-outlined shrink-0" style={{ fontSize: '16px' }}>check_circle</span>
+                {forgotMessage}
+              </div>
+            )}
+            {forgotError && (
+              <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex gap-2">
+                <span className="material-symbols-outlined shrink-0" style={{ fontSize: '16px' }}>error</span>
+                {forgotError}
+              </div>
+            )}
+            <form onSubmit={handleForgotPassword} className="flex flex-col gap-4">
+              <div>
+                <label className="block text-[0.7rem] font-bold text-slate-400 mb-1.5 uppercase tracking-widest">Email Address</label>
+                <input
+                  type="email"
+                  required
+                  value={forgotEmail}
+                  onChange={(e) => setForgotEmail(e.target.value)}
+                  placeholder="alex@university.edu"
+                  className="w-full h-11 px-4 rounded-xl text-sm text-slate-800 placeholder:text-slate-300 outline-none transition-all font-medium border border-purple-100 bg-purple-50/30"
+                  onFocus={e => { e.currentTarget.style.border = '1.5px solid #9333ea'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(168,85,247,0.12)'; e.currentTarget.style.background = '#fff'; }}
+                  onBlur={e => { e.currentTarget.style.border = '1.5px solid #e9d5ff'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.background = '#faf8ff'; }}
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={forgotLoading}
+                className="w-full h-11 rounded-xl font-bold text-sm text-white flex items-center justify-center gap-2 transition-all duration-200 active:scale-[0.98] disabled:opacity-60 bg-gradient-to-r from-purple-600 to-blue-500 shadow-lg shadow-purple-500/25"
+              >
+                {forgotLoading ? 'Sending...' : 'Send Reset Link'}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
