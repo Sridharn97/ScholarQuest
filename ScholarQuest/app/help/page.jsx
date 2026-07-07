@@ -168,9 +168,9 @@ export default function HelpCenterPage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative overflow-hidden pt-40 pb-48 lg:pt-48 lg:pb-56 bg-gradient-to-b from-primary to-secondary">
-          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 mix-blend-overlay" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white/10 rounded-full blur-[100px] pointer-events-none" />
+        <section className="relative overflow-hidden pt-40 pb-48 lg:pt-48 lg:pb-56 bg-slate-900">
+          <div className="absolute inset-0 bg-[url('/help_center_hero.png')] bg-cover bg-center opacity-70" />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-900/90 via-slate-900/40 to-slate-900" />
           
           <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tight mb-6 drop-shadow-md">
