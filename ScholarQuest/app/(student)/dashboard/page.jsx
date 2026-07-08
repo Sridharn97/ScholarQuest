@@ -9,25 +9,20 @@ import { collection, query, where, onSnapshot } from 'firebase/firestore';
 
 export default function DashboardPage() {
   const [stats, setStats] = useState({ matched: 0, applied: 0, accepted: 0, deadlines: 0 });
+  const [trackerItems, setTrackerItems] = useState([]);
+  const [scholarships, setScholarships] = useState([]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         const q = query(collection(db, 'tracker'), where('userId', '==', user.uid));
         const unsubTracker = onSnapshot(q, (snap) => {
-          let applied = 0;
-          let accepted = 0;
-          snap.docs.forEach(doc => {
-            const data = doc.data();
-            if (data.columnId === 'col_applied') applied++;
-            else if (data.columnId === 'col_accepted') accepted++;
-          });
-          setStats(prev => ({ ...prev, applied, accepted }));
+          setTrackerItems(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
         });
         
         const qSchol = query(collection(db, 'scholarships'), where('status', '==', 'Active'));
         const unsubSchol = onSnapshot(qSchol, (snap) => {
-          setStats(prev => ({ ...prev, matched: snap.docs.length }));
+          setScholarships(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
         });
         
         return () => {
@@ -39,13 +34,60 @@ export default function DashboardPage() {
     return () => unsubscribe();
   }, []);
 
+  let appliedCount = 0;
+  let acceptedCount = 0;
+  let reviewCount = 0;
+  let rejectedCount = 0;
+  const categoryCounts = {};
+
+  trackerItems.forEach(t => {
+    if (t.columnId === 'col_applied') appliedCount++;
+    else if (t.columnId === 'col_accepted') acceptedCount++;
+    else if (t.columnId === 'col_review') reviewCount++;
+    else if (t.columnId === 'col_rejected') rejectedCount++;
+
+    if (t.columnId !== 'col_interested') {
+      const schol = scholarships.find(s => s.id === t.scholarshipId || s.name === t.scholarshipName);
+      if (schol && schol.category) {
+        categoryCounts[schol.category] = (categoryCounts[schol.category] || 0) + 1;
+      }
+    }
+  });
+
+  const upcomingDeadlines = trackerItems
+    .filter(t => ['col_interested', 'col_applied', 'col_review'].includes(t.columnId))
+    .map(t => {
+      const schol = scholarships.find(s => s.id === t.scholarshipId || s.name === t.scholarshipName);
+      return schol ? { ...schol, trackerId: t.id } : null;
+    })
+    .filter(s => s && s.deadline && new Date(s.deadline) > new Date())
+    .sort((a, b) => new Date(a.deadline) - new Date(b.deadline))
+    .slice(0, 3);
+
+  const smartMatches = scholarships
+    .filter(s => !trackerItems.some(t => t.scholarshipId === s.id || t.scholarshipName === s.name))
+    .slice(0, 2);
+
+  const topCategories = Object.entries(categoryCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 4)
+    .map((entry, index) => {
+      const colors = ['bg-primary', 'bg-secondary', 'bg-tertiary', 'bg-primary'];
+      return { label: entry[0], count: entry[1], color: colors[index % colors.length] };
+    });
+  const maxCategoryCount = topCategories[0]?.count || 1;
+
+  const formatMonth = (dateStr) => new Date(dateStr).toLocaleString('default', { month: 'short' });
+  const formatDay = (dateStr) => new Date(dateStr).getDate();
+  const getDaysLeft = (dateStr) => Math.ceil((new Date(dateStr) - new Date()) / (1000 * 60 * 60 * 24));
+
   return (
     <div className="p-8 max-w-[1200px] mx-auto font-sans">
       {/* Header Area */}
       <div className="flex items-end justify-between mb-8">
         <div>
           <h2 className="text-[28px] font-bold text-on-surface mb-1 leading-tight tracking-tight">Scholarship Overview</h2>
-          <p className="text-on-surface-variant text-sm font-medium">You have {stats.applied} applications in progress. Keep up the momentum!</p>
+          <p className="text-on-surface-variant text-sm font-medium">You have {appliedCount} applications in progress. Keep up the momentum!</p>
         </div>
         <div className="flex items-center gap-6">
           <button className="text-on-surface font-bold text-sm hover:underline tracking-wide">Generate Report</button>
@@ -67,7 +109,7 @@ export default function DashboardPage() {
             </div>
           </div>
           <p className="text-on-surface-variant text-xs font-bold tracking-wide mb-1 uppercase">Matched</p>
-          <h3 className="text-3xl font-extrabold text-on-surface">{stats.matched}</h3>
+          <h3 className="text-3xl font-extrabold text-on-surface">{scholarships.length}</h3>
         </div>
 
         {/* Card 2 */}
@@ -79,7 +121,7 @@ export default function DashboardPage() {
             <div className="text-on-surface font-bold text-[10px] tracking-wider uppercase bg-surface-container px-2 py-1 rounded">Last 30 days</div>
           </div>
           <p className="text-on-surface-variant text-xs font-bold tracking-wide mb-1 uppercase">Applied</p>
-          <h3 className="text-3xl font-extrabold text-on-surface">{stats.applied}</h3>
+          <h3 className="text-3xl font-extrabold text-on-surface">{appliedCount}</h3>
         </div>
 
         {/* Card 3 */}
@@ -90,7 +132,7 @@ export default function DashboardPage() {
             </div>
           </div>
           <p className="text-on-surface-variant text-xs font-bold tracking-wide mb-1 uppercase">Accepted</p>
-          <h3 className="text-3xl font-extrabold text-on-surface">{stats.accepted}</h3>
+          <h3 className="text-3xl font-extrabold text-on-surface">{acceptedCount}</h3>
         </div>
 
         {/* Card 4 */}
@@ -101,7 +143,7 @@ export default function DashboardPage() {
             </div>
           </div>
           <p className="text-on-surface-variant text-xs font-bold tracking-wide mb-1 uppercase">Deadlines</p>
-          <h3 className="text-3xl font-extrabold text-on-surface">{stats.deadlines}</h3>
+          <h3 className="text-3xl font-extrabold text-on-surface">{upcomingDeadlines.length}</h3>
         </div>
       </div>
 
@@ -142,32 +184,27 @@ export default function DashboardPage() {
             </div>
           </div>
           
-          <StudentApplicationOutcomes />
+          <StudentApplicationOutcomes accepted={acceptedCount} review={reviewCount} rejected={rejectedCount} />
         </div>
       </div>
 
       {/* Row 2 */}
       <div className="flex gap-6 mb-6">
         {/* Success by Category */}
-        <div className="w-[38%] bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/30 flex flex-col justify-between">
-          <h3 className="text-lg font-bold text-on-surface mb-6">Success by Category</h3>
+                <div className="w-[38%] bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/30 flex flex-col justify-between">
+          <h3 className="text-lg font-bold text-on-surface mb-6">Applications by Category</h3>
           <div className="space-y-5 mt-auto">
-            {[
-              { label: 'STEM', val: '85%', color: 'bg-primary' },
-              { label: 'Arts', val: '42%', color: 'bg-secondary' },
-              { label: 'Community', val: '68%', color: 'bg-tertiary' },
-              { label: 'Leadership', val: '55%', color: 'bg-primary' }
-            ].map(item => (
+            {topCategories.length > 0 ? topCategories.map(item => (
               <div key={item.label}>
                 <div className="flex justify-between text-xs font-bold text-on-surface mb-2">
                   <span>{item.label}</span>
-                  <span>{item.val}</span>
+                  <span>{item.count}</span>
                 </div>
                 <div className="h-2 w-full bg-surface-container-low rounded-full overflow-hidden border border-outline-variant/10">
-                  <div className={`h-full ${item.color} rounded-full`} style={{ width: item.val }}></div>
+                  <div className={`h-full ${item.color} rounded-full`} style={{ width: `${(item.count / maxCategoryCount) * 100}%` }}></div>
                 </div>
               </div>
-            ))}
+            )) : <p className="text-sm text-on-surface-variant">No applications yet.</p>}
           </div>
         </div>
 
@@ -193,43 +230,25 @@ export default function DashboardPage() {
             <h3 className="text-lg font-bold text-on-surface">Critical Deadlines</h3>
             <button className="text-xs font-bold text-primary hover:underline">View Calendar</button>
           </div>
-          <div className="space-y-4">
-            <div className="flex items-center bg-surface-container-low rounded-xl p-4 relative border border-outline-variant/20">
-              <div className="absolute left-0 top-0 bottom-0 w-1 bg-error rounded-l-xl"></div>
-              <div className="flex flex-col items-center justify-center min-w-[50px] pr-4 border-r border-outline-variant/30 ml-1">
-                <span className="text-[10px] font-extrabold text-error uppercase tracking-widest">Oct</span>
-                <span className="text-2xl font-extrabold text-on-surface leading-none mt-1">12</span>
-              </div>
-              <div className="pl-4 flex-1">
-                <h4 className="font-bold text-on-surface text-sm">Fulbright Scholar Award</h4>
-                <p className="text-xs text-on-surface-variant mt-0.5">Global Research Program</p>
-              </div>
-              <div className="text-xs font-bold text-error">4 Days Left</div>
-            </div>
-
-            <div className="flex items-center bg-surface-container-lowest rounded-xl p-4 border border-outline-variant/30">
-              <div className="flex flex-col items-center justify-center min-w-[50px] pr-4 border-r border-outline-variant/30">
-                <span className="text-[10px] font-extrabold text-on-surface-variant uppercase tracking-widest">Oct</span>
-                <span className="text-2xl font-extrabold text-on-surface leading-none mt-1">28</span>
-              </div>
-              <div className="pl-4 flex-1">
-                <h4 className="font-bold text-on-surface text-sm">STEM Innovators Grant</h4>
-                <p className="text-xs text-on-surface-variant mt-0.5">National Science Council</p>
-              </div>
-              <div className="text-xs font-bold text-on-surface">20 Days Left</div>
-            </div>
-
-            <div className="flex items-center bg-surface-container-lowest rounded-xl p-4 border border-outline-variant/30">
-              <div className="flex flex-col items-center justify-center min-w-[50px] pr-4 border-r border-outline-variant/30">
-                <span className="text-[10px] font-extrabold text-on-surface-variant uppercase tracking-widest">Nov</span>
-                <span className="text-2xl font-extrabold text-on-surface leading-none mt-1">05</span>
-              </div>
-              <div className="pl-4 flex-1">
-                <h4 className="font-bold text-on-surface text-sm">Rhodes Scholarship</h4>
-                <p className="text-xs text-on-surface-variant mt-0.5">Oxford University</p>
-              </div>
-              <div className="text-xs font-bold text-outline">Pending</div>
-            </div>
+                    <div className="space-y-4">
+            {upcomingDeadlines.length > 0 ? upcomingDeadlines.map((item, idx) => {
+              const daysLeft = getDaysLeft(item.deadline);
+              const isUrgent = daysLeft <= 7;
+              return (
+                <div key={idx} className="flex items-center bg-surface-container-low rounded-xl p-4 relative border border-outline-variant/20">
+                  {isUrgent && <div className="absolute left-0 top-0 bottom-0 w-1 bg-error rounded-l-xl"></div>}
+                  <div className="flex flex-col items-center justify-center min-w-[50px] pr-4 border-r border-outline-variant/30 ml-1">
+                    <span className={`text-[10px] font-extrabold uppercase tracking-widest ${isUrgent ? 'text-error' : 'text-on-surface-variant'}`}>{formatMonth(item.deadline)}</span>
+                    <span className="text-2xl font-extrabold text-on-surface leading-none mt-1">{formatDay(item.deadline)}</span>
+                  </div>
+                  <div className="pl-4 flex-1">
+                    <h4 className="font-bold text-on-surface text-sm line-clamp-1">{item.name}</h4>
+                    <p className="text-xs text-on-surface-variant mt-0.5">{item.providerName || item.category || 'Scholarship'}</p>
+                  </div>
+                  <div className={`text-xs font-bold ${isUrgent ? 'text-error' : 'text-on-surface'}`}>{daysLeft} Days Left</div>
+                </div>
+              );
+            }) : <p className="text-sm text-on-surface-variant p-4">No upcoming deadlines.</p>}
           </div>
         </div>
 
@@ -240,34 +259,22 @@ export default function DashboardPage() {
             <span className="bg-green-100 text-green-700 text-[10px] font-bold px-3 py-1.5 rounded-md uppercase tracking-wider">NEW ACTIVITY</span>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 flex-1">
-            <div className="bg-surface-container-low rounded-xl p-5 border border-outline-variant/20 flex flex-col">
-              <div className="flex justify-between items-start mb-6">
-                <span className="text-xs font-extrabold text-primary bg-surface-container-lowest px-2.5 py-1 rounded-md shadow-sm border border-outline-variant/30">₹15,00,000</span>
-                <div className="w-7 h-7 rounded-full bg-surface-container-lowest flex items-center justify-center shadow-sm border border-outline-variant/30 text-primary">
-                  <span className="material-symbols-outlined text-[16px]">stars</span>
+                    <div className="grid grid-cols-2 gap-4 flex-1">
+            {smartMatches.length > 0 ? smartMatches.map((item, idx) => (
+              <div key={idx} className="bg-surface-container-low rounded-xl p-5 border border-outline-variant/20 flex flex-col">
+                <div className="flex justify-between items-start mb-6">
+                  <span className={`text-xs font-extrabold ${idx === 0 ? 'text-primary' : 'text-secondary'} bg-surface-container-lowest px-2.5 py-1 rounded-md shadow-sm border border-outline-variant/30`}>{item.amount || 'Varies'}</span>
+                  <div className={`w-7 h-7 rounded-full bg-surface-container-lowest flex items-center justify-center shadow-sm border border-outline-variant/30 ${idx === 0 ? 'text-primary' : 'text-secondary'}`}>
+                    <span className="material-symbols-outlined text-[16px]">{idx === 0 ? 'stars' : 'bolt'}</span>
+                  </div>
                 </div>
+                <h4 className="font-bold text-on-surface text-sm mb-1 leading-tight line-clamp-2">{item.name}</h4>
+                <p className="text-[10px] text-on-surface-variant font-bold mb-auto">98% Fit Score</p>
+                <a href={`/scholarships/${item.id}`} className={`mt-4 text-xs font-bold text-on-surface flex items-center gap-1 transition-colors ${idx === 0 ? 'hover:text-primary' : 'hover:text-secondary'}`}>
+                  Review Now <span className="material-symbols-outlined text-[14px]">chevron_right</span>
+                </a>
               </div>
-              <h4 className="font-bold text-on-surface text-sm mb-1 leading-tight">Microsoft Tech Leaders</h4>
-              <p className="text-[10px] text-on-surface-variant font-bold mb-auto">98% Fit Score</p>
-              <button className="mt-4 text-xs font-bold text-on-surface flex items-center gap-1 hover:text-primary transition-colors">
-                Match Details <span className="material-symbols-outlined text-[14px]">chevron_right</span>
-              </button>
-            </div>
-
-            <div className="bg-surface-container-low rounded-xl p-5 border border-outline-variant/20 flex flex-col">
-              <div className="flex justify-between items-start mb-6">
-                <span className="text-xs font-extrabold text-secondary bg-surface-container-lowest px-2.5 py-1 rounded-md shadow-sm border border-outline-variant/30">₹5,00,000</span>
-                <div className="w-7 h-7 rounded-full bg-surface-container-lowest flex items-center justify-center shadow-sm border border-outline-variant/30 text-secondary">
-                  <span className="material-symbols-outlined text-[16px]">bolt</span>
-                </div>
-              </div>
-              <h4 className="font-bold text-on-surface text-sm mb-1 leading-tight">Local Heritage Grant</h4>
-              <p className="text-[10px] text-on-surface-variant font-bold mb-auto">84% Fit Score</p>
-              <button className="mt-4 text-xs font-bold text-on-surface flex items-center gap-1 hover:text-secondary transition-colors">
-                Review Now <span className="material-symbols-outlined text-[14px]">chevron_right</span>
-              </button>
-            </div>
+            )) : <p className="text-sm text-on-surface-variant col-span-2 p-5">No new matches found right now.</p>}
           </div>
 
           <div className="mt-4 border border-dashed border-outline-variant/40 rounded-xl p-5 text-center flex flex-col items-center justify-center">
