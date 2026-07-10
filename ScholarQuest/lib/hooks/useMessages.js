@@ -66,6 +66,15 @@ export default function useMessages() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [convs, activeConv]);
 
+  useEffect(() => {
+    if (activeConv) {
+      const active = convs.find(c => c.id === activeConv);
+      if (active && active.unread > 0) {
+        updateDoc(doc(db, 'conversations', activeConv), { unread: 0 }).catch(console.error);
+      }
+    }
+  }, [activeConv, convs]);
+
   const handleSelectConv = async (id) => {
     setActiveConv(id);
     setShowMobileList(false);

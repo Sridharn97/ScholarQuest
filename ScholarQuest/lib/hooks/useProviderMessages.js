@@ -73,6 +73,15 @@ export default function useProviderMessages() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [convs, activeConv]);
 
+  useEffect(() => {
+    if (activeConv) {
+      const active = convs.find(c => c.id === activeConv);
+      if (active && active.providerUnread > 0) {
+        updateDoc(doc(db, 'conversations', activeConv), { providerUnread: 0 }).catch(console.error);
+      }
+    }
+  }, [activeConv, convs]);
+
   const handleSelectConv = async (id) => {
     setActiveConv(id);
     setShowMobileList(false);
