@@ -1,24 +1,11 @@
 'use client';
 import useNotifications from '@/lib/hooks/useNotifications';
 import SpotlightCard from '@/components/react-bits/SpotlightCard';
-import { db, auth } from '@/lib/firebase';
-import { collection, addDoc } from 'firebase/firestore';
 
 export default function ApplicationStatusPage() {
   const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
 
-  const handleCreateMock = async () => {
-    if (!auth.currentUser) return;
-    await addDoc(collection(db, 'notifications'), {
-      userId: auth.currentUser.uid,
-      scholarshipName: 'National Merit Scholarship',
-      type: 'status_update',
-      status: 'Approved',
-      message: 'Congratulations! Your application for the National Merit Scholarship was Approved!',
-      createdAt: new Date().toISOString(),
-      read: false
-    });
-  };
+
 
   const confirmedApps = notifications.filter(n => n.status === 'Approved' || n.status === 'Accepted');
   const rejectedApps = notifications.filter(n => n.status === 'Rejected');
@@ -77,12 +64,7 @@ export default function ApplicationStatusPage() {
           <p className="text-gray-500">You have {unreadCount} unread update{unreadCount !== 1 && 's'}.</p>
         </div>
         <div className="flex gap-4">
-          <button 
-            onClick={handleCreateMock}
-            className="px-4 py-2 bg-emerald-100 text-emerald-700 font-bold rounded-lg hover:bg-emerald-200 transition-all text-sm"
-          >
-            + Add Demo Update
-          </button>
+
           {unreadCount > 0 && (
             <button 
               onClick={markAllAsRead}
