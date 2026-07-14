@@ -148,50 +148,60 @@ export default function DiscoveryPage() {
                 
                 return (
                   <Link href={`/scholarships/${s.id}`} key={s.id} className="block group">
-                    <div className={`h-full bg-surface-bright border p-4 rounded-2xl transition-all duration-200 flex flex-col justify-between ${
+                    <div className={`h-full bg-surface-bright border p-5 rounded-3xl transition-all duration-300 flex flex-col justify-between relative overflow-hidden ${
                       isFeatured 
-                        ? 'border-primary/50 shadow-sm shadow-primary/10 hover:shadow-md' 
-                        : 'border-outline-variant/30 hover:border-outline-variant hover:shadow-sm'
+                        ? 'border-primary/40 shadow-md shadow-primary/5 hover:shadow-xl hover:-translate-y-1' 
+                        : 'border-outline-variant/30 hover:border-outline-variant/60 hover:shadow-lg hover:-translate-y-1'
                     }`}>
-                      <div>
-                        <div className="flex justify-between items-start mb-3">
-                          <span className="bg-surface-container-low px-2 py-1 rounded-md text-[10px] font-bold text-on-surface-variant border border-outline-variant/20 uppercase tracking-wider">
+                      {/* Decorative gradient blob for featured */}
+                      {isFeatured && <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none" />}
+                      
+                      <div className="relative z-10">
+                        <div className="flex justify-between items-start mb-4">
+                          <span className="bg-surface-container px-3 py-1.5 rounded-lg text-[11px] font-bold text-on-surface-variant border border-outline-variant/10 uppercase tracking-wider shadow-sm">
                             {s.category}
                           </span>
                           {isFeatured && (
-                            <span className="text-[10px] font-bold text-primary bg-primary/10 px-2 py-1 rounded-md flex items-center gap-1">
-                              <span className="material-symbols-outlined text-[12px]" style={{fontVariationSettings: "'FILL' 1"}}>stars</span> Top Match
+                            <span className="text-[11px] font-bold text-white bg-gradient-to-r from-primary to-secondary px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm">
+                              <span className="material-symbols-outlined text-[14px]" style={{fontVariationSettings: "'FILL' 1"}}>stars</span> Top Match
                             </span>
                           )}
                         </div>
                         
-                        <h4 className="font-headline-md text-base font-bold text-on-surface mb-1 group-hover:text-primary transition-colors line-clamp-2 leading-tight">
+                        <h4 className="font-headline-md text-lg font-bold text-on-surface mb-2 group-hover:text-primary transition-colors line-clamp-2 leading-tight">
                           {s.name}
                         </h4>
-                        <p className="font-body-sm text-xs text-on-surface-variant mb-4 line-clamp-1">{s.org}</p>
+                        <p className="font-body-sm text-sm text-on-surface-variant mb-5 line-clamp-1 flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[16px]">account_balance</span>
+                          {s.org}
+                        </p>
                       </div>
 
-                      <div>
-                        <div className="grid grid-cols-2 gap-2 mb-4 p-2 bg-surface-container-lowest rounded-xl border border-outline-variant/20">
+                      <div className="relative z-10 mt-auto">
+                        <div className="grid grid-cols-2 gap-3 mb-5 p-3 bg-gradient-to-br from-surface-container-lowest to-surface-container rounded-2xl border border-outline-variant/20 shadow-inner">
                           <div>
-                            <p className="text-[10px] text-on-surface-variant uppercase tracking-wider">Amount</p>
-                            <p className="font-label-md text-sm font-bold text-on-surface">{s.amount}</p>
+                            <p className="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold mb-0.5">Award Amount</p>
+                            <p className="font-headline-md text-base font-extrabold text-on-surface">
+                              {typeof s.amount === 'number' ? `$${s.amount.toLocaleString()}` : (s.amount && !isNaN(s.amount.toString().replace(/[^0-9.-]+/g, '')) ? `$${Number(s.amount.toString().replace(/[^0-9.-]+/g, '')).toLocaleString()}` : s.amount)}
+                            </p>
                           </div>
                           <div>
-                            <p className="text-[10px] text-on-surface-variant uppercase tracking-wider">Match</p>
-                            <p className={`font-label-md text-sm font-bold ${isFeatured ? 'text-primary' : 'text-green-600'}`}>
+                            <p className="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold mb-0.5">Match Score</p>
+                            <p className={`font-headline-md text-base font-extrabold ${isFeatured ? 'text-primary' : 'text-green-600'}`}>
                               {s.match || '90%'}
                             </p>
                           </div>
                         </div>
 
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs text-on-surface-variant flex items-center gap-1">
-                            <span className="material-symbols-outlined text-[14px]">event</span>
+                        <div className="flex items-center justify-between pt-4 border-t border-outline-variant/20">
+                          <span className="text-xs font-bold text-on-surface-variant flex items-center gap-1.5 bg-surface-container-low px-3 py-1.5 rounded-lg">
+                            <span className="material-symbols-outlined text-[16px]">event</span>
                             {s.deadline}
                           </span>
-                          <span className="material-symbols-outlined text-outline-variant group-hover:text-primary group-hover:translate-x-0.5 transition-all text-[18px]">
-                            arrow_forward
+                          <span className="w-8 h-8 rounded-full bg-primary/5 group-hover:bg-primary flex items-center justify-center transition-colors">
+                            <span className="material-symbols-outlined text-primary group-hover:text-white transition-colors text-[18px]">
+                              arrow_forward
+                            </span>
                           </span>
                         </div>
                       </div>
