@@ -27,6 +27,10 @@ export default function ProfilePage() {
     return acc;
   }, 0) || 0;
 
+  const acceptedCards = columns?.find(c => c.id === 'col_accepted')?.cards || [];
+  const rejectedCards = columns?.find(c => c.id === 'col_rejected')?.cards || [];
+  const historyCards = [...acceptedCards, ...rejectedCards].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
   const [showAddAchieve, setShowAddAchieve] = useState(false);
   const [newAchieve, setNewAchieve] = useState({ title: '', type: 'Academic', org: '', date: '', desc: '', position: '', award: '', link: '' });
   const [editIndexAchieve, setEditIndexAchieve] = useState(null);
@@ -566,13 +570,50 @@ export default function ProfilePage() {
 
           {/* TAB: ACTIVITY */}
           {activeTab === 'activity' && (
-            <div className="glass-card rounded-3xl p-16 text-center shadow-sm border border-outline-variant/30 bg-surface-bright animate-in fade-in slide-in-from-bottom-4 duration-500">
-              <div className="w-24 h-24 mx-auto bg-secondary/5 rounded-3xl flex items-center justify-center mb-6 shadow-inner border border-secondary/10">
-                <span className="material-symbols-outlined text-secondary text-5xl">history</span>
+            <div className="glass-card rounded-3xl p-8 shadow-sm border border-outline-variant/30 bg-surface-bright animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+                <div className="flex items-center gap-4 w-full md:w-auto">
+                  <div className="w-16 h-16 bg-secondary/5 rounded-2xl flex items-center justify-center shadow-inner border border-secondary/10 shrink-0">
+                    <span className="material-symbols-outlined text-secondary text-3xl">history</span>
+                  </div>
+                  <div>
+                    <h2 className="font-headline-md text-2xl font-bold tracking-tight">Application History</h2>
+                    <p className="text-on-surface-variant text-sm mt-1">Your finalized applications</p>
+                  </div>
+                </div>
+                <Link href="/tracker" className="px-5 py-2.5 bg-secondary text-white rounded-xl font-bold text-sm shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all whitespace-nowrap">
+                  View Tracker
+                </Link>
               </div>
-              <h2 className="font-headline-md text-3xl font-bold mb-3 tracking-tight">Application History</h2>
-              <p className="text-on-surface-variant max-w-md mx-auto mb-10 text-lg">Track your saved scholarships and submitted applications all in one beautifully organized dashboard.</p>
-              <Link href="/tracker" className="px-8 py-4 bg-secondary text-white rounded-full font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all inline-block">Go to Scholarship Tracker</Link>
+
+              {historyCards.length > 0 ? (
+                <div className="space-y-4">
+                  {historyCards.map((card, idx) => (
+                    <div key={idx} className="flex items-center justify-between p-5 rounded-2xl border border-outline-variant/30 bg-surface-container-lowest hover:bg-surface-container-low transition-colors group">
+                      <div>
+                        <h3 className="font-bold text-lg text-on-surface group-hover:text-primary transition-colors">{card.title}</h3>
+                        <p className="text-sm text-on-surface-variant font-medium mt-1">{card.desc || 'No description provided'}</p>
+                        {card.amount && <p className="text-sm font-bold text-green-600 mt-2">{card.amount}</p>}
+                      </div>
+                      <div className="shrink-0 ml-4">
+                        {card.columnId === 'col_accepted' ? (
+                          <span className="px-4 py-1.5 bg-green-100 text-green-700 font-bold text-xs rounded-full border border-green-200 shadow-sm flex items-center gap-1.5">
+                            <span className="material-symbols-outlined text-[16px]">check_circle</span> Offer
+                          </span>
+                        ) : (
+                          <span className="px-4 py-1.5 bg-red-100 text-red-700 font-bold text-xs rounded-full border border-red-200 shadow-sm flex items-center gap-1.5">
+                            <span className="material-symbols-outlined text-[16px]">cancel</span> Rejected
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-12 bg-surface-container-lowest rounded-2xl border border-outline-variant/30 border-dashed">
+                  <p className="text-on-surface-variant max-w-md mx-auto text-base">No completed applications yet. Start tracking your applications to see your history here.</p>
+                </div>
+              )}
             </div>
           )}
 
