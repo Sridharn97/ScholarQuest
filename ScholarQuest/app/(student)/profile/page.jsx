@@ -63,9 +63,13 @@ export default function ProfilePage() {
             
             <div className="relative flex flex-col items-center text-center mt-4">
               <div className="w-32 h-32 rounded-full bg-surface-bright p-1 shadow-xl border-2 border-primary/20 mb-6">
-                <div className="w-full h-full rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-extrabold text-4xl">
-                  {user?.initials || 'AJ'}
-                </div>
+                {user?.photoURL ? (
+                  <img src={user.photoURL} alt="Profile" className="w-full h-full rounded-full object-cover" />
+                ) : (
+                  <div className="w-full h-full rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-extrabold text-4xl">
+                    {user?.initials || 'AJ'}
+                  </div>
+                )}
               </div>
               
               {editMode ? (

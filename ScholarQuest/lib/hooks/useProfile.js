@@ -43,7 +43,7 @@ export default function useProfile() {
         const userDoc = await getDoc(doc(db, 'users', u.uid));
         if (userDoc.exists()) {
           const data = userDoc.data();
-          setUser(data);
+          setUser({ ...data, photoURL: data.photoURL || u.photoURL });
           let initialPhone = data.phone || '';
           if (initialPhone && !initialPhone.startsWith('+')) {
             initialPhone = (data.countryCode || '+1') + initialPhone;
