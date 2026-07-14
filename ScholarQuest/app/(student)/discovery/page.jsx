@@ -212,7 +212,7 @@ export default function DiscoveryPage() {
             </div>
             
             {/* Pagination Controls */}
-            {totalPages > 0 && (
+            {totalPages > 1 && (
               <div className="flex items-center justify-center gap-2 mt-8 pt-6 border-t border-outline-variant/20">
                 <button 
                   disabled={currentPage === 1} 
