@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 import useScholarshipDetail from '@/lib/hooks/useScholarshipDetail';
 
 export default function ScholarshipDetailsPage({ params }) {
@@ -10,6 +11,36 @@ export default function ScholarshipDetailsPage({ params }) {
     applicationStatus,
     handleSaveToTracker,
   } = useScholarshipDetail(params);
+
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
+  useEffect(() => {
+    if (!scholarship?.deadline) return;
+    
+    let targetDate = new Date(scholarship.deadline);
+    if (isNaN(targetDate.getTime())) {
+      targetDate = new Date();
+      targetDate.setDate(targetDate.getDate() + 14); // 14 days default if parsing fails
+    }
+
+    const updateTimer = () => {
+      const now = new Date();
+      const difference = targetDate - now;
+
+      if (difference > 0) {
+        setTimeLeft({
+          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((difference / 1000 / 60) % 60),
+          seconds: Math.floor((difference / 1000) % 60),
+        });
+      }
+    };
+
+    updateTimer(); // Initial call
+    const interval = setInterval(updateTimer, 1000);
+    return () => clearInterval(interval);
+  }, [scholarship]);
 
   if (loading || !scholarship) {
     return (
@@ -140,6 +171,27 @@ export default function ScholarshipDetailsPage({ params }) {
             </div>
             <h3 className="font-headline-md text-headline-md mb-2">Ready to Apply?</h3>
             <p className="font-body-sm text-body-sm text-on-surface-variant mb-6">Submit your application directly to **{scholarship.org}**.</p>
+            
+            {/* Countdown Timer */}
+            <div className="flex justify-center gap-3 mb-6">
+              <div className="flex flex-col items-center bg-surface-container-lowest p-2 rounded-xl min-w-[56px] border border-primary/20 shadow-sm animate-subtle-float">
+                <span className="font-bold text-xl text-primary">{timeLeft.days}</span>
+                <span className="text-[10px] text-on-surface-variant uppercase font-bold tracking-wider mt-1">Days</span>
+              </div>
+              <div className="flex flex-col items-center bg-surface-container-lowest p-2 rounded-xl min-w-[56px] border border-primary/20 shadow-sm animate-subtle-float" style={{animationDelay: '100ms'}}>
+                <span className="font-bold text-xl text-primary">{timeLeft.hours}</span>
+                <span className="text-[10px] text-on-surface-variant uppercase font-bold tracking-wider mt-1">Hrs</span>
+              </div>
+              <div className="flex flex-col items-center bg-surface-container-lowest p-2 rounded-xl min-w-[56px] border border-primary/20 shadow-sm animate-subtle-float" style={{animationDelay: '200ms'}}>
+                <span className="font-bold text-xl text-primary">{timeLeft.minutes}</span>
+                <span className="text-[10px] text-on-surface-variant uppercase font-bold tracking-wider mt-1">Min</span>
+              </div>
+              <div className="flex flex-col items-center bg-surface-container-lowest p-2 rounded-xl min-w-[56px] border border-primary/20 shadow-sm animate-subtle-float" style={{animationDelay: '300ms'}}>
+                <span className="font-bold text-xl text-primary">{timeLeft.seconds}</span>
+                <span className="text-[10px] text-on-surface-variant uppercase font-bold tracking-wider mt-1">Sec</span>
+              </div>
+            </div>
+
             {applicationStatus ? (
               <div
                 className={`block w-full py-3 rounded-10 font-label-md text-label-md text-center shadow-sm mb-3 font-bold cursor-default ${
