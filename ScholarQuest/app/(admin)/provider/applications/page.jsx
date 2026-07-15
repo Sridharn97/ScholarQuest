@@ -1,6 +1,7 @@
 'use client';
 import useProviderApplications from '@/lib/hooks/useProviderApplications';
 import { formatGpa } from '@/lib/gpaConverter';
+import AIQualityBadge from '@/components/ai/AIQualityBadge';
 
 const STATUS_CONFIG = {
   'Approved': { cls: 'bg-green-100 text-green-700', icon: 'check_circle' },
@@ -47,7 +48,7 @@ export default function ProviderApplicationsPage() {
             onClick={e => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="px-6 py-6 border-b border-outline-variant/20 flex items-start justify-between bg-surface-container-lowest">
+            <div className="px-6 py-6 border-b border-outline-variant/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-surface-container-lowest">
               <div className="flex items-center gap-4">
                 {viewApp.photoURL ? (
                   <img src={viewApp.photoURL} alt="Logo" className="w-14 h-14 rounded-2xl object-cover shadow-inner bg-white border border-outline-variant/20" />
@@ -57,9 +58,12 @@ export default function ProviderApplicationsPage() {
                   </div>
                 )}
                 <div>
-                  <h3 className="font-headline-md text-headline-md text-on-surface">{viewApp.student}</h3>
-                  <p className="font-body-md text-on-surface-variant flex items-center gap-1">
-                    <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>mail</span>
+                  <h3 className="font-headline-sm text-on-surface mb-1 flex items-center gap-2">
+                    {viewApp.student}
+                    <AIQualityBadge application={viewApp} />
+                  </h3>
+                  <p className="font-body-sm text-on-surface-variant flex items-center gap-2">
+                    <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>mail</span>
                     {viewApp.email}
                   </p>
                 </div>

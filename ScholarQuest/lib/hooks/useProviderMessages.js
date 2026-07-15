@@ -57,9 +57,15 @@ export default function useProviderMessages() {
         
         setConvs(data);
         
-        const remaining = data.filter(c => !c.hiddenForProvider);
+        const remaining = data.filter(c => !c.hiddenForProvider && c.hasStudentMessages);
         if (remaining.length > 0) {
-          setActiveConv(prev => prev || remaining[0].id);
+          setActiveConv(prev => {
+            // Check if previous active is still in remaining
+            if (prev && remaining.find(r => r.id === prev)) return prev;
+            return remaining[0].id;
+          });
+        } else {
+          setActiveConv(null);
         }
       });
     } else {

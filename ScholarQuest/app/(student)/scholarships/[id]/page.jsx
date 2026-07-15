@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import useScholarshipDetail from '@/lib/hooks/useScholarshipDetail';
+import AISummarizer from '@/components/ai/AISummarizer';
 
 export default function ScholarshipDetailsPage({ params }) {
   const {
@@ -123,6 +124,7 @@ export default function ScholarshipDetailsPage({ params }) {
             <p className="font-body-md text-body-md text-on-surface-variant mb-4 leading-relaxed whitespace-pre-wrap">
               {scholarship.desc}
             </p>
+            <AISummarizer text={scholarship.desc} />
           </div>
 
           {/* Eligibility */}

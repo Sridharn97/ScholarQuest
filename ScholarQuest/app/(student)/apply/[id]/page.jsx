@@ -2,6 +2,8 @@
 import Link from 'next/link';
 import useApply from '@/lib/hooks/useApply';
 import { convertToPercentage } from '@/lib/gpaConverter';
+import AIToneAnalyzer from '@/components/ai/AIToneAnalyzer';
+import AIDocumentScanner from '@/components/ai/AIDocumentScanner';
 
 const initialSteps = [
   { num: '01', label: 'Personal Info', sub: 'Completed', done: true },
@@ -189,6 +191,11 @@ export default function ApplyPage({ params }) {
               <p className="font-body-md text-body-md text-on-surface-variant mt-1">Please verify your academic status before submitting.</p>
             </div>
 
+            <AIDocumentScanner onExtractedData={(data) => {
+              if (data.gpa) setGpa(data.gpa);
+              if (data.institution) setInstitution(data.institution);
+            }} />
+
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
@@ -286,7 +293,10 @@ export default function ApplyPage({ params }) {
               </div>
 
               <div className="space-y-2 pt-4">
-                <label className="font-label-md text-label-md text-on-surface">Academic Honors, Research, or Publications</label>
+                <label className="font-label-md text-label-md text-on-surface flex items-center gap-2">
+                  Academic Honors, Research, or Publications
+                  <span className="bg-primary/10 text-primary px-2 py-0.5 rounded text-[10px] font-bold tracking-widest uppercase ml-auto">AI Enabled</span>
+                </label>
                 <textarea
                   rows={4}
                   value={honors}
@@ -294,6 +304,7 @@ export default function ApplyPage({ params }) {
                   placeholder="Describe your research work, awards, or papers..."
                   className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all resize-none"
                 />
+                <AIToneAnalyzer text={honors} />
               </div>
 
               {/* Dynamic Application Sections */}
@@ -304,16 +315,24 @@ export default function ApplyPage({ params }) {
                   </div>
                   {section.questions.map((q) => (
                     <div key={q.id} className="space-y-2">
-                      <label className="font-label-md text-label-md text-on-surface">{q.text} *</label>
+                      <label className="font-label-md text-label-md text-on-surface flex items-center gap-2">
+                        {q.text} *
+                        {q.type === 'text' && (
+                          <span className="bg-primary/10 text-primary px-2 py-0.5 rounded text-[10px] font-bold tracking-widest uppercase ml-auto">AI Enabled</span>
+                        )}
+                      </label>
                       {q.type === 'text' ? (
-                        <input
-                          type="text"
-                          value={customResponses[q.id]?.answer || ''}
-                          onChange={(e) => setCustomResponses({ ...customResponses, [q.id]: { question: q.text, answer: e.target.value, type: q.type } })}
-                          placeholder="Enter your response here..."
-                          className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all"
-                          required
-                        />
+                        <div>
+                          <input
+                            type="text"
+                            value={customResponses[q.id]?.answer || ''}
+                            onChange={(e) => setCustomResponses({ ...customResponses, [q.id]: { question: q.text, answer: e.target.value, type: q.type } })}
+                            placeholder="Enter your response here..."
+                            className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-10 font-body-md outline-none focus:border-primary focus:ring-2 focus:ring-primary/25 transition-all"
+                            required
+                          />
+                          <AIToneAnalyzer text={customResponses[q.id]?.answer} />
+                        </div>
                       ) : q.type === 'multiple_choice' ? (
                         <div className="relative">
                           <select
