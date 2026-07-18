@@ -9,8 +9,8 @@ const AI_RESPONSES = {
     { match: 95, title: 'NSF Graduate Research Fellowship', award: '₹37,00,000/yr + ₹12,00,000 stipend', urgency: 'Deadline: Oct 15', tags: ['STEM', 'Research'] },
     { match: 88, title: 'SMART Scholarship', award: '₹25,00,000–₹38,00,000', urgency: 'Deadline: Dec 1', tags: ['Engineering', 'Full-Ride'] },
     { match: 76, title: 'Boren Awards for International Study', award: 'Funding varies', urgency: 'Deadline: Jan 31', tags: ['Language', 'Study Abroad'] },
-  ],
-  trending: [
+  ]},
+  'ai': { title: 'AI & Machine Learning Grants', scholarships: [
     { match: 92, title: 'The Turing-Lovelace Fellowship', award: '₹45,00,000 + Living Stipend', urgency: '6 days left!', tags: ['AI Ethics', 'Full-Ride'] },
     { match: 85, title: 'Next-Gen Innovators Grant', award: '₹25,00,000 Research Budget', urgency: 'Deadline: Dec 15', tags: ['Research', 'Global'] },
   ]},
