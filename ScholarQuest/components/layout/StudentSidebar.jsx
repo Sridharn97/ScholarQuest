@@ -74,7 +74,10 @@ export default function StudentSidebar({ onLogout, userName, userInitials, userP
         {/* Subtle top glow */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
         
-        <button className="w-full py-3 bg-[#0A2540] text-white rounded-xl font-bold text-sm hover:bg-[#0A2540]/90 transition-all shadow-md flex items-center justify-center gap-2">
+        <button 
+          onClick={() => router.push('/discovery')}
+          className="w-full py-3 bg-[#0A2540] text-white rounded-xl font-bold text-sm hover:bg-[#0A2540]/90 transition-all shadow-md flex items-center justify-center gap-2"
+        >
           Apply Now
         </button>
 
