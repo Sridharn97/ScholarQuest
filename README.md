@@ -243,10 +243,10 @@ classDiagram
 ```mermaid
 flowchart TD
     A([User visits ScholarQuest]) --> B{Has Account?}
-    B -->|No - Student| C[/signup]
-    B -->|No - Provider| D[/provider-signup]
-    B -->|Yes - Student| E[/login]
-    B -->|Yes - Provider| F[/provider-login]
+    B -->|No - Student| C["/signup"]
+    B -->|No - Provider| D["/provider-signup"]
+    B -->|Yes - Student| E["/login"]
+    B -->|Yes - Provider| F["/provider-login"]
 
     C --> G[Firebase Auth: createUser]
     D --> G
