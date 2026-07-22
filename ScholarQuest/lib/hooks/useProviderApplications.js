@@ -168,12 +168,15 @@ export default function useProviderApplications() {
   };
 
   const handleExport = () => {
-    const csv = ['Student,Scholarship,Submitted,Score,Status', ...filtered.map(a => `${a.student},${a.scholarship},${a.submitted},${a.score}%,${a.status}`)].join('\n');
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const el = document.createElement('a');
-    el.href = url; el.download = 'applications.csv'; el.click();
-    URL.revokeObjectURL(url);
+    const { generateReport } = require('../../reportUtils');
+    const reportData = filtered.map(a => ({
+      Student: a.student,
+      Scholarship: a.scholarship,
+      Submitted: a.submitted,
+      Score: `${a.score}%`,
+      Status: a.status
+    }));
+    generateReport(reportData, 'applications_report.csv');
     showToast('CSV exported!');
   };
 

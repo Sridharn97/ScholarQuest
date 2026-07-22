@@ -90,7 +90,19 @@ export default function DashboardPage() {
           <p className="text-on-surface-variant text-sm font-medium">You have {appliedCount} applications in progress. Keep up the momentum!</p>
         </div>
         <div className="flex items-center gap-6">
-          <button className="text-on-surface font-bold text-sm hover:underline tracking-wide">Generate Report</button>
+          <button 
+            onClick={() => {
+              const { generateReport } = require('@/lib/reportUtils');
+              const reportData = trackerItems.map(item => ({
+                Scholarship: item.scholarshipName || item.scholarshipId || 'Unknown',
+                Status: item.status || 'Pending',
+                AppliedOn: item.appliedAt ? new Date(item.appliedAt).toLocaleDateString() : 'N/A'
+              }));
+              generateReport(reportData, 'student_report.csv');
+            }}
+            className="text-on-surface font-bold text-sm hover:underline tracking-wide">
+            Generate Report
+          </button>
           <button className="bg-primary text-on-primary px-6 py-2.5 rounded-xl font-bold text-sm shadow-sm hover:opacity-90 transition-colors tracking-wide">Quick Match</button>
         </div>
       </div>

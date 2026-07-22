@@ -64,9 +64,27 @@ export default function ProviderReportsPage() {
 
   return (
     <div>
-      <div className="mb-12">
-        <h2 className="font-headline-lg text-3xl font-bold text-on-surface">Reports & Analytics</h2>
-        <p className="text-body-lg text-on-surface-variant mt-2">Insights into scholarship disbursements and application activity</p>
+      <div className="flex items-center justify-between mb-12">
+        <div>
+          <h2 className="font-headline-lg text-3xl font-bold text-on-surface">Reports & Analytics</h2>
+          <p className="text-body-lg text-on-surface-variant mt-2">Insights into scholarship disbursements and application activity</p>
+        </div>
+        <button 
+          onClick={() => {
+            const { generateReport } = require('@/lib/reportUtils');
+            const reportData = applications.map(a => ({
+                Student: a.student || 'Unknown',
+                Scholarship: a.scholarship || 'Unknown',
+                Status: a.status || 'Pending',
+                Score: a.score ? `${a.score}%` : 'N/A',
+                SubmittedAt: a.appliedAt || a.createdAt || 'N/A'
+            }));
+            generateReport(reportData, 'provider_report.csv');
+          }}
+          className="bg-primary text-on-primary px-6 py-3 rounded-xl font-bold text-sm shadow-sm hover:opacity-90 transition-colors tracking-wide flex items-center gap-2">
+          <span className="material-symbols-outlined">download</span>
+          Generate Report
+        </button>
       </div>
 
       {/* Summary KPIs */}
