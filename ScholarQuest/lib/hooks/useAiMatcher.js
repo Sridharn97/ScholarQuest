@@ -42,23 +42,40 @@ export default function useAiMatcher() {
       const list = snapshot.docs.map(document => ({ id: document.id, ...document.data() }));
 
       const lower = text.toLowerCase();
-      let matched = list;
-      let title = 'Top Matches For You';
       
-      if (lower.includes('stem') || lower.includes('engineering') || lower.includes('science')) {
-        matched = list.filter(s => s.category === 'STEM' || (s.name && s.name.toLowerCase().includes('stem')));
-        title = 'STEM Excellence Matches';
-      } else if (lower.includes('ai') || lower.includes('machine learning') || lower.includes('research')) {
-        matched = list.filter(s => (s.name && s.name.toLowerCase().includes('ai')) || (s.name && s.name.toLowerCase().includes('research')));
-        title = 'AI & Machine Learning Grants';
-      } else if (lower.includes('grad') || lower.includes('master') || lower.includes('phd')) {
-        title = 'Graduate School Funding';
+      // Stop words for better keyword extraction
+      const stopWords = ['i', 'want', 'to', 'find', 'looking', 'for', 'a', 'the', 'scholarship', 'scholarships', 'grant', 'grants', 'funding', 'need', 'show', 'me', 'some', 'any', 'my', 'in', 'on', 'at', 'is', 'are', 'am', 'with', 'about', 'an'];
+      
+      // Extract keywords from prompt
+      const words = lower.split(/[^a-z0-9]+/).filter(w => w.length > 2 && !stopWords.includes(w));
+      
+      let matched = [];
+      let title = 'Search Results';
+
+      if (words.length > 0) {
+        matched = list.filter(s => {
+          const searchString = `${s.name || ''} ${s.category || ''} ${s.desc || ''} ${s.org || ''} ${s.fieldOfStudy || ''}`.toLowerCase();
+          // Find if any keyword matches
+          return words.some(w => searchString.includes(w));
+        });
+      } else {
+        // Fallback if no meaningful keywords were found
+        matched = list;
+      }
+
+      if (matched.length === 0) {
+        title = 'No Matches Found';
+      } else {
+        title = `Top Matches for "${words.join(' ')}"`;
+        if (words.length === 0) {
+          title = 'Top Matches For You';
+        }
       }
 
       const response = {
         title,
         scholarships: matched.slice(0, 2).map((s, idx) => ({
-          match: 95 - idx * 5,
+          match: Math.max(95 - idx * 5, 75), // Mock match percentage
           title: s.name,
           award: s.amount,
           urgency: `Deadline: ${s.deadline || 'Rolling'}`,

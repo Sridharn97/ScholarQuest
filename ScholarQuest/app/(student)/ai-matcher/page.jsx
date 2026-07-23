@@ -87,73 +87,81 @@ export default function AiMatcherPage() {
                 <div className="flex-1 space-y-6">
                   <div className="glass-panel p-6 rounded-2xl rounded-tl-none shadow-sm">
                     <h3 className="font-headline-md text-headline-md text-on-surface mb-1">{msg.response.title}</h3>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant">
-                      Based on your query &quot;{msg.content}&quot;, I found these high-probability matches for your profile.
-                    </p>
+                    {msg.response.scholarships.length > 0 ? (
+                      <p className="font-body-sm text-body-sm text-on-surface-variant">
+                        Based on your query &quot;{msg.content}&quot;, I found these high-probability matches for your profile.
+                      </p>
+                    ) : (
+                      <p className="font-body-sm text-body-sm text-on-surface-variant">
+                        I couldn&apos;t find any active scholarships matching &quot;{msg.content}&quot; at the moment. Try adjusting your search terms!
+                      </p>
+                    )}
                   </div>
 
                   {/* Match Cards */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {msg.response.scholarships.map((card, i) => (
-                      <div key={i} className={`glass-panel p-6 rounded-10 border-l-4 ${i === 0 ? 'border-secondary' : 'border-primary'} flex flex-col justify-between group hover:scale-[1.01] transition-transform cursor-pointer relative overflow-hidden`}>
-                        {/* Match Circle */}
-                        <div className="absolute top-0 right-0 p-4">
-                          <div className="flex flex-col items-center">
-                            <div className="relative w-12 h-12">
-                              <svg className="w-12 h-12 transform -rotate-90" viewBox="0 0 48 48">
-                                <circle className="text-surface-container-highest" cx="24" cy="24" r="20" fill="transparent" stroke="currentColor" strokeWidth="4" />
-                                <circle className={i === 0 ? 'text-secondary' : 'text-primary'} cx="24" cy="24" r="20" fill="transparent" stroke="currentColor" strokeDasharray="125.6" strokeDashoffset={125.6 * (1 - card.match / 100)} strokeWidth="4" />
-                              </svg>
-                              <span className={`absolute inset-0 flex items-center justify-center font-label-sm font-bold ${i === 0 ? 'text-secondary' : 'text-primary'}`}>{card.match}%</span>
+                  {msg.response.scholarships.length > 0 && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {msg.response.scholarships.map((card, i) => (
+                        <div key={i} className={`glass-panel p-6 rounded-10 border-l-4 ${i === 0 ? 'border-secondary' : 'border-primary'} flex flex-col justify-between group hover:scale-[1.01] transition-transform cursor-pointer relative overflow-hidden`}>
+                          {/* Match Circle */}
+                          <div className="absolute top-0 right-0 p-4">
+                            <div className="flex flex-col items-center">
+                              <div className="relative w-12 h-12">
+                                <svg className="w-12 h-12 transform -rotate-90" viewBox="0 0 48 48">
+                                  <circle className="text-surface-container-highest" cx="24" cy="24" r="20" fill="transparent" stroke="currentColor" strokeWidth="4" />
+                                  <circle className={i === 0 ? 'text-secondary' : 'text-primary'} cx="24" cy="24" r="20" fill="transparent" stroke="currentColor" strokeDasharray="125.6" strokeDashoffset={125.6 * (1 - card.match / 100)} strokeWidth="4" />
+                                </svg>
+                                <span className={`absolute inset-0 flex items-center justify-center font-label-sm font-bold ${i === 0 ? 'text-secondary' : 'text-primary'}`}>{card.match}%</span>
+                              </div>
+                              <span className="text-[10px] uppercase font-bold text-on-surface-variant mt-1">Match</span>
                             </div>
-                            <span className="text-[10px] uppercase font-bold text-on-surface-variant mt-1">Match</span>
                           </div>
-                        </div>
 
-                        <div>
-                          <div className="flex gap-2 mb-2 flex-wrap">
-                            {card.tags.map((t) => (
-                              <span key={t} className={`px-2 py-0.5 ${i === 0 ? 'bg-secondary-container/10 text-secondary' : 'bg-primary-container/10 text-primary'} text-[10px] font-bold rounded uppercase tracking-wider`}>{t}</span>
-                            ))}
+                          <div>
+                            <div className="flex gap-2 mb-2 flex-wrap">
+                              {card.tags.map((t) => (
+                                <span key={t} className={`px-2 py-0.5 ${i === 0 ? 'bg-secondary-container/10 text-secondary' : 'bg-primary-container/10 text-primary'} text-[10px] font-bold rounded uppercase tracking-wider`}>{t}</span>
+                              ))}
+                            </div>
+                            <h4 className="font-headline-md text-[18px] font-bold text-on-surface leading-tight mb-1 pr-16">{card.title}</h4>
+                            <p className="font-body-sm text-body-sm text-on-surface-variant mb-4">Award: {card.award}</p>
                           </div>
-                          <h4 className="font-headline-md text-[18px] font-bold text-on-surface leading-tight mb-1 pr-16">{card.title}</h4>
-                          <p className="font-body-sm text-body-sm text-on-surface-variant mb-4">Award: {card.award}</p>
-                        </div>
 
-                        <div className="pt-4 border-t border-outline-variant/10 flex justify-between items-center">
-                          <span className={`font-label-sm font-semibold flex items-center gap-1 ${card.urgency.includes('left') ? 'text-error' : 'text-on-surface-variant'}`}>
-                            <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>schedule</span>
-                            {card.urgency}
-                          </span>
-                          <button
-                            onClick={async () => {
-                              if (auth.currentUser) {
-                                try {
-                                  await addDoc(collection(db, 'tracker'), {
-                                    userId: auth.currentUser.uid,
-                                    columnId: 'col_interested',
-                                    title: card.title,
-                                    desc: `Award: ${card.award}`,
-                                    amount: card.award,
-                                    createdAt: Date.now()
-                                  });
-                                  alert(`"${card.title}" added to your tracker!`);
-                                } catch (e) {
-                                  console.error(e);
-                                  alert('Error adding to tracker');
+                          <div className="pt-4 border-t border-outline-variant/10 flex justify-between items-center">
+                            <span className={`font-label-sm font-semibold flex items-center gap-1 ${card.urgency.includes('left') ? 'text-error' : 'text-on-surface-variant'}`}>
+                              <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>schedule</span>
+                              {card.urgency}
+                            </span>
+                            <button
+                              onClick={async () => {
+                                if (auth.currentUser) {
+                                  try {
+                                    await addDoc(collection(db, 'tracker'), {
+                                      userId: auth.currentUser.uid,
+                                      columnId: 'col_interested',
+                                      title: card.title,
+                                      desc: `Award: ${card.award}`,
+                                      amount: card.award,
+                                      createdAt: Date.now()
+                                    });
+                                    alert(`"${card.title}" added to your tracker!`);
+                                  } catch (e) {
+                                    console.error(e);
+                                    alert('Error adding to tracker');
+                                  }
+                                } else {
+                                  alert('Please sign in to track scholarships.');
                                 }
-                              } else {
-                                alert('Please sign in to track scholarships.');
-                              }
-                            }}
-                            className="text-primary font-bold font-label-md flex items-center gap-1 hover:underline"
-                          >
-                            Track It <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>bookmark_add</span>
-                          </button>
+                              }}
+                              className="text-primary font-bold font-label-md flex items-center gap-1 hover:underline"
+                            >
+                              Track It <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>bookmark_add</span>
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             );
