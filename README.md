@@ -445,6 +445,24 @@ SMTP_PASS=your-app-password
 
 ---
 
+## 🌍 Deployment
+
+ScholarQuest is optimized for deployment on Vercel (recommended) or Firebase Hosting.
+
+### Deploying to Vercel
+1. Push your code to GitHub.
+2. In Vercel, click **Add New...** > **Project** and import your repository.
+3. **CRITICAL:** Because the Next.js app is inside the nested `ScholarQuest` folder, you must edit the **Root Directory** setting in Vercel to point to `ScholarQuest`. If left as `/`, Vercel will return a `404 NOT_FOUND` error.
+4. Add all environment variables from `.env` to Vercel's Environment Variables section.
+5. Click **Deploy**.
+
+### Firebase Auth Configuration (Post-Deployment)
+If you deploy to a new domain (like Vercel), you must authorize it in Firebase or users will see a `auth/unauthorized-domain` error when logging in:
+1. Go to the Firebase Console > **Authentication** > **Settings** > **Authorized domains**.
+2. Click **Add domain** and paste your new Vercel domain (e.g., `your-app.vercel.app` without `https://`).
+
+---
+
 ## 🔐 Role-Based Access
 
 ScholarQuest uses Firebase Auth + Firestore to implement role-based access control:
