@@ -168,7 +168,7 @@ export default function useProviderApplications() {
   };
 
   const handleExport = () => {
-    const { generateReport } = require('../../reportUtils');
+    const { generateReport } = require('../reportUtils');
     const reportData = filtered.map(a => ({
       Student: a.student,
       Scholarship: a.scholarship,
