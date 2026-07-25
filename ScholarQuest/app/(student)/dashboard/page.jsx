@@ -11,6 +11,7 @@ export default function DashboardPage() {
   const [stats, setStats] = useState({ matched: 0, applied: 0, accepted: 0, deadlines: 0 });
   const [trackerItems, setTrackerItems] = useState([]);
   const [scholarships, setScholarships] = useState([]);
+  const [analyticsPeriod, setAnalyticsPeriod] = useState('weekly');
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -80,6 +81,53 @@ export default function DashboardPage() {
   const formatMonth = (dateStr) => new Date(dateStr).toLocaleString('default', { month: 'short' });
   const formatDay = (dateStr) => new Date(dateStr).getDate();
   const getDaysLeft = (dateStr) => Math.ceil((new Date(dateStr) - new Date()) / (1000 * 60 * 60 * 24));
+
+  const getAnalyticsData = () => {
+    const countsByDate = {};
+    trackerItems.forEach(t => {
+      let dateObj = null;
+      if (t.appliedAt) dateObj = new Date(t.appliedAt);
+      else if (t.updatedAt) dateObj = new Date(t.updatedAt);
+      else if (t.createdAt) dateObj = new Date(t.createdAt);
+      
+      if (dateObj && !isNaN(dateObj.getTime())) {
+        const dateString = dateObj.toISOString().split('T')[0];
+        countsByDate[dateString] = (countsByDate[dateString] || 0) + 1;
+      }
+    });
+
+    const today = new Date();
+    
+    if (analyticsPeriod === 'weekly') {
+      const data = [];
+      const labels = [];
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(today.getDate() - i);
+        const dateString = d.toISOString().split('T')[0];
+        data.push(countsByDate[dateString] || 0);
+        labels.push(d.toLocaleDateString('default', { weekday: 'short' }));
+      }
+      return { data, labels };
+    } else {
+      const data = [];
+      const labels = [];
+      for (let i = 5; i >= 0; i--) {
+        const d = new Date();
+        d.setMonth(today.getMonth() - i);
+        const monthKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+        let monthCount = 0;
+        Object.keys(countsByDate).forEach(key => {
+          if (key.startsWith(monthKey)) monthCount += countsByDate[key];
+        });
+        data.push(monthCount);
+        labels.push(d.toLocaleDateString('default', { month: 'short' }));
+      }
+      return { data, labels };
+    }
+  };
+
+  const { data: chartData, labels: chartLabels } = getAnalyticsData();
 
   return (
     <div className="p-8 max-w-[1200px] mx-auto font-sans">
@@ -169,20 +217,20 @@ export default function DashboardPage() {
               <p className="text-sm text-on-surface-variant font-medium">Application Volume & Trends</p>
             </div>
             <div className="bg-surface-container-low rounded-lg p-1 flex border border-outline-variant/20">
-              <button className="px-4 py-1.5 text-xs font-bold text-on-surface-variant rounded-md transition-all hover:bg-surface-container-lowest hover:text-on-surface">Weekly</button>
-              <button className="px-4 py-1.5 text-xs font-bold text-on-surface bg-surface-container-lowest rounded-md shadow-sm transition-all border border-outline-variant/30">Monthly</button>
+              <button 
+                onClick={() => setAnalyticsPeriod('weekly')}
+                className={`px-4 py-1.5 text-xs font-bold rounded-md transition-all ${analyticsPeriod === 'weekly' ? 'bg-surface-container-lowest text-on-surface shadow-sm border border-outline-variant/30' : 'text-on-surface-variant hover:bg-surface-container-lowest hover:text-on-surface'}`}>Weekly</button>
+              <button 
+                onClick={() => setAnalyticsPeriod('monthly')}
+                className={`px-4 py-1.5 text-xs font-bold rounded-md transition-all ${analyticsPeriod === 'monthly' ? 'bg-surface-container-lowest text-on-surface shadow-sm border border-outline-variant/30' : 'text-on-surface-variant hover:bg-surface-container-lowest hover:text-on-surface'}`}>Monthly</button>
             </div>
           </div>
           <div className="w-full mt-auto">
-            <StudentAnalyticsOverview />
+            <StudentAnalyticsOverview data={chartData} />
             <div className="flex justify-between text-xs text-on-surface-variant font-bold mt-4 px-1">
-              <span className="text-center w-8 -ml-4">Mon</span>
-              <span className="text-center w-8">Tue</span>
-              <span className="text-center w-8">Wed</span>
-              <span className="text-center w-8">Thu</span>
-              <span className="text-center w-8">Fri</span>
-              <span className="text-center w-8">Sat</span>
-              <span className="text-center w-8 -mr-4">Sun</span>
+              {chartLabels.map((label, idx) => (
+                <span key={idx} className={`text-center w-8 ${idx === 0 ? '-ml-4' : ''} ${idx === chartLabels.length - 1 ? '-mr-4' : ''}`}>{label}</span>
+              ))}
             </div>
           </div>
         </div>
