@@ -129,6 +129,51 @@ export default function DashboardPage() {
 
   const { data: chartData, labels: chartLabels } = getAnalyticsData();
 
+  const getFundingData = () => {
+    const today = new Date();
+    const data = [];
+    const labels = [];
+    
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date();
+      d.setMonth(today.getMonth() - i);
+      const monthKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+      
+      let totalAmount = 0;
+      
+      trackerItems.forEach(t => {
+        let dateObj = null;
+        if (t.appliedAt) dateObj = new Date(t.appliedAt);
+        else if (t.updatedAt) dateObj = new Date(t.updatedAt);
+        else if (t.createdAt) dateObj = new Date(t.createdAt);
+        
+        if (dateObj && !isNaN(dateObj.getTime())) {
+          const itemMonthKey = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}`;
+          if (itemMonthKey === monthKey) {
+            const schol = scholarships.find(s => s.id === t.scholarshipId || s.name === t.scholarshipName);
+            let amt = 0;
+            if (schol && schol.amount) {
+              if (typeof schol.amount === 'number') {
+                amt = schol.amount;
+              } else if (typeof schol.amount === 'string') {
+                const numStr = schol.amount.replace(/,/g, '').match(/\d+/);
+                if (numStr) amt = parseInt(numStr[0], 10);
+              }
+            }
+            totalAmount += amt;
+          }
+        }
+      });
+      
+      data.push(totalAmount);
+      labels.push(d.toLocaleDateString('default', { month: 'short' }));
+    }
+    
+    return { data, labels };
+  };
+
+  const { data: fundingData, labels: fundingLabels } = getFundingData();
+
   return (
     <div className="p-8 max-w-[1200px] mx-auto font-sans">
       {/* Header Area */}
@@ -274,7 +319,7 @@ export default function DashboardPage() {
             <h3 className="text-lg font-bold text-on-surface">Monthly Funding Trends</h3>
             <span className="text-xs font-bold text-on-surface-variant">Last 6 Months</span>
           </div>
-          <StudentFundingTrends />
+          <StudentFundingTrends data={fundingData} labels={fundingLabels} />
 
           <button className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-12 h-12 bg-primary rounded-full text-on-primary flex items-center justify-center shadow-lg border-4 border-surface-container-lowest hover:scale-105 transition-transform z-10">
             <span className="material-symbols-outlined text-[24px]">add</span>
