@@ -67,6 +67,8 @@ export default function useProviderMessages() {
         } else {
           setActiveConv(null);
         }
+      }, (error) => {
+        console.error("Provider Messages snapshot error:", error);
       });
     } else {
       setConvs([]);

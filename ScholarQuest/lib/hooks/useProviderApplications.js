@@ -50,6 +50,8 @@ export default function useProviderApplications() {
           };
         });
         setApplications(data);
+      }, (error) => {
+        console.error("Provider Applications snapshot error:", error);
       });
     } else {
       setApplications([]);

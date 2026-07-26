@@ -21,6 +21,8 @@ export default function useProviderScholarships() {
           const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
           data.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
           setScholarships(data);
+        }, (error) => {
+          console.error("Provider Scholarships snapshot error:", error);
         });
       } else {
         setScholarships([]);

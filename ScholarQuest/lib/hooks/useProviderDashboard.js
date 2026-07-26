@@ -32,10 +32,14 @@ export default function useProviderDashboard() {
 
     const unsubApps = onSnapshot(query(collection(db, 'applications'), where('providerId', '==', userUid)), (snap) => {
       setApplications(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    }, (error) => {
+      console.error("Applications snapshot permission error:", error);
     });
 
     const unsubSchols = onSnapshot(query(collection(db, 'scholarships'), where('providerId', '==', userUid)), (snap) => {
       setScholarships(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    }, (error) => {
+      console.error("Scholarships snapshot permission error:", error);
     });
 
     return () => {
