@@ -6,8 +6,8 @@
   --color-primary: #9333ea; /* Purple-600 */
   --color-secondary: #ec4899; /* Pink-500 */
   --color-tertiary: #f59e0b; /* Amber-500 */
-  --color-background: #fffafa; /* Extremely faint pink/purple background */
-  --color-surface: #fffafa;
+  --color-background: #fae8ff; /* Stronger fuchsia/pink background for even better visibility */
+  --color-surface: #fae8ff;
   --color-surface-bright: #ffffff;
   --color-surface-dim: #f3e8ff;
   --color-surface-container-lowest: #ffffff;
@@ -50,6 +50,21 @@
   --color-error-container: #ffdad6;
   --color-on-error: #ffffff;
   --color-on-error-container: #93000a;
+
+  --color-success: #15803d; /* green-700 */
+  --color-success-container: #dcfce7; /* green-100 */
+  --color-on-success: #ffffff;
+  --color-on-success-container: #14532d; /* green-900 */
+
+  --color-warning: #b45309; /* amber-700 */
+  --color-warning-container: #fef3c7; /* amber-100 */
+  --color-on-warning: #ffffff;
+  --color-on-warning-container: #78350f; /* amber-900 */
+
+  --color-info: #1d4ed8; /* blue-700 */
+  --color-info-container: #dbeafe; /* blue-100 */
+  --color-on-info: #ffffff;
+  --color-on-info-container: #1e3a8a; /* blue-900 */
 
   /* Spacing */
   --spacing-gutter: 24px;
@@ -181,6 +196,26 @@
     --color-inverse-on-surface: #f9fafb;
     --color-outline: #9ca3af;
     --color-outline-variant: #d1d5db;
+
+    --color-error: #ba1a1a;
+    --color-error-container: #ffdad6;
+    --color-on-error: #ffffff;
+    --color-on-error-container: #93000a;
+
+    --color-success: #059669; /* emerald-600 */
+    --color-success-container: #d1fae5; /* emerald-100 */
+    --color-on-success: #ffffff;
+    --color-on-success-container: #064e3b; /* emerald-900 */
+
+    --color-warning: #d97706; /* amber-600 */
+    --color-warning-container: #fef3c7; /* amber-100 */
+    --color-on-warning: #ffffff;
+    --color-on-warning-container: #78350f; /* amber-900 */
+
+    --color-info: #2563eb; /* blue-600 */
+    --color-info-container: #dbeafe; /* blue-100 */
+    --color-on-info: #ffffff;
+    --color-on-info-container: #1e3a8a; /* blue-900 */
   }
 }
 

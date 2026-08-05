@@ -12,10 +12,10 @@ export default function ProviderEducationLevelChart({ applications = [] }) {
 
   const data = [
     { label: 'Undergraduate', count: undergraduate, color: 'var(--color-primary)', bg: 'bg-primary' },
-    { label: 'Postgraduate', count: postgraduate, color: '#3b82f6', bg: 'bg-blue-500' },
-    { label: 'Diploma', count: diploma, color: '#22c55e', bg: 'bg-green-500' },
-    { label: 'PhD', count: phd, color: '#eab308', bg: 'bg-yellow-500' },
-    { label: 'High School', count: highSchool, color: '#ef4444', bg: 'bg-red-500' },
+    { label: 'Postgraduate', count: postgraduate, color: 'var(--color-info)', bg: 'bg-info' },
+    { label: 'Diploma', count: diploma, color: 'var(--color-success)', bg: 'bg-success' },
+    { label: 'PhD', count: phd, color: 'var(--color-warning)', bg: 'bg-warning' },
+    { label: 'High School', count: highSchool, color: 'var(--color-error)', bg: 'bg-error' },
   ];
 
   const c = 219.9; // 2 * pi * 35

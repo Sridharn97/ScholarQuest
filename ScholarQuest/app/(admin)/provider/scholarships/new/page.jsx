@@ -321,7 +321,7 @@ export default function PostScholarshipPage() {
                     <button
                       type="button"
                       onClick={() => addQuestion(section.id)}
-                      className="font-label-md text-primary hover:text-primary-dark flex items-center gap-1.5 py-2 px-3 hover:bg-primary/5 rounded-lg transition-colors"
+                      className="font-label-md text-primary hover:text-on-primary-fixed-variant flex items-center gap-1.5 py-2 px-3 hover:bg-primary/5 rounded-lg transition-colors"
                     >
                       <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>add</span>
                       Add Question

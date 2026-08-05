@@ -26,10 +26,10 @@ export default function ProviderStatusBreakdown({ applications = [] }) {
         <div className="relative w-40 h-40 shrink-0">
           <svg className="w-full h-full transform -rotate-90 drop-shadow-sm" viewBox="0 0 100 100">
             <circle cx="50" cy="50" r="38" fill="transparent" stroke="var(--color-surface-container-highest)" strokeWidth="12" className="opacity-20" />
-            {approved > 0 && <circle cx="50" cy="50" r="38" fill="transparent" stroke="#22c55e" strokeWidth="12" strokeLinecap="round" strokeDasharray={`${appLen} ${c - appLen}`} strokeDashoffset={appOff} className="transition-all duration-1000" />}
-            {review > 0 && <circle cx="50" cy="50" r="38" fill="transparent" stroke="#3b82f6" strokeWidth="12" strokeLinecap="round" strokeDasharray={`${revLen} ${c - revLen}`} strokeDashoffset={revOff} className="transition-all duration-1000 delay-100" />}
-            {pending > 0 && <circle cx="50" cy="50" r="38" fill="transparent" stroke="#f97316" strokeWidth="12" strokeLinecap="round" strokeDasharray={`${penLen} ${c - penLen}`} strokeDashoffset={penOff} className="transition-all duration-1000 delay-200" />}
-            {rejected > 0 && <circle cx="50" cy="50" r="38" fill="transparent" stroke="#ef4444" strokeWidth="12" strokeLinecap="round" strokeDasharray={`${rejLen} ${c - rejLen}`} strokeDashoffset={rejOff} className="transition-all duration-1000 delay-300" />}
+            {approved > 0 && <circle cx="50" cy="50" r="38" fill="transparent" stroke="var(--color-success)" strokeWidth="12" strokeLinecap="round" strokeDasharray={`${appLen} ${c - appLen}`} strokeDashoffset={appOff} className="transition-all duration-1000" />}
+            {review > 0 && <circle cx="50" cy="50" r="38" fill="transparent" stroke="var(--color-info)" strokeWidth="12" strokeLinecap="round" strokeDasharray={`${revLen} ${c - revLen}`} strokeDashoffset={revOff} className="transition-all duration-1000 delay-100" />}
+            {pending > 0 && <circle cx="50" cy="50" r="38" fill="transparent" stroke="var(--color-warning)" strokeWidth="12" strokeLinecap="round" strokeDasharray={`${penLen} ${c - penLen}`} strokeDashoffset={penOff} className="transition-all duration-1000 delay-200" />}
+            {rejected > 0 && <circle cx="50" cy="50" r="38" fill="transparent" stroke="var(--color-error)" strokeWidth="12" strokeLinecap="round" strokeDasharray={`${rejLen} ${c - rejLen}`} strokeDashoffset={rejOff} className="transition-all duration-1000 delay-300" />}
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
             <span className="font-headline-md text-3xl font-bold text-on-surface">{total === 1 && applications.length === 0 ? 0 : total}</span>
@@ -40,29 +40,29 @@ export default function ProviderStatusBreakdown({ applications = [] }) {
         <div className="flex flex-col gap-5 flex-1 w-full max-w-[200px]">
           <div className="flex items-center justify-between group">
             <div className="flex items-center gap-3">
-              <div className="w-3 h-3 rounded-full bg-green-500 shadow-sm" />
-              <span className="font-label-md text-sm font-medium text-on-surface group-hover:text-green-600 transition-colors">Approved</span>
+              <div className="w-3 h-3 rounded-full bg-success shadow-sm" />
+              <span className="font-label-md text-sm font-medium text-on-surface group-hover:text-success transition-colors">Approved</span>
             </div>
             <span className="font-label-md text-sm font-bold text-on-surface">{approved}</span>
           </div>
           <div className="flex items-center justify-between group">
             <div className="flex items-center gap-3">
-              <div className="w-3 h-3 rounded-full bg-blue-500 shadow-sm" />
-              <span className="font-label-md text-sm font-medium text-on-surface group-hover:text-blue-600 transition-colors">Under Review</span>
+              <div className="w-3 h-3 rounded-full bg-info shadow-sm" />
+              <span className="font-label-md text-sm font-medium text-on-surface group-hover:text-info transition-colors">Under Review</span>
             </div>
             <span className="font-label-md text-sm font-bold text-on-surface">{review}</span>
           </div>
           <div className="flex items-center justify-between group">
             <div className="flex items-center gap-3">
-              <div className="w-3 h-3 rounded-full bg-orange-500 shadow-sm" />
-              <span className="font-label-md text-sm font-medium text-on-surface group-hover:text-orange-600 transition-colors">Pending</span>
+              <div className="w-3 h-3 rounded-full bg-warning shadow-sm" />
+              <span className="font-label-md text-sm font-medium text-on-surface group-hover:text-warning transition-colors">Pending</span>
             </div>
             <span className="font-label-md text-sm font-bold text-on-surface">{pending}</span>
           </div>
           <div className="flex items-center justify-between group">
             <div className="flex items-center gap-3">
-              <div className="w-3 h-3 rounded-full bg-red-500 shadow-sm" />
-              <span className="font-label-md text-sm font-medium text-on-surface group-hover:text-red-600 transition-colors">Rejected</span>
+              <div className="w-3 h-3 rounded-full bg-error shadow-sm" />
+              <span className="font-label-md text-sm font-medium text-on-surface group-hover:text-error transition-colors">Rejected</span>
             </div>
             <span className="font-label-md text-sm font-bold text-on-surface">{rejected}</span>
           </div>

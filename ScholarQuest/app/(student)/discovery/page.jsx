@@ -187,7 +187,7 @@ export default function DiscoveryPage() {
                           </div>
                           <div>
                             <p className="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold mb-0.5">Match Score</p>
-                            <p className={`font-headline-md text-base font-extrabold ${isFeatured ? 'text-primary' : 'text-green-600'}`}>
+                            <p className={`font-headline-md text-base font-extrabold ${isFeatured ? 'text-primary' : 'text-success'}`}>
                               {s.match || '90%'}
                             </p>
                           </div>

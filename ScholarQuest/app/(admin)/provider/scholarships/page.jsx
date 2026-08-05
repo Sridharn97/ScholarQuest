@@ -3,7 +3,7 @@ import Link from 'next/link';
 import useProviderScholarships from '@/lib/hooks/useProviderScholarships';
 
 const STATUS_CLS = {
-  Active: 'bg-green-100 text-green-700',
+  Active: 'bg-success-container text-on-success-container',
   Draft: 'bg-surface-variant text-on-surface-variant',
   Closed: 'bg-outline-variant/30 text-on-surface-variant',
 };
@@ -30,16 +30,16 @@ export default function ProviderScholarshipsPage() {
     if (applicants > 100) {
       return (
         <>
-          <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-[10px] font-bold text-blue-700 border-2 border-white z-10">JD</div>
-          <div className="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center text-[10px] font-bold text-pink-700 border-2 border-white z-20">ML</div>
-          <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-[10px] font-bold text-emerald-700 border-2 border-white z-30">+{applicants - 2}</div>
+          <div className="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-[10px] font-bold text-on-secondary-container border-2 border-white z-10">JD</div>
+          <div className="w-8 h-8 rounded-full bg-tertiary-container flex items-center justify-center text-[10px] font-bold text-on-tertiary-container border-2 border-white z-20">ML</div>
+          <div className="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-[10px] font-bold text-on-primary-container border-2 border-white z-30">+{applicants - 2}</div>
         </>
       );
     }
     return (
       <>
-        <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-[10px] font-bold text-purple-700 border-2 border-white z-10">AK</div>
-        <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-[10px] font-bold text-orange-700 border-2 border-white z-20">RB</div>
+        <div className="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-[10px] font-bold text-on-primary-container border-2 border-white z-10">AK</div>
+        <div className="w-8 h-8 rounded-full bg-tertiary-container flex items-center justify-center text-[10px] font-bold text-on-tertiary-container border-2 border-white z-20">RB</div>
       </>
     );
   };
@@ -47,7 +47,7 @@ export default function ProviderScholarshipsPage() {
   return (
     <div>
       {toast && (
-        <div className="fixed top-6 right-6 z-50 bg-green-600 text-white px-5 py-3 rounded-2xl shadow-xl flex items-center gap-2 font-label-md">
+        <div className="fixed top-6 right-6 z-50 bg-success text-on-success px-5 py-3 rounded-2xl shadow-xl flex items-center gap-2 font-label-md">
           <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>check_circle</span>
           {toast}
         </div>
@@ -62,7 +62,7 @@ export default function ProviderScholarshipsPage() {
             <p className="font-body-md text-on-surface-variant mb-8">This will remove the program permanently. This action cannot be undone.</p>
             <div className="flex gap-3">
               <button onClick={() => setDeleteConfirm(null)} className="flex-1 py-3 border border-outline-variant rounded-xl font-label-md text-on-surface hover:bg-surface-container-low transition-colors">Cancel</button>
-              <button onClick={() => handleDelete(deleteConfirm)} className="flex-1 py-3 bg-error text-white rounded-xl font-label-md hover:bg-red-700 transition-colors">Delete</button>
+              <button onClick={() => handleDelete(deleteConfirm)} className="flex-1 py-3 bg-error text-white rounded-xl font-label-md hover:bg-error/90 transition-colors">Delete</button>
             </div>
           </div>
         </div>
@@ -111,10 +111,10 @@ export default function ProviderScholarshipsPage() {
       {/* Stats Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
         {[
-          { label: 'Active Programs', value: scholarships.filter(s => s.status === 'Active').length, icon: 'verified_user', cls: 'bg-primary/10 text-primary', trend: '', trendUp: true },
-          { label: 'Total Applicants', value: scholarships.reduce((acc, curr) => acc + (curr.applicants || 0), 0).toLocaleString(), icon: 'group', cls: 'bg-blue-100 text-blue-700', trend: '', trendUp: true },
-          { label: 'Total Awarded', value: `$${scholarships.reduce((acc, curr) => acc + (Number(curr.amount?.toString().replace(/[^0-9.-]+/g,"")) || 0), 0).toLocaleString()}`, icon: 'payments', cls: 'bg-green-100 text-green-700', trend: '', trendUp: true },
-          { label: 'Pending Review', value: '0', icon: 'schedule', cls: 'bg-orange-100 text-orange-700', trend: '', trendUp: false },
+          { label: 'Active Programs', value: scholarships.filter(s => s.status === 'Active').length, icon: 'verified_user', cls: 'bg-primary-container text-on-primary-container', trend: '', trendUp: true },
+          { label: 'Total Applicants', value: scholarships.reduce((acc, curr) => acc + (curr.applicants || 0), 0).toLocaleString(), icon: 'group', cls: 'bg-secondary-container text-on-secondary-container', trend: '', trendUp: true },
+          { label: 'Total Awarded', value: `$${scholarships.reduce((acc, curr) => acc + (Number(curr.amount?.toString().replace(/[^0-9.-]+/g,"")) || 0), 0).toLocaleString()}`, icon: 'payments', cls: 'bg-success-container text-on-success-container', trend: '', trendUp: true },
+          { label: 'Pending Review', value: '0', icon: 'schedule', cls: 'bg-warning-container text-on-warning-container', trend: '', trendUp: false },
         ].map((stat) => (
           <div key={stat.label} className="relative overflow-hidden clean-card p-4 rounded-2xl hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
             <div className="flex justify-between items-start mb-3">
@@ -122,7 +122,7 @@ export default function ProviderScholarshipsPage() {
                 <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1", fontSize: '20px' }}>{stat.icon}</span>
               </div>
               {stat.trend && (
-                <div className={`flex items-center gap-1 font-label-sm text-[11px] px-2 py-0.5 rounded-full ${stat.trendUp ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+                <div className={`flex items-center gap-1 font-label-sm text-[11px] px-2 py-0.5 rounded-full ${stat.trendUp ? 'bg-success-container text-success' : 'bg-error-container text-error'}`}>
                   <span className="material-symbols-outlined" style={{ fontSize: '12px' }}>{stat.trendUp ? 'trending_up' : 'priority_high'}</span>
                   {stat.trend}
                 </div>
@@ -173,7 +173,7 @@ export default function ProviderScholarshipsPage() {
                 <div className="font-label-sm text-[9px] text-on-surface-variant uppercase tracking-widest mb-0.5">Applicants</div>
                 <div className="flex items-baseline gap-2">
                   <span className="font-headline-md text-lg text-on-surface">{program.applicants || 0}</span>
-                  <span className={`font-label-sm text-[9px] font-semibold ${program.status === 'Closed' ? 'text-on-surface-variant' : 'text-green-600'}`}>
+                  <span className={`font-label-sm text-[9px] font-semibold ${program.status === 'Closed' ? 'text-on-surface-variant' : 'text-success'}`}>
                     {program.status === 'Closed' ? 'Final Count' : '+0 today'}
                   </span>
                 </div>

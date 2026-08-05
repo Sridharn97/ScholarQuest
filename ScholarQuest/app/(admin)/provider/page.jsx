@@ -21,7 +21,7 @@ export default function ProviderDashboard() {
   return (
     <div>
       {toast && (
-        <div className="fixed top-6 right-6 z-50 bg-green-600 text-white px-5 py-3 rounded-2xl shadow-xl flex items-center gap-2 font-label-md">
+        <div className="fixed top-6 right-6 z-50 bg-success text-on-success px-5 py-3 rounded-2xl shadow-xl flex items-center gap-2 font-label-md">
           <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>check_circle</span>
           {toast}
         </div>

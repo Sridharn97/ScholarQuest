@@ -54,7 +54,7 @@ export default function LandingPage() {
       <Navbar />
 
       {/* ======================== HERO ======================== */}
-      <section className="relative overflow-hidden pt-16 pb-24 px-6" style={{ background: 'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(168,85,247,0.08), transparent), radial-gradient(ellipse 60% 40% at 80% 50%, rgba(236,72,153,0.07), transparent)' }}>
+      <section className="relative overflow-hidden pt-16 pb-24 px-6" style={{ background: 'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(168,85,247,0.25), transparent), radial-gradient(ellipse 60% 40% at 80% 50%, rgba(236,72,153,0.20), transparent)' }}>
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center min-h-[580px]">
 
@@ -130,8 +130,8 @@ export default function LandingPage() {
             {/* Right — Hero Image */}
             <div className="relative hidden lg:flex items-center justify-center">
               {/* Colorful floating orbs behind hero image */}
-              <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full opacity-40 filter blur-[80px]" style={{ background: 'radial-gradient(circle, rgba(216,180,254,0.6) 0%, rgba(216,180,254,0) 70%)' }} />
-              <div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] rounded-full opacity-40 filter blur-[80px]" style={{ background: 'radial-gradient(circle, rgba(249,168,212,0.6) 0%, rgba(249,168,212,0) 70%)' }} />
+              <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full opacity-50 filter blur-[80px]" style={{ background: 'radial-gradient(circle, rgba(168,85,247,0.5) 0%, rgba(168,85,247,0) 70%)' }} />
+              <div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] rounded-full opacity-50 filter blur-[80px]" style={{ background: 'radial-gradient(circle, rgba(236,72,153,0.5) 0%, rgba(236,72,153,0) 70%)' }} />
 
               <div className="relative w-full aspect-square max-w-[520px] rounded-3xl overflow-hidden border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.06)] bg-white/40 backdrop-blur-md flex items-center justify-center p-4">
                 <Image
@@ -239,7 +239,7 @@ export default function LandingPage() {
               </Link>
             </div>
             <div className="relative h-72 lg:h-full min-h-[360px] flex items-center justify-center p-8 bg-gradient-to-br from-[#faf5ff] via-[#fdf2f8] to-[#fffbeb]">
-              <div className="absolute top-[-10%] right-[-10%] w-[300px] h-[300px] rounded-full opacity-40 filter blur-[60px]" style={{ background: 'radial-gradient(circle, rgba(216,180,254,0.5) 0%, rgba(216,180,254,0) 70%)' }} />
+              <div className="absolute top-[-10%] right-[-10%] w-[300px] h-[300px] rounded-full opacity-50 filter blur-[60px]" style={{ background: 'radial-gradient(circle, rgba(168,85,247,0.5) 0%, rgba(168,85,247,0) 70%)' }} />
               <Image src="/ai_matcher_new_realistic.png" alt="AI Scholarship Matching" fill sizes="(max-width: 1024px) 100vw, 48vw" className="object-cover rounded-3xl p-4 z-10" unoptimized />
             </div>
           </div>
@@ -247,7 +247,7 @@ export default function LandingPage() {
       </section>
 
       {/* ======================== HOW IT WORKS ======================== */}
-      <section className="py-28 px-6" style={{ background: 'radial-gradient(ellipse 80% 50% at 50% 100%, rgba(168,85,247,0.04), transparent)' }}>
+      <section className="py-28 px-6" style={{ background: 'radial-gradient(ellipse 80% 50% at 50% 100%, rgba(168,85,247,0.15), transparent)' }}>
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 max-w-xl mx-auto">
             <p className="text-sm font-bold text-secondary uppercase tracking-widest mb-3">Simple Process</p>
