@@ -38,7 +38,7 @@ export default function Navbar() {
           <div className="flex justify-start items-center">
             <Link href="/" className="flex items-center gap-2.5 flex-shrink-0 group">
               <div className="relative w-10 h-10 rounded-full shadow-sm bg-white overflow-hidden border border-slate-100 group-hover:shadow-md transition-all">
-                 <img src="/Logo.png.png" alt="Logo" className="w-full h-full object-cover" />
+                 <img src="/scholarquest-logo.png" alt="Logo" className="w-full h-full object-cover" />
               </div>
               <span className={`font-extrabold text-xl tracking-tight transition-colors duration-300 ${isScrolled ? 'text-slate-800' : (isTransparentLight ? 'text-white' : 'text-slate-900')}`}>
                 Scholar<span className={isTransparentLight ? 'text-white' : 'text-primary'}>Quest</span>

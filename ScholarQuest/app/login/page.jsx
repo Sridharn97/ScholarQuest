@@ -74,7 +74,7 @@ export default function LoginPage() {
           {/* Brand header */}
           <Link href="/" className="flex items-center gap-3 mb-5 group w-fit">
             <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300">
-              <img src="/Logo.png.png" alt="ScholarQuest Logo" className="w-8 h-8 rounded-lg object-cover" />
+              <img src="/scholarquest-logo.png" alt="ScholarQuest Logo" className="w-8 h-8 rounded-lg object-cover" />
             </div>
             <div>
               <p className="font-extrabold text-white text-[1.05rem] tracking-tight leading-none" style={{ fontFamily: 'Manrope, sans-serif' }}>ScholarQuest</p>
