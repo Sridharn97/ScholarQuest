@@ -592,7 +592,6 @@ export default function ProfilePage() {
                     <div key={idx} className="flex items-center justify-between p-5 rounded-2xl border border-outline-variant/30 bg-surface-container-lowest hover:bg-surface-container-low transition-colors group">
                       <div>
                         <h3 className="font-bold text-lg text-on-surface group-hover:text-primary transition-colors">{card.title}</h3>
-                        <p className="text-sm text-on-surface-variant font-medium mt-1">{card.desc || 'No description provided'}</p>
                         {card.amount && <p className="text-sm font-bold text-green-600 mt-2">{card.amount}</p>}
                       </div>
                       <div className="shrink-0 ml-4">

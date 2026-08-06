@@ -180,7 +180,6 @@ export default function DashboardPage() {
       <div className="flex items-end justify-between mb-8">
         <div>
           <h2 className="text-[28px] font-bold text-on-surface mb-1 leading-tight tracking-tight">Scholarship Overview</h2>
-          <p className="text-on-surface-variant text-sm font-medium">You have {appliedCount} applications in progress. Keep up the momentum!</p>
         </div>
         <div className="flex items-center gap-6">
           <button 
