@@ -45,13 +45,10 @@ export default function ProviderApplicationTrends({ applications = [] }) {
           
           return (
             <div key={label + i} className="flex flex-col items-center gap-4 group flex-1">
-              <div className="relative w-8 h-48 bg-surface-container-highest/20 rounded-full flex items-end overflow-hidden group-hover:bg-surface-container-highest/30 transition-colors">
-                <div
-                  className={`w-full rounded-full transition-all duration-700 ease-out ${isMax ? 'bg-primary' : 'bg-outline-variant/50 group-hover:bg-primary/70'}`}
-                  style={{ height: heightPct }}
-                  title={`${counts[i]} applications`}
-                />
-              </div>
+              <div 
+                className={`w-8 h-48 rounded-full transition-colors ${isMax ? 'bg-primary' : 'bg-surface-container-highest/20 group-hover:bg-surface-container-highest/30'}`}
+                title={`${counts[i]} applications`}
+              />
               <span className={`text-label-sm ${isMax ? 'font-bold text-primary' : 'text-on-surface-variant font-medium'}`}>
                 {label}
               </span>

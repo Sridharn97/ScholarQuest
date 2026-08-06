@@ -5,6 +5,8 @@ import ProviderStatusBreakdown from '@/components/dashboard/ProviderStatusBreakd
 import ProviderApplicationTrends from '@/components/dashboard/ProviderApplicationTrends';
 import ProviderEducationLevelChart from '@/components/dashboard/ProviderEducationLevelChart';
 import ProviderMonthlyOverviewChart from '@/components/dashboard/ProviderMonthlyOverviewChart';
+import ProviderTopScholarshipsChart from '@/components/dashboard/ProviderTopScholarshipsChart';
+import ProviderRecentActivityChart from '@/components/dashboard/ProviderRecentActivityChart';
 
 export default function ProviderDashboard() {
   const {
@@ -68,6 +70,15 @@ export default function ProviderDashboard() {
 
         {/* Monthly Applications Overview */}
         <ProviderMonthlyOverviewChart applications={applications} />
+      </div>
+
+      {/* Performance & Outcomes Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        {/* Top Performing Scholarships */}
+        <ProviderTopScholarshipsChart applications={applications} scholarships={scholarships} />
+
+        {/* Recent Activity Timeline */}
+        <ProviderRecentActivityChart applications={applications} />
       </div>
     </div>
   );
