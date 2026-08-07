@@ -14,10 +14,39 @@ const manrope = Manrope({
 });
 
 export const metadata = {
-  title: 'ScholarQuest | Find Your Academic Future',
-  description:
-    'ScholarQuest — AI-powered scholarship discovery and application management platform. Find scholarships tailored for you with our intelligent matching engine.',
-  keywords: 'scholarships, scholarship finder, AI matching, student funding, grants, fellowships',
+  metadataBase: new URL('https://scholar-quest-ten.vercel.app'),
+  title: {
+    default: 'ScholarQuest | AI-Powered Scholarship Discovery Platform',
+    template: '%s | ScholarQuest',
+  },
+  description: 'ScholarQuest — An intelligent, AI-powered scholarship discovery and application management platform connecting ambitious students with universities, companies, and organizations.',
+  keywords: ['scholarships', 'scholarship finder', 'AI matching', 'student funding', 'grants', 'fellowships', 'college funding', 'financial aid'],
+  authors: [{ name: 'ScholarQuest' }],
+  creator: 'ScholarQuest',
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://scholar-quest-ten.vercel.app',
+    title: 'ScholarQuest | Find Your Academic Future',
+    description: 'Find scholarships tailored for you with our intelligent matching engine.',
+    siteName: 'ScholarQuest',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'ScholarQuest | Find Your Academic Future',
+    description: 'Find scholarships tailored for you with our intelligent matching engine.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
 export default function RootLayout({ children }) {

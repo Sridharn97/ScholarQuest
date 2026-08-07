@@ -7,6 +7,11 @@ import useGoogleLogin from '@/lib/hooks/useGoogleLogin';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 
+export const metadata = {
+  title: 'Student Login',
+  description: 'Sign in to your ScholarQuest student dashboard to track your scholarship applications and discover new matches.',
+};
+
 export default function LoginPage() {
   const {
     showPassword,
