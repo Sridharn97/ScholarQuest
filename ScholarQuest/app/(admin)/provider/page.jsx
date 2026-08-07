@@ -43,12 +43,12 @@ export default function ProviderDashboard() {
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${kpi.iconCls} shadow-inner`}>
                 <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1", fontSize: '20px' }}>{kpi.icon}</span>
               </div>
-              <div className={`flex items-center gap-1 font-label-sm text-[11px] px-2 py-0.5 rounded-full ${kpi.badgeCls}`}>
-                <span className="material-symbols-outlined" style={{ fontSize: '12px' }}>trending_up</span>
+              <div className={`flex items-center gap-1 font-label-sm text-sm px-2 py-0.5 rounded-full ${kpi.badgeCls}`}>
+                <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>trending_up</span>
                 {kpi.badge}
               </div>
             </div>
-            <p className="font-label-sm text-on-surface-variant mb-0.5">{kpi.label}</p>
+            <p className="text-sm font-label-md text-on-surface-variant mb-0.5">{kpi.label}</p>
             <h4 className="font-headline-md text-2xl text-on-surface">{kpi.value}</h4>
           </div>
         ))}

@@ -81,7 +81,7 @@ export default function ProviderRecentActivityChart({ applications = [] }) {
               <g key={i} className="group">
                 <circle cx={p.x} cy={p.y} r="5" fill="var(--color-surface)" stroke="var(--color-tertiary)" strokeWidth="3" />
                 <circle cx={p.x} cy={p.y} r="14" fill="var(--color-tertiary)" fillOpacity="0.2" className="opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer" />
-                <text x={p.x} y={p.y - 16} textAnchor="middle" fill="var(--color-on-surface)" fontSize="14" fontWeight="bold" className="opacity-0 group-hover:opacity-100 transition-opacity">
+                <text x={p.x} y={p.y - 16} textAnchor="middle" fill="var(--color-on-surface)" fontSize="16" fontWeight="bold" className="opacity-0 group-hover:opacity-100 transition-opacity">
                   {p.count}
                 </text>
               </g>
@@ -92,7 +92,7 @@ export default function ProviderRecentActivityChart({ applications = [] }) {
         {/* X Axis Labels */}
         <div className="flex justify-between w-full mt-4 px-[20px]">
           {points.map((p, i) => (
-            <span key={i} className={`text-[12px] font-medium ${i === points.length - 1 ? 'text-tertiary font-bold' : 'text-on-surface-variant'}`} style={{ transform: 'translateX(-50%)' }}>
+            <span key={i} className={`text-sm font-medium ${i === points.length - 1 ? 'text-tertiary font-bold' : 'text-on-surface-variant'}`} style={{ transform: 'translateX(-50%)' }}>
               {i === points.length - 1 ? 'Today' : p.label}
             </span>
           ))}

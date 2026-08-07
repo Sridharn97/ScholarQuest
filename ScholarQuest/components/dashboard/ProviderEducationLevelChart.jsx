@@ -61,7 +61,7 @@ export default function ProviderEducationLevelChart({ applications = [] }) {
             })}
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="font-label-sm text-[12px] font-semibold text-on-surface mb-0.5">Total</span>
+            <span className="font-label-sm text-sm font-semibold text-on-surface mb-0.5">Total</span>
             <span className="font-headline-md text-3xl font-bold text-on-surface leading-none">{applications.length}</span>
           </div>
         </div>

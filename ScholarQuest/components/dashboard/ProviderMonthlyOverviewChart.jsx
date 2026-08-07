@@ -86,7 +86,7 @@ export default function ProviderMonthlyOverviewChart({ applications = [] }) {
       
       <div className="flex-1 relative w-full flex my-auto">
         {/* Y Axis Labels */}
-        <div className="flex flex-col justify-between h-[180px] pr-4 py-[20px] text-[11px] font-medium text-on-surface-variant">
+        <div className="flex flex-col justify-between h-[180px] pr-4 py-[20px] text-sm font-medium text-on-surface-variant">
           {gridLines.reverse().map((g, i) => (
             <span key={i} className="leading-none">{g.val}</span>
           ))}
@@ -128,7 +128,7 @@ export default function ProviderMonthlyOverviewChart({ applications = [] }) {
           {/* X Axis Labels */}
           <div className="absolute left-0 right-0 -bottom-6 flex justify-between px-[20px]">
             {points.map((p, i) => (
-              <span key={i} className="text-[12px] font-medium text-on-surface-variant" style={{ transform: 'translateX(-50%)' }}>
+              <span key={i} className="text-sm font-medium text-on-surface-variant" style={{ transform: 'translateX(-50%)' }}>
                 {p.label}
               </span>
             ))}
