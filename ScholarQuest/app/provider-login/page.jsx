@@ -34,7 +34,7 @@ export default function ProviderLoginPage() {
           {/* Mobile logo */}
           <div className="flex items-center gap-3 lg:hidden">
             <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center shadow-md">
-              <img src="/logo_provider.png" alt="Logo" className="w-6 h-6 rounded-lg object-cover" />
+              <img src="/scholarquest-logo.png" alt="Logo" className="w-6 h-6 rounded-lg object-cover" />
             </div>
             <p className="font-extrabold text-slate-900 text-base tracking-tight" style={{ fontFamily: 'Manrope, sans-serif' }}>ScholarQuest</p>
           </div>
@@ -192,7 +192,7 @@ export default function ProviderLoginPage() {
           {/* Brand header */}
           <Link href="/" className="flex items-center gap-3 mb-5 group w-fit">
             <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300">
-              <img src="/logo_provider.png" alt="ScholarQuest Logo" className="w-8 h-8 rounded-lg object-cover" />
+              <img src="/scholarquest-logo.png" alt="ScholarQuest Logo" className="w-8 h-8 rounded-lg object-cover" />
             </div>
             <div>
               <p className="font-extrabold text-white text-[1.05rem] tracking-tight leading-none" style={{ fontFamily: 'Manrope, sans-serif' }}>ScholarQuest</p>
