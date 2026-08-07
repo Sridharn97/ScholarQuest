@@ -1,5 +1,8 @@
 # 🎓 ScholarQuest
 
+> ⚠️ **COPYRIGHT NOTICE: All Rights Reserved**
+> This repository is public strictly for portfolio and viewing purposes. You are **NOT permitted** to clone, modify, distribute, or use this code for personal or commercial projects. See the `LICENSE` file for details.
+
 > **An AI-powered scholarship discovery and management platform** connecting ambitious students with companies, universities, and institutions that fund their futures — all in one place.
 
 ---
