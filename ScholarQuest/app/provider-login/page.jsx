@@ -3,11 +3,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import useProviderLogin from '@/lib/hooks/useProviderLogin';
 
-export const metadata = {
-  title: 'Provider Login',
-  description: 'Sign in to your ScholarQuest Provider Portal. Manage your organization\'s scholarship programs and review student applications.',
-};
-
 export default function ProviderLoginPage() {
   const {
     showPassword,

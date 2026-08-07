@@ -3,11 +3,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import useProviderSignup from '@/lib/hooks/useProviderSignup';
 
-export const metadata = {
-  title: 'Partner with Us | Provider Registration',
-  description: 'Join ScholarQuest as a scholarship provider. Post your funding opportunities, streamline application tracking, and connect with top students.',
-};
-
 export default function ProviderSignupPage() {
   const {
     showPassword,

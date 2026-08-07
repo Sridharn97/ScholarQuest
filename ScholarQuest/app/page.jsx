@@ -6,11 +6,6 @@ import Footer from '@/components/layout/Footer';
 import SuccessStoriesSection from '@/components/sections/SuccessStoriesSection';
 import useUserRole from '@/lib/hooks/useUserRole';
 
-export const metadata = {
-  title: 'ScholarQuest | Find Your Academic Future',
-  description: 'Join thousands of students getting matched to millions in scholarships. ScholarQuest connects you directly with institutional and corporate funding.',
-};
-
 const stats = [
   { value: '₹2,500 Cr+', label: 'Scholarship Funds' },
   { value: '50,000+', label: 'Opportunities' },
