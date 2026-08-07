@@ -43,7 +43,7 @@ export default function ProviderCategoryBreakdown({ categories = [], totalCount 
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               <span className="font-headline-md text-2xl text-on-surface">{totalCount}</span>
-              <span className="font-label-sm text-[10px] text-on-surface-variant uppercase tracking-widest mt-0.5">Total</span>
+              <span className="font-label-sm text-xs text-on-surface-variant uppercase tracking-widest mt-0.5">Total</span>
             </div>
           </div>
           
@@ -51,8 +51,8 @@ export default function ProviderCategoryBreakdown({ categories = [], totalCount 
             {categories.map((c) => (
               <div key={c.label} className="flex items-center gap-2">
                 <div className={`w-2.5 h-2.5 rounded-full ${c.colorClass} flex-shrink-0`} />
-                <span className="font-body-sm text-xs text-on-surface-variant truncate">{c.label}</span>
-                <span className="font-label-sm text-xs font-bold ml-auto">{c.pctString}</span>
+                <span className="font-body-sm text-sm text-on-surface-variant truncate">{c.label}</span>
+                <span className="font-label-sm text-sm font-bold ml-auto">{c.pctString}</span>
               </div>
             ))}
           </div>

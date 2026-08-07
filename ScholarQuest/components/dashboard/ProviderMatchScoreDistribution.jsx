@@ -36,10 +36,10 @@ export default function ProviderMatchScoreDistribution({ applications = [] }) {
                   title={`${bucket.count} applications`}
                 />
               </div>
-              <span className={`text-xs font-label-md ${isMax ? 'font-bold text-secondary' : 'text-on-surface-variant'}`}>
+              <span className={`text-sm font-label-md ${isMax ? 'font-bold text-secondary' : 'text-on-surface-variant'}`}>
                 {bucket.label}
               </span>
-              <span className="text-xs font-bold text-on-surface">{bucket.count}</span>
+              <span className="text-sm font-bold text-on-surface">{bucket.count}</span>
             </div>
           );
         })}

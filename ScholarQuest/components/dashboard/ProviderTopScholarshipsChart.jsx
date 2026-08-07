@@ -65,7 +65,7 @@ export default function ProviderTopScholarshipsChart({ applications = [], schola
           return (
             <div key={schol.id + i} className="flex flex-col items-center group flex-1 h-full">
               <div className="h-6 flex items-end mb-2">
-                <span className={`text-sm font-bold ${isMax ? 'text-primary' : 'text-on-surface-variant'} opacity-0 group-hover:opacity-100 transition-opacity`}>
+                <span className={`text-sm sm:text-base font-bold ${isMax ? 'text-primary' : 'text-on-surface-variant'} opacity-0 group-hover:opacity-100 transition-opacity`}>
                   {schol.isEmpty ? '' : schol.count}
                 </span>
               </div>
@@ -78,7 +78,7 @@ export default function ProviderTopScholarshipsChart({ applications = [], schola
               </div>
               <div className="h-10 mt-3 flex items-start justify-center px-1 w-full overflow-hidden">
                 <span 
-                  className={`text-[10px] sm:text-xs font-semibold text-center line-clamp-2 leading-tight ${isMax ? 'text-primary' : 'text-on-surface-variant'}`}
+                  className={`text-xs sm:text-sm font-semibold text-center line-clamp-2 leading-tight ${isMax ? 'text-primary' : 'text-on-surface-variant'}`}
                   title={schol.name}
                 >
                   {schol.name === '-' ? '' : schol.name}

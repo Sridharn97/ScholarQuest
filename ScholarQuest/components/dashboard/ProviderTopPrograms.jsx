@@ -36,10 +36,10 @@ export default function ProviderTopPrograms({ scholarships = [], applications = 
                     title={`${s.applicants} applications`}
                   />
                 </div>
-                <span className={`text-xs font-label-md text-center max-w-[80px] truncate ${isMax ? 'font-bold text-primary' : 'text-on-surface-variant'}`} title={s.name}>
+                <span className={`text-sm font-label-md text-center max-w-[80px] truncate ${isMax ? 'font-bold text-primary' : 'text-on-surface-variant'}`} title={s.name}>
                   {s.name.split(' ')[0]} {/* Display only the first word to fit */}
                 </span>
-                <span className="text-xs font-bold text-on-surface">{s.applicants}</span>
+                <span className="text-sm font-bold text-on-surface">{s.applicants}</span>
               </div>
             );
           })}
