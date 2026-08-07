@@ -43,7 +43,7 @@ export default function ProviderSignupPage() {
             </div>
             <div>
               <p className="font-extrabold text-white text-[1.05rem] tracking-tight leading-none" style={{ fontFamily: 'Manrope, sans-serif' }}>ScholarQuest</p>
-              <p className="text-sky-400 text-[0.62rem] tracking-[0.18em] uppercase mt-1 font-bold">Partner Onboarding</p>
+              <p className="text-sky-400 text-xs tracking-[0.18em] uppercase mt-1 font-bold">Partner Onboarding</p>
             </div>
           </Link>
 
@@ -64,8 +64,8 @@ export default function ProviderSignupPage() {
                 <span className="material-symbols-outlined text-white" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>school</span>
               </div>
               <div>
-                <p className="text-white font-bold text-[0.75rem] leading-none">Global Reach</p>
-                <p className="text-sky-300 text-[0.58rem] uppercase font-bold tracking-wider mt-0.5">Top Institutions</p>
+                <p className="text-white font-bold text-sm leading-none">Global Reach</p>
+                <p className="text-sky-300 text-xs uppercase font-bold tracking-wider mt-0.5">Top Institutions</p>
               </div>
             </div>
           </div>
@@ -75,7 +75,7 @@ export default function ProviderSignupPage() {
             <div className="px-4 py-3 rounded-2xl shadow-2xl"
               style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
               <p className="text-emerald-400 font-extrabold text-xl leading-none" style={{ fontFamily: 'Manrope, sans-serif' }}>$50M+</p>
-              <p className="text-slate-300 text-[0.58rem] uppercase font-bold tracking-wider mt-1">Funds Distributed</p>
+              <p className="text-slate-300 text-xs uppercase font-bold tracking-wider mt-1">Funds Distributed</p>
             </div>
           </div>
 
@@ -86,10 +86,10 @@ export default function ProviderSignupPage() {
               <div className="flex gap-0.5 mb-2">
                 {[1,2,3,4,5].map(i => <span key={i} className="material-symbols-outlined text-amber-400" style={{ fontSize: '11px', fontVariationSettings: "'FILL' 1" }}>star</span>)}
               </div>
-              <p className="text-slate-300 text-[0.7rem] italic leading-snug mb-3">"Our company's outreach has never been more impactful and streamlined."</p>
+              <p className="text-slate-300 text-sm italic leading-snug mb-3">"Our company's outreach has never been more impactful and streamlined."</p>
               <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-full bg-emerald-600 flex items-center justify-center text-[9px] font-bold text-white flex-shrink-0">DR</div>
-                <p className="text-white font-bold text-[0.65rem]">David R., <span className="font-normal text-slate-400">Innovate Inc.</span></p>
+                <div className="w-6 h-6 rounded-full bg-emerald-600 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">DR</div>
+                <p className="text-white font-bold text-sm">David R., <span className="font-normal text-slate-400">Innovate Inc.</span></p>
               </div>
             </div>
           </div>
@@ -108,7 +108,7 @@ export default function ProviderSignupPage() {
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-md" style={{ background: item.gradient }}>
                   <span className="material-symbols-outlined text-white" style={{ fontSize: '20px', fontVariationSettings: "'FILL' 1" }}>{item.icon}</span>
                 </div>
-                <span className="text-slate-200 text-[0.62rem] font-bold uppercase tracking-wider leading-tight whitespace-pre-line">{item.label}</span>
+                <span className="text-slate-200 text-xs font-bold uppercase tracking-wider leading-tight whitespace-pre-line">{item.label}</span>
               </div>
             ))}
           </div>
@@ -149,7 +149,7 @@ export default function ProviderSignupPage() {
           {/* ── Badge + Heading (fixed top section) ── */}
           <div className="flex-shrink-0 mb-4">
             {/* Partner badge */}
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[0.68rem] font-bold tracking-wide uppercase mb-3"
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-bold tracking-wide uppercase mb-3"
               style={{ background: 'linear-gradient(135deg, rgba(99,102,241,0.12) 0%, rgba(168,85,247,0.12) 100%)', color: '#6366f1', border: '1px solid rgba(99,102,241,0.2)' }}>
               <span className="material-symbols-outlined" style={{ fontSize: '12px', fontVariationSettings: "'FILL' 1" }}>verified</span>
               Partner Program
@@ -162,7 +162,7 @@ export default function ProviderSignupPage() {
                 Registration
               </span>
             </h1>
-            <p className="text-slate-500 text-[0.82rem] leading-relaxed">
+            <p className="text-slate-500 text-sm leading-relaxed">
               Create an account for your Company or Educational Institute and start funding talent.
             </p>
           </div>
@@ -206,10 +206,10 @@ export default function ProviderSignupPage() {
                 {/* First + Last Name */}
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label htmlFor="first_name" className="block text-[0.7rem] font-semibold text-slate-500 mb-1 uppercase tracking-wide">First Name</label>
+                    <label htmlFor="first_name" className="block text-sm font-semibold text-slate-500 mb-1 uppercase tracking-wide">First Name</label>
                     <div className="relative">
                       <input id="first_name" name="first_name" type="text" placeholder="Jane" autoComplete="given-name" required
-                        className="w-full h-9 px-3 rounded-lg text-[0.83rem] text-slate-800 placeholder:text-slate-400 outline-none transition-all"
+                        className="w-full h-9 px-3 rounded-lg text-sm text-slate-800 placeholder:text-slate-400 outline-none transition-all"
                         style={{ background: '#f8fafc', border: '1.5px solid #e2e8f0' }}
                         onFocus={e => { e.currentTarget.style.border = '1.5px solid #6366f1'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)'; e.currentTarget.style.background = '#fff'; }}
                         onBlur={e => { e.currentTarget.style.border = '1.5px solid #e2e8f0'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.background = '#f8fafc'; }}
@@ -217,9 +217,9 @@ export default function ProviderSignupPage() {
                     </div>
                   </div>
                   <div>
-                    <label htmlFor="last_name" className="block text-[0.7rem] font-semibold text-slate-500 mb-1 uppercase tracking-wide">Last Name</label>
+                    <label htmlFor="last_name" className="block text-sm font-semibold text-slate-500 mb-1 uppercase tracking-wide">Last Name</label>
                     <input id="last_name" name="last_name" type="text" placeholder="Doe" autoComplete="family-name" required
-                      className="w-full h-9 px-3 rounded-lg text-[0.83rem] text-slate-800 placeholder:text-slate-400 outline-none transition-all"
+                      className="w-full h-9 px-3 rounded-lg text-sm text-slate-800 placeholder:text-slate-400 outline-none transition-all"
                       style={{ background: '#f8fafc', border: '1.5px solid #e2e8f0' }}
                       onFocus={e => { e.currentTarget.style.border = '1.5px solid #6366f1'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)'; e.currentTarget.style.background = '#fff'; }}
                       onBlur={e => { e.currentTarget.style.border = '1.5px solid #e2e8f0'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.background = '#f8fafc'; }}
@@ -229,11 +229,11 @@ export default function ProviderSignupPage() {
 
                 {/* Company Name */}
                 <div>
-                  <label htmlFor="organization" className="block text-[0.7rem] font-semibold text-slate-500 mb-1 uppercase tracking-wide">Company or Institute Name</label>
+                  <label htmlFor="organization" className="block text-sm font-semibold text-slate-500 mb-1 uppercase tracking-wide">Company or Institute Name</label>
                   <div className="relative">
                     <span className="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" style={{ fontSize: '16px' }}>business</span>
                     <input id="organization" name="organization" type="text" placeholder="e.g., Stanford University or Google Inc." required
-                      className="w-full h-9 pl-8 pr-3 rounded-lg text-[0.83rem] text-slate-800 placeholder:text-slate-400 outline-none transition-all"
+                      className="w-full h-9 pl-8 pr-3 rounded-lg text-sm text-slate-800 placeholder:text-slate-400 outline-none transition-all"
                       style={{ background: '#f8fafc', border: '1.5px solid #e2e8f0' }}
                       onFocus={e => { e.currentTarget.style.border = '1.5px solid #6366f1'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)'; e.currentTarget.style.background = '#fff'; }}
                       onBlur={e => { e.currentTarget.style.border = '1.5px solid #e2e8f0'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.background = '#f8fafc'; }}
@@ -244,10 +244,10 @@ export default function ProviderSignupPage() {
                 {/* Entity Type + Work Email */}
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label htmlFor="entity_type" className="block text-[0.7rem] font-semibold text-slate-500 mb-1 uppercase tracking-wide">Entity Type</label>
+                    <label htmlFor="entity_type" className="block text-sm font-semibold text-slate-500 mb-1 uppercase tracking-wide">Entity Type</label>
                     <div className="relative">
                       <select id="entity_type" name="entity_type"
-                        className="w-full h-9 pl-3 pr-8 rounded-lg text-[0.83rem] text-slate-800 outline-none appearance-none transition-all cursor-pointer"
+                        className="w-full h-9 pl-3 pr-8 rounded-lg text-sm text-slate-800 outline-none appearance-none transition-all cursor-pointer"
                         style={{ background: '#f8fafc', border: '1.5px solid #e2e8f0' }}
                         onFocus={e => { e.currentTarget.style.border = '1.5px solid #6366f1'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)'; e.currentTarget.style.background = '#fff'; }}
                         onBlur={e => { e.currentTarget.style.border = '1.5px solid #e2e8f0'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.background = '#f8fafc'; }}
@@ -262,11 +262,11 @@ export default function ProviderSignupPage() {
                     </div>
                   </div>
                   <div>
-                    <label htmlFor="provider_email" className="block text-[0.7rem] font-semibold text-slate-500 mb-1 uppercase tracking-wide">Work Email</label>
+                    <label htmlFor="provider_email" className="block text-sm font-semibold text-slate-500 mb-1 uppercase tracking-wide">Work Email</label>
                     <div className="relative">
                       <span className="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" style={{ fontSize: '16px' }}>mail</span>
                       <input id="provider_email" name="provider_email" type="email" placeholder="jane@org.com" autoComplete="email" required
-                        className="w-full h-9 pl-8 pr-3 rounded-lg text-[0.83rem] text-slate-800 placeholder:text-slate-400 outline-none transition-all"
+                        className="w-full h-9 pl-8 pr-3 rounded-lg text-sm text-slate-800 placeholder:text-slate-400 outline-none transition-all"
                         style={{ background: '#f8fafc', border: '1.5px solid #e2e8f0' }}
                         onFocus={e => { e.currentTarget.style.border = '1.5px solid #6366f1'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)'; e.currentTarget.style.background = '#fff'; }}
                         onBlur={e => { e.currentTarget.style.border = '1.5px solid #e2e8f0'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.background = '#f8fafc'; }}
@@ -277,11 +277,11 @@ export default function ProviderSignupPage() {
 
                 {/* Password */}
                 <div>
-                  <label htmlFor="provider_password" className="block text-[0.7rem] font-semibold text-slate-500 mb-1 uppercase tracking-wide">Password</label>
+                  <label htmlFor="provider_password" className="block text-sm font-semibold text-slate-500 mb-1 uppercase tracking-wide">Password</label>
                   <div className="relative">
                     <span className="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" style={{ fontSize: '16px' }}>lock</span>
                     <input id="provider_password" name="provider_password" type={showPassword ? 'text' : 'password'} placeholder="Min. 8 characters" autoComplete="new-password" required
-                      className="w-full h-9 pl-8 pr-10 rounded-lg text-[0.83rem] text-slate-800 placeholder:text-slate-400 outline-none transition-all"
+                      className="w-full h-9 pl-8 pr-10 rounded-lg text-sm text-slate-800 placeholder:text-slate-400 outline-none transition-all"
                       style={{ background: '#f8fafc', border: '1.5px solid #e2e8f0' }}
                       onFocus={e => { e.currentTarget.style.border = '1.5px solid #6366f1'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)'; e.currentTarget.style.background = '#fff'; }}
                       onBlur={e => { e.currentTarget.style.border = '1.5px solid #e2e8f0'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.background = '#f8fafc'; }}
@@ -299,7 +299,7 @@ export default function ProviderSignupPage() {
                 {/* Terms */}
                 <div className="flex items-start gap-2.5">
                   <input type="checkbox" id="provider_terms" required className="w-3.5 h-3.5 mt-0.5 rounded cursor-pointer accent-indigo-600 flex-shrink-0" />
-                  <label htmlFor="provider_terms" className="text-[0.73rem] leading-snug cursor-pointer text-slate-500">
+                  <label htmlFor="provider_terms" className="text-sm leading-snug cursor-pointer text-slate-500">
                     I represent that I am an authorized agent of this organization and agree to the{' '}
                     <Link href="#" className="font-semibold hover:underline" style={{ color: '#6366f1' }}>Terms of Use</Link>
                     {' '}and{' '}
@@ -335,11 +335,11 @@ export default function ProviderSignupPage() {
 
           {/* ── Trust indicators + links — pinned to bottom ── */}
           <div className="flex-shrink-0 pt-4 text-center space-y-2">
-            <p className="text-slate-500 text-[0.83rem]">
+            <p className="text-slate-500 text-sm">
               Already registered?{' '}
               <Link href="/provider-login" className="font-bold hover:underline" style={{ color: '#6366f1' }}>Sign In</Link>
             </p>
-            <Link href="/" className="inline-flex items-center gap-1 text-slate-400 text-[0.72rem] hover:text-indigo-600 transition-colors font-medium group">
+            <Link href="/" className="inline-flex items-center gap-1 text-slate-400 text-sm hover:text-indigo-600 transition-colors font-medium group">
               <span className="material-symbols-outlined group-hover:-translate-x-0.5 transition-transform" style={{ fontSize: '13px' }}>arrow_back</span>
               Back to Home
             </Link>

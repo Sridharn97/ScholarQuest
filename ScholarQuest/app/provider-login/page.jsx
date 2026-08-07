@@ -41,7 +41,7 @@ export default function ProviderLoginPage() {
 
           {/* Header block */}
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[0.68rem] font-bold tracking-widest uppercase mb-4"
+            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-bold tracking-widest uppercase mb-4"
               style={{ background: 'linear-gradient(135deg, rgba(99,102,241,0.12) 0%, rgba(168,85,247,0.12) 100%)', color: '#6366f1', border: '1px solid rgba(99,102,241,0.2)' }}>
               <span className="material-symbols-outlined" style={{ fontSize: '13px', fontVariationSettings: "'FILL' 1" }}>verified</span>
               Partner Program
@@ -79,7 +79,7 @@ export default function ProviderLoginPage() {
             <form id="provider-login-form" onSubmit={handleSubmit} className="flex flex-col gap-5">
               {/* Email */}
                 <div>
-                  <label htmlFor="provider_email" className="block text-[0.72rem] font-bold text-slate-500 mb-1.5 uppercase tracking-widest">Institutional Email</label>
+                  <label htmlFor="provider_email" className="block text-sm font-bold text-slate-500 mb-1.5 uppercase tracking-widest">Institutional Email</label>
                   <div className="relative">
                     <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" style={{ fontSize: '17px' }}>mail</span>
                     <input
@@ -100,8 +100,8 @@ export default function ProviderLoginPage() {
                 {/* Password */}
                 <div>
                   <div className="flex justify-between items-center mb-1.5">
-                    <label htmlFor="provider_password" className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-widest">Password</label>
-                    <Link href="#" className="text-[0.72rem] font-semibold hover:underline transition-colors" style={{ color: '#6366f1' }}>Forgot password?</Link>
+                    <label htmlFor="provider_password" className="block text-sm font-bold text-slate-500 uppercase tracking-widest">Password</label>
+                    <Link href="#" className="text-sm font-semibold hover:underline transition-colors" style={{ color: '#6366f1' }}>Forgot password?</Link>
                   </div>
                   <div className="relative">
                     <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" style={{ fontSize: '17px' }}>lock</span>
@@ -130,7 +130,7 @@ export default function ProviderLoginPage() {
               {/* Remember me */}
               <div className="flex items-center gap-2">
                 <input type="checkbox" id="remember_me" className="w-4 h-4 rounded cursor-pointer accent-indigo-600" />
-                <label htmlFor="remember_me" className="text-[0.8rem] text-slate-500 cursor-pointer select-none">Keep me signed in</label>
+                <label htmlFor="remember_me" className="text-base text-slate-500 cursor-pointer select-none">Keep me signed in</label>
               </div>
 
               {/* Submit */}
@@ -196,7 +196,7 @@ export default function ProviderLoginPage() {
             </div>
             <div>
               <p className="font-extrabold text-white text-[1.05rem] tracking-tight leading-none" style={{ fontFamily: 'Manrope, sans-serif' }}>ScholarQuest</p>
-              <p className="text-sky-400 text-[0.62rem] tracking-[0.18em] uppercase mt-1 font-bold">Partner Portal</p>
+              <p className="text-sky-400 text-xs tracking-[0.18em] uppercase mt-1 font-bold">Partner Portal</p>
             </div>
           </Link>
 
@@ -217,8 +217,8 @@ export default function ProviderLoginPage() {
                 <span className="material-symbols-outlined text-white" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>school</span>
               </div>
               <div>
-                <p className="text-white font-bold text-[0.75rem] leading-none">Global Reach</p>
-                <p className="text-sky-300 text-[0.58rem] uppercase font-bold tracking-wider mt-0.5">Top Institutions</p>
+                <p className="text-white font-bold text-sm leading-none">Global Reach</p>
+                <p className="text-sky-300 text-xs uppercase font-bold tracking-wider mt-0.5">Top Institutions</p>
               </div>
             </div>
           </div>
@@ -228,7 +228,7 @@ export default function ProviderLoginPage() {
             <div className="px-4 py-3 rounded-2xl shadow-2xl"
               style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
               <p className="text-emerald-400 font-extrabold text-xl leading-none" style={{ fontFamily: 'Manrope, sans-serif' }}>$50M+</p>
-              <p className="text-slate-300 text-[0.58rem] uppercase font-bold tracking-wider mt-1">Funds Distributed</p>
+              <p className="text-slate-300 text-xs uppercase font-bold tracking-wider mt-1">Funds Distributed</p>
             </div>
           </div>
 
@@ -239,10 +239,10 @@ export default function ProviderLoginPage() {
               <div className="flex gap-0.5 mb-2">
                 {[1,2,3,4,5].map(i => <span key={i} className="material-symbols-outlined text-amber-400" style={{ fontSize: '11px', fontVariationSettings: "'FILL' 1" }}>star</span>)}
               </div>
-              <p className="text-slate-300 text-[0.7rem] italic leading-snug mb-3">"ScholarQuest allowed us to effortlessly deploy our CSR funds to the most deserving candidates globally."</p>
+              <p className="text-slate-300 text-sm italic leading-snug mb-3">"ScholarQuest allowed us to effortlessly deploy our CSR funds to the most deserving candidates globally."</p>
               <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-[9px] font-bold text-white flex-shrink-0">MK</div>
-                <p className="text-white font-bold text-[0.65rem]">Maria K., <span className="font-normal text-slate-400">Global Tech</span></p>
+                <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">MK</div>
+                <p className="text-white font-bold text-sm">Maria K., <span className="font-normal text-slate-400">Global Tech</span></p>
               </div>
             </div>
           </div>
@@ -261,7 +261,7 @@ export default function ProviderLoginPage() {
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-md" style={{ background: item.gradient }}>
                   <span className="material-symbols-outlined text-white" style={{ fontSize: '20px', fontVariationSettings: "'FILL' 1" }}>{item.icon}</span>
                 </div>
-                <span className="text-slate-200 text-[0.62rem] font-bold uppercase tracking-wider leading-tight whitespace-pre-line">{item.label}</span>
+                <span className="text-slate-200 text-xs font-bold uppercase tracking-wider leading-tight whitespace-pre-line">{item.label}</span>
               </div>
             ))}
           </div>

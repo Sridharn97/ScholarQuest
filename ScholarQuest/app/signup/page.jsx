@@ -49,7 +49,7 @@ export default function SignupPage() {
 
           {/* Header */}
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[0.66rem] font-bold tracking-widest uppercase mb-3"
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-bold tracking-widest uppercase mb-3"
               style={{ background: 'linear-gradient(135deg, rgba(168,85,247,0.13) 0%, rgba(59,130,246,0.13) 100%)', color: '#9333ea', border: '1px solid rgba(168,85,247,0.25)' }}>
               <span className="material-symbols-outlined" style={{ fontSize: '13px', fontVariationSettings: "'FILL' 1" }}>school</span>
               Student Portal · Free Forever
@@ -88,7 +88,7 @@ export default function SignupPage() {
               {/* Name row */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label htmlFor="first_name" className="block text-[0.7rem] font-bold text-slate-400 mb-1.5 uppercase tracking-widest">First Name</label>
+                  <label htmlFor="first_name" className="block text-sm font-bold text-slate-400 mb-1.5 uppercase tracking-widest">First Name</label>
                   <input
                     id="first_name" name="first_name" type="text" placeholder="Alex"
                     autoComplete="given-name" required
@@ -99,7 +99,7 @@ export default function SignupPage() {
                   />
                 </div>
                 <div>
-                  <label htmlFor="last_name" className="block text-[0.7rem] font-bold text-slate-400 mb-1.5 uppercase tracking-widest">Last Name</label>
+                  <label htmlFor="last_name" className="block text-sm font-bold text-slate-400 mb-1.5 uppercase tracking-widest">Last Name</label>
                   <input
                     id="last_name" name="last_name" type="text" placeholder="Johnson"
                     autoComplete="family-name" required
@@ -113,7 +113,7 @@ export default function SignupPage() {
 
               {/* Email */}
               <div>
-                <label htmlFor="signup_email" className="block text-[0.7rem] font-bold text-slate-400 mb-1.5 uppercase tracking-widest">University Email</label>
+                <label htmlFor="signup_email" className="block text-sm font-bold text-slate-400 mb-1.5 uppercase tracking-widest">University Email</label>
                 <div className="relative">
                   <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none" style={{ fontSize: '17px' }}>mail</span>
                   <input
@@ -129,7 +129,7 @@ export default function SignupPage() {
 
               {/* Institution */}
               <div>
-                <label htmlFor="institution" className="block text-[0.7rem] font-bold text-slate-400 mb-1.5 uppercase tracking-widest">Institution</label>
+                <label htmlFor="institution" className="block text-sm font-bold text-slate-400 mb-1.5 uppercase tracking-widest">Institution</label>
                 <div className="relative">
                   <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none" style={{ fontSize: '17px' }}>school</span>
                   <input
@@ -145,7 +145,7 @@ export default function SignupPage() {
 
               {/* Password */}
               <div>
-                <label htmlFor="signup_password" className="block text-[0.7rem] font-bold text-slate-400 mb-1.5 uppercase tracking-widest">Password</label>
+                <label htmlFor="signup_password" className="block text-sm font-bold text-slate-400 mb-1.5 uppercase tracking-widest">Password</label>
                 <div className="relative">
                   <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none" style={{ fontSize: '17px' }}>lock</span>
                   <input
@@ -175,7 +175,7 @@ export default function SignupPage() {
                         <div key={i} className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= strength ? strengthColors[strength] : 'bg-slate-100'}`} />
                       ))}
                     </div>
-                    <p className={`text-[0.68rem] font-bold ${strength >= 3 ? 'text-green-600' : strength >= 2 ? 'text-orange-500' : 'text-red-500'}`}>
+                    <p className={`text-sm font-bold ${strength >= 3 ? 'text-green-600' : strength >= 2 ? 'text-orange-500' : 'text-red-500'}`}>
                       {strengthLabels[strength] || 'Too short'}
                     </p>
                   </div>
@@ -215,7 +215,7 @@ export default function SignupPage() {
               {/* Third Party Auth Divider */}
               <div className="relative flex py-1 items-center">
                 <div className="flex-grow border-t border-slate-200"></div>
-                <span className="flex-shrink mx-4 text-slate-400 text-[0.72rem] font-bold uppercase tracking-wider">or</span>
+                <span className="flex-shrink mx-4 text-slate-400 text-sm font-bold uppercase tracking-wider">or</span>
                 <div className="flex-grow border-t border-slate-200"></div>
               </div>
 
@@ -282,7 +282,7 @@ export default function SignupPage() {
             </div>
             <div>
               <p className="font-extrabold text-white text-[1.05rem] tracking-tight leading-none" style={{ fontFamily: 'Manrope, sans-serif' }}>ScholarQuest</p>
-              <p className="text-purple-300 text-[0.62rem] tracking-[0.18em] uppercase mt-1 font-bold">Student Platform</p>
+              <p className="text-purple-300 text-xs tracking-[0.18em] uppercase mt-1 font-bold">Student Platform</p>
             </div>
           </Link>
 
@@ -303,8 +303,8 @@ export default function SignupPage() {
                 <span className="material-symbols-outlined text-white" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>groups</span>
               </div>
               <div>
-                <p className="text-white font-bold text-[0.75rem] leading-none">12,000+ Scholars</p>
-                <p className="text-purple-300 text-[0.58rem] uppercase font-bold tracking-wider mt-0.5">Funded This Year</p>
+                <p className="text-white font-bold text-sm leading-none">12,000+ Scholars</p>
+                <p className="text-purple-300 text-xs uppercase font-bold tracking-wider mt-0.5">Funded This Year</p>
               </div>
             </div>
           </div>
@@ -314,7 +314,7 @@ export default function SignupPage() {
             <div className="px-4 py-3 rounded-2xl shadow-2xl"
               style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
               <p className="text-emerald-400 font-extrabold text-xl leading-none" style={{ fontFamily: 'Manrope, sans-serif' }}>₹2,500 Cr</p>
-              <p className="text-slate-300 text-[0.58rem] uppercase font-bold tracking-wider mt-1">Funds Available</p>
+              <p className="text-slate-300 text-xs uppercase font-bold tracking-wider mt-1">Funds Available</p>
             </div>
           </div>
 
@@ -325,11 +325,11 @@ export default function SignupPage() {
               <div className="flex gap-0.5 mb-2">
                 {[1,2,3,4,5].map(i => <span key={i} className="material-symbols-outlined text-amber-400" style={{ fontSize: '11px', fontVariationSettings: "'FILL' 1" }}>star</span>)}
               </div>
-              <p className="text-slate-300 text-[0.7rem] italic leading-snug mb-3">"Within 2 weeks I matched with 34 scholarships I was eligible for. I won 3!"</p>
+              <p className="text-slate-300 text-sm italic leading-snug mb-3">"Within 2 weeks I matched with 34 scholarships I was eligible for. I won 3!"</p>
               <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold text-white flex-shrink-0"
+                <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
                   style={{ background: 'linear-gradient(135deg, #9333ea, #3b82f6)' }}>PR</div>
-                <p className="text-white font-bold text-[0.65rem]">Priya R., <span className="font-normal text-slate-400">UC Berkeley</span></p>
+                <p className="text-white font-bold text-sm">Priya R., <span className="font-normal text-slate-400">UC Berkeley</span></p>
               </div>
             </div>
           </div>
@@ -348,7 +348,7 @@ export default function SignupPage() {
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-md" style={{ background: item.gradient }}>
                   <span className="material-symbols-outlined text-white" style={{ fontSize: '20px', fontVariationSettings: "'FILL' 1" }}>{item.icon}</span>
                 </div>
-                <span className="text-slate-200 text-[0.62rem] font-bold uppercase tracking-wider leading-tight whitespace-pre-line">{item.label}</span>
+                <span className="text-slate-200 text-xs font-bold uppercase tracking-wider leading-tight whitespace-pre-line">{item.label}</span>
               </div>
             ))}
           </div>

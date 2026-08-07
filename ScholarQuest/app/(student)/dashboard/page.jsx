@@ -14,25 +14,31 @@ export default function DashboardPage() {
   const [analyticsPeriod, setAnalyticsPeriod] = useState('weekly');
 
   useEffect(() => {
+    let unsubTracker = null;
+    let unsubSchol = null;
+
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         const q = query(collection(db, 'tracker'), where('userId', '==', user.uid));
-        const unsubTracker = onSnapshot(q, (snap) => {
+        unsubTracker = onSnapshot(q, (snap) => {
           setTrackerItems(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-        });
+        }, (error) => console.error("Tracker snapshot error:", error));
         
         const qSchol = query(collection(db, 'scholarships'), where('status', '==', 'Active'));
-        const unsubSchol = onSnapshot(qSchol, (snap) => {
+        unsubSchol = onSnapshot(qSchol, (snap) => {
           setScholarships(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-        });
-        
-        return () => {
-          unsubTracker();
-          unsubSchol();
-        };
+        }, (error) => console.error("Scholarships snapshot error:", error));
+      } else {
+        if (unsubTracker) unsubTracker();
+        if (unsubSchol) unsubSchol();
       }
     });
-    return () => unsubscribe();
+
+    return () => {
+      unsubscribe();
+      if (unsubTracker) unsubTracker();
+      if (unsubSchol) unsubSchol();
+    };
   }, []);
 
   let appliedCount = 0;

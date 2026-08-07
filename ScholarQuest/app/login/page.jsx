@@ -78,7 +78,7 @@ export default function LoginPage() {
             </div>
             <div>
               <p className="font-extrabold text-white text-[1.05rem] tracking-tight leading-none" style={{ fontFamily: 'Manrope, sans-serif' }}>ScholarQuest</p>
-              <p className="text-purple-300 text-[0.62rem] tracking-[0.18em] uppercase mt-1 font-bold">Student Platform</p>
+              <p className="text-purple-300 text-xs tracking-[0.18em] uppercase mt-1 font-bold">Student Platform</p>
             </div>
           </Link>
 
@@ -99,8 +99,8 @@ export default function LoginPage() {
                 <span className="material-symbols-outlined text-white" style={{ fontSize: '18px', fontVariationSettings: "'FILL' 1" }}>psychology</span>
               </div>
               <div>
-                <p className="text-white font-bold text-[0.75rem] leading-none">98% Match</p>
-                <p className="text-purple-300 text-[0.58rem] uppercase font-bold tracking-wider mt-0.5">AI Powered</p>
+                <p className="text-white font-bold text-sm leading-none">98% Match</p>
+                <p className="text-purple-300 text-xs uppercase font-bold tracking-wider mt-0.5">AI Powered</p>
               </div>
             </div>
           </div>
@@ -110,7 +110,7 @@ export default function LoginPage() {
             <div className="px-4 py-3 rounded-2xl shadow-2xl"
               style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
               <p className="text-emerald-400 font-extrabold text-xl leading-none" style={{ fontFamily: 'Manrope, sans-serif' }}>50K+</p>
-              <p className="text-slate-300 text-[0.58rem] uppercase font-bold tracking-wider mt-1">Scholarships</p>
+              <p className="text-slate-300 text-xs uppercase font-bold tracking-wider mt-1">Scholarships</p>
             </div>
           </div>
 
@@ -121,11 +121,11 @@ export default function LoginPage() {
               <div className="flex gap-0.5 mb-2">
                 {[1,2,3,4,5].map(i => <span key={i} className="material-symbols-outlined text-amber-400" style={{ fontSize: '11px', fontVariationSettings: "'FILL' 1" }}>star</span>)}
               </div>
-              <p className="text-slate-300 text-[0.7rem] italic leading-snug mb-3">"ScholarQuest matched me with 34 scholarships in 2 weeks. I won 3 of them!"</p>
+              <p className="text-slate-300 text-sm italic leading-snug mb-3">"ScholarQuest matched me with 34 scholarships in 2 weeks. I won 3 of them!"</p>
               <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold text-white flex-shrink-0"
+                <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
                   style={{ background: 'linear-gradient(135deg, #9333ea, #3b82f6)' }}>PR</div>
-                <p className="text-white font-bold text-[0.65rem]">Priya R., <span className="font-normal text-slate-400">UC Berkeley</span></p>
+                <p className="text-white font-bold text-sm">Priya R., <span className="font-normal text-slate-400">UC Berkeley</span></p>
               </div>
             </div>
           </div>
@@ -144,7 +144,7 @@ export default function LoginPage() {
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-md" style={{ background: item.gradient }}>
                   <span className="material-symbols-outlined text-white" style={{ fontSize: '20px', fontVariationSettings: "'FILL' 1" }}>{item.icon}</span>
                 </div>
-                <span className="text-slate-200 text-[0.62rem] font-bold uppercase tracking-wider leading-tight whitespace-pre-line">{item.label}</span>
+                <span className="text-slate-200 text-xs font-bold uppercase tracking-wider leading-tight whitespace-pre-line">{item.label}</span>
               </div>
             ))}
           </div>
@@ -180,7 +180,7 @@ export default function LoginPage() {
 
           {/* Header */}
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[0.66rem] font-bold tracking-widest uppercase mb-3"
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-bold tracking-widest uppercase mb-3"
               style={{ background: 'linear-gradient(135deg, rgba(168,85,247,0.13) 0%, rgba(59,130,246,0.13) 100%)', color: '#9333ea', border: '1px solid rgba(168,85,247,0.25)' }}>
               <span className="material-symbols-outlined" style={{ fontSize: '13px', fontVariationSettings: "'FILL' 1" }}>school</span>
               Student Portal
@@ -243,7 +243,7 @@ export default function LoginPage() {
 
               {/* Email */}
               <div>
-                <label htmlFor="login_email" className="block text-[0.7rem] font-bold text-slate-400 mb-1.5 uppercase tracking-widest">Email Address</label>
+                <label htmlFor="login_email" className="block text-sm font-bold text-slate-400 mb-1.5 uppercase tracking-widest">Email Address</label>
                 <div className="relative">
                   <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none" style={{ fontSize: '17px' }}>mail</span>
                   <input
@@ -264,8 +264,8 @@ export default function LoginPage() {
               {/* Password */}
               <div>
                 <div className="flex justify-between items-center mb-1.5">
-                  <label htmlFor="login_password" className="block text-[0.7rem] font-bold text-slate-400 uppercase tracking-widest">Password</label>
-                  <button type="button" onClick={() => setShowForgotModal(true)} className="text-[0.72rem] font-semibold hover:underline transition-colors" style={{ color: '#9333ea' }}>Forgot password?</button>
+                  <label htmlFor="login_password" className="block text-sm font-bold text-slate-400 uppercase tracking-widest">Password</label>
+                  <button type="button" onClick={() => setShowForgotModal(true)} className="text-sm font-semibold hover:underline transition-colors" style={{ color: '#9333ea' }}>Forgot password?</button>
                 </div>
                 <div className="relative">
                   <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none" style={{ fontSize: '17px' }}>lock</span>
@@ -294,7 +294,7 @@ export default function LoginPage() {
               {/* Remember me */}
               <div className="flex items-center gap-2">
                 <input type="checkbox" id="remember_me" className="w-4 h-4 rounded cursor-pointer" style={{ accentColor: '#9333ea' }} />
-                <label htmlFor="remember_me" className="text-[0.8rem] text-slate-500 cursor-pointer select-none">Remember me for 30 days</label>
+                <label htmlFor="remember_me" className="text-base text-slate-500 cursor-pointer select-none">Remember me for 30 days</label>
               </div>
 
               {/* Submit */}
@@ -320,7 +320,7 @@ export default function LoginPage() {
               {/* Third Party Auth Divider */}
               <div className="relative flex py-1 items-center">
                 <div className="flex-grow border-t border-slate-200"></div>
-                <span className="flex-shrink mx-4 text-slate-400 text-[0.72rem] font-bold uppercase tracking-wider">or</span>
+                <span className="flex-shrink mx-4 text-slate-400 text-sm font-bold uppercase tracking-wider">or</span>
                 <div className="flex-grow border-t border-slate-200"></div>
               </div>
 
@@ -387,7 +387,7 @@ export default function LoginPage() {
             )}
             <form onSubmit={handleForgotPassword} className="flex flex-col gap-4">
               <div>
-                <label className="block text-[0.7rem] font-bold text-slate-400 mb-1.5 uppercase tracking-widest">Email Address</label>
+                <label className="block text-sm font-bold text-slate-400 mb-1.5 uppercase tracking-widest">Email Address</label>
                 <input
                   type="email"
                   required
