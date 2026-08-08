@@ -7,6 +7,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 export default function useProviderApplications() {
   const [applications, setApplications] = useState([]);
   const [activeFilter, setActiveFilter] = useState('All');
+  const [activeScholarshipFilter, setActiveScholarshipFilter] = useState('All Scholarships');
   const [search, setSearch] = useState('');
   const [toast, setToast] = useState({ msg: '', type: '' });
   const [viewApp, setViewApp] = useState(null);
@@ -156,17 +157,23 @@ export default function useProviderApplications() {
     }
   };
 
-  const filtered = applications.filter(a => {
+  const scholarshipFilters = ['All Scholarships', ...new Set(applications.map(a => a.scholarship))];
+
+  const scholarshipFiltered = applications.filter(a => 
+    activeScholarshipFilter === 'All Scholarships' || a.scholarship === activeScholarshipFilter
+  );
+
+  const filtered = scholarshipFiltered.filter(a => {
     const matchFilter = activeFilter === 'All' || a.status === activeFilter;
     const matchSearch = !search || a.student?.toLowerCase().includes(search.toLowerCase()) || a.scholarship?.toLowerCase().includes(search.toLowerCase());
     return matchFilter && matchSearch;
   });
 
   const counts = {
-    total: applications.length,
-    review: applications.filter(a => a.status === 'Under Review').length,
-    approved: applications.filter(a => a.status === 'Approved').length,
-    pending: applications.filter(a => a.status === 'Pending').length,
+    total: scholarshipFiltered.length,
+    review: scholarshipFiltered.filter(a => a.status === 'Under Review').length,
+    approved: scholarshipFiltered.filter(a => a.status === 'Approved').length,
+    pending: scholarshipFiltered.filter(a => a.status === 'Pending').length,
   };
 
   const handleExport = () => {
@@ -186,6 +193,9 @@ export default function useProviderApplications() {
     applications,
     activeFilter,
     setActiveFilter,
+    activeScholarshipFilter,
+    setActiveScholarshipFilter,
+    scholarshipFilters,
     search,
     setSearch,
     toast,

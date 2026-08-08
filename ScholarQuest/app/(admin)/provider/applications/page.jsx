@@ -14,6 +14,9 @@ export default function ProviderApplicationsPage() {
   const {
     activeFilter,
     setActiveFilter,
+    activeScholarshipFilter,
+    setActiveScholarshipFilter,
+    scholarshipFilters,
     search,
     setSearch,
     toast,
@@ -321,7 +324,19 @@ export default function ProviderApplicationsPage() {
               className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 pl-11 pr-4 text-sm outline-none focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all hover:border-slate-300"
             />
           </div>
-          <div className="flex gap-3 w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+            <div className="relative w-full sm:w-auto">
+              <select
+                value={activeScholarshipFilter}
+                onChange={(e) => setActiveScholarshipFilter(e.target.value)}
+                className="w-full sm:w-48 bg-slate-50 border border-slate-200 rounded-xl py-2.5 pl-4 pr-10 text-sm outline-none focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all appearance-none font-semibold text-slate-700 cursor-pointer hover:border-slate-300 truncate"
+              >
+                {scholarshipFilters.map((f) => (
+                  <option key={f} value={f}>{f}</option>
+                ))}
+              </select>
+              <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" style={{ fontSize: '20px' }}>expand_more</span>
+            </div>
             <div className="relative w-full sm:w-auto">
               <select
                 value={activeFilter}
