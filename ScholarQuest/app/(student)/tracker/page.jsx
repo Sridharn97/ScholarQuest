@@ -1,5 +1,6 @@
 'use client';
 import useTracker from '@/lib/hooks/useTracker';
+import { generateGoogleCalendarLink, downloadICS } from '@/lib/calendar';
 
 export default function TrackerPage() {
   const {
@@ -212,16 +213,19 @@ export default function TrackerPage() {
 
       {/* Move Card Modal (Clean List) */}
       {showMoveMenu && (
-        <div className="fixed inset-0 z-50 bg-on-surface/30 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200" onClick={() => setShowMoveMenu(null)}>
-          <div className="bg-surface-container-lowest rounded-xl p-5 w-full max-w-xs shadow-xl border border-outline-variant/30 animate-in zoom-in-95" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between mb-4">
-               <h3 className="text-sm font-semibold text-on-surface">Move to...</h3>
-               <button onClick={() => handleDeleteCard(showMoveMenu.cardId)} className="text-error hover:bg-error/10 p-1 rounded transition-colors" title="Delete Card">
-                  <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>delete</span>
-               </button>
-            </div>
-            
-            <div className="space-y-1">
+        (() => {
+          const activeCard = columns.flatMap(c => c.cards).find(c => c.id === showMoveMenu.cardId);
+          return (
+            <div className="fixed inset-0 z-50 bg-on-surface/30 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200" onClick={() => setShowMoveMenu(null)}>
+              <div className="bg-surface-container-lowest rounded-xl p-5 w-full max-w-xs shadow-xl border border-outline-variant/30 animate-in zoom-in-95" onClick={e => e.stopPropagation()}>
+                <div className="flex items-center justify-between mb-4">
+                   <h3 className="text-sm font-semibold text-on-surface">Move to...</h3>
+                   <button onClick={() => handleDeleteCard(showMoveMenu.cardId)} className="text-error hover:bg-error/10 p-1 rounded transition-colors" title="Delete Card">
+                      <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>delete</span>
+                   </button>
+                </div>
+                
+                <div className="space-y-1 mb-4 pb-4 border-b border-outline-variant/20">
               {columns.filter(c => {
                 if (c.id === showMoveMenu.fromColId) return false;
                 const from = showMoveMenu.fromColId;
@@ -240,10 +244,40 @@ export default function TrackerPage() {
                 >
                   {c.label}
                 </button>
-              ))}
+                ))}
+                </div>
+
+                {activeCard && activeCard.date && (
+                  <div>
+                    <h3 className="text-sm font-semibold text-on-surface mb-2">Calendar Sync</h3>
+                    <div className="space-y-1">
+                      <a
+                        href={generateGoogleCalendarLink(`Deadline: ${activeCard.title}`, activeCard.desc, activeCard.date)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => setShowMoveMenu(null)}
+                        className="w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors"
+                      >
+                        <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>event</span>
+                        Google Calendar
+                      </a>
+                      <button
+                        onClick={() => {
+                          downloadICS(activeCard.title, activeCard.desc, activeCard.date);
+                          setShowMoveMenu(null);
+                        }}
+                        className="w-full text-left flex items-center gap-2 px-3 py-2 rounded-md text-sm text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors"
+                      >
+                        <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>download</span>
+                        Apple / Outlook (.ics)
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        </div>
+          );
+        })()
       )}
 
       {/* Add Card Modal */}

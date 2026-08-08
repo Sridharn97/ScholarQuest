@@ -1,8 +1,9 @@
 'use client';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import useScholarshipDetail from '@/lib/hooks/useScholarshipDetail';
 import AISummarizer from '@/components/ai/AISummarizer';
+import { generateGoogleCalendarLink, downloadICS } from '@/lib/calendar';
 
 export default function ScholarshipDetailsPage({ params }) {
   const {
@@ -14,6 +15,18 @@ export default function ScholarshipDetailsPage({ params }) {
   } = useScholarshipDetail(params);
 
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [showCalendarMenu, setShowCalendarMenu] = useState(false);
+  const calendarMenuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (calendarMenuRef.current && !calendarMenuRef.current.contains(event.target)) {
+        setShowCalendarMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   useEffect(() => {
     if (!scholarship?.deadline) return;
@@ -226,6 +239,43 @@ export default function ScholarshipDetailsPage({ params }) {
               >
                 {saved ? 'Saved in Tracker ✓' : 'Save to Tracker'}
               </button>
+            )}
+
+            {scholarship.deadline && (
+              <div className="relative mt-3" ref={calendarMenuRef}>
+                <button
+                  onClick={() => setShowCalendarMenu(!showCalendarMenu)}
+                  className="w-full flex items-center justify-center gap-2 py-3 border border-outline-variant/50 rounded-10 font-label-md text-label-md text-on-surface hover:bg-surface-container-low active:scale-95 transition-all"
+                >
+                  <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>calendar_add_on</span>
+                  Add to Calendar
+                </button>
+                
+                {showCalendarMenu && (
+                  <div className="absolute top-full left-0 right-0 mt-2 p-2 bg-surface border border-outline-variant/30 rounded-xl shadow-lg z-20 animate-in fade-in slide-in-from-top-2">
+                    <a
+                      href={generateGoogleCalendarLink(`Deadline: ${scholarship.name}`, scholarship.desc, scholarship.deadline)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => setShowCalendarMenu(false)}
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-surface-container-low transition-colors text-sm font-medium text-on-surface"
+                    >
+                      <span className="material-symbols-outlined text-primary" style={{ fontSize: '18px' }}>event</span>
+                      Google Calendar
+                    </a>
+                    <button
+                      onClick={() => {
+                        downloadICS(scholarship.name, scholarship.desc, scholarship.deadline);
+                        setShowCalendarMenu(false);
+                      }}
+                      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-surface-container-low transition-colors text-sm font-medium text-on-surface text-left mt-1"
+                    >
+                      <span className="material-symbols-outlined text-primary" style={{ fontSize: '18px' }}>download</span>
+                      Apple / Outlook (.ics)
+                    </button>
+                  </div>
+                )}
+              </div>
             )}
           </div>
 
