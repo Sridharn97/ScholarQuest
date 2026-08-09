@@ -11,7 +11,6 @@ const navItems = [
   { href: '/tracker', label: 'Applications', icon: 'description' },
   { href: '/ai-matcher', label: 'AI Matcher', icon: 'lightbulb' },
   { href: '/calculator', label: 'Calculator', icon: 'calculate' },
-  { href: '/profile', label: 'Profile', icon: 'person_outline' },
   { href: '/messages', label: 'Messages', icon: 'mail' },
   { href: '/application-status', label: 'Application Status', icon: 'rule_folder' },
 ];
@@ -83,7 +82,7 @@ export default function StudentSidebar({ onLogout, userName, userInitials, userP
         </button>
 
         <div className="flex items-center justify-between w-full bg-slate-50 p-2.5 rounded-2xl border border-slate-200/60 shadow-sm transition-colors hover:border-slate-300">
-          <div className="flex items-center gap-3 overflow-hidden">
+          <button onClick={() => router.push('/profile')} className="flex items-center gap-3 overflow-hidden text-left hover:opacity-80 transition-opacity outline-none rounded-lg cursor-pointer">
             {userPhoto ? (
               <img src={userPhoto} alt="User Logo" className="w-10 h-10 rounded-full object-cover shrink-0 border-2 border-white shadow-sm" />
             ) : (
@@ -95,7 +94,7 @@ export default function StudentSidebar({ onLogout, userName, userInitials, userP
               <span className="text-sm font-bold text-slate-900 leading-tight truncate">{userName || 'Student'}</span>
               <span className="text-[11px] font-semibold text-slate-500 truncate">Student Account</span>
             </div>
-          </div>
+          </button>
           <button
             onClick={handleLogout}
             className="text-slate-400 hover:text-red-500 transition-colors p-2 rounded-xl hover:bg-red-50 shrink-0 ml-1"
