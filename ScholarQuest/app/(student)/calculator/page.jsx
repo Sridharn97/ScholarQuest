@@ -2,6 +2,25 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { auth, db } from '@/lib/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
+
+const InputField = ({ label, value, onChange, icon }) => (
+  <div className="flex flex-col mb-4">
+    <label className="text-sm font-semibold text-on-surface-variant mb-1.5">{label}</label>
+    <div className="relative flex items-center">
+      <span className="absolute left-3 text-on-surface-variant material-symbols-outlined" style={{ fontSize: '18px' }}>{icon}</span>
+      <input 
+        type="number" 
+        value={value === 0 && String(value) !== '0' ? '' : value} 
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full bg-surface border border-outline-variant/50 rounded-xl py-3 pl-10 pr-4 text-on-surface font-semibold focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+      />
+      <span className="absolute right-4 text-on-surface-variant/50 font-bold">₹</span>
+    </div>
+  </div>
+);
 
 export default function CalculatorPage() {
   // Costs
@@ -13,13 +32,100 @@ export default function CalculatorPage() {
   // Funds
   const [savings, setSavings] = useState(3000);
   const [familyCont, setFamilyCont] = useState(5000);
-  const [scholarships, setScholarships] = useState(4000);
+  const [scholarships, setScholarships] = useState(0);
   const [loans, setLoans] = useState(0);
 
   const [totalCost, setTotalCost] = useState(0);
   const [totalFunds, setTotalFunds] = useState(0);
   const [gap, setGap] = useState(0);
   const [percentCovered, setPercentCovered] = useState(0);
+
+  // Load from localStorage on mount
+  useEffect(() => {
+    const savedData = localStorage.getItem('sq_calculatorData');
+    if (savedData) {
+      try {
+        const parsed = JSON.parse(savedData);
+        if (parsed.tuition !== undefined) setTuition(parsed.tuition);
+        if (parsed.examFees !== undefined) setExamFees(parsed.examFees);
+        if (parsed.books !== undefined) setBooks(parsed.books);
+        if (parsed.otherCosts !== undefined) setOtherCosts(parsed.otherCosts);
+        if (parsed.savings !== undefined) setSavings(parsed.savings);
+        if (parsed.familyCont !== undefined) setFamilyCont(parsed.familyCont);
+        if (parsed.loans !== undefined) setLoans(parsed.loans);
+      } catch (e) {
+        console.error("Error parsing calculator data", e);
+      }
+    }
+  }, []);
+
+  // Save to localStorage when inputs change
+  useEffect(() => {
+    const dataToSave = {
+      tuition,
+      examFees,
+      books,
+      otherCosts,
+      savings,
+      familyCont,
+      loans,
+    };
+    localStorage.setItem('sq_calculatorData', JSON.stringify(dataToSave));
+  }, [tuition, examFees, books, otherCosts, savings, familyCont, loans]);
+
+  // Real-time confirmed scholarships listener
+  useEffect(() => {
+    let unsubTracker = null;
+    let unsubSchol = null;
+
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const qSchol = query(collection(db, 'scholarships'), where('status', '==', 'Active'));
+        unsubSchol = onSnapshot(qSchol, (snapSchol) => {
+          const allSchols = snapSchol.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          
+          const q = query(collection(db, 'tracker'), where('userId', '==', user.uid));
+          unsubTracker = onSnapshot(q, (snapTracker) => {
+            const trackerItems = snapTracker.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            
+            let totalConfirmed = 0;
+            trackerItems.forEach(t => {
+              if (t.columnId === 'col_accepted') {
+                const schol = allSchols.find(s => s.id === t.scholarshipId || s.name === t.title || s.name === t.scholarshipName);
+                let amt = 0;
+                if (schol && schol.amount) {
+                  if (typeof schol.amount === 'number') {
+                    amt = schol.amount;
+                  } else if (typeof schol.amount === 'string') {
+                    const numStr = schol.amount.replace(/,/g, '').match(/\d+/);
+                    if (numStr) amt = parseInt(numStr[0], 10);
+                  }
+                } else if (t.amount) {
+                  if (typeof t.amount === 'number') amt = t.amount;
+                  else if (typeof t.amount === 'string') {
+                    const numStr = t.amount.replace(/,/g, '').match(/\d+/);
+                    if (numStr) amt = parseInt(numStr[0], 10);
+                  }
+                }
+                totalConfirmed += amt;
+              }
+            });
+            
+            setScholarships(totalConfirmed);
+          });
+        });
+      } else {
+        if (unsubTracker) unsubTracker();
+        if (unsubSchol) unsubSchol();
+      }
+    });
+
+    return () => {
+      unsubscribe();
+      if (unsubTracker) unsubTracker();
+      if (unsubSchol) unsubSchol();
+    };
+  }, []);
 
   useEffect(() => {
     const cost = (Number(tuition) || 0) + (Number(examFees) || 0) + (Number(books) || 0) + (Number(otherCosts) || 0);
@@ -41,22 +147,6 @@ export default function CalculatorPage() {
   const formatMoney = (val) => {
     return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(val);
   };
-
-  const InputField = ({ label, value, onChange, icon }) => (
-    <div className="flex flex-col mb-4">
-      <label className="text-sm font-semibold text-on-surface-variant mb-1.5">{label}</label>
-      <div className="relative flex items-center">
-        <span className="absolute left-3 text-on-surface-variant material-symbols-outlined" style={{ fontSize: '18px' }}>{icon}</span>
-        <input 
-          type="number" 
-          value={value === 0 && String(value) !== '0' ? '' : value} 
-          onChange={(e) => onChange(e.target.value)}
-          className="w-full bg-surface border border-outline-variant/50 rounded-xl py-3 pl-10 pr-4 text-on-surface font-semibold focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
-        />
-        <span className="absolute right-4 text-on-surface-variant/50 font-bold">₹</span>
-      </div>
-    </div>
-  );
 
   return (
     <div className="max-w-[1200px] mx-auto px-6 py-8 lg:py-12">
