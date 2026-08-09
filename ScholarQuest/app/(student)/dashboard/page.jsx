@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import StudentAnalyticsOverview from '@/components/dashboard/StudentAnalyticsOverview';
 import StudentApplicationOutcomes from '@/components/dashboard/StudentApplicationOutcomes';
 import StudentFundingTrends from '@/components/dashboard/StudentFundingTrends';
@@ -187,7 +188,11 @@ export default function DashboardPage() {
         <div>
           <h2 className="text-[28px] font-bold text-on-surface mb-1 leading-tight tracking-tight">Scholarship Overview</h2>
         </div>
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4">
+          <Link href="/calculator" className="text-primary font-bold text-sm hover:underline tracking-wide flex items-center gap-1">
+            <span className="material-symbols-outlined text-[18px]">calculate</span>
+            Funding Gap
+          </Link>
           <button 
             onClick={() => {
               const { generateReport } = require('@/lib/reportUtils');
@@ -373,7 +378,7 @@ export default function DashboardPage() {
             {smartMatches.length > 0 ? smartMatches.map((item, idx) => (
               <div key={idx} className="bg-surface-container-low rounded-xl p-5 border border-outline-variant/20 flex flex-col">
                 <div className="flex justify-between items-start mb-6">
-                  <span className={`text-xs font-extrabold ${idx === 0 ? 'text-primary' : 'text-secondary'} bg-surface-container-lowest px-2.5 py-1 rounded-md shadow-sm border border-outline-variant/30`}>{item.amount || 'Varies'}</span>
+                  <span className={`text-xs font-extrabold ${idx === 0 ? 'text-primary' : 'text-secondary'} bg-surface-container-lowest px-2.5 py-1 rounded-md shadow-sm border border-outline-variant/30`}>{typeof item.amount === 'string' ? item.amount.replace(/\$/g, '₹') : (item.amount || 'Varies')}</span>
                   <div className={`w-7 h-7 rounded-full bg-surface-container-lowest flex items-center justify-center shadow-sm border border-outline-variant/30 ${idx === 0 ? 'text-primary' : 'text-secondary'}`}>
                     <span className="material-symbols-outlined text-[16px]">{idx === 0 ? 'stars' : 'bolt'}</span>
                   </div>

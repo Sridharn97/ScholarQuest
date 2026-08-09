@@ -124,7 +124,7 @@ export default function AiMatcherPage() {
                               ))}
                             </div>
                             <h4 className="font-headline-md text-[18px] font-bold text-on-surface leading-tight mb-1 pr-16">{card.title}</h4>
-                            <p className="font-body-sm text-body-sm text-on-surface-variant mb-4">Award: {card.award}</p>
+                            <p className="font-body-sm text-body-sm text-on-surface-variant mb-4">Award: {typeof card.award === 'string' ? card.award.replace(/\$/g, '₹') : card.award}</p>
                           </div>
 
                           <div className="pt-4 border-t border-outline-variant/10 flex justify-between items-center">

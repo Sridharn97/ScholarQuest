@@ -91,7 +91,7 @@ export default function PostScholarshipPage() {
             <div className="space-y-2 group">
               <label htmlFor="amount" className="font-label-md text-sm font-bold text-on-surface-variant group-focus-within:text-primary transition-colors">Award Amount *</label>
               <div className="relative">
-                <span className="absolute left-5 top-1/2 -translate-y-1/2 text-on-surface-variant font-bold">$</span>
+                <span className="absolute left-5 top-1/2 -translate-y-1/2 text-on-surface-variant font-bold">₹</span>
                 <input
                   id="amount"
                   name="amount"

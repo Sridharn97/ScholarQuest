@@ -316,7 +316,7 @@ export default function TrackerPage() {
               <div>
                 <label className="text-xs font-medium text-on-surface-variant block mb-1">Award Amount</label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">₹</span>
                   <input
                     value={newCardAmount}
                     onChange={e => setNewCardAmount(e.target.value)}

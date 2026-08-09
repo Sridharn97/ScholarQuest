@@ -92,7 +92,7 @@ export default function ProviderReportsPage() {
         {[
           { label: 'Total Submissions', value: totalApps.toString(), trend: '', trendUp: true, icon: 'description', cls: 'bg-primary/10 text-primary' },
           { label: 'Grants Funded', value: funded.toString(), trend: '', trendUp: true, icon: 'check_circle', cls: 'bg-green-100 text-green-700' },
-          { label: 'Total Funds Disbursed', value: `$${totalFunds.toLocaleString()}`, trend: '', trendUp: true, icon: 'payments', cls: 'bg-secondary/10 text-secondary' },
+          { label: 'Total Funds Disbursed', value: `₹${totalFunds.toLocaleString()}`, trend: '', trendUp: true, icon: 'payments', cls: 'bg-secondary/10 text-secondary' },
           { label: 'Avg. Match score', value: `${avgScore}%`, trend: '', trendUp: true, icon: 'psychiatry', cls: 'bg-blue-100 text-blue-700' },
         ].map((stat) => (
           <div key={stat.label} className="relative overflow-hidden clean-card p-6 rounded-2xl hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">

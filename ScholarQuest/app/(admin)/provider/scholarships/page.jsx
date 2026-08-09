@@ -113,7 +113,7 @@ export default function ProviderScholarshipsPage() {
         {[
           { label: 'Active Programs', value: scholarships.filter(s => s.status === 'Active').length, icon: 'verified_user', cls: 'bg-primary-container text-on-primary-container', trend: '', trendUp: true },
           { label: 'Total Applicants', value: scholarships.reduce((acc, curr) => acc + (curr.applicants || 0), 0).toLocaleString(), icon: 'group', cls: 'bg-secondary-container text-on-secondary-container', trend: '', trendUp: true },
-          { label: 'Total Awarded', value: `$${scholarships.reduce((acc, curr) => acc + (Number(curr.amount?.toString().replace(/[^0-9.-]+/g,"")) || 0), 0).toLocaleString()}`, icon: 'payments', cls: 'bg-success-container text-on-success-container', trend: '', trendUp: true },
+          { label: 'Total Awarded', value: `₹${scholarships.reduce((acc, curr) => acc + (Number(curr.amount?.toString().replace(/[^0-9.-]+/g,"")) || 0), 0).toLocaleString()}`, icon: 'payments', cls: 'bg-success-container text-on-success-container', trend: '', trendUp: true },
           { label: 'Pending Review', value: '0', icon: 'schedule', cls: 'bg-warning-container text-on-warning-container', trend: '', trendUp: false },
         ].map((stat) => (
           <div key={stat.label} className="relative overflow-hidden clean-card p-4 rounded-2xl hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">

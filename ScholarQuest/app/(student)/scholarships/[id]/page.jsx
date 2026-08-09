@@ -117,7 +117,7 @@ export default function ScholarshipDetailsPage({ params }) {
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
-                  { label: 'Award Amount', value: scholarship.amount, cls: 'text-primary' },
+                  { label: 'Award Amount', value: typeof scholarship.amount === 'string' ? scholarship.amount.replace(/\$/g, '₹') : scholarship.amount, cls: 'text-primary' },
                   { label: 'Renewable', value: 'Yes', cls: 'text-green-700' },
                   { label: 'Applicants Tracked', value: scholarship.applicants || '0', cls: '' },
                   { label: 'Deadline Date', value: scholarship.deadline, cls: '' },

@@ -60,7 +60,7 @@ export default function DiscoveryPage() {
                 <div className="space-y-2 pt-2">
                   <div className="flex items-center justify-between">
                     <label className="font-label-md text-xs font-bold text-on-surface-variant">Min Amount</label>
-                    <span className="text-primary font-bold text-xs">${amountFilter.toLocaleString()}</span>
+                    <span className="text-primary font-bold text-xs">₹{amountFilter.toLocaleString()}</span>
                   </div>
                   <input 
                     type="range" 
@@ -182,7 +182,7 @@ export default function DiscoveryPage() {
                           <div>
                             <p className="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold mb-0.5">Award Amount</p>
                             <p className="font-headline-md text-base font-extrabold text-on-surface">
-                              {typeof s.amount === 'number' ? `$${s.amount.toLocaleString()}` : (s.amount && !isNaN(s.amount.toString().replace(/[^0-9.-]+/g, '')) ? `$${Number(s.amount.toString().replace(/[^0-9.-]+/g, '')).toLocaleString()}` : s.amount)}
+                              {typeof s.amount === 'number' ? `₹${s.amount.toLocaleString()}` : (s.amount && !isNaN(s.amount.toString().replace(/[^0-9.-]+/g, '')) ? `₹${Number(s.amount.toString().replace(/[^0-9.-]+/g, '')).toLocaleString()}` : s.amount)}
                             </p>
                           </div>
                           <div>

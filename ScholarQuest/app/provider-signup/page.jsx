@@ -70,12 +70,14 @@ export default function ProviderSignupPage() {
             </div>
           </div>
 
-          {/* Floating badge: $50M+ */}
-          <div className="absolute right-7 top-[36%] z-30" style={{ animation: 'providerFloat 5s ease-in-out infinite', animationDelay: '0.8s' }}>
-            <div className="px-4 py-3 rounded-2xl shadow-2xl"
-              style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.2)' }}>
-              <p className="text-emerald-400 font-extrabold text-xl leading-none" style={{ fontFamily: 'Manrope, sans-serif' }}>$50M+</p>
-              <p className="text-slate-300 text-xs uppercase font-bold tracking-wider mt-1">Funds Distributed</p>
+          {/* Floating badge: ₹50M+ */}
+          <div className="absolute top-[20%] right-[-5%] bg-surface-container-lowest/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-outline-variant/20 animate-subtle-float flex items-center gap-3">
+            <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center">
+              <span className="material-symbols-outlined" style={{ fontSize: '24px' }}>payments</span>
+            </div>
+            <div>
+              <p className="text-emerald-400 font-extrabold text-xl leading-none" style={{ fontFamily: 'Manrope, sans-serif' }}>₹50M+</p>
+              <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mt-1">Disbursed</p>
             </div>
           </div>
 

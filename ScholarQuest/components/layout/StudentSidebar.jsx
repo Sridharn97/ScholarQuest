@@ -10,6 +10,7 @@ const navItems = [
   { href: '/discovery', label: 'Discovery', icon: 'explore' },
   { href: '/tracker', label: 'Applications', icon: 'description' },
   { href: '/ai-matcher', label: 'AI Matcher', icon: 'lightbulb' },
+  { href: '/calculator', label: 'Calculator', icon: 'calculate' },
   { href: '/profile', label: 'Profile', icon: 'person_outline' },
   { href: '/messages', label: 'Messages', icon: 'mail' },
   { href: '/application-status', label: 'Application Status', icon: 'rule_folder' },
