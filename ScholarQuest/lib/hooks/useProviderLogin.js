@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { auth, db } from '@/lib/firebase';
-import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import { signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 
 export default function useProviderLogin() {
@@ -20,7 +20,9 @@ export default function useProviderLogin() {
           if (userDoc.data().role === 'provider') {
             router.replace('/provider');
           } else {
-            router.replace('/dashboard');
+            await signOut(auth);
+            setError('Access denied. Please use the student login.');
+            setLoading(false);
           }
         }
       }

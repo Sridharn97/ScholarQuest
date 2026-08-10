@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { auth, db } from '@/lib/firebase';
-import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import { signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 
 export default function useLogin() {
@@ -18,7 +18,9 @@ export default function useLogin() {
         const userDoc = await getDoc(doc(db, 'users', user.uid));
         if (userDoc.exists()) {
           if (userDoc.data().role === 'provider') {
-            router.replace('/provider');
+            await signOut(auth);
+            setError('Access denied. Please use the provider login.');
+            setLoading(false);
           } else {
             router.replace('/dashboard');
           }
