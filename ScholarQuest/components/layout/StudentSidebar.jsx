@@ -30,31 +30,32 @@ export default function StudentSidebar({ onLogout, userName, userInitials, userP
   return (
     <aside className="hidden lg:flex flex-col h-screen sticky top-0 bg-[#FAFAFA] border-r border-outline-variant/30 w-[260px] shrink-0">
       {/* Logo */}
-      <div className="pt-8 pb-6 px-6">
+      <div className="pt-10 pb-8 px-6">
         <Link href="/" className="flex items-center gap-3 block">
-          <img src="/scholarquest-logo.png" alt="ScholarQuest Logo" className="w-8 h-8 rounded-full object-cover border border-gray-200" />
+          <img src="/scholarquest-logo.png" alt="ScholarQuest Logo" className="w-10 h-10 rounded-full object-cover border border-gray-200" />
           <div>
-            <h1 className="font-bold text-xl text-gray-900 tracking-tight leading-none" style={{ fontFamily: 'Manrope, sans-serif' }}>ScholarQuest</h1>
+            <h1 className="font-bold text-2xl text-gray-900 tracking-tight leading-none" style={{ fontFamily: 'Manrope, sans-serif' }}>ScholarQuest</h1>
             <p className="text-[10px] uppercase tracking-widest text-gray-500 mt-1 font-semibold">Higher Ed Funding</p>
           </div>
         </Link>
       </div>
 
       {/* Nav Items */}
-      <nav className="flex-1 space-y-1 mt-2 px-3 overflow-y-auto">
+      <nav className="flex-1 space-y-2 mt-4 px-4 overflow-y-auto">
+        <div className="px-3 mb-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Main Menu</div>
         {navItems.map((item) => {
           const isActive = pathname === item.href || (item.href === '/dashboard' && pathname === '/');
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center justify-between rounded-md px-3 py-2 text-sm transition-colors ${isActive
+              className={`flex items-center justify-between rounded-md px-3 py-3 text-sm transition-colors ${isActive
                 ? 'bg-[#EAE4FF] text-[#4F39F6] font-semibold'
                 : 'text-gray-600 font-medium hover:bg-gray-50 hover:text-gray-900'
                 }`}
             >
               <div className="flex items-center gap-3">
-                <span className="material-symbols-outlined text-[18px]" style={isActive ? { fontVariationSettings: "'FILL' 1" } : {}}>
+                <span className="material-symbols-outlined text-[20px]" style={isActive ? { fontVariationSettings: "'FILL' 1" } : {}}>
                   {item.icon}
                 </span>
                 <span>{item.label}</span>
@@ -70,20 +71,20 @@ export default function StudentSidebar({ onLogout, userName, userInitials, userP
       </nav>
 
       {/* Bottom CTA */}
-      <div className="mt-auto p-4 space-y-4 bg-white border-t border-gray-200 z-10 relative">
+      <div className="mt-auto p-5 space-y-5 bg-white border-t border-gray-200 z-10 relative">
         <button 
           onClick={() => router.push('/discovery')}
-          className="w-full py-2 bg-[#0A2540] text-white rounded-md font-medium text-sm hover:bg-[#0A2540]/90 transition-colors shadow-sm flex items-center justify-center gap-2"
+          className="w-full py-3 bg-[#0A2540] text-white rounded-md font-semibold text-sm hover:bg-[#0A2540]/90 transition-colors shadow-sm flex items-center justify-center gap-2"
         >
           Apply Now
         </button>
 
-        <div className="flex items-center justify-between w-full px-2 py-2 rounded-md hover:bg-gray-50 transition-colors">
+        <div className="flex items-center justify-between w-full px-2 py-2.5 rounded-md hover:bg-gray-50 transition-colors">
           <button onClick={() => router.push('/profile')} className="flex items-center gap-3 overflow-hidden text-left outline-none rounded-md cursor-pointer flex-1">
             {userPhoto ? (
-              <img src={userPhoto} alt="User Logo" className="w-8 h-8 rounded-full object-cover shrink-0 border border-gray-200" />
+              <img src={userPhoto} alt="User Logo" className="w-10 h-10 rounded-full object-cover shrink-0 border border-gray-200" />
             ) : (
-              <div className="w-8 h-8 rounded-full bg-gray-100 text-gray-700 border border-gray-200 flex items-center justify-center font-semibold text-sm shrink-0">
+              <div className="w-10 h-10 rounded-full bg-gray-100 text-gray-700 border border-gray-200 flex items-center justify-center font-semibold text-sm shrink-0">
                 {userInitials || 'ST'}
               </div>
             )}

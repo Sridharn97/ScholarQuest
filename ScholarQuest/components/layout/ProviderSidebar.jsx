@@ -82,7 +82,8 @@ export default function ProviderSidebar({ isOpen, setIsOpen, onLogout }) {
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 space-y-1 overflow-y-auto px-3">
+        <nav className="flex-1 space-y-2 overflow-y-auto px-4">
+          <div className="px-3 mb-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Main Menu</div>
           {navItems.map((item) => {
             const isActive = pathname === item.href || (item.href !== '/provider' && pathname.startsWith(item.href));
             return (
@@ -90,7 +91,7 @@ export default function ProviderSidebar({ isOpen, setIsOpen, onLogout }) {
                 key={item.href}
                 href={item.href}
                 onClick={() => setIsOpen(false)}
-                className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`flex items-center gap-3 px-3 py-3 rounded-md text-sm font-medium transition-colors ${
                   isActive
                     ? 'bg-primary/10 text-primary'
                     : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
@@ -105,11 +106,11 @@ export default function ProviderSidebar({ isOpen, setIsOpen, onLogout }) {
 
         {/* Provider User Card */}
         <div className="px-4 mt-auto pt-4 space-y-2">
-          <div className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-md transition-colors border border-transparent">
+          <div className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-md transition-colors border border-transparent">
             {providerInfo.photoURL ? (
-              <img src={providerInfo.photoURL} alt="User Logo" className="w-8 h-8 rounded-full object-cover shrink-0 border border-gray-200 bg-white" />
+              <img src={providerInfo.photoURL} alt="User Logo" className="w-10 h-10 rounded-full object-cover shrink-0 border border-gray-200 bg-white" />
             ) : (
-              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm shrink-0 border border-primary/20">
+              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm shrink-0 border border-primary/20">
                 {providerInfo.initials}
               </div>
             )}
