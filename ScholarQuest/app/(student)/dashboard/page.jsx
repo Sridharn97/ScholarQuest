@@ -45,13 +45,57 @@ export default function DashboardPage() {
     };
   }, []);
 
+  const filterDateObj = (dateObj) => {
+    if (!dateObj || isNaN(dateObj.getTime())) return true;
+    const today = new Date();
+    
+    if (dateFilter === 'today') {
+      return dateObj.toDateString() === today.toDateString();
+    }
+    if (dateFilter === 'week') {
+      const firstDayOfWeek = new Date(today);
+      firstDayOfWeek.setDate(today.getDate() - today.getDay());
+      firstDayOfWeek.setHours(0, 0, 0, 0);
+      return dateObj >= firstDayOfWeek;
+    }
+    if (dateFilter === 'month') {
+      return dateObj.getMonth() === today.getMonth() && dateObj.getFullYear() === today.getFullYear();
+    }
+    if (dateFilter === 'year') {
+      return dateObj.getFullYear() === today.getFullYear();
+    }
+    if (dateFilter === 'custom') {
+      if (customStartDate) {
+        const start = new Date(customStartDate);
+        start.setHours(0, 0, 0, 0);
+        if (dateObj < start) return false;
+      }
+      if (customEndDate) {
+        const end = new Date(customEndDate);
+        end.setHours(23, 59, 59, 999);
+        if (dateObj > end) return false;
+      }
+      return true;
+    }
+    return true;
+  };
+
+  const filteredTrackerItems = trackerItems.filter(t => {
+    if (dateFilter === 'all') return true;
+    let dateObj = null;
+    if (t.appliedAt) dateObj = new Date(t.appliedAt);
+    else if (t.updatedAt) dateObj = new Date(t.updatedAt);
+    else if (t.createdAt) dateObj = new Date(t.createdAt);
+    return filterDateObj(dateObj);
+  });
+
   let appliedCount = 0;
   let acceptedCount = 0;
   let reviewCount = 0;
   let rejectedCount = 0;
   const categoryCounts = {};
 
-  trackerItems.forEach(t => {
+  filteredTrackerItems.forEach(t => {
     if (t.columnId === 'col_applied') appliedCount++;
     else if (t.columnId === 'col_accepted') acceptedCount++;
     else if (t.columnId === 'col_review') reviewCount++;
@@ -65,7 +109,7 @@ export default function DashboardPage() {
     }
   });
 
-  const upcomingDeadlines = trackerItems
+  const upcomingDeadlines = filteredTrackerItems
     .filter(t => ['col_interested', 'col_applied', 'col_review'].includes(t.columnId))
     .map(t => {
       const schol = scholarships.find(s => s.id === t.scholarshipId || s.name === t.scholarshipName);
@@ -94,7 +138,7 @@ export default function DashboardPage() {
 
   const getAnalyticsData = () => {
     const countsByDate = {};
-    trackerItems.forEach(t => {
+    filteredTrackerItems.forEach(t => {
       let dateObj = null;
       if (t.appliedAt) dateObj = new Date(t.appliedAt);
       else if (t.updatedAt) dateObj = new Date(t.updatedAt);
@@ -151,7 +195,7 @@ export default function DashboardPage() {
       
       let totalAmount = 0;
       
-      trackerItems.forEach(t => {
+      filteredTrackerItems.forEach(t => {
         let dateObj = null;
         if (t.appliedAt) dateObj = new Date(t.appliedAt);
         else if (t.updatedAt) dateObj = new Date(t.updatedAt);
@@ -199,7 +243,7 @@ export default function DashboardPage() {
           <button 
             onClick={() => {
               const { generateReport } = require('@/lib/reportUtils');
-              const reportData = trackerItems.map(item => ({
+              const reportData = filteredTrackerItems.map(item => ({
                 Scholarship: item.scholarshipName || item.scholarshipId || 'Unknown',
                 Status: item.status || 'Pending',
                 AppliedOn: item.appliedAt ? new Date(item.appliedAt).toLocaleDateString() : 'N/A'
