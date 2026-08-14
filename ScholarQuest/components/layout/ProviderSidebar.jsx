@@ -64,25 +64,25 @@ export default function ProviderSidebar({ isOpen, setIsOpen, onLogout }) {
         />
       )}
       
-      <aside className={`fixed left-0 top-0 bottom-0 flex flex-col py-6 h-screen w-64 border-r border-outline-variant bg-surface z-30 transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+      <aside className={`fixed left-0 top-0 bottom-0 flex flex-col py-6 h-screen w-64 border-r border-gray-200 bg-white z-30 transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
         {/* Mobile close button */}
         <div className="absolute top-4 right-4 lg:hidden">
-          <button onClick={() => setIsOpen(false)} className="p-2 bg-surface-container rounded-6 text-on-surface-variant">
+          <button onClick={() => setIsOpen(false)} className="p-2 bg-gray-100 rounded-md text-gray-500">
             <span className="material-symbols-outlined">close</span>
           </button>
         </div>
 
         {/* Brand */}
-        <div className="px-6 mb-8 flex items-center gap-2.5">
-          <img src="/scholarquest-logo.png" alt="Logo" className="w-8 h-8 rounded-full object-cover shadow-sm" />
+        <div className="px-5 mb-8 flex items-center gap-3">
+          <img src="/scholarquest-logo.png" alt="Logo" className="w-8 h-8 rounded-full object-cover border border-gray-200" />
           <div>
-            <h1 className="font-extrabold text-gray-900 text-base tracking-tight leading-none">ScholarQuest</h1>
-            <p className="text-on-surface-variant font-label-sm text-[10px] uppercase tracking-widest mt-0.5 font-bold">Sponsor Portal</p>
+            <h1 className="font-bold text-gray-900 text-lg tracking-tight leading-none">ScholarQuest</h1>
+            <p className="text-gray-500 text-[10px] uppercase tracking-widest mt-0.5 font-semibold">Sponsor Portal</p>
           </div>
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 space-y-2 overflow-y-auto">
+        <nav className="flex-1 space-y-1 overflow-y-auto px-3">
           {navItems.map((item) => {
             const isActive = pathname === item.href || (item.href !== '/provider' && pathname.startsWith(item.href));
             return (
@@ -90,10 +90,10 @@ export default function ProviderSidebar({ isOpen, setIsOpen, onLogout }) {
                 key={item.href}
                 href={item.href}
                 onClick={() => setIsOpen(false)}
-                className={`flex items-center gap-3 px-4 py-3 mx-2 rounded-10 font-label-md text-label-md transition-all ${
+                className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                   isActive
-                    ? 'bg-primary/10 text-primary font-bold'
-                    : 'text-on-surface-variant hover:bg-surface-container-high'
+                    ? 'bg-primary/10 text-primary'
+                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                 }`}
               >
                 <span className="material-symbols-outlined" style={isActive ? { fontVariationSettings: "'FILL' 1" } : {}}>{item.icon}</span>
@@ -104,34 +104,34 @@ export default function ProviderSidebar({ isOpen, setIsOpen, onLogout }) {
         </nav>
 
         {/* Provider User Card */}
-        <div className="px-6 mt-auto pt-4 space-y-3">
-          <div className="flex items-center gap-3 p-3 bg-surface-container-low rounded-10 border border-outline-variant/20">
+        <div className="px-4 mt-auto pt-4 space-y-2">
+          <div className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-md transition-colors border border-transparent">
             {providerInfo.photoURL ? (
-              <img src={providerInfo.photoURL} alt="User Logo" className="w-10 h-10 rounded-full object-cover shrink-0 border border-outline-variant/20 shadow-sm bg-white" />
+              <img src={providerInfo.photoURL} alt="User Logo" className="w-8 h-8 rounded-full object-cover shrink-0 border border-gray-200 bg-white" />
             ) : (
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold text-sm shrink-0">
+              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm shrink-0 border border-primary/20">
                 {providerInfo.initials}
               </div>
             )}
             <div className="overflow-hidden flex-1">
-              <p className="font-label-md text-label-md truncate text-on-surface">{providerInfo.name}</p>
-              <p className="text-label-sm text-on-surface-variant text-xs truncate">{providerInfo.organization}</p>
+              <p className="font-semibold text-sm truncate text-gray-900">{providerInfo.name}</p>
+              <p className="text-gray-500 text-xs truncate">{providerInfo.organization}</p>
             </div>
           </div>
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1 px-2">
             <Link
               href="/"
-              className="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-low px-3 py-2 rounded-6 transition-all text-sm"
+              className="flex items-center gap-3 text-gray-500 hover:text-gray-900 px-2 py-1.5 rounded-md transition-colors text-sm font-medium"
             >
               <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>public</span>
-              <span className="font-label-md text-label-md">Public Home</span>
+              <span>Public Home</span>
             </Link>
             <button
               onClick={onLogout}
-              className="flex items-center gap-3 text-error hover:bg-error-container/20 px-3 py-2 rounded-6 transition-all w-full text-left"
+              className="flex items-center gap-3 text-gray-500 hover:text-red-600 px-2 py-1.5 rounded-md transition-colors w-full text-left font-medium text-sm"
             >
               <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>logout</span>
-              <span className="font-label-md text-label-md">Sign Out</span>
+              <span>Sign Out</span>
             </button>
           </div>
         </div>
