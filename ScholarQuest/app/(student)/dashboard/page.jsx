@@ -13,6 +13,9 @@ export default function DashboardPage() {
   const [trackerItems, setTrackerItems] = useState([]);
   const [scholarships, setScholarships] = useState([]);
   const [analyticsPeriod, setAnalyticsPeriod] = useState('weekly');
+  const [dateFilter, setDateFilter] = useState('all');
+  const [customStartDate, setCustomStartDate] = useState('');
+  const [customEndDate, setCustomEndDate] = useState('');
 
   useEffect(() => {
     let unsubTracker = null;
@@ -206,7 +209,42 @@ export default function DashboardPage() {
             className="text-on-surface font-bold text-sm hover:underline tracking-wide">
             Generate Report
           </button>
-          <button className="bg-primary text-on-primary px-6 py-2.5 rounded-xl font-bold text-sm shadow-sm hover:opacity-90 transition-colors tracking-wide">Quick Match</button>
+
+          {dateFilter === 'custom' && (
+            <div className="flex items-center gap-2">
+              <input 
+                type="date" 
+                value={customStartDate}
+                onChange={(e) => setCustomStartDate(e.target.value)}
+                className="bg-surface-container-lowest text-on-surface px-3 py-2 rounded-xl font-bold text-sm shadow-sm border border-outline-variant/30 focus:outline-none focus:ring-2 focus:ring-primary/20"
+              />
+              <span className="text-on-surface-variant text-sm font-bold">to</span>
+              <input 
+                type="date" 
+                value={customEndDate}
+                onChange={(e) => setCustomEndDate(e.target.value)}
+                className="bg-surface-container-lowest text-on-surface px-3 py-2 rounded-xl font-bold text-sm shadow-sm border border-outline-variant/30 focus:outline-none focus:ring-2 focus:ring-primary/20"
+              />
+            </div>
+          )}
+
+          <div className="relative">
+            <select 
+              value={dateFilter}
+              onChange={(e) => setDateFilter(e.target.value)}
+              className="bg-surface-container-lowest text-on-surface pl-4 pr-10 py-2.5 rounded-xl font-bold text-sm shadow-sm border border-outline-variant/30 focus:outline-none focus:ring-2 focus:ring-primary/20 appearance-none cursor-pointer"
+            >
+              <option value="all">All Time</option>
+              <option value="today">Today</option>
+              <option value="week">This Week</option>
+              <option value="month">This Month</option>
+              <option value="year">This Year</option>
+              <option value="custom">Custom</option>
+            </select>
+            <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant text-[20px]">
+              expand_more
+            </span>
+          </div>
         </div>
       </div>
 
