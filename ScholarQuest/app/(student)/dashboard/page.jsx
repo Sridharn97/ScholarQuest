@@ -235,8 +235,8 @@ export default function DashboardPage() {
         <div>
           <h2 className="text-[28px] font-bold text-on-surface mb-1 leading-tight tracking-tight">Scholarship Overview</h2>
         </div>
-        <div className="flex items-center gap-4">
-          <Link href="/calculator" className="text-primary font-bold text-sm hover:underline tracking-wide flex items-center gap-1">
+        <div className="flex items-center gap-3 bg-white p-1.5 rounded-full shadow-sm ring-1 ring-slate-900/5">
+          <Link href="/calculator" className="text-primary font-semibold text-sm hover:bg-primary/5 px-4 py-2 rounded-full transition-colors flex items-center gap-2">
             <span className="material-symbols-outlined text-[18px]">calculate</span>
             Funding Gap
           </Link>
@@ -250,33 +250,33 @@ export default function DashboardPage() {
               }));
               generateReport(reportData, 'student_report.csv');
             }}
-            className="text-on-surface font-bold text-sm hover:underline tracking-wide">
+            className="text-slate-700 font-semibold text-sm hover:bg-slate-50 px-4 py-2 rounded-full transition-colors flex items-center gap-2">
             Generate Report
           </button>
 
           {dateFilter === 'custom' && (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 px-2 border-l border-slate-100">
               <input 
                 type="date" 
                 value={customStartDate}
                 onChange={(e) => setCustomStartDate(e.target.value)}
-                className="bg-surface-container-lowest text-on-surface px-3 py-2 rounded-xl font-bold text-sm shadow-sm border border-outline-variant/30 focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className="bg-transparent text-slate-700 px-2 py-1.5 font-medium text-sm focus:outline-none focus:text-primary transition-colors cursor-pointer"
               />
-              <span className="text-on-surface-variant text-sm font-bold">to</span>
+              <span className="text-slate-400 text-sm font-medium">to</span>
               <input 
                 type="date" 
                 value={customEndDate}
                 onChange={(e) => setCustomEndDate(e.target.value)}
-                className="bg-surface-container-lowest text-on-surface px-3 py-2 rounded-xl font-bold text-sm shadow-sm border border-outline-variant/30 focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className="bg-transparent text-slate-700 px-2 py-1.5 font-medium text-sm focus:outline-none focus:text-primary transition-colors cursor-pointer"
               />
             </div>
           )}
 
-          <div className="relative">
+          <div className="relative border-l border-slate-100">
             <select 
               value={dateFilter}
               onChange={(e) => setDateFilter(e.target.value)}
-              className="bg-surface-container-lowest text-on-surface pl-4 pr-10 py-2.5 rounded-xl font-bold text-sm shadow-sm border border-outline-variant/30 focus:outline-none focus:ring-2 focus:ring-primary/20 appearance-none cursor-pointer"
+              className="bg-transparent text-slate-800 font-semibold text-sm pl-4 pr-10 py-2 focus:outline-none appearance-none cursor-pointer hover:text-primary transition-colors"
             >
               <option value="all">All Time</option>
               <option value="today">Today</option>
@@ -285,7 +285,7 @@ export default function DashboardPage() {
               <option value="year">This Year</option>
               <option value="custom">Custom</option>
             </select>
-            <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant text-[20px]">
+            <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500 text-[20px]">
               expand_more
             </span>
           </div>
@@ -293,54 +293,42 @@ export default function DashboardPage() {
       </div>
 
       {/* 4 Stat Cards */}
-      <div className="grid grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {/* Card 1 */}
-        <div className="bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/30">
-          <div className="flex justify-between items-start mb-6">
-            <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
-              <span className="material-symbols-outlined">auto_awesome</span>
-            </div>
-            <div className="flex items-center gap-1 text-green-600 bg-green-50 px-2 py-1 rounded text-xs font-bold">
+        <div className="bg-white rounded-3xl p-6 shadow-sm ring-1 ring-slate-900/5 hover:shadow-md transition-all flex flex-col justify-between">
+          <div className="flex justify-between items-start mb-4">
+            <p className="text-slate-500 text-xs font-semibold tracking-wider uppercase mt-1">Matched</p>
+            <div className="flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md text-[10px] font-bold tracking-wide">
               <span>+14%</span>
-              <span className="material-symbols-outlined text-[16px]">trending_up</span>
+              <span className="material-symbols-outlined text-[14px]">trending_up</span>
             </div>
           </div>
-          <p className="text-on-surface-variant text-xs font-bold tracking-wide mb-1 uppercase">Matched</p>
-          <h3 className="text-3xl font-extrabold text-on-surface">{scholarships.length}</h3>
+          <h3 className="text-[36px] font-bold text-slate-900 leading-none">{scholarships.length}</h3>
         </div>
 
         {/* Card 2 */}
-        <div className="bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/30">
-          <div className="flex justify-between items-start mb-6">
-            <div className="w-12 h-12 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center">
-              <span className="material-symbols-outlined text-[22px] transform -rotate-45 ml-1">send</span>
-            </div>
-            <div className="text-on-surface font-bold text-[10px] tracking-wider uppercase bg-surface-container px-2 py-1 rounded">Last 30 days</div>
+        <div className="bg-white rounded-3xl p-6 shadow-sm ring-1 ring-slate-900/5 hover:shadow-md transition-all flex flex-col justify-between">
+          <div className="flex justify-between items-start mb-4">
+            <p className="text-slate-500 text-xs font-semibold tracking-wider uppercase mt-1">Applied</p>
+            <div className="text-indigo-700 font-bold text-[10px] tracking-wider uppercase bg-indigo-50 px-2.5 py-1 rounded-md">Last 30 days</div>
           </div>
-          <p className="text-on-surface-variant text-xs font-bold tracking-wide mb-1 uppercase">Applied</p>
-          <h3 className="text-3xl font-extrabold text-on-surface">{appliedCount}</h3>
+          <h3 className="text-[36px] font-bold text-slate-900 leading-none">{appliedCount}</h3>
         </div>
 
         {/* Card 3 */}
-        <div className="bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/30">
-          <div className="flex justify-between items-start mb-6">
-            <div className="w-12 h-12 rounded-xl bg-green-50 text-green-600 flex items-center justify-center">
-              <span className="material-symbols-outlined">emoji_events</span>
-            </div>
+        <div className="bg-white rounded-3xl p-6 shadow-sm ring-1 ring-slate-900/5 hover:shadow-md transition-all flex flex-col justify-between">
+          <div className="flex justify-between items-start mb-4">
+            <p className="text-slate-500 text-xs font-semibold tracking-wider uppercase mt-1">Accepted</p>
           </div>
-          <p className="text-on-surface-variant text-xs font-bold tracking-wide mb-1 uppercase">Accepted</p>
-          <h3 className="text-3xl font-extrabold text-on-surface">{acceptedCount}</h3>
+          <h3 className="text-[36px] font-bold text-slate-900 leading-none">{acceptedCount}</h3>
         </div>
 
         {/* Card 4 */}
-        <div className="bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/30">
-          <div className="flex justify-between items-start mb-6">
-            <div className="w-12 h-12 rounded-xl bg-error/10 text-error flex items-center justify-center">
-              <span className="material-symbols-outlined">calendar_today</span>
-            </div>
+        <div className="bg-white rounded-3xl p-6 shadow-sm ring-1 ring-slate-900/5 hover:shadow-md transition-all flex flex-col justify-between">
+          <div className="flex justify-between items-start mb-4">
+            <p className="text-slate-500 text-xs font-semibold tracking-wider uppercase mt-1">Deadlines</p>
           </div>
-          <p className="text-on-surface-variant text-xs font-bold tracking-wide mb-1 uppercase">Deadlines</p>
-          <h3 className="text-3xl font-extrabold text-on-surface">{upcomingDeadlines.length}</h3>
+          <h3 className="text-[36px] font-bold text-slate-900 leading-none">{upcomingDeadlines.length}</h3>
         </div>
       </div>
 
