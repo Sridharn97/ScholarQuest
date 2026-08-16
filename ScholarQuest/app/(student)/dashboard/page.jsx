@@ -376,34 +376,51 @@ export default function DashboardPage() {
       {/* Row 2 */}
       <div className="flex gap-6 mb-6">
         {/* Success by Category */}
-                <div className="w-[38%] bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/30 flex flex-col justify-between">
+        <div className="flex-1 bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/30 flex flex-col justify-between">
           <h3 className="text-lg font-bold text-on-surface mb-6">Applications by Category</h3>
-          <div className="space-y-5 mt-auto">
-            {topCategories.length > 0 ? topCategories.map(item => (
-              <div key={item.label}>
-                <div className="flex justify-between text-xs font-bold text-on-surface mb-2">
-                  <span>{item.label}</span>
-                  <span>{item.count}</span>
+          <div className="h-[200px] mt-8 relative flex items-end justify-between px-2 pb-6 border-b border-slate-100">
+            {/* Background Grid Lines */}
+            <div className="absolute inset-0 flex flex-col justify-between pointer-events-none pb-6">
+              <div className="w-full border-t border-slate-100/60 flex-1"></div>
+              <div className="w-full border-t border-slate-100/60 flex-1"></div>
+              <div className="w-full border-t border-slate-100/60"></div>
+            </div>
+
+            {topCategories.length > 0 ? topCategories.map((item, idx) => {
+              const heightPercentage = (item.count / maxCategoryCount) * 100;
+              return (
+                <div key={item.label} className="relative flex flex-col justify-end items-center group w-[15%] h-full z-10">
+                  {/* Tooltip */}
+                  <div className="absolute -top-10 bg-slate-800 text-white text-[10px] font-medium px-2 py-1.5 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-20 text-center">
+                    <div className="font-bold">{item.label}</div>
+                    <div className="text-slate-300">{item.count} Applications</div>
+                  </div>
+
+                  {/* Vertical Bar */}
+                  <div 
+                    className={`w-full rounded-t-sm transition-all duration-300 ease-in-out hover:opacity-80 ${item.color.replace('bg-', 'bg-').replace('500', '600')}`} // Ensure color is vibrant
+                    style={{ height: `${heightPercentage}%`, minHeight: '4px' }}
+                  ></div>
+
+                  {/* X-Axis Label */}
+                  <div className="absolute -bottom-6 text-[9px] font-bold text-slate-500 uppercase tracking-wider truncate w-[150%] text-center">
+                    {item.label}
+                  </div>
                 </div>
-                <div className="h-2 w-full bg-surface-container-low rounded-full overflow-hidden border border-outline-variant/10">
-                  <div className={`h-full ${item.color} rounded-full`} style={{ width: `${(item.count / maxCategoryCount) * 100}%` }}></div>
-                </div>
-              </div>
-            )) : <p className="text-sm text-on-surface-variant">No applications yet.</p>}
+              );
+            }) : (
+              <div className="w-full h-full flex items-center justify-center text-sm text-slate-400">No applications yet.</div>
+            )}
           </div>
         </div>
 
         {/* Monthly Funding Trends */}
-        <div className="w-[62%] bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/30 relative flex flex-col justify-between">
+        <div className="flex-1 bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/30 relative flex flex-col justify-between">
           <div className="flex justify-between items-center mb-10">
             <h3 className="text-lg font-bold text-on-surface">Monthly Funding Trends</h3>
             <span className="text-xs font-bold text-on-surface-variant">Last 6 Months</span>
           </div>
           <StudentFundingTrends data={fundingData} labels={fundingLabels} />
-
-          <button className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-12 h-12 bg-primary rounded-full text-on-primary flex items-center justify-center shadow-lg border-4 border-surface-container-lowest hover:scale-105 transition-transform z-10">
-            <span className="material-symbols-outlined text-[24px]">add</span>
-          </button>
         </div>
       </div>
 
